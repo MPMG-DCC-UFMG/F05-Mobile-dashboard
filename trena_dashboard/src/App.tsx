@@ -3,7 +3,7 @@ import './styles/App.css';
 import './styles/trena.css';
 import 'bulma/css/bulma.css';
 
-import {Menu} from './components/Menu';
+import {Menu} from './components/navigation/Menu';
 import {Home} from './screens/Home';
 import {ScreenPublicWork} from './screens/ScreenPublicWork';
 import {ScreenTypeOfWork} from './screens/ScreenTypeOfWork';
