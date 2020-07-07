@@ -3,7 +3,7 @@ import './styles/App.css';
 import './styles/trena.css';
 import 'bulma/css/bulma.css';
 
-import {Menu} from './screens/components/navigation/Menu';
+import {NavigationMenu} from './screens/components/menus/NavigationMenu';
 import {Home} from './screens/Home';
 import {ScreenPublicWork} from './screens/ScreenPublicWork';
 import {ScreenTypeOfWork} from './screens/ScreenTypeOfWork';
@@ -15,7 +15,7 @@ function App() {
             <div className="App">
                 <div className="columns is-fullheight mt-1">
                     <div className="column is-one-fifth">
-                        <Menu/>
+                        <NavigationMenu/>
                     </div>
                     <div className="column">
                         <div className="box is-fullheight mr-2">

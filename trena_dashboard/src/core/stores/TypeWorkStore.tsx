@@ -9,6 +9,7 @@ export class TypeWorkStore {
 
     @observable typeWorksList: TypeWork[] = [];
     @observable isLoading = false;
+    @observable selectedTypeWork?: TypeWork = undefined
 
     @action
     async loadTypeWorkList() {
@@ -34,6 +35,11 @@ export class TypeWorkStore {
         } else {
             this.typeWorksList = this.fullTypeWorksList.filter(item => item.name.includes(query))
         }
+    }
+
+    @action
+    selectTypeWork(typeWork?: TypeWork) {
+        this.selectedTypeWork = typeWork
     }
 
 }
