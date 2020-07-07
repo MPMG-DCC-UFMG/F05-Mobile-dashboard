@@ -1,7 +1,7 @@
 import {observer} from "mobx-react";
-import {useStores} from "../../core/stores/UseStores";
+import {useStores} from "../../../core/stores/UseStores";
 import React from "react";
-import {ItemTypeWork} from "../items/ItemTypeWork";
+import {ItemTypeWork} from "./items/ItemTypeWork";
 import {Search} from "../base/Search";
 
 export const ListTypeWork = observer(() => {

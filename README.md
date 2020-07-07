@@ -12,7 +12,16 @@ The list of all the third party libraries used are:
 * [Bulma](https://bulma.io/): a free, open source CSS framework based on Flexbox.
 * [SuperAgent](https://visionmedia.github.io/superagent/): light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve
 * [Fontawesome](https://fontawesome.com/): the web's most popular icon set and toolkit.
+* [Leaflet](https://leafletjs.com/index.html): leading open-source JavaScript library for mobile-friendly interactive maps.
  
 ## 2. Configuration
 
-There is a file called Config.tsx in the folder **src/config**. That file holds the global values used trough the application. 
+There is a file called Config.tsx in the folder **src/config**. That file holds the global values used trough the application and it looks like:
+
+```bash
+export default class Config {
+    static ENVIRONMENT: string = "development";
+    static BASE_URL: string = "http://0.0.0.0:8000";
+    static SENTRY_DNS: string = "<SENTRY_DNS>" 
+}
+```

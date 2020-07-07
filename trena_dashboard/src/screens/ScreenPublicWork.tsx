@@ -1,13 +1,23 @@
 import React from "react";
+import {ListPublicWork} from "./components/lists/ListPublicWork";
+import {useStores} from "../core/stores/UseStores";
+import {PublicWorkView} from "./components/views/PublicWorkView";
 
-interface ScreenPublicWork{
+interface ScreenPublicWork {
 
 }
 
-export const ScreenPublicWork: React.FC<ScreenPublicWork> = (props) =>{
-    return(
-        <div>
-            Public Work
+export const ScreenPublicWork: React.FC<ScreenPublicWork> = (props) => {
+    const {publicWorkStore} = useStores()
+    publicWorkStore.loadPublicWorkList()
+    return (
+        <div className="columns">
+            <div className="column is-one-third">
+                <ListPublicWork/>
+            </div>
+            <div className="column is-two-thirds">
+                <PublicWorkView/>
+            </div>
         </div>
     )
 }
