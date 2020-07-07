@@ -8,10 +8,12 @@ export class TypeWorkStore {
     private fullTypeWorksList: TypeWork[] = [];
 
     @observable typeWorksList: TypeWork[] = [];
-    @observable isLoading = true;
+    @observable isLoading = false;
+    @observable selectedTypeWork?: TypeWork = undefined
 
     @action
     async loadTypeWorkList() {
+        this.isLoading = true
         try {
             const typeWorks = await TypeWorkService.loadTypeWorks()
             runInAction(() => {
@@ -20,6 +22,9 @@ export class TypeWorkStore {
                 }
             )
         } catch (error) {
+            console.log(error)
+        } finally {
+            this.isLoading = false
         }
     }
 
@@ -28,8 +33,13 @@ export class TypeWorkStore {
         if (!query || /^\s*$/.test(query)) {
             this.typeWorksList = this.fullTypeWorksList
         } else {
-            this.typeWorksList = this.fullTypeWorksList.filter(item => item.name.startsWith(query))
+            this.typeWorksList = this.fullTypeWorksList.filter(item => item.name.includes(query))
         }
+    }
+
+    @action
+    selectTypeWork(typeWork?: TypeWork) {
+        this.selectedTypeWork = typeWork
     }
 
 }

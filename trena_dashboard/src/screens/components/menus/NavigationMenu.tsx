@@ -1,9 +1,14 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
+import {ReactComponent as Logo} from "../../../images/logo.svg";
 
-export const Menu: React.FC<any> = () => {
+export const NavigationMenu: React.FC<any> = () => {
     return (
         <aside className="menu">
+            <figure className="image">
+                <Logo/>
+            </figure>
+            <br/>
             <p className="menu-label">
                 Geral
             </p>

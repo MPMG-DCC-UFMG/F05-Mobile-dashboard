@@ -1,8 +1,9 @@
 import {observer} from "mobx-react";
-import {useStores} from "../../core/stores/UseStores";
+import {useStores} from "../../../core/stores/UseStores";
 import React from "react";
-import {ItemTypeWork} from "../items/ItemTypeWork";
+import {ItemTypeWork} from "./items/ItemTypeWork";
 import {Search} from "../base/Search";
+import {ItemActionsMenu} from "../menus/ItemActionsMenu";
 
 export const ListTypeWork = observer(() => {
     const {typeWorkStore} = useStores()
@@ -10,6 +11,18 @@ export const ListTypeWork = observer(() => {
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         const query = event.currentTarget.value
         typeWorkStore.search(query)
+    }
+
+    const handleAddClick = () => {
+        console.log("Add clicked")
+    }
+
+    const handleEditClick = () => {
+        console.log("Edit clicked")
+    }
+
+    const handleDeleteClick = () => {
+        console.log("Delete clicked")
     }
 
     return (
@@ -21,11 +34,17 @@ export const ListTypeWork = observer(() => {
                 <div className="panel-block">
                     <Search onTextChanged={handleSearch}/>
                 </div>
+                <div className="panel-block">
+                    <ItemActionsMenu
+                        itemSelected={typeWorkStore.selectedTypeWork !== undefined}
+                        onAddClicked={handleAddClick}
+                        onDeleteClicked={handleDeleteClick}
+                        onEditClicked={handleEditClick}/>
+                </div>
                 {typeWorkStore.typeWorksList.map(typeWork => {
                         return <ItemTypeWork
                             key={typeWork.flag}
-                            flag={typeWork.flag}
-                            name={typeWork.name}/>
+                            typeWork={typeWork}/>
                     }
                 )}
             </div>
