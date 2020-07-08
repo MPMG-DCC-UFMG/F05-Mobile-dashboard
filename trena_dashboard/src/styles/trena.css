@@ -9,3 +9,7 @@ body > #root > div {
 .is-fullheight {
     height: calc(100vh - ( 3.25rem - .75rem ) );
 }
+
+.card-footer-right{
+    justify-content: flex-end !important;
+}

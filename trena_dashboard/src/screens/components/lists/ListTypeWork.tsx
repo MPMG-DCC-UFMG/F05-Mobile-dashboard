@@ -4,9 +4,12 @@ import React from "react";
 import {ItemTypeWork} from "./items/ItemTypeWork";
 import {Search} from "../base/Search";
 import {ItemActionsMenu} from "../menus/ItemActionsMenu";
+import {DeleteView} from "../views/DeleteView";
+import {TypeWorkView} from "../views/TypeWorkView";
+import {TypeWork} from "../../../core/models/TypeWork";
 
 export const ListTypeWork = observer(() => {
-    const {typeWorkStore} = useStores()
+    const {typeWorkStore, viewStore} = useStores()
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         const query = event.currentTarget.value
@@ -14,15 +17,65 @@ export const ListTypeWork = observer(() => {
     }
 
     const handleAddClick = () => {
-        console.log("Add clicked")
+        let mTypeWork: TypeWork = {name: ""}
+        createTypeWorkView(
+            "Adicionar tipo de obra",
+            "Adicionar",
+            () => {
+                typeWorkStore.addTypeWork(mTypeWork)
+            },
+            (typeWork: TypeWork) => {
+                mTypeWork = typeWork
+            })
+    }
+
+    const createTypeWorkView = (title: string,
+                                confirm: string,
+                                onConfirmClick: () => void,
+                                onChangeTypeWork: (typeWork: TypeWork) => void,
+                                defaultTypeWork?: TypeWork
+    ) => {
+        let typeWorkView = {
+            title: title,
+            confirmButton: confirm,
+            onConfirmClick: onConfirmClick,
+            contentView:
+                <TypeWorkView onChangeTypeWork={onChangeTypeWork} defaultTypeWork={defaultTypeWork}/>
+        }
+        viewStore.setViewInModal(typeWorkView)
     }
 
     const handleEditClick = () => {
-        console.log("Edit clicked")
+        if (typeWorkStore.selectedTypeWork) {
+            let mTypeWork = typeWorkStore.selectedTypeWork
+            createTypeWorkView(
+                "Editar tipo de obra",
+                "Editar",
+                () => {
+                    typeWorkStore.updateTypeWork(mTypeWork)
+                },
+                (typeWork: TypeWork) => {
+                    mTypeWork = typeWork
+                },
+                mTypeWork)
+        }
     }
 
     const handleDeleteClick = () => {
-        console.log("Delete clicked")
+        if (typeWorkStore.selectedTypeWork !== undefined) {
+            const typeWork = typeWorkStore.selectedTypeWork
+            let deleteView = {
+                title: "Deletar Tipo de Obra",
+                confirmButton: "Deletar",
+                onConfirmClick: () => {
+                    if (typeWork.flag) {
+                        typeWorkStore.deleteTypeOfWork(typeWork.flag)
+                    }
+                },
+                contentView: <DeleteView toDelete={typeWork.name}/>
+            }
+            viewStore.setViewInModal(deleteView)
+        }
     }
 
     return (

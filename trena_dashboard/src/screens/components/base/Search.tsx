@@ -7,7 +7,6 @@ interface SearchProps {
 }
 
 export const Search: React.FC<SearchProps> = (props) => {
-
     return (
         <p className="control has-icons-left">
             <input className="input" type="text" placeholder="Buscar" onChange={props.onTextChanged}/>
