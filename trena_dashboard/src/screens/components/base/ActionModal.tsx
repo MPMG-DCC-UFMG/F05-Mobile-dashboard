@@ -15,7 +15,10 @@ export const ActionModal: React.FC<ActionModalProps> = observer((props) => {
     }
 
     const handleConfirmClick = () => {
-        viewInModal?.onConfirmClick()
+        let onConfirmClick = viewInModal?.onConfirmClick;
+        if (onConfirmClick) {
+            onConfirmClick()
+        }
         closeModal()
     }
 
