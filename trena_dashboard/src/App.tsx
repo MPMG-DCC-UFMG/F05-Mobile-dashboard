@@ -8,6 +8,7 @@ import {Home} from './screens/Home';
 import {ScreenPublicWork} from './screens/ScreenPublicWork';
 import {ScreenTypeOfWork} from './screens/ScreenTypeOfWork';
 import {Switch, Route, BrowserRouter} from 'react-router-dom';
+import {ActionModal} from "./screens/components/base/ActionModal";
 
 function App() {
     return (
@@ -33,6 +34,7 @@ function App() {
                         </div>
                     </div>
                 </div>
+                <ActionModal/>
             </div>
         </BrowserRouter>
     );

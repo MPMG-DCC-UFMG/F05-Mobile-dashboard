@@ -14,4 +14,47 @@ export class TypeWorkService {
                 return listOfTypeWorks
             })
     }
+
+    static async deleteTypeWork(typeWorkFlag: number) {
+        const call = Config.BASE_URL + "/typeworks/delete"
+        request.post(call)
+            .type('application/json')
+            .query({type_work_id: typeWorkFlag})
+            .then(res => {
+                if (res.ok) {
+                    this.loadTypeWorks()
+                }
+            }).catch(err => {
+            console.log(err)
+        });
+    }
+
+    static async addTypeWork(typeWork: TypeWork) {
+        const call = Config.BASE_URL + "/typeworks/add"
+        request.post(call)
+            .type('application/json')
+            .send(typeWork)
+            .then(res => {
+                if (res.ok) {
+                    this.loadTypeWorks()
+                }
+            }).catch(err => {
+            console.log(err)
+        });
+    }
+
+    static async updateTypeWork(typeWork: TypeWork) {
+        const call = Config.BASE_URL + "/typeworks/update"
+        request.put(call)
+            .type('application/json')
+            .send(typeWork)
+            .then(res => {
+                if (res.ok) {
+                    this.loadTypeWorks()
+                }
+            }).catch(err => {
+            console.log(err)
+        });
+    }
+
 }

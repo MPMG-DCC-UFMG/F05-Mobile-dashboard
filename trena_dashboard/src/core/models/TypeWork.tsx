@@ -1,4 +1,4 @@
 export interface TypeWork {
-    flag: number,
+    flag?: number,
     name: string
 }

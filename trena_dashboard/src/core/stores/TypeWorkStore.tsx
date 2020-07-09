@@ -13,27 +13,22 @@ export class TypeWorkStore {
 
     @action
     async loadTypeWorkList() {
-        this.isLoading = true
-        try {
+        this.baseCall(async () => {
             const typeWorks = await TypeWorkService.loadTypeWorks()
             runInAction(() => {
                     this.fullTypeWorksList = typeWorks;
                     this.search("")
                 }
             )
-        } catch (error) {
-            console.log(error)
-        } finally {
-            this.isLoading = false
-        }
+        })
     }
 
     @action
     search(query?: string) {
-        if (!query || /^\s*$/.test(query)) {
-            this.typeWorksList = this.fullTypeWorksList
-        } else {
+        if (query) {
             this.typeWorksList = this.fullTypeWorksList.filter(item => item.name.includes(query))
+        } else {
+            this.typeWorksList = this.fullTypeWorksList
         }
     }
 
@@ -42,4 +37,48 @@ export class TypeWorkStore {
         this.selectedTypeWork = typeWork
     }
 
+    @action
+    async deleteTypeOfWork(typeWorkFlag: number) {
+        this.baseCall(async () => {
+            await TypeWorkService.deleteTypeWork(typeWorkFlag)
+            runInAction(() => {
+                this.loadTypeWorkList()
+            })
+        })
+    }
+
+    @action
+    async addTypeWork(typeWork: TypeWork) {
+        if (typeWork.name) {
+            this.baseCall(async () => {
+                await TypeWorkService.addTypeWork(typeWork)
+                runInAction(() => {
+                    this.loadTypeWorkList()
+                })
+            })
+        }
+    }
+
+    @action
+    async updateTypeWork(typeWork: TypeWork) {
+        if (typeWork.name && typeWork.flag) {
+            this.baseCall(async () => {
+                await TypeWorkService.updateTypeWork(typeWork)
+                runInAction(() => {
+                    this.loadTypeWorkList()
+                })
+            })
+        }
+    }
+
+    baseCall(tryContent: () => void) {
+        this.isLoading = true
+        try {
+            tryContent()
+        } catch (error) {
+            console.log(error)
+        } finally {
+            this.isLoading = false
+        }
+    }
 }
