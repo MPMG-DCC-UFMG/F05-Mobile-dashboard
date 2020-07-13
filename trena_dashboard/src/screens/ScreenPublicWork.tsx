@@ -8,8 +8,9 @@ interface ScreenPublicWork {
 }
 
 export const ScreenPublicWork: React.FC<ScreenPublicWork> = (props) => {
-    const {publicWorkStore} = useStores()
+    const {publicWorkStore,typeWorkStore} = useStores()
     publicWorkStore.loadPublicWorkList()
+    typeWorkStore.loadTypeWorkList()
     return (
         <div className="columns">
             <div className="column is-one-third">

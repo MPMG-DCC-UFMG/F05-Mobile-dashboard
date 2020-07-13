@@ -1,15 +1,15 @@
 import React from "react";
-import {InputField} from "../base/InputField";
+import {InputField} from "../form/InputField";
 import {TypeWork} from "../../../core/models/TypeWork";
 
-interface TypeWorkViewProps {
+interface TypeWorkCRUDViewProps {
     defaultTypeWork?: TypeWork,
     onChangeTypeWork?: (typeWork: TypeWork) => void
 }
 
-export const TypeWorkView: React.FC<TypeWorkViewProps> = (props) => {
+export const TypeWorkCRUDView: React.FC<TypeWorkCRUDViewProps> = (props) => {
 
-    const handleFormChange = (value: string, key?: string) => {
+    const handleFormChange = (value: string) => {
         if (props.onChangeTypeWork) {
             props.onChangeTypeWork({...props.defaultTypeWork, name: value})
         }
@@ -19,7 +19,7 @@ export const TypeWorkView: React.FC<TypeWorkViewProps> = (props) => {
         <div className="container has-text-left">
             <InputField
                 inputLabel="Tipo de Obra"
-                inputHint="Adicionar novo tipo de obra .."
+                inputHint="Adicionar novo tipo de obra ..."
                 inputDefaultValue={props.defaultTypeWork?.name}
                 onValueChanged={handleFormChange}/>
         </div>

@@ -1,6 +1,6 @@
 import React from "react";
 
-interface InputFieldProps {
+export interface InputFieldProps {
     inputLabel: string,
     inputHint?: string,
     inputKey?: string,

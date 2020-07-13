@@ -14,6 +14,12 @@ The list of all the third party libraries used are:
 * [Fontawesome](https://fontawesome.com/): the web's most popular icon set and toolkit.
 * [Leaflet](https://leafletjs.com/index.html): leading open-source JavaScript library for mobile-friendly interactive maps.
  
+### 1.2. Services
+
+Services used to provide features into this project:
+
+* [ViaCep](https://viacep.com.br/): free webservice to query CEP in Brazil, not necessary to create account but don't return latitude and longitude
+ 
 ## 2. Configuration
 
 There is a file called Config.tsx in the folder **src/config**. That file holds the global values used trough the application and it looks like:

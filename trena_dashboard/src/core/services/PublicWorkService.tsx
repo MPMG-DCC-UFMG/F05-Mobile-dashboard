@@ -12,4 +12,18 @@ export class PublicWorkService {
                 return listPublicWorks
             })
     }
+
+    static async deletePublicWork(publicWorkId: string) {
+        const call = Config.BASE_URL + "/publicworks/delete"
+        request.post(call)
+            .type('application/json')
+            .query({public_work_id: publicWorkId})
+            .then(res => {
+                if (res.ok) {
+                    this.loadPublicWorks()
+                }
+            }).catch(err => {
+            console.log(err)
+        });
+    }
 }

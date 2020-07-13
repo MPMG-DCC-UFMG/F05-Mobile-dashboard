@@ -12,18 +12,13 @@ export class PublicWorkStore {
 
     @action
     async loadPublicWorkList() {
-        this.isLoading = true
-        try {
+        this.baseCall(async () => {
             const publicWorks = await PublicWorkService.loadPublicWorks()
             runInAction(() => {
                 this.fullPublicWorkList = publicWorks;
                 this.search("")
             })
-        } catch (error) {
-            console.log(error)
-        } finally {
-            this.isLoading = false
-        }
+        })
     }
 
     @action
@@ -38,5 +33,26 @@ export class PublicWorkStore {
     @action
     selectPublicWork(publicWork?: PublicWork) {
         this.selectedPublicWork = publicWork
+    }
+
+    @action
+    async deletePublicWork(publicWorkId: string) {
+        this.baseCall(async () => {
+            await PublicWorkService.deletePublicWork(publicWorkId)
+            runInAction(() => {
+                this.loadPublicWorkList()
+            })
+        })
+    }
+
+    baseCall(tryContent: () => void) {
+        this.isLoading = true
+        try {
+            tryContent()
+        } catch (error) {
+            console.log(error)
+        } finally {
+            this.isLoading = false
+        }
     }
 }
