@@ -5,7 +5,6 @@ import {ItemPublicWork} from "./items/ItemPublicWork";
 import {Search} from "../form/Search";
 import {ItemActionsMenu} from "../menus/ItemActionsMenu";
 import {DeleteView} from "../views/DeleteView";
-import PublicWorkCRUDView from "../views/PublicWorkCRUDView";
 import {PublicWork} from "../../../core/models/PublicWork";
 import {DropdownOptions} from "../form/Dropdown";
 
@@ -30,7 +29,7 @@ export const ListPublicWork = observer(() => {
             "Adicionar obra pública",
             "Adicionar",
             () => {
-                console.log(mPublicWork)
+
             },
             (publicWork: PublicWork) => {
                 mPublicWork = publicWork
@@ -44,7 +43,7 @@ export const ListPublicWork = observer(() => {
                 "Editar obra pública",
                 "editar",
                 () => {
-                    console.log(mPublicWork)
+
                 },
                 (publicWork: PublicWork) => {
                     mPublicWork = publicWork
@@ -63,10 +62,10 @@ export const ListPublicWork = observer(() => {
             title: title,
             confirmButton: confirm,
             onConfirmClick: onConfirmClick,
-            contentView:
-                <PublicWorkCRUDView onChangePublicWork={onChangePublicWork}
-                                    defaultPublicWork={defaultPublicWork}
-                                    typeOfWorkList={typeWorks}/>
+            // contentView:
+            //     <PublicWorkCRUDView onChangePublicWork={onChangePublicWork}
+            //                         defaultPublicWork={defaultPublicWork}
+            //                         typeOfWorkList={typeWorks}/>
         }
         viewStore.setViewInModal(publicWorkView)
     }

@@ -8,20 +8,17 @@ interface InputFieldWithActionProps extends InputFieldProps {
 
 export const InputFieldWithAction: React.FC<InputFieldWithActionProps> = (props) => {
 
-    const {inputLabel, inputHint, inputKey, inputDefaultValue, inputActionText} = props
-
-    const handleOnValueChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (props.onValueChanged) {
-            props.onValueChanged(event.currentTarget.value, inputKey)
-        }
-    }
+    const {inputLabel, inputHint, inputName, inputDefaultValue, inputActionText, onValueChanged} = props
 
     return (
         <div className="field">
             <label className="label">{inputLabel}</label>
             <div className="field has-addons">
                 <div className="control is-expanded">
-                    <input className="input" type="text" placeholder={inputHint} onChange={handleOnValueChanged}
+                    <input className="input" type="text"
+                           placeholder={inputHint}
+                           name={inputName}
+                           onChange={onValueChanged}
                            defaultValue={inputDefaultValue}/>
                 </div>
                 <div className="control">

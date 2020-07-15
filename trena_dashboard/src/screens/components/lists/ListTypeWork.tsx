@@ -5,7 +5,7 @@ import {ItemTypeWork} from "./items/ItemTypeWork";
 import {Search} from "../form/Search";
 import {ItemActionsMenu} from "../menus/ItemActionsMenu";
 import {DeleteView} from "../views/DeleteView";
-import {TypeWorkCRUDView} from "../views/TypeWorkCRUDView";
+import TypeWorkCRUDView from "../views/TypeWorkCRUDView";
 import {TypeWork} from "../../../core/models/TypeWork";
 
 export const ListTypeWork = observer(() => {
@@ -40,7 +40,8 @@ export const ListTypeWork = observer(() => {
             confirmButton: confirm,
             onConfirmClick: onConfirmClick,
             contentView:
-                <TypeWorkCRUDView onChangeTypeWork={onChangeTypeWork} defaultTypeWork={defaultTypeWork}/>
+                <TypeWorkCRUDView onChangeTypeWork={onChangeTypeWork}
+                                  defaultTypeWork={defaultTypeWork}/>
         }
         viewStore.setViewInModal(typeWorkView)
     }
@@ -91,10 +92,10 @@ export const ListTypeWork = observer(() => {
                         <div className="level-right">
                             <div className="level-item">
                                 <ItemActionsMenu
-                                itemSelected={typeWorkStore.selectedTypeWork !== undefined}
-                                onAddClicked={handleAddClick}
-                                onDeleteClicked={handleDeleteClick}
-                                onEditClicked={handleEditClick}/>
+                                    itemSelected={typeWorkStore.selectedTypeWork !== undefined}
+                                    onAddClicked={handleAddClick}
+                                    onDeleteClicked={handleDeleteClick}
+                                    onEditClicked={handleEditClick}/>
                             </div>
                         </div>
                     </nav>

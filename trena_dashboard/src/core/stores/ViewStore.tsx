@@ -3,7 +3,7 @@ import {BaseActionView} from "../../screens/components/base/BaseActionView";
 
 export class ViewStore {
 
-    @observable viewInModal?: BaseActionView = undefined
+    @observable viewInModal?: BaseActionView<any, any> = undefined
 
     @action
     setViewInModal(viewInModal?: any) {

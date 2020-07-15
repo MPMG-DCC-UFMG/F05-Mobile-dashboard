@@ -3,25 +3,20 @@ import React from "react";
 export interface InputFieldProps {
     inputLabel: string,
     inputHint?: string,
-    inputKey?: string,
+    inputName?: string,
     inputDefaultValue?: string,
-    onValueChanged?: (value: string, key?: string) => void,
+    onValueChanged?: (event: React.ChangeEvent<HTMLInputElement>) => void,
 }
 
 export const InputField: React.FC<InputFieldProps> = (props) => {
-    const {inputLabel, inputHint, inputKey, inputDefaultValue} = props
+    const {inputLabel, inputHint, inputName, inputDefaultValue, onValueChanged} = props
 
-    const handleOnValueChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (props.onValueChanged) {
-            props.onValueChanged(event.currentTarget.value, inputKey)
-        }
-    }
 
     return (
         <div className="field">
             <label className="label">{inputLabel}</label>
             <div className="control">
-                <input className="input" type="text" placeholder={inputHint} onChange={handleOnValueChanged}
+                <input className="input" type="text" name={inputName} placeholder={inputHint} onChange={onValueChanged}
                        defaultValue={inputDefaultValue}/>
             </div>
         </div>

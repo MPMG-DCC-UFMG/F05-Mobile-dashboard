@@ -19,7 +19,8 @@ The list of all the third party libraries used are:
 Services used to provide features into this project:
 
 * [ViaCep](https://viacep.com.br/): free webservice to query CEP in Brazil, not necessary to create account but don't return latitude and longitude
- 
+* [Cep Aberto](https://cepaberto.com/): free webservice to query CEP in Brazil.
+
 ## 2. Configuration
 
 There is a file called Config.tsx in the folder **src/config**. That file holds the global values used trough the application and it looks like:
@@ -28,6 +29,7 @@ There is a file called Config.tsx in the folder **src/config**. That file holds 
 export default class Config {
     static ENVIRONMENT: string = "development";
     static BASE_URL: string = "http://0.0.0.0:8000";
-    static SENTRY_DNS: string = "<SENTRY_DNS>" 
+    static SENTRY_DNS: string = "<SENTRY_DNS>";
+    static TOKEN_CEP_ABERTO: string = "<TOKEN_CEP_ABERTO>";
 }
 ```
