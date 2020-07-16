@@ -1,12 +1,13 @@
 import {observer} from "mobx-react";
-import {useStores} from "../../../core/stores/UseStores";
+import {useStores} from "../../core/stores/UseStores";
 import React from "react";
 import {ItemPublicWork} from "./items/ItemPublicWork";
 import {Search} from "../form/Search";
 import {ItemActionsMenu} from "../menus/ItemActionsMenu";
-import {DeleteView} from "../views/DeleteView";
-import {PublicWork} from "../../../core/models/PublicWork";
+import {DeleteView} from "../../views/DeleteView";
+import {PublicWork} from "../../core/models/PublicWork";
 import {DropdownOptions} from "../form/Dropdown";
+import PublicWorkCRUDView from "../../views/PublicWorkCRUDView";
 
 export const ListPublicWork = observer(() => {
     const {publicWorkStore, viewStore, typeWorkStore} = useStores()
@@ -29,7 +30,7 @@ export const ListPublicWork = observer(() => {
             "Adicionar obra pública",
             "Adicionar",
             () => {
-
+                publicWorkStore.addPublicWork(mPublicWork)
             },
             (publicWork: PublicWork) => {
                 mPublicWork = publicWork
@@ -43,7 +44,7 @@ export const ListPublicWork = observer(() => {
                 "Editar obra pública",
                 "editar",
                 () => {
-
+                    publicWorkStore.addPublicWork(mPublicWork)
                 },
                 (publicWork: PublicWork) => {
                     mPublicWork = publicWork
@@ -62,10 +63,10 @@ export const ListPublicWork = observer(() => {
             title: title,
             confirmButton: confirm,
             onConfirmClick: onConfirmClick,
-            // contentView:
-            //     <PublicWorkCRUDView onChangePublicWork={onChangePublicWork}
-            //                         defaultPublicWork={defaultPublicWork}
-            //                         typeOfWorkList={typeWorks}/>
+            contentView:
+                <PublicWorkCRUDView onChangePublicWork={onChangePublicWork}
+                                    defaultPublicWork={defaultPublicWork}
+                                    typeOfWorkList={typeWorks}/>
         }
         viewStore.setViewInModal(publicWorkView)
     }

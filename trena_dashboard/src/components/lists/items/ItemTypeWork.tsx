@@ -1,6 +1,6 @@
-import {TypeWork} from "../../../../core/models/TypeWork";
+import {TypeWork} from "../../../core/models/TypeWork";
 import React from "react";
-import {useStores} from "../../../../core/stores/UseStores";
+import {useStores} from "../../../core/stores/UseStores";
 import {observer} from "mobx-react";
 
 interface ItemTypeWorkProps {

@@ -1,5 +1,5 @@
 import {action, observable} from "mobx";
-import {BaseActionView} from "../../screens/components/base/BaseActionView";
+import {BaseActionView} from "../../components/base/BaseActionView";
 
 export class ViewStore {
 

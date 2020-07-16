@@ -4,7 +4,7 @@ export interface InputFieldProps {
     inputLabel: string,
     inputHint?: string,
     inputName?: string,
-    inputDefaultValue?: string,
+    inputDefaultValue?: any,
     onValueChanged?: (event: React.ChangeEvent<HTMLInputElement>) => void,
 }
 

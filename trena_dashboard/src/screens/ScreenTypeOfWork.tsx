@@ -1,5 +1,5 @@
 import React from "react";
-import {ListTypeWork} from "./components/lists/ListTypeWork";
+import {ListTypeWork} from "../components/lists/ListTypeWork";
 import {useStores} from "../core/stores/UseStores";
 
 interface ScreenTypeOfWorkProps {

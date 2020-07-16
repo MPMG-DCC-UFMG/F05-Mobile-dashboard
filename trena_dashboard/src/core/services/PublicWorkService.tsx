@@ -26,4 +26,13 @@ export class PublicWorkService {
             console.log(err)
         });
     }
+
+    static async addPublicWork(publicWork: PublicWork) {
+        const call = Config.BASE_URL + "/publicworks/add"
+        request.post(call).type('application/json').send(publicWork).then(res => {
+
+        }).catch(err => {
+            console.log(err)
+        })
+    }
 }
