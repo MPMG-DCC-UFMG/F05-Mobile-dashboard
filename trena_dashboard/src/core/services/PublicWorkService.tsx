@@ -12,4 +12,28 @@ export class PublicWorkService {
                 return listPublicWorks
             })
     }
+
+    static async deletePublicWork(publicWorkId: string) {
+        const call = Config.BASE_URL + "/publicworks/delete"
+        request.post(call)
+            .type('application/json')
+            .query({public_work_id: publicWorkId})
+            .then().catch(err => {
+            console.log(err)
+        });
+    }
+
+    static async addPublicWork(publicWork: PublicWork) {
+        const call = Config.BASE_URL + "/publicworks/add"
+        request.post(call).type('application/json').send(publicWork).then().catch(err => {
+            console.log(err)
+        })
+    }
+
+    static async updatePublicWork(publicWork: PublicWork) {
+        const call = Config.BASE_URL + "/publicworks/update"
+        request.put(call).type('application/json').send(publicWork).then().catch(err => {
+            console.log(err)
+        })
+    }
 }

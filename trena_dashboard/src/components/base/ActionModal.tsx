@@ -1,6 +1,6 @@
 import {observer} from "mobx-react";
 import React from "react";
-import {useStores} from "../../../core/stores/UseStores";
+import {useStores} from "../../core/stores/UseStores";
 
 interface ActionModalProps {
 
@@ -22,6 +22,8 @@ export const ActionModal: React.FC<ActionModalProps> = observer((props) => {
         closeModal()
     }
 
+    const isValid = viewInModal?.contentView.isValid
+
     return (
         <div className={"modal " + (viewInModal !== undefined ? "is-active" : "")}>
             <div className="modal-background"/>
@@ -35,7 +37,7 @@ export const ActionModal: React.FC<ActionModalProps> = observer((props) => {
                 </section>
                 <footer className="card-footer-right modal-card-foot">
                     <button className="button" onClick={closeModal}>Cancel</button>
-                    <button className="button is-success"
+                    <button className="button is-success" disabled={isValid ? !isValid() : false}
                             onClick={handleConfirmClick}>{viewInModal?.confirmButton}</button>
                 </footer>
             </div>

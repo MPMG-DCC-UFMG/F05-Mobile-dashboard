@@ -3,12 +3,12 @@ import './styles/App.css';
 import './styles/trena.css';
 import 'bulma/css/bulma.css';
 
-import {NavigationMenu} from './screens/components/menus/NavigationMenu';
+import {NavigationMenu} from './components/menus/NavigationMenu';
 import {Home} from './screens/Home';
 import {ScreenPublicWork} from './screens/ScreenPublicWork';
 import {ScreenTypeOfWork} from './screens/ScreenTypeOfWork';
 import {Switch, Route, BrowserRouter} from 'react-router-dom';
-import {ActionModal} from "./screens/components/base/ActionModal";
+import {ActionModal} from "./components/base/ActionModal";
 
 function App() {
     return (

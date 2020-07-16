@@ -20,11 +20,7 @@ export class TypeWorkService {
         request.post(call)
             .type('application/json')
             .query({type_work_id: typeWorkFlag})
-            .then(res => {
-                if (res.ok) {
-                    this.loadTypeWorks()
-                }
-            }).catch(err => {
+            .then().catch(err => {
             console.log(err)
         });
     }
@@ -34,11 +30,7 @@ export class TypeWorkService {
         request.post(call)
             .type('application/json')
             .send(typeWork)
-            .then(res => {
-                if (res.ok) {
-                    this.loadTypeWorks()
-                }
-            }).catch(err => {
+            .then().catch(err => {
             console.log(err)
         });
     }
@@ -48,11 +40,7 @@ export class TypeWorkService {
         request.put(call)
             .type('application/json')
             .send(typeWork)
-            .then(res => {
-                if (res.ok) {
-                    this.loadTypeWorks()
-                }
-            }).catch(err => {
+            .then().catch(err => {
             console.log(err)
         });
     }
