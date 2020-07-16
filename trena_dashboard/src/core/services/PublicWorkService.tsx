@@ -18,20 +18,21 @@ export class PublicWorkService {
         request.post(call)
             .type('application/json')
             .query({public_work_id: publicWorkId})
-            .then(res => {
-                if (res.ok) {
-                    this.loadPublicWorks()
-                }
-            }).catch(err => {
+            .then().catch(err => {
             console.log(err)
         });
     }
 
     static async addPublicWork(publicWork: PublicWork) {
         const call = Config.BASE_URL + "/publicworks/add"
-        request.post(call).type('application/json').send(publicWork).then(res => {
+        request.post(call).type('application/json').send(publicWork).then().catch(err => {
+            console.log(err)
+        })
+    }
 
-        }).catch(err => {
+    static async updatePublicWork(publicWork: PublicWork) {
+        const call = Config.BASE_URL + "/publicworks/update"
+        request.put(call).type('application/json').send(publicWork).then().catch(err => {
             console.log(err)
         })
     }

@@ -55,6 +55,16 @@ export class PublicWorkStore {
         })
     }
 
+    @action
+    async updatePublicWork(publicWork: PublicWork) {
+        this.baseCall(async () => {
+            await PublicWorkService.updatePublicWork(publicWork)
+            runInAction(() => {
+                this.loadPublicWorkList()
+            })
+        })
+    }
+
     baseCall(tryContent: () => void) {
         this.isLoading = true
         try {

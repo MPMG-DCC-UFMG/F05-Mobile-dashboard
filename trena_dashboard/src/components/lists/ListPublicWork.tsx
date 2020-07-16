@@ -44,7 +44,7 @@ export const ListPublicWork = observer(() => {
                 "Editar obra pública",
                 "editar",
                 () => {
-                    publicWorkStore.addPublicWork(mPublicWork)
+                    publicWorkStore.updatePublicWork(mPublicWork)
                 },
                 (publicWork: PublicWork) => {
                     mPublicWork = publicWork
