@@ -1,0 +1,86 @@
+import {observer} from "mobx-react";
+import {ItemActionsMenu} from "../menus/ItemActionsMenu";
+import React from "react";
+import {useStores} from "../../core/stores/UseStores";
+import {ItemTypePhoto} from "./items/ItemTypePhoto";
+import {Search} from "../form/Search";
+import {DeleteView} from "../../views/DeleteView";
+
+export const ListTypePhoto = observer(() => {
+    const {typePhotoStore, viewStore} = useStores()
+
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const query = event.currentTarget.value
+        typePhotoStore.search(query)
+    }
+
+    const handleAddClick = () => {
+
+    }
+
+    const handleEditClick = () => {
+
+    }
+
+    const handleDeleteClick = () => {
+        if (typePhotoStore.selectedTypePhoto !== undefined) {
+            const typePhoto = typePhotoStore.selectedTypePhoto
+            let deleteView = {
+                title: "Deletar tipo de foto",
+                confirmButton: "Deletar",
+                onConfirmClick: () => {
+                    if (typePhoto.flag) {
+                        typePhotoStore.deleteTypeOfPhoto(typePhoto.flag)
+                    }
+                },
+                contentView: <DeleteView toDelete={typePhoto.name}/>
+            }
+            viewStore.setViewInModal(deleteView)
+        }
+    }
+
+    return (
+        <div className="panel">
+            <div className="panel-heading">
+                <nav className="level">
+                    <div className="level-left">
+                        <div className="level-item">
+                            Tipos de fotos
+                        </div>
+                    </div>
+                    <div className="level-right">
+                        <div className="level-item">
+                            <ItemActionsMenu
+                                itemSelected={typePhotoStore.selectedTypePhoto !== undefined}
+                                onAddClicked={handleAddClick}
+                                onDeleteClicked={handleDeleteClick}
+                                onEditClicked={handleEditClick}/>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div className="panel-block">
+                <Search onTextChanged={handleSearch}/>
+            </div>
+            <div className="panel-block">
+                <table className="table is-fullwidth is-hoverable">
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {typePhotoStore.typePhotoList.map(typePhoto => {
+                            return <ItemTypePhoto
+                                key={typePhoto.flag}
+                                typePhoto={typePhoto}/>
+                        }
+                    )}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    )
+})
