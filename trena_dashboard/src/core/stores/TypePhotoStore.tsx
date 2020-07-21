@@ -46,4 +46,28 @@ export class TypePhotoStore extends BaseStore {
             })
         })
     }
+
+    @action
+    async addTypePhoto(typePhoto: TypePhoto) {
+        if (typePhoto.name) {
+            this.baseCall(async () => {
+                await TypePhotoService.addTypePhoto(typePhoto)
+                runInAction(() => {
+                    this.loadTypePhotoList()
+                })
+            })
+        }
+    }
+
+    @action
+    async updateTypePhoto(typePhoto: TypePhoto) {
+        if (typePhoto.name && typePhoto.flag) {
+            this.baseCall(async () => {
+                await TypePhotoService.updateTypePhoto(typePhoto)
+                runInAction(() => {
+                    this.loadTypePhotoList()
+                })
+            })
+        }
+    }
 }

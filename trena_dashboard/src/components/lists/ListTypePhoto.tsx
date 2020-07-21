@@ -5,9 +5,28 @@ import {useStores} from "../../core/stores/UseStores";
 import {ItemTypePhoto} from "./items/ItemTypePhoto";
 import {Search} from "../form/Search";
 import {DeleteView} from "../../views/DeleteView";
+import {TypePhoto} from "../../core/models/TypePhoto";
+import TypePhotoCRUDView from "../../views/TypePhotoCRUDView";
 
 export const ListTypePhoto = observer(() => {
     const {typePhotoStore, viewStore} = useStores()
+
+    const createTypePhotoView = (title: string,
+                                 confirm: string,
+                                 onConfirmClick: () => void,
+                                 onChangeTypePhoto: (typePhoto: TypePhoto) => void,
+                                 defaultTypePhoto?: TypePhoto
+    ) => {
+        let typePhotoView = {
+            title: title,
+            confirmButton: confirm,
+            onConfirmClick: onConfirmClick,
+            contentView:
+                <TypePhotoCRUDView onChangeTypePhoto={onChangeTypePhoto}
+                                   defaultTypePhoto={defaultTypePhoto}/>
+        }
+        viewStore.setViewInModal(typePhotoView)
+    }
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         const query = event.currentTarget.value
@@ -15,11 +34,32 @@ export const ListTypePhoto = observer(() => {
     }
 
     const handleAddClick = () => {
-
+        let mTypePhoto: TypePhoto = {name: ""}
+        createTypePhotoView(
+            "Adicionar tipo de foto",
+            "Adicionar",
+            () => {
+                typePhotoStore.addTypePhoto(mTypePhoto)
+            },
+            (typePhoto: TypePhoto) => {
+                mTypePhoto = typePhoto
+            })
     }
 
     const handleEditClick = () => {
-
+        if (typePhotoStore.selectedTypePhoto) {
+            let mTypePhoto = typePhotoStore.selectedTypePhoto
+            createTypePhotoView(
+                "Editar tipo de foto",
+                "Editar",
+                () => {
+                    typePhotoStore.updateTypePhoto(mTypePhoto)
+                },
+                (typePhoto: TypePhoto) => {
+                    mTypePhoto = typePhoto
+                },
+                mTypePhoto)
+        }
     }
 
     const handleDeleteClick = () => {

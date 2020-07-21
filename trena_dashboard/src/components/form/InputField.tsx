@@ -11,7 +11,6 @@ export interface InputFieldProps {
 export const InputField: React.FC<InputFieldProps> = (props) => {
     const {inputLabel, inputHint, inputName, inputDefaultValue, onValueChanged} = props
 
-
     return (
         <div className="field">
             <label className="label">{inputLabel}</label>
