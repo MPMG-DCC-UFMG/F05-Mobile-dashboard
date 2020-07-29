@@ -1,13 +1,14 @@
 import {PublicWork} from "../models/PublicWork";
 import {action, observable, runInAction} from "mobx";
+import {BaseStore} from "./BaseStore";
 import {PublicWorkService} from "../services/PublicWorkService";
 
-export class PublicWorkStore {
+
+export class PublicWorkStore extends BaseStore {
 
     private fullPublicWorkList: PublicWork[] = [];
 
     @observable publicWorkList: PublicWork[] = [];
-    @observable isLoading = false;
     @observable selectedPublicWork?: PublicWork = undefined;
 
     @action

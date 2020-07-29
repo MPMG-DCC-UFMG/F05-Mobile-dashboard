@@ -1,14 +1,13 @@
 import {action, observable, runInAction} from "mobx";
 import {TypeWork} from "../models/TypeWork";
-
+import {BaseStore} from "./BaseStore";
 import {TypeWorkService} from "../services/TypeWorkService";
 
-export class TypeWorkStore {
+export class TypeWorkStore extends BaseStore {
 
     private fullTypeWorksList: TypeWork[] = [];
 
     @observable typeWorksList: TypeWork[] = [];
-    @observable isLoading = false;
     @observable selectedTypeWork?: TypeWork = undefined
 
     @action
@@ -68,17 +67,6 @@ export class TypeWorkStore {
                     this.loadTypeWorkList()
                 })
             })
-        }
-    }
-
-    baseCall(tryContent: () => void) {
-        this.isLoading = true
-        try {
-            tryContent()
-        } catch (error) {
-            console.log(error)
-        } finally {
-            this.isLoading = false
         }
     }
 }
