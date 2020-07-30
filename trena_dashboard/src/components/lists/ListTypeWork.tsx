@@ -80,36 +80,34 @@ export const ListTypeWork = observer(() => {
     }
 
     return (
-        <>
-            <div className="panel">
-                <div className="panel-heading">
-                    <nav className="level">
-                        <div className="level-left">
-                            <div className="level-item">
-                                Tipos de Obras
-                            </div>
+        <div className="panel">
+            <div className="panel-heading">
+                <nav className="level">
+                    <div className="level-left">
+                        <div className="level-item">
+                            Tipos de Obras
                         </div>
-                        <div className="level-right">
-                            <div className="level-item">
-                                <ItemActionsMenu
-                                    itemSelected={typeWorkStore.selectedTypeWork !== undefined}
-                                    onAddClicked={handleAddClick}
-                                    onDeleteClicked={handleDeleteClick}
-                                    onEditClicked={handleEditClick}/>
-                            </div>
+                    </div>
+                    <div className="level-right">
+                        <div className="level-item">
+                            <ItemActionsMenu
+                                itemSelected={typeWorkStore.selectedTypeWork !== undefined}
+                                onAddClicked={handleAddClick}
+                                onDeleteClicked={handleDeleteClick}
+                                onEditClicked={handleEditClick}/>
                         </div>
-                    </nav>
-                </div>
-                <div className="panel-block">
-                    <Search onTextChanged={handleSearch}/>
-                </div>
-                {typeWorkStore.typeWorksList.map(typeWork => {
-                        return <ItemTypeWork
-                            key={typeWork.flag}
-                            typeWork={typeWork}/>
-                    }
-                )}
+                    </div>
+                </nav>
             </div>
-        </>
+            <div className="panel-block">
+                <Search onTextChanged={handleSearch}/>
+            </div>
+            {typeWorkStore.typeWorksList.map(typeWork => {
+                    return <ItemTypeWork
+                        key={typeWork.flag}
+                        typeWork={typeWork}/>
+                }
+            )}
+        </div>
     )
 })

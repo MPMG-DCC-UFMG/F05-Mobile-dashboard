@@ -8,7 +8,7 @@ interface ScreenTypeOfWorkProps {
 
 }
 
-export const ScreenTypeOfWork: React.FC<ScreenTypeOfWorkProps> = (props) => {
+export const TypeOfWorkScreen: React.FC<ScreenTypeOfWorkProps> = (props) => {
     const {typeWorkStore, typePhotoStore} = useStores()
     typeWorkStore.loadTypeWorkList()
     typePhotoStore.loadTypePhotoList()
