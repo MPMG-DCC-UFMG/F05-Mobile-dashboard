@@ -8,7 +8,6 @@ export class TypePhotoStore extends BaseStore {
     private fullTypePhotoList: TypePhoto[] = [];
 
     @observable typePhotoList: TypePhoto[] = [];
-    @observable isLoading = false;
     @observable selectedTypePhoto?: TypePhoto = undefined
 
     @action
