@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Trena Dashboard",
+  "name": "Trena dashboard created using react",
   "icons": [
     {
       "src": "favicon.ico",

@@ -10,7 +10,7 @@ import {LoginScreen} from "./screens/LoginScreen";
 
 function App() {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
             <div className="App">
                 <Switch>
                     <Route path="/login">
