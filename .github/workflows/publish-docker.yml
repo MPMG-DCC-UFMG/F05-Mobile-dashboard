@@ -13,7 +13,7 @@ jobs:
         uses: docker/build-push-action@v1
         with:
           path: ./trena_dashboard/
-          dockerfile: Dockerfile.prod
+          dockerfile: ./trena_dashboard/Dockerfile.prod
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
