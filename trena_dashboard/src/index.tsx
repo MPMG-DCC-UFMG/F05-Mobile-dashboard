@@ -6,6 +6,12 @@ import * as Sentry from '@sentry/react';
 import * as serviceWorker from './serviceWorker';
 import Config from "./config/Config";
 
+declare global {
+    interface Window {
+        _env_: any
+    }
+}
+
 Sentry.init({dsn: Config.SENTRY_DNS, environment: Config.ENVIRONMENT});
 
 ReactDOM.render(

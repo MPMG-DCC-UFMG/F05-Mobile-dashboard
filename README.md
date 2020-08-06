@@ -23,12 +23,10 @@ Services used to provide features into this project:
 
 ## 2. Configuration
 
-There is a file called Config.tsx in the folder **src/config**. That file holds the global values used trough the application and it looks like:
+There is a file called .env in the root folder. That file holds the global environment default values used trough the application:
 
 ```bash
-export default class Config {
-    static ENVIRONMENT: string = "development";
-    static BASE_URL: string = "http://0.0.0.0:8000";
-    static SENTRY_DNS: string = "<SENTRY_DNS>";
-}
+REACT_APP_ENVIRONMENT=development
+REACT_APP_BASE_URL=http://0.0.0.0:8000
+REACT_APP_SENTRY_DNS=<SENTRY_DNS>
 ```
