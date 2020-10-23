@@ -1,7 +1,9 @@
 import {PublicWork} from "../models/PublicWork";
 import {action, observable, runInAction} from "mobx";
 import {BaseStore} from "./BaseStore";
-import {PublicWorkService} from "../services/PublicWorkService";
+import {PublicWorkService} from "../network/services/PublicWorkService";
+import {Collect} from "../models/Collect";
+import {CollectService} from "../network/services/CollectService";
 
 
 export class PublicWorkStore extends BaseStore {
@@ -10,6 +12,8 @@ export class PublicWorkStore extends BaseStore {
 
     @observable publicWorkList: PublicWork[] = [];
     @observable selectedPublicWork?: PublicWork = undefined;
+    @observable collectsOfPublicWork: Collect[] = [];
+
 
     @action
     async loadPublicWorkList() {
@@ -34,6 +38,9 @@ export class PublicWorkStore extends BaseStore {
     @action
     selectPublicWork(publicWork?: PublicWork) {
         this.selectedPublicWork = publicWork
+        if (publicWork) {
+            this.loadPublicWorkCollects(publicWork?.id)
+        }
     }
 
     @action
@@ -66,14 +73,15 @@ export class PublicWorkStore extends BaseStore {
         })
     }
 
-    baseCall(tryContent: () => void) {
-        this.isLoading = true
-        try {
-            tryContent()
-        } catch (error) {
-            console.log(error)
-        } finally {
-            this.isLoading = false
-        }
+    @action
+    async loadPublicWorkCollects(publicWorkId: string) {
+        this.baseCall(async () => {
+            const collects = await CollectService.loadPublicWorkCollects(publicWorkId)
+            runInAction(() => {
+                this.collectsOfPublicWork = collects
+            })
+        })
     }
+
+
 }

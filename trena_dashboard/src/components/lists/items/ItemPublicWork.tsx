@@ -18,7 +18,7 @@ export const ItemPublicWork: React.FC<ItemPublicWorkProps> = observer((props) =>
     }
 
     return (
-        <a href="# " className={"panel-block" + (isSelected ? " has-background-grey-lighter" : "")} key={publicWork.id}
+        <a className={"panel-block" + (isSelected ? " has-background-grey-lighter" : "")} key={publicWork.id}
            onClick={handleClick}>
             {publicWork.name}
         </a>

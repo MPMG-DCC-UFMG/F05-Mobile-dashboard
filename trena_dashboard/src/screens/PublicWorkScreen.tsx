@@ -1,13 +1,13 @@
 import React from "react";
 import {ListPublicWork} from "../components/lists/ListPublicWork";
 import {useStores} from "../core/stores/UseStores";
-import {PublicWorkView} from "../views/PublicWorkView";
+import {PublicWorkView} from "../views/publicWork/PublicWorkView";
 
-interface PublicWorkScreen {
+interface PublicWorkScreenProps {
 
 }
 
-export const ScreenPublicWork: React.FC<PublicWorkScreen> = (props) => {
+export const PublicWorkScreen: React.FC<PublicWorkScreenProps> = (props) => {
     const {publicWorkStore,typeWorkStore} = useStores()
     publicWorkStore.loadPublicWorkList()
     typeWorkStore.loadTypeWorkList()

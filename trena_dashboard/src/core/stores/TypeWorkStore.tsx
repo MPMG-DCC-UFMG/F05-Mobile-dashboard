@@ -1,7 +1,7 @@
 import {action, observable, runInAction} from "mobx";
 import {TypeWork} from "../models/TypeWork";
 import {BaseStore} from "./BaseStore";
-import {TypeWorkService} from "../services/TypeWorkService";
+import {TypeWorkService} from "../network/services/TypeWorkService";
 
 export class TypeWorkStore extends BaseStore {
 

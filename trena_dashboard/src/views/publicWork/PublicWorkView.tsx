@@ -1,7 +1,7 @@
 import {observer} from "mobx-react";
-import {useStores} from "../core/stores/UseStores";
+import {useStores} from "../../core/stores/UseStores";
 import React from "react";
-import {EmptyView} from "./EmptyView";
+import {EmptyView} from "../EmptyView";
 import {MapView} from "./MapView";
 
 

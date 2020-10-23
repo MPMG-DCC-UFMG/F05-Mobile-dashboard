@@ -1,13 +1,13 @@
-import request from "superagent";
-import Config from "../../config/Config";
+import Config from "../../../config/Config";
 
-import {TypeWork} from "../models/TypeWork"
+import {TypeWork} from "../../models/TypeWork"
+import {network} from "../NetworkInterceptor";
 
 export class TypeWorkService {
 
     static async loadTypeWorks(): Promise<TypeWork[]> {
         const call = Config.BASE_URL + "/typeworks/"
-        return request.get(call)
+        return network.get(call)
             .then(res => {
                 let listOfTypeWorks: TypeWork[] = res.body
 
@@ -17,7 +17,7 @@ export class TypeWorkService {
 
     static async deleteTypeWork(typeWorkFlag: number) {
         const call = Config.BASE_URL + "/typeworks/delete"
-        request.post(call)
+        network.post(call)
             .type('application/json')
             .query({type_work_id: typeWorkFlag})
             .then().catch(err => {
@@ -27,7 +27,7 @@ export class TypeWorkService {
 
     static async addTypeWork(typeWork: TypeWork) {
         const call = Config.BASE_URL + "/typeworks/add"
-        request.post(call)
+        network.post(call)
             .type('application/json')
             .send(typeWork)
             .then().catch(err => {
@@ -37,7 +37,7 @@ export class TypeWorkService {
 
     static async updateTypeWork(typeWork: TypeWork) {
         const call = Config.BASE_URL + "/typeworks/update"
-        request.put(call)
+        network.put(call)
             .type('application/json')
             .send(typeWork)
             .then().catch(err => {

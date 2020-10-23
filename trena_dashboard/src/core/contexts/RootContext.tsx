@@ -4,6 +4,7 @@ import {PublicWorkStore} from "../stores/PublicWorkStore";
 import {ViewStore} from "../stores/ViewStore";
 import {TypePhotoStore} from "../stores/TypePhotoStore";
 import {UserStore} from "../stores/UserStore";
+import {StatisticsStore} from "../stores/StatisticsStore";
 
 
 export const rootContext = React.createContext({
@@ -11,5 +12,6 @@ export const rootContext = React.createContext({
     publicWorkStore: new PublicWorkStore(),
     viewStore: new ViewStore(),
     typePhotoStore: new TypePhotoStore(),
-    userStore: new UserStore()
+    userStore: new UserStore(),
+    statisticsStore: new StatisticsStore()
 })

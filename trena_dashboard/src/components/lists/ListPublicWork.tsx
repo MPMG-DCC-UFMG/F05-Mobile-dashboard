@@ -7,7 +7,7 @@ import {ItemActionsMenu} from "../menus/ItemActionsMenu";
 import {DeleteView} from "../../views/DeleteView";
 import {PublicWork} from "../../core/models/PublicWork";
 import {DropdownOptions} from "../form/Dropdown";
-import PublicWorkCRUDView from "../../views/PublicWorkCRUDView";
+import PublicWorkCRUDView from "../../views/publicWork/PublicWorkCRUDView";
 
 export const ListPublicWork = observer(() => {
     const {publicWorkStore, viewStore, typeWorkStore} = useStores()

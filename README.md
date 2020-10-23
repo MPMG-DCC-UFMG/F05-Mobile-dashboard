@@ -18,7 +18,6 @@ The list of all the third party libraries used are:
 
 Services used to provide features into this project:
 
-* [ViaCep](https://viacep.com.br/): free webservice to query CEP in Brazil, not necessary to create account but don't return latitude and longitude
 * [Cep Aberto](https://cepaberto.com/): free webservice to query CEP in Brazil.
 
 ## 2. Configuration

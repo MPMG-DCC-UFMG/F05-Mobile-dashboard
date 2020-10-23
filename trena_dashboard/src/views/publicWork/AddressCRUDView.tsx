@@ -1,9 +1,9 @@
-import {BaseCRUDView} from "../components/base/BaseCRUDView";
-import {Address} from "../core/models/Address";
+import {BaseCRUDView} from "../../components/base/BaseCRUDView";
+import {Address} from "../../core/models/Address";
 import React from "react";
-import {InputField} from "../components/form/InputField";
-import {InputFieldWithAction} from "../components/form/InputFieldWithAction";
-import {LocationService} from "../core/services/LocationService";
+import {InputField} from "../../components/form/InputField";
+import {InputFieldWithAction} from "../../components/form/InputFieldWithAction";
+import {LocationService} from "../../core/network/services/LocationService";
 
 interface AddressCRUDViewProps {
     defaultAddress?: AddressCRUDViewState,

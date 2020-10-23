@@ -1,7 +1,7 @@
 import {TypePhoto} from "../models/TypePhoto";
 import {action, observable, runInAction} from "mobx";
 import {BaseStore} from "./BaseStore";
-import {TypePhotoService} from "../services/TypePhotoService";
+import {TypePhotoService} from "../network/services/TypePhotoService";
 
 export class TypePhotoStore extends BaseStore {
 

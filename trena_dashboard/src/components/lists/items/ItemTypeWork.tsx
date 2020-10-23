@@ -18,7 +18,7 @@ export const ItemTypeWork: React.FC<ItemTypeWorkProps> = observer((props) => {
     }
 
     return (
-        <a href="# " className={"panel-block" + (isSelected ? " has-background-grey-lighter" : "")} key={typeWork.flag}
+        <a className={"panel-block" + (isSelected ? " has-background-grey-lighter" : "")} key={typeWork.flag}
            onClick={handleClick}>
             {typeWork.name}
         </a>

@@ -1,11 +1,12 @@
 import {Route, Switch, Redirect} from "react-router-dom";
 import {Home} from "./Home";
 import {TypeOfWorkScreen} from "./TypeOfWorkScreen";
-import {ScreenPublicWork} from "./PublicWorkScreen";
+import {PublicWorkScreen} from "./PublicWorkScreen";
 import React from "react";
 import {observer} from "mobx-react";
 import {useStores} from "../core/stores/UseStores";
 import {NavigationMenu} from "../components/menus/NavigationMenu";
+import {UserManagementScreen} from "./UserManagementScreen";
 
 export const MainScreen = observer(() => {
 
@@ -30,7 +31,10 @@ export const MainScreen = observer(() => {
                             <TypeOfWorkScreen/>
                         </Route>
                         <Route path="/publicWork">
-                            <ScreenPublicWork/>
+                            <PublicWorkScreen/>
+                        </Route>
+                        <Route path="/users">
+                            <UserManagementScreen/>
                         </Route>
                     </Switch>
                 </div>
