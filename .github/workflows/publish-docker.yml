@@ -12,7 +12,8 @@ jobs:
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
         with:
-          dockerfile: /trena_dashboard/Dockerfile.prod
+          path: ./trena_dashboard/
+          dockerfile: ./trena_dashboard/Dockerfile.prod
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
