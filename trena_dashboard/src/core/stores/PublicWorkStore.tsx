@@ -14,7 +14,6 @@ export class PublicWorkStore extends BaseStore {
     @observable selectedPublicWork?: PublicWork = undefined;
     @observable collectsOfPublicWork: Collect[] = [];
 
-
     @action
     async loadPublicWorkList() {
         this.baseCall(async () => {
@@ -83,5 +82,8 @@ export class PublicWorkStore extends BaseStore {
         })
     }
 
+    downloadCollectJSONReport = (publicWorkId: string) => {
+        CollectService.downloadJSONReport(publicWorkId)
+    }
 
 }

@@ -1,6 +1,6 @@
 import {PublicWork} from "../../../core/models/PublicWork";
 import React from "react";
-import {useStores} from "../../../core/stores/UseStores";
+import {useStores} from "../../../core/contexts/UseStores";
 import {observer} from "mobx-react";
 
 interface ItemPublicWorkProps {

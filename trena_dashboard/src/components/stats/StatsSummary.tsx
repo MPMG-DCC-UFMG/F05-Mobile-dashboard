@@ -1,7 +1,7 @@
 import React from "react";
 import {StatsItem} from "./StatsItem";
 import {observer} from "mobx-react";
-import {useStores} from "../../core/stores/UseStores";
+import {useStores} from "../../core/contexts/UseStores";
 
 export const StatsSummary: React.FC<any> = observer(() => {
 

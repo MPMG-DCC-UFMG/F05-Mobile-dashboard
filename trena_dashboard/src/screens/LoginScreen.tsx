@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {InputField} from "../components/form/InputField";
 import {ReactComponent as Logo} from "../images/logo.svg";
-import {useStores} from "../core/stores/UseStores";
+import {useStores} from "../core/contexts/UseStores";
 import {Redirect} from "react-router-dom";
 import {observer} from "mobx-react";
 
@@ -10,15 +10,8 @@ export const LoginScreen: React.FC<any> = observer(() => {
     const {userStore} = useStores()
     const [user, setUser] = useState({username: "", password: ""})
 
-    const checkLogged = () => {
-        if (userStore.loggedUser) {
-            return <Redirect to="/"/>
-        }
-    }
-
     const onLoginClicked = async () => {
         await userStore.login(user.username, user.password)
-        checkLogged()
     }
 
     const onValueChanged = (e: React.ChangeEvent<HTMLInputElement>) => {

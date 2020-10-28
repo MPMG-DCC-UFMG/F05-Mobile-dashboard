@@ -1,7 +1,7 @@
 import React from "react"
 import {UserCRUDView} from "../views/user/UserCRUDView";
 import {ListUser} from "../components/lists/ListUser";
-import {useStores} from "../core/stores/UseStores";
+import {useStores} from "../core/contexts/UseStores";
 
 export const UserManagementScreen: React.FC<any> = () => {
     const {userStore} = useStores()

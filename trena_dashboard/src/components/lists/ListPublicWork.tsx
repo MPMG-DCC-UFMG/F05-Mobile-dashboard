@@ -1,5 +1,5 @@
 import {observer} from "mobx-react";
-import {useStores} from "../../core/stores/UseStores";
+import {useStores} from "../../core/contexts/UseStores";
 import React from "react";
 import {ItemPublicWork} from "./items/ItemPublicWork";
 import {Search} from "../form/Search";

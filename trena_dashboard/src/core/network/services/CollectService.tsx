@@ -23,4 +23,23 @@ export class CollectService {
             return collectCount
         })
     }
+
+    static async downloadJSONReport(publicWorkId: string) {
+        const call = Config.BASE_URL + "/collects/report/json/file"
+        network.get(call)
+            .responseType('blob')
+            .query({public_work_id: publicWorkId}).then(res => {
+            const data: Blob = res.body
+            this.saveData(data, publicWorkId)
+        })
+    }
+
+    private static saveData = (data: Blob, filename: string = "filename") => {
+        const csvURL = window.URL.createObjectURL(data);
+        let tempLink = document.createElement('a');
+        tempLink.href = csvURL;
+        tempLink.setAttribute('download', filename + '.json');
+        tempLink.click();
+    }
+
 }

@@ -2,7 +2,6 @@ import {BaseStore} from "./BaseStore";
 import {action, observable, runInAction} from "mobx";
 import {User} from "../models/User";
 import {SecurityService} from "../network/services/SecurityService";
-import {TypePhotoService} from "../network/services/TypePhotoService";
 
 export class UserStore extends BaseStore {
 

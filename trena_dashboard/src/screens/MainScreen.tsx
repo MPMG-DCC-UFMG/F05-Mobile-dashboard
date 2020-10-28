@@ -4,13 +4,15 @@ import {TypeOfWorkScreen} from "./TypeOfWorkScreen";
 import {PublicWorkScreen} from "./PublicWorkScreen";
 import React from "react";
 import {observer} from "mobx-react";
-import {useStores} from "../core/stores/UseStores";
+import {useStores} from "../core/contexts/UseStores";
 import {NavigationMenu} from "../components/menus/NavigationMenu";
 import {UserManagementScreen} from "./UserManagementScreen";
 
 export const MainScreen = observer(() => {
 
-    const {userStore} = useStores()
+    const {userStore, workStatusStore} = useStores()
+
+    workStatusStore.loadWorkStatus()
 
     if (userStore.loggedUser === undefined) {
         return <Redirect to="/login"/>

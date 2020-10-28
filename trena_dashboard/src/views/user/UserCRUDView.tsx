@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {InputField} from "../../components/form/InputField";
-import {useStores} from "../../core/stores/UseStores";
+import {useStores} from "../../core/contexts/UseStores";
 
 export const UserCRUDView: React.FC<any> = () => {
     const {userStore} = useStores()

@@ -1,6 +1,6 @@
 import React from "react";
 import {ListTypeWork} from "../components/lists/ListTypeWork";
-import {useStores} from "../core/stores/UseStores";
+import {useStores} from "../core/contexts/UseStores";
 import {ListTypePhoto} from "../components/lists/ListTypePhoto";
 
 

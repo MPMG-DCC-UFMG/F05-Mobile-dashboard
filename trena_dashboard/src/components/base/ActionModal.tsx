@@ -1,6 +1,6 @@
 import {observer} from "mobx-react";
 import React from "react";
-import {useStores} from "../../core/stores/UseStores";
+import {useStores} from "../../core/contexts/UseStores";
 
 interface ActionModalProps {
 

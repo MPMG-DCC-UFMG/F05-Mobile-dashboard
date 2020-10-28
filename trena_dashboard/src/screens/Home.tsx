@@ -1,6 +1,6 @@
 import React from "react";
 import {StatsSummary} from "../components/stats/StatsSummary";
-import {useStores} from "../core/stores/UseStores";
+import {useStores} from "../core/contexts/UseStores";
 
 interface HomeProps {
 }

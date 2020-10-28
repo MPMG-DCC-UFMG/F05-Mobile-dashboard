@@ -1,13 +1,31 @@
 import {observer} from "mobx-react";
-import {useStores} from "../../core/stores/UseStores";
+import {useStores} from "../../core/contexts/UseStores";
 import React from "react";
 import {EmptyView} from "../EmptyView";
 import {MapView} from "./MapView";
+import {PublicWorkMenu} from "../../components/menus/PublicWorkMenu";
 
 
 export const PublicWorkView = observer(() => {
-    const {publicWorkStore} = useStores()
+    const {publicWorkStore, workStatusStore} = useStores()
     const publicWork = publicWorkStore.selectedPublicWork
+    const collectCount = publicWorkStore.collectsOfPublicWork.length
+
+    const handleDownloadCollectClicked = () => {
+        if (publicWork) {
+            publicWorkStore.downloadCollectJSONReport(publicWork.id)
+        }
+    }
+
+    const getWorkStatus = (): string => {
+        const status = publicWork?.user_status
+        if (status) {
+            const workStatus = workStatusStore.getWorkStatusByFlag(status)
+            return workStatus?.name ?? "--"
+        } else {
+            return "--"
+        }
+    }
 
     return (
         <>{
@@ -25,6 +43,10 @@ export const PublicWorkView = observer(() => {
                                 </p>
                                 <MapView latitude={publicWork.address.latitude} longitude={publicWork.address.longitude}
                                          zoom={14}/>
+                                <br/>
+                                <PublicWorkMenu collectCount={collectCount}
+                                                workState={getWorkStatus()}
+                                                onDownloadClicked={handleDownloadCollectClicked}/>
                             </div>
                         </div>
                     </article>

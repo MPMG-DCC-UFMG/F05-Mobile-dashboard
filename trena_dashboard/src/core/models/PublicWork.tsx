@@ -5,4 +5,6 @@ export interface PublicWork {
     name: string,
     type_work_flag: number,
     address: Address,
+    user_status?: number,
+    rnn_status?: number
 }
