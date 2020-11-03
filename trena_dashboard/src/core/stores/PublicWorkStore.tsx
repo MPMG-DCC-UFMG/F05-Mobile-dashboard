@@ -30,7 +30,7 @@ export class PublicWorkStore extends BaseStore {
         if (!query || /^\s*$/.test(query)) {
             this.publicWorkList = this.fullPublicWorkList
         } else {
-            this.publicWorkList = this.fullPublicWorkList.filter(item => item.name.includes(query))
+            this.publicWorkList = this.fullPublicWorkList.filter(item => item.name.toUpperCase().includes(query.toUpperCase()))
         }
     }
 

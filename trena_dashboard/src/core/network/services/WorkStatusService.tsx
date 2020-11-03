@@ -12,4 +12,34 @@ export class WorkStatusService {
                 return listOfWorkStatus
             })
     }
+
+    static async deleteWorkStatus(workStatusFlag: number) {
+        const call = Config.BASE_URL + "/workstatus/delete"
+        network.post(call)
+            .type('application/json')
+            .query({work_status_id: workStatusFlag})
+            .then().catch(err => {
+            console.log(err)
+        });
+    }
+
+    static async addWorkStatus(workStatus: WorkStatus) {
+        const call = Config.BASE_URL + "/workstatus/add"
+        network.post(call)
+            .type('application/json')
+            .send(workStatus)
+            .then().catch(err => {
+            console.log(err)
+        });
+    }
+
+    static async updateWorkStatus(workStatus: WorkStatus) {
+        const call = Config.BASE_URL + "/workstatus/update"
+        network.put(call)
+            .type('application/json')
+            .send(workStatus)
+            .then().catch(err => {
+            console.log(err)
+        });
+    }
 }

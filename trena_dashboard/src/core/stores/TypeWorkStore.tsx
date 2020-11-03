@@ -25,7 +25,7 @@ export class TypeWorkStore extends BaseStore {
     @action
     search(query?: string) {
         if (query) {
-            this.typeWorksList = this.fullTypeWorksList.filter(item => item.name.includes(query))
+            this.typeWorksList = this.fullTypeWorksList.filter(item => item.name.toUpperCase().includes(query.toUpperCase()))
         } else {
             this.typeWorksList = this.fullTypeWorksList
         }

@@ -7,6 +7,7 @@ import {observer} from "mobx-react";
 import {useStores} from "../core/contexts/UseStores";
 import {NavigationMenu} from "../components/menus/NavigationMenu";
 import {UserManagementScreen} from "./UserManagementScreen";
+import {WorkStatusScreen} from "./WorkStatusScreen";
 
 export const MainScreen = observer(() => {
 
@@ -34,6 +35,9 @@ export const MainScreen = observer(() => {
                         </Route>
                         <Route path="/publicWork">
                             <PublicWorkScreen/>
+                        </Route>
+                        <Route path="/workStatus">
+                            <WorkStatusScreen/>
                         </Route>
                         <Route path="/users">
                             <UserManagementScreen/>

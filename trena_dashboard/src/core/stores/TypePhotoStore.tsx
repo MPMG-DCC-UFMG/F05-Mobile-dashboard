@@ -30,7 +30,7 @@ export class TypePhotoStore extends BaseStore {
     @action
     search(query?: string) {
         if (query) {
-            this.typePhotoList = this.fullTypePhotoList.filter(item => item.name.includes(query))
+            this.typePhotoList = this.fullTypePhotoList.filter(item => item.name.toUpperCase().includes(query.toUpperCase()))
         } else {
             this.typePhotoList = this.fullTypePhotoList
         }

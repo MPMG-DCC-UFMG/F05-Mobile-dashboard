@@ -1,5 +1,5 @@
 export interface WorkStatus {
-    flag: number,
+    flag?: number,
     name: string,
-    description: string
+    description?: string
 }
