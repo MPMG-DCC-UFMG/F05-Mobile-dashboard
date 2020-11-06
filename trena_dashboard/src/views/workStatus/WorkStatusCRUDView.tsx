@@ -1,13 +1,13 @@
-import {BaseCRUDView} from "../components/base/BaseCRUDView";
-import {TypePhoto} from "../core/models/TypePhoto";
-import {InputField} from "../components/form/InputField";
 import React from "react";
-import {InputTextArea} from "../components/form/InputTextArea";
+import {BaseCRUDView} from "../../components/base/BaseCRUDView";
+import {InputField} from "../../components/form/InputField";
+import {InputTextArea} from "../../components/form/InputTextArea";
+import {WorkStatus} from "../../core/models/WorkStatus";
 
 
-interface TypePhotoCRUDViewProps {
-    defaultTypePhoto?: TypePhotoCRUDViewState,
-    onChangeTypePhoto?: (typePhoto: TypePhoto) => void
+interface WorkStatusCRUDViewProps {
+    defaultWorkStatus?: WorkStatusCRUDViewState,
+    onChangeWorkStatus?: (workStatus: WorkStatus) => void
 }
 
 const initialState = {
@@ -16,17 +16,17 @@ const initialState = {
     description: ""
 }
 
-type TypePhotoCRUDViewState = typeof initialState | TypePhoto
+type WorkStatusCRUDViewState = typeof initialState | WorkStatus
 
-export default class TypePhotoCRUDView extends BaseCRUDView<TypePhotoCRUDViewProps, TypePhotoCRUDViewState> {
+export default class WorkStatusCRUDView extends BaseCRUDView<WorkStatusCRUDViewProps, WorkStatusCRUDViewState> {
 
-    readonly state: TypePhotoCRUDViewState = initialState
+    readonly state: WorkStatusCRUDViewState = initialState
 
-    constructor(props: TypePhotoCRUDViewProps) {
+    constructor(props: WorkStatusCRUDViewProps) {
         super(props);
 
-        if (props.defaultTypePhoto) {
-            this.state = props.defaultTypePhoto
+        if (props.defaultWorkStatus) {
+            this.state = props.defaultWorkStatus
         }
     }
 
@@ -40,9 +40,9 @@ export default class TypePhotoCRUDView extends BaseCRUDView<TypePhotoCRUDViewPro
         return valid
     }
 
-    onChange = (value: TypePhotoCRUDViewState) => {
-        if (this.props.onChangeTypePhoto) {
-            this.props.onChangeTypePhoto(value as TypePhoto)
+    onChange = (value: WorkStatusCRUDViewState) => {
+        if (this.props.onChangeWorkStatus) {
+            this.props.onChangeWorkStatus(value as WorkStatus)
         }
     }
 
@@ -58,13 +58,13 @@ export default class TypePhotoCRUDView extends BaseCRUDView<TypePhotoCRUDViewPro
         return (
             <div className="container has-text-left">
                 <InputField
-                    inputLabel="Tipo de Foto"
-                    inputHint="Adicionar novo tipo de foto ..."
+                    inputLabel="Estado da obra"
+                    inputHint="Adicionar novo estado da obra ..."
                     inputDefaultValue={this.state.name}
                     inputName="name"
                     onValueChanged={this.handleFormChange}/>
                 <InputTextArea inputLabel="Descrição"
-                               inputHint="Descrição da foto"
+                               inputHint="Descrição do estado da obra"
                                inputDefaultValue={this.state.description}
                                inputName="description"
                                onValueChanged={this.onDescriptionChanged}/>

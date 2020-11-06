@@ -15,6 +15,7 @@ export const NavigationMenu: React.FC<any> = () => {
             <ul className="menu-list is-active">
                 <NavLink activeClassName="is-active" to="/" exact={true}>Home</NavLink>
                 <NavLink activeClassName="is-active" to="/typeOfWork">Tipos de Obra</NavLink>
+                <NavLink activeClassName="is-active" to="/typePhoto">Tipos de Fotos</NavLink>
                 <NavLink activeClassName="is-active" to="/publicWork">Obras Públicas</NavLink>
                 <NavLink activeClassName="is-active" to="/workStatus">Estados das Obras</NavLink>
                 <NavLink activeClassName="is-active" to="/users">Usuários</NavLink>

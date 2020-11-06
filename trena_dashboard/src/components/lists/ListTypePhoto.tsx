@@ -6,7 +6,7 @@ import {ItemTypePhoto} from "./items/ItemTypePhoto";
 import {Search} from "../form/Search";
 import {DeleteView} from "../../views/DeleteView";
 import {TypePhoto} from "../../core/models/TypePhoto";
-import TypePhotoCRUDView from "../../views/TypePhotoCRUDView";
+import TypePhotoCRUDView from "../../views/typePhoto/TypePhotoCRUDView";
 
 export const ListTypePhoto = observer(() => {
     const {typePhotoStore, viewStore} = useStores()

@@ -1,17 +1,12 @@
 import React from "react";
 import {ListTypeWork} from "../components/lists/ListTypeWork";
 import {useStores} from "../core/contexts/UseStores";
-import {ListTypePhoto} from "../components/lists/ListTypePhoto";
+import {TypePhotoBox} from "../views/typePhoto/TypePhotoBox";
+import {WorkStatusBox} from "../views/workStatus/WorkStatusBox";
 
-
-interface ScreenTypeOfWorkProps {
-
-}
-
-export const TypeOfWorkScreen: React.FC<ScreenTypeOfWorkProps> = (props) => {
-    const {typeWorkStore, typePhotoStore} = useStores()
+export const TypeOfWorkScreen: React.FC<any> = (props) => {
+    const {typeWorkStore} = useStores()
     typeWorkStore.loadTypeWorkList()
-    typePhotoStore.loadTypePhotoList()
 
     return (
         <div className="columns">
@@ -19,7 +14,8 @@ export const TypeOfWorkScreen: React.FC<ScreenTypeOfWorkProps> = (props) => {
                 <ListTypeWork/>
             </div>
             <div className="column">
-                <ListTypePhoto/>
+                <TypePhotoBox/>
+                <WorkStatusBox/>
             </div>
         </div>
     )

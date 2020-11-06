@@ -17,7 +17,7 @@ export const ListTypeWork = observer(() => {
     }
 
     const handleAddClick = () => {
-        let mTypeWork: TypeWork = {name: ""}
+        let mTypeWork: TypeWork = {name: "", status_list: []}
         createTypeWorkView(
             "Adicionar tipo de obra",
             "Adicionar",

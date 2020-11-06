@@ -1,4 +1,5 @@
 export type TypeWork = {
     flag?: number,
-    name: ""
+    name: "",
+    status_list: number[]
 }

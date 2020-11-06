@@ -8,6 +8,7 @@ import {useStores} from "../core/contexts/UseStores";
 import {NavigationMenu} from "../components/menus/NavigationMenu";
 import {UserManagementScreen} from "./UserManagementScreen";
 import {WorkStatusScreen} from "./WorkStatusScreen";
+import {TypePhotoScreen} from "./TypePhotoScreen";
 
 export const MainScreen = observer(() => {
 
@@ -32,6 +33,9 @@ export const MainScreen = observer(() => {
                         </Route>
                         <Route path="/typeOfWork">
                             <TypeOfWorkScreen/>
+                        </Route>
+                        <Route path="/typePhoto">
+                            <TypePhotoScreen/>
                         </Route>
                         <Route path="/publicWork">
                             <PublicWorkScreen/>

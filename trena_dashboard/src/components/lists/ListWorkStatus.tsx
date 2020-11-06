@@ -7,7 +7,7 @@ import {Search} from "../form/Search";
 import {DeleteView} from "../../views/DeleteView";
 import {TypePhoto} from "../../core/models/TypePhoto";
 import {WorkStatus} from "../../core/models/WorkStatus";
-import WorkStatusCRUDView from "../../views/WorkStatusCRUDView";
+import WorkStatusCRUDView from "../../views/workStatus/WorkStatusCRUDView";
 
 export const ListWorkStatus = observer(() => {
     const {workStatusStore, viewStore} = useStores()
