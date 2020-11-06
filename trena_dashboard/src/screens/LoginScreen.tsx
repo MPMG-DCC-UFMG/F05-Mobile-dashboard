@@ -14,6 +14,11 @@ export const LoginScreen: React.FC<any> = observer(() => {
         await userStore.login(user.username, user.password)
     }
 
+    const onSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
+        onLoginClicked()
+    }
+
     const onValueChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUser({...user, [e.target.name]: e.target.value})
     }
@@ -37,19 +42,22 @@ export const LoginScreen: React.FC<any> = observer(() => {
                             <figure className="image">
                                 <Logo/>
                             </figure>
-                            <InputField inputLabel="Usuário"
-                                        inputDefaultValue={user.username}
-                                        onValueChanged={onValueChanged}
-                                        inputName="username"/>
-                            <InputField inputLabel="Senha"
-                                        inputDefaultValue={user.password}
-                                        onValueChanged={onValueChanged}
-                                        inputName="password"
-                                        type="password"/>
-                            <button disabled={!isFormValid()} className="button is-info"
-                                    onClick={onLoginClicked}>
-                                Logar
-                            </button>
+                            <form onSubmit={onSubmit}>
+                                <InputField inputLabel="Usuário"
+                                            inputDefaultValue={user.username}
+                                            onValueChanged={onValueChanged}
+                                            inputName="username"/>
+                                <InputField inputLabel="Senha"
+                                            inputDefaultValue={user.password}
+                                            onValueChanged={onValueChanged}
+                                            inputName="password"
+                                            type="password"/>
+                                <button disabled={!isFormValid()} className="button is-info"
+                                        onClick={onLoginClicked} type={"submit"}>
+                                    Logar
+                                </button>
+                            </form>
+
                         </div>
                     </div>
                 </div>
