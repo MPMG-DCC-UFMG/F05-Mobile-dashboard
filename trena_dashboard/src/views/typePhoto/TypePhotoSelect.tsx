@@ -5,15 +5,24 @@ import React from "react";
 interface TypePhotoSelectProps {
     options: string[]
     onChangeSelectedOptions?: (selectedOptions: number[]) => void
+    defaultSelected?: number[]
 }
 
 const initialState = {
-    selectedOptions: []
+    selectedOptions: new Set<string>()
 }
 
 type TypePhotoSelectState = typeof initialState
 
 export default class TypePhotoSelect extends BaseCRUDView<TypePhotoSelectProps, TypePhotoSelectState>{
+
+    constructor(props: TypePhotoSelectProps) {
+        super(props);
+
+        if (props.defaultSelected) {
+            this.state = {selectedOptions: new Set<string>(props.defaultSelected.map(value => value.toString()))}
+        }
+    }
 
     isValid(): boolean {
         let valid = true
@@ -27,9 +36,8 @@ export default class TypePhotoSelect extends BaseCRUDView<TypePhotoSelectProps, 
 
     handleWorkChange = (selected: Set<string>) => {
         if (this.props.onChangeSelectedOptions) {
-            this.props.onChangeSelectedOptions([selected.values()].map(value => {
-                return value as unknown as number;
-            }))
+            let mArray = Array.from(selected).map(value => value as unknown as number)
+            this.props.onChangeSelectedOptions(mArray)
         }
     }
 

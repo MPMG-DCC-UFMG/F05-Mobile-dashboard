@@ -12,9 +12,10 @@ import {TypePhotoScreen} from "./TypePhotoScreen";
 
 export const MainScreen = observer(() => {
 
-    const {userStore, workStatusStore} = useStores()
+    const {userStore, workStatusStore,typePhotoStore} = useStores()
 
     workStatusStore.loadWorkStatus()
+    typePhotoStore.loadTypePhotoList()
 
     if (userStore.loggedUser === undefined) {
         return <Redirect to="/login"/>

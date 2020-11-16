@@ -7,9 +7,9 @@ import WorkStatusSelect from "./WorkStatusSelect";
 import {TagList} from "../../components/lists/TagList";
 
 export const WorkStatusBox: React.FC<any> = observer((props) => {
-
     const {viewStore, workStatusStore, typeWorkStore} = useStores()
     const selectedTypeWork = typeWorkStore.selectedTypeWork
+    const workStatuses = typeWorkStore.typeWorkWorkStatus
     const options = workStatusStore.workStatusList
 
     const handleOnEditClicked = async () => {
@@ -48,15 +48,6 @@ export const WorkStatusBox: React.FC<any> = observer((props) => {
         return selected
     }
 
-    const getSelectedStatus = (): string[] => {
-        let selectedStatus: string[] = []
-        if (selectedTypeWork) {
-            const works = new Set<number>(selectedTypeWork.status_list)
-            selectedStatus = options.filter(value => works.has(value.flag!)).map(value => value.name)
-        }
-        return selectedStatus
-    }
-
     const handleOnConfirmClicked = (selected: number[]) => {
         const newStatus: number[] = []
         selected.forEach((index) => {
@@ -64,7 +55,7 @@ export const WorkStatusBox: React.FC<any> = observer((props) => {
         })
         if (selectedTypeWork) {
             selectedTypeWork.status_list = newStatus
-            typeWorkStore.updateTypeWork(selectedTypeWork)
+            typeWorkStore.updateTypeWorkWorkStatus(newStatus, selectedTypeWork.flag!)
         }
     }
 
@@ -92,7 +83,7 @@ export const WorkStatusBox: React.FC<any> = observer((props) => {
             <div className="panel-block" style={{
                 minHeight: 250,
             }}>
-                <TagList tags={getSelectedStatus()}/>
+                <TagList tags={workStatuses.map(value => value.name)}/>
             </div>
         </div>
     )

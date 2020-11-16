@@ -2,6 +2,8 @@ import {action, observable, runInAction} from "mobx";
 import {TypeWork} from "../models/TypeWork";
 import {BaseStore} from "./BaseStore";
 import {TypeWorkService} from "../network/services/TypeWorkService";
+import {WorkStatus} from "../models/WorkStatus";
+import {TypePhoto} from "../models/TypePhoto";
 
 export class TypeWorkStore extends BaseStore {
 
@@ -9,6 +11,8 @@ export class TypeWorkStore extends BaseStore {
 
     @observable typeWorksList: TypeWork[] = [];
     @observable selectedTypeWork?: TypeWork = undefined
+    @observable typeWorkWorkStatus: WorkStatus[] = []
+    @observable typeWorkTypePhoto: TypePhoto[] = []
 
     @action
     async loadTypeWorkList() {
@@ -34,6 +38,8 @@ export class TypeWorkStore extends BaseStore {
     @action
     selectTypeWork(typeWork?: TypeWork) {
         this.selectedTypeWork = typeWork
+        this.loadSelectedTypeWorkWorkStatus()
+        this.loadSelectedTypeWorkTypePhotos()
     }
 
     @action
@@ -66,6 +72,52 @@ export class TypeWorkStore extends BaseStore {
                 runInAction(() => {
                     this.loadTypeWorkList()
                 })
+            })
+        }
+    }
+
+    @action
+    async updateTypeWorkWorkStatus(workStatuses: number[], typeWorkFlag: number) {
+        this.baseCall(async () => {
+            await TypeWorkService.updateTypeWorkWorkStatus(workStatuses, typeWorkFlag)
+            runInAction(() => {
+                this.loadSelectedTypeWorkWorkStatus()
+            })
+        })
+    }
+
+    @action
+    async loadSelectedTypeWorkWorkStatus() {
+        if (this.selectedTypeWork) {
+            this.baseCall(async () => {
+                const workStatus = await TypeWorkService.loadTypeWorkWorkStatus(this.selectedTypeWork!.flag!)
+                runInAction(() => {
+                        this.typeWorkWorkStatus = workStatus;
+                    }
+                )
+            })
+        }
+    }
+
+    @action
+    async updateTypeWorkTypePhoto(typePhotos: number[], typeWorkFlag: number) {
+        this.baseCall(async () => {
+            await TypeWorkService.updateTypeWorkTypePhoto(typePhotos, typeWorkFlag)
+            runInAction(() => {
+                this.loadSelectedTypeWorkTypePhotos()
+            })
+        })
+    }
+
+    @action
+    async loadSelectedTypeWorkTypePhotos() {
+        if (this.selectedTypeWork) {
+            this.baseCall(async () => {
+                const typePhotos = await TypeWorkService.loadTypeWorkTypePhotos(this.selectedTypeWork!.flag!)
+                runInAction(() => {
+                        this.typeWorkTypePhoto = typePhotos;
+                    }
+                )
             })
         }
     }

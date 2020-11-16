@@ -4,20 +4,22 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEdit} from "@fortawesome/free-solid-svg-icons";
 import {useStores} from "../../core/contexts/UseStores";
 import TypePhotoSelect from "./TypePhotoSelect";
+import {TagList} from "../../components/lists/TagList";
 
 export const TypePhotoBox: React.FC<any> = observer((props) => {
     const {viewStore, typePhotoStore, typeWorkStore} = useStores()
     const selectedTypeWork = typeWorkStore.selectedTypeWork
+    const typePhotos = typeWorkStore.typeWorkTypePhoto
+    const options = typePhotoStore.typePhotoList
 
     const handleOnEditClicked = async () => {
         await typePhotoStore.loadTypePhotoList()
-        const options = typePhotoStore.typePhotoList
-        let mSelected = []
+        let mSelected: number[] = []
         let workStatusSelect = {
             title: "Selecionar tipos de fotos",
             confirmButton: "Selecionar",
             onConfirmClick: () => {
-
+                handleOnConfirmClicked(mSelected)
             },
             contentView:
                 <TypePhotoSelect
@@ -25,9 +27,37 @@ export const TypePhotoBox: React.FC<any> = observer((props) => {
                     onChangeSelectedOptions={(selectedOptions) => {
                         mSelected = selectedOptions
                     }}
+                    defaultSelected={getSelectedIndexes()}
                 />
         }
         viewStore.setViewInModal(workStatusSelect)
+    }
+
+
+    const getSelectedIndexes = (): number[] => {
+        const selected: number[] = []
+        if (selectedTypeWork) {
+            const photos = new Set<number>(typePhotos.map(value => value.flag!))
+            options.forEach((value, index) => {
+                    if (photos.has(value.flag!)) {
+                        selected.push(index)
+                    }
+                }
+            )
+        }
+
+        return selected
+    }
+
+    const handleOnConfirmClicked = (selected: number[]) => {
+        const newStatus: number[] = []
+        selected.forEach((index) => {
+            newStatus.push(options[index].flag!)
+        })
+        if (selectedTypeWork) {
+            selectedTypeWork.status_list = newStatus
+            typeWorkStore.updateTypeWorkTypePhoto(newStatus, selectedTypeWork.flag!)
+        }
     }
 
     return (
@@ -54,6 +84,7 @@ export const TypePhotoBox: React.FC<any> = observer((props) => {
             <div className="panel-block" style={{
                 minHeight: 250,
             }}>
+                <TagList tags={typePhotos.map(value => value.name)}/>
             </div>
         </div>
     )
