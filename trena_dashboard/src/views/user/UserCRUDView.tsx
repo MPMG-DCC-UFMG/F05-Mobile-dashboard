@@ -1,8 +1,10 @@
 import React, {useState} from "react";
 import {InputField} from "../../components/form/InputField";
 import {useStores} from "../../core/contexts/UseStores";
+import {MPNotification} from "../../components/elements/Notification";
+import {observer} from "mobx-react";
 
-export const UserCRUDView: React.FC<any> = () => {
+export const UserCRUDView: React.FC<any> = observer(() => {
     const {userStore} = useStores()
     const [user, setUser] = useState({username: "", password1: "", password2: ""})
 
@@ -48,6 +50,11 @@ export const UserCRUDView: React.FC<any> = () => {
                                     type="password"/>
                     </div>
                 </div>
+                {userStore.addResult &&
+                <div className="panel-block" style={{'display':'block'}}>
+                    <MPNotification message={userStore.addResult}/>
+                </div>
+                }
                 <div className="panel-block">
                     <button className="button is-link is-outlined is-fullwidth" onClick={onAddUserClicked}
                             disabled={!formValid()}>
@@ -57,4 +64,4 @@ export const UserCRUDView: React.FC<any> = () => {
             </div>
         </>
     )
-}
+})

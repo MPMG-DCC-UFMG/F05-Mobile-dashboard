@@ -7,15 +7,16 @@ export class UserStore extends BaseStore {
 
     @observable loggedUser?: User = undefined
     @observable userCreated: boolean = false
-    @observable usersList: string[] = []
+    @observable addResult?: string = undefined
+    @observable usersList: User[] = []
 
     @action
     async login(email: string, password: string) {
         this.baseCall(async () => {
-            SecurityService.login(email, password).then(token => {
+            SecurityService.login(email, password).then(user => {
                 runInAction(() => {
-                    if (token) {
-                        this.loggedUser = {email: email, token: token}
+                    if (user) {
+                        this.loggedUser = user
                     }
                 })
             }).catch(res => {
@@ -33,12 +34,14 @@ export class UserStore extends BaseStore {
     async createUser(email: string, password: string) {
         this.baseCall(async () => {
             const response = await SecurityService.createUser(email, password)
-            if (response.success) {
-                runInAction(() => {
-                    this.userCreated = true
+            runInAction(() => {
+                console.log(response)
+                this.userCreated = response.success
+                this.addResult = response.error?.message
+                if (response.success) {
                     this.loadUsers()
-                })
-            }
+                }
+            })
         })
     }
 

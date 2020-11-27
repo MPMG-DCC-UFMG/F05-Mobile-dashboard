@@ -24,7 +24,7 @@ export const ListUser = observer(() => {
                     </nav>
                 </div>
                 {userStore.usersList.map(user => {
-                    return <ItemUser username={user} key={user}
+                    return <ItemUser user={user} key={user.email}
                                      onDeleteClicked={handleUserDeleted}/>
                 })}
             </div>

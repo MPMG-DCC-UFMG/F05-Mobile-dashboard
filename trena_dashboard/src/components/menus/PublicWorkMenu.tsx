@@ -4,13 +4,14 @@ import {faDownload} from "@fortawesome/free-solid-svg-icons";
 
 interface PublicWorkMenuProps {
     collectCount: number
-    workState: string
+    workStateUser: string
+    workStateIA: string
     onDownloadClicked?: () => void
 }
 
 export const PublicWorkMenu: React.FC<PublicWorkMenuProps> = (props) => {
 
-    const {collectCount, workState, onDownloadClicked} = props
+    const {collectCount, workStateUser, workStateIA, onDownloadClicked} = props
 
     return (
         <nav className="level">
@@ -30,8 +31,14 @@ export const PublicWorkMenu: React.FC<PublicWorkMenuProps> = (props) => {
             </div>
             <div className="level-item has-text-centered">
                 <div>
-                    <p className="heading">Estado da Obra</p>
-                    <span className="tag is-info">{workState}</span>
+                    <p className="heading">Estado da Obra Usuário</p>
+                    <span className="tag is-info">{workStateUser}</span>
+                </div>
+            </div>
+            <div className="level-item has-text-centered">
+                <div>
+                    <p className="heading">Estado da Obra RNN</p>
+                    <span className="tag is-info">{workStateIA}</span>
                 </div>
             </div>
         </nav>

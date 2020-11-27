@@ -8,6 +8,7 @@ import {DeleteView} from "../../views/DeleteView";
 import {TypePhoto} from "../../core/models/TypePhoto";
 import {WorkStatus} from "../../core/models/WorkStatus";
 import WorkStatusCRUDView from "../../views/workStatus/WorkStatusCRUDView";
+import {ItemWorkStatus} from "./items/ItemWorkStatus";
 
 export const ListWorkStatus = observer(() => {
     const {workStatusStore, viewStore} = useStores()
@@ -113,9 +114,9 @@ export const ListWorkStatus = observer(() => {
                     </thead>
                     <tbody>
                     {workStatusStore.workStatusList.map(workStatus => {
-                            return <ItemTypePhoto
+                            return <ItemWorkStatus
                                 key={workStatus.flag}
-                                typePhoto={workStatus}/>
+                                workStatus={workStatus}/>
                         }
                     )}
                     </tbody>

@@ -17,8 +17,8 @@ export const PublicWorkView = observer(() => {
         }
     }
 
-    const getWorkStatus = (): string => {
-        const status = publicWork?.user_status
+    const getWorkStatus = (_status?: number): string => {
+        const status = _status
         if (status) {
             const workStatus = workStatusStore.getWorkStatusByFlag(status)
             return workStatus?.name ?? "--"
@@ -40,12 +40,15 @@ export const PublicWorkView = observer(() => {
                                     {publicWork.address.street}, {publicWork.address.number} - {publicWork.address.neighborhood}
                                     <br/>
                                     {publicWork.address.city} - {publicWork.address.cep}
+                                    <br/>
+                                    Latitude: {publicWork.address.latitude} - Longitude: {publicWork.address.longitude}
                                 </p>
                                 <MapView latitude={publicWork.address.latitude} longitude={publicWork.address.longitude}
                                          zoom={14}/>
                                 <br/>
                                 <PublicWorkMenu collectCount={collectCount}
-                                                workState={getWorkStatus()}
+                                                workStateUser={getWorkStatus(publicWork?.user_status)}
+                                                workStateIA={getWorkStatus(publicWork?.rnn_status)}
                                                 onDownloadClicked={handleDownloadCollectClicked}/>
                             </div>
                         </div>

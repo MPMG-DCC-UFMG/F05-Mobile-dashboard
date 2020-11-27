@@ -1,12 +1,12 @@
 import {Collect} from "../../models/Collect";
 import Config from "../../../config/Config";
-import {network} from "../NetworkInterceptor";
+import TrenaAPI from "../TrenaAPI";
 
 export class CollectService {
 
     static async loadPublicWorkCollects(publicWorkId: string): Promise<Collect[]> {
         const call = Config.BASE_URL + "/collects/publicWork"
-        return network.get(call)
+        return TrenaAPI.network().get(call)
             .query({public_work_id: publicWorkId})
             .then(res => {
                 let listCollects: Collect[] = res.body
@@ -17,7 +17,7 @@ export class CollectService {
 
     static async collectMonthCount(): Promise<number> {
         const call = Config.BASE_URL + "/collects/month/count"
-        return network.get(call).then(res => {
+        return TrenaAPI.network().get(call).then(res => {
             let collectCount: number = res.body
 
             return collectCount
@@ -26,7 +26,7 @@ export class CollectService {
 
     static async downloadJSONReport(publicWorkId: string) {
         const call = Config.BASE_URL + "/collects/report/json/file"
-        network.get(call)
+        TrenaAPI.network().get(call)
             .responseType('blob')
             .query({public_work_id: publicWorkId}).then(res => {
             const data: Blob = res.body

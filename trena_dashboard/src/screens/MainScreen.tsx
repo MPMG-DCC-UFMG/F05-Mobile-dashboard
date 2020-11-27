@@ -9,10 +9,11 @@ import {NavigationMenu} from "../components/menus/NavigationMenu";
 import {UserManagementScreen} from "./UserManagementScreen";
 import {WorkStatusScreen} from "./WorkStatusScreen";
 import {TypePhotoScreen} from "./TypePhotoScreen";
+import {CollectScreen} from "./CollectScreen";
 
 export const MainScreen = observer(() => {
 
-    const {userStore, workStatusStore,typePhotoStore} = useStores()
+    const {userStore, workStatusStore, typePhotoStore} = useStores()
 
     workStatusStore.loadWorkStatus()
     typePhotoStore.loadTypePhotoList()
@@ -46,6 +47,9 @@ export const MainScreen = observer(() => {
                         </Route>
                         <Route path="/users">
                             <UserManagementScreen/>
+                        </Route>
+                        <Route path="/collect">
+                            <CollectScreen/>
                         </Route>
                     </Switch>
                 </div>

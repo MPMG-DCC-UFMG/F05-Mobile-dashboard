@@ -1,15 +1,15 @@
 import Config from "../../../config/Config";
 
 import {TypeWork} from "../../models/TypeWork"
-import {network} from "../NetworkInterceptor";
 import {WorkStatus} from "../../models/WorkStatus";
 import {TypePhoto} from "../../models/TypePhoto";
+import TrenaAPI from "../TrenaAPI";
 
 export class TypeWorkService {
 
     static async loadTypeWorks(): Promise<TypeWork[]> {
         const call = Config.BASE_URL + "/typeworks/"
-        return network.get(call)
+        return TrenaAPI.network().get(call)
             .then(res => {
                 let listOfTypeWorks: TypeWork[] = res.body
 
@@ -19,7 +19,7 @@ export class TypeWorkService {
 
     static async deleteTypeWork(typeWorkFlag: number) {
         const call = Config.BASE_URL + "/typeworks/delete"
-        network.post(call)
+        TrenaAPI.network().post(call)
             .type('application/json')
             .query({type_work_id: typeWorkFlag})
             .then().catch(err => {
@@ -29,7 +29,7 @@ export class TypeWorkService {
 
     static async addTypeWork(typeWork: TypeWork) {
         const call = Config.BASE_URL + "/typeworks/add"
-        network.post(call)
+        TrenaAPI.network().post(call)
             .type('application/json')
             .send(typeWork)
             .then().catch(err => {
@@ -39,7 +39,7 @@ export class TypeWorkService {
 
     static async updateTypeWork(typeWork: TypeWork) {
         const call = Config.BASE_URL + "/typeworks/update"
-        network.put(call)
+        TrenaAPI.network().put(call)
             .type('application/json')
             .send(typeWork)
             .then().catch(err => {
@@ -49,7 +49,7 @@ export class TypeWorkService {
 
     static async updateTypeWorkWorkStatus(workStatuses: number[], typeWorkFlag: number) {
         const call = Config.BASE_URL + "/typeworks/workStatus/update"
-        network
+        TrenaAPI.network()
             .post(call)
             .type('application/json')
             .send({type_work_id: typeWorkFlag, work_statuses: workStatuses})
@@ -60,7 +60,7 @@ export class TypeWorkService {
 
     static async loadTypeWorkWorkStatus(typeWorkFlag: number): Promise<WorkStatus[]> {
         const call = Config.BASE_URL + "/typeworks/workStatus/all"
-        return network.get(call)
+        return TrenaAPI.network().get(call)
             .query({type_work_id: typeWorkFlag})
             .then(res => {
                 let workStatuses: WorkStatus[] = res.body
@@ -71,7 +71,7 @@ export class TypeWorkService {
 
     static async updateTypeWorkTypePhoto(typePhotos: number[], typeWorkFlag: number) {
         const call = Config.BASE_URL + "/typeworks/typePhoto/update"
-        network
+        TrenaAPI.network()
             .post(call)
             .type('application/json')
             .send({type_work_id: typeWorkFlag, type_photos: typePhotos})
@@ -82,7 +82,7 @@ export class TypeWorkService {
 
     static async loadTypeWorkTypePhotos(typeWorkFlag: number): Promise<TypePhoto[]> {
         const call = Config.BASE_URL + "/typeworks/typePhoto/all"
-        return network.get(call)
+        return TrenaAPI.network().get(call)
             .query({type_work_id: typeWorkFlag})
             .then(res => {
                 let typePhotos: TypePhoto[] = res.body
