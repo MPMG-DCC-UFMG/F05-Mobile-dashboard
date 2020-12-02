@@ -12,6 +12,7 @@ export const StatsSummary: React.FC<any> = observer(() => {
             <div className="level">
                 <StatsItem title={"Obras Cadastradas"} value={statisticsStore.publicWorkCount + ""}/>
                 <StatsItem title={"Coletas do mês"} value={statisticsStore.collectMonthCount + ""}/>
+                <StatsItem title={"Dados na fila"} value={statisticsStore.queueCount + ""}/>
             </div>
         </>
     )

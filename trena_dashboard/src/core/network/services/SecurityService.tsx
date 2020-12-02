@@ -14,7 +14,7 @@ export class SecurityService {
                 let role: string = res.body["role"]
 
                 if (role !== "ADMIN") {
-                    throw new Error("User not admin")
+                    throw new Error("Usuário não tem acesso ao painel")
                 } else {
                     TrenaAPI.getInstance().setUserToken(accessToken)
                     return {email: email, token: accessToken, role: role}

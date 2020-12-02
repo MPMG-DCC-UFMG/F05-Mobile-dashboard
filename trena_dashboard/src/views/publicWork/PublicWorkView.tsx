@@ -35,7 +35,14 @@ export const PublicWorkView = observer(() => {
                         <div className="media-content">
                             <div className="content has-text-left">
                                 <p>
-                                    <strong>{publicWork.name}</strong>
+                                    <strong> Obra Pública: </strong>
+                                    <br/>
+                                    Nome: {publicWork.name}
+                                    <br/>
+                                    ID: {publicWork.id}
+                                    <br/>
+                                    <br/>
+                                    <strong>Endereço:</strong>
                                     <br/>
                                     {publicWork.address.street}, {publicWork.address.number} - {publicWork.address.neighborhood}
                                     <br/>

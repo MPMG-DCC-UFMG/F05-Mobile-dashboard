@@ -9,6 +9,7 @@ export class UserStore extends BaseStore {
     @observable userCreated: boolean = false
     @observable addResult?: string = undefined
     @observable usersList: User[] = []
+    @observable loginResult?: string = undefined
 
     @action
     async login(email: string, password: string) {
@@ -17,10 +18,11 @@ export class UserStore extends BaseStore {
                 runInAction(() => {
                     if (user) {
                         this.loggedUser = user
+                        this.loginResult = undefined
                     }
                 })
             }).catch(res => {
-                console.log(res)
+                this.loginResult = (res as Error).message
             })
         })
     }

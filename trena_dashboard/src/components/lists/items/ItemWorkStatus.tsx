@@ -17,7 +17,7 @@ export const ItemWorkStatus: React.FC<ItemWorkStatusProps> = observer( (props) =
         workStatusStore.selectWorkStatus(workStatus)
     }
     return (
-        <tr className={(isSelected ? "is-selected" : "")} onClick={handleClick}>
+        <tr className={(isSelected ? "is-selected has-background-grey-lighter has-text-black" : "")} onClick={handleClick}>
             <td>
                 {workStatus.name}
             </td>

@@ -4,6 +4,7 @@ import {ReactComponent as Logo} from "../images/logo.svg";
 import {useStores} from "../core/contexts/UseStores";
 import {Redirect} from "react-router-dom";
 import {observer} from "mobx-react";
+import {MPNotification} from "../components/elements/Notification";
 
 export const LoginScreen: React.FC<any> = observer(() => {
 
@@ -57,7 +58,11 @@ export const LoginScreen: React.FC<any> = observer(() => {
                                     Logar
                                 </button>
                             </form>
-
+                            {userStore.loginResult &&
+                            <div className="panel-block" style={{'display': 'block'}}>
+                                <MPNotification message={userStore.loginResult}/>
+                            </div>
+                            }
                         </div>
                     </div>
                 </div>

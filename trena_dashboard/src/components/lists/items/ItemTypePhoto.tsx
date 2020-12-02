@@ -17,7 +17,7 @@ export const ItemTypePhoto: React.FC<ItemTypePhotoProps> = observer((props) => {
         typePhotoStore.selectTypePhoto(typePhoto)
     }
     return (
-        <tr className={(isSelected ? "is-selected" : "")} onClick={handleClick}>
+        <tr className={(isSelected ? "is-selected has-background-grey-lighter has-text-black" : "")} onClick={handleClick}>
             <td>
                 {typePhoto.name}
             </td>

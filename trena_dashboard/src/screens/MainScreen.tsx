@@ -10,6 +10,7 @@ import {UserManagementScreen} from "./UserManagementScreen";
 import {WorkStatusScreen} from "./WorkStatusScreen";
 import {TypePhotoScreen} from "./TypePhotoScreen";
 import {CollectScreen} from "./CollectScreen";
+import {QueueScreen} from "./QueueScreen";
 
 export const MainScreen = observer(() => {
 
@@ -50,6 +51,9 @@ export const MainScreen = observer(() => {
                         </Route>
                         <Route path="/collect">
                             <CollectScreen/>
+                        </Route>
+                        <Route path="/queue">
+                            <QueueScreen/>
                         </Route>
                     </Switch>
                 </div>
