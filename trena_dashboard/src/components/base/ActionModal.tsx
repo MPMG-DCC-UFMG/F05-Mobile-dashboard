@@ -25,7 +25,7 @@ export const ActionModal: React.FC<ActionModalProps> = observer((props) => {
     const isValid = viewInModal?.contentView.isValid
 
     return (
-        <div className={"modal " + (viewInModal !== undefined ? "is-active" : "")}>
+        <div className={"modal" + (viewInModal !== undefined ? "is-active" : "")}>
             <div className="modal-background"/>
             <div className="modal-card">
                 <header className="modal-card-head">

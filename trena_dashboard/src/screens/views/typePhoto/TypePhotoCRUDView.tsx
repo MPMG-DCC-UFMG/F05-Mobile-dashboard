@@ -1,8 +1,8 @@
-import {BaseCRUDView} from "../../components/base/BaseCRUDView";
-import {TypePhoto} from "../../core/models/TypePhoto";
-import {InputField} from "../../components/form/InputField";
+import {BaseCRUDView} from "../../../components/base/BaseCRUDView";
+import {TypePhoto} from "../../../core/models/TypePhoto";
+import {InputField} from "../../../components/form/InputField";
 import React from "react";
-import {InputTextArea} from "../../components/form/InputTextArea";
+import {InputTextArea} from "../../../components/form/InputTextArea";
 
 
 interface TypePhotoCRUDViewProps {

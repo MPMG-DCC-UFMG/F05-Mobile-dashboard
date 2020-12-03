@@ -1,8 +1,8 @@
-import {BaseCRUDView} from "../../components/base/BaseCRUDView";
-import {MultipleSelector} from "../../components/form/MultipleSelector";
+import {BaseCRUDView} from "../../../components/base/BaseCRUDView";
 import React from "react";
+import {MultipleSelector} from "../../../components/form/MultipleSelector";
 
-interface TypePhotoSelectProps {
+interface WorkStatusSelectProps {
     options: string[]
     onChangeSelectedOptions?: (selectedOptions: number[]) => void
     defaultSelected?: number[]
@@ -12,11 +12,11 @@ const initialState = {
     selectedOptions: new Set<string>()
 }
 
-type TypePhotoSelectState = typeof initialState
+type WorkStatusSelectState = typeof initialState
 
-export default class TypePhotoSelect extends BaseCRUDView<TypePhotoSelectProps, TypePhotoSelectState>{
+export default class WorkStatusSelect extends BaseCRUDView<WorkStatusSelectProps, WorkStatusSelectState> {
 
-    constructor(props: TypePhotoSelectProps) {
+    constructor(props: WorkStatusSelectProps) {
         super(props);
 
         if (props.defaultSelected) {
@@ -41,14 +41,15 @@ export default class TypePhotoSelect extends BaseCRUDView<TypePhotoSelectProps, 
         }
     }
 
-    onChange = (value: TypePhotoSelectState) => {
+    onChange = (value: WorkStatusSelectState) => {
 
     }
 
     render() {
-        return(
+        return (
             <div className="container has-text-left">
-                <MultipleSelector options={this.props.options} selected={new Set<string>()} onSelectionChanged={this.handleWorkChange}/>
+                <MultipleSelector options={this.props.options} selected={this.state.selectedOptions}
+                                  onSelectionChanged={this.handleWorkChange}/>
             </div>
         )
     }

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
-import {InputField} from "../../components/form/InputField";
-import {useStores} from "../../core/contexts/UseStores";
-import {MPNotification} from "../../components/elements/Notification";
+import {InputField} from "../../../components/form/InputField";
+import {useStores} from "../../../core/contexts/UseStores";
+import {MPNotification} from "../../../components/elements/Notification";
 import {observer} from "mobx-react";
 
 export const UserCRUDView: React.FC<any> = observer(() => {

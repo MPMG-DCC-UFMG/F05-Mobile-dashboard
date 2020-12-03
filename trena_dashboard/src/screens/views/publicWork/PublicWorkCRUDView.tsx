@@ -1,9 +1,9 @@
-import {BaseCRUDView} from "../../components/base/BaseCRUDView";
-import {PublicWork} from "../../core/models/PublicWork";
-import {InputField} from "../../components/form/InputField";
+import {BaseCRUDView} from "../../../components/base/BaseCRUDView";
+import {PublicWork} from "../../../core/models/PublicWork";
+import {InputField} from "../../../components/form/InputField";
 import React from "react";
-import {Dropdown, DropdownOptions} from "../../components/form/Dropdown";
-import {Address} from "../../core/models/Address";
+import {Dropdown, DropdownOptions} from "../../../components/form/Dropdown";
+import {Address} from "../../../core/models/Address";
 import AddressCRUDView from "./AddressCRUDView";
 
 

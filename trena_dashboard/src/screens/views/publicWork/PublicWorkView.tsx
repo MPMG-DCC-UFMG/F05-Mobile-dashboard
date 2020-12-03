@@ -1,9 +1,9 @@
 import {observer} from "mobx-react";
-import {useStores} from "../../core/contexts/UseStores";
+import {useStores} from "../../../core/contexts/UseStores";
 import React from "react";
 import {EmptyView} from "../EmptyView";
-import {MapView} from "./MapView";
-import {PublicWorkMenu} from "../../components/menus/PublicWorkMenu";
+import {PublicWorkMenu} from "../../../components/menus/PublicWorkMenu";
+import {PublicWorkDetails} from "../../../components/details/PublicWorkDetails";
 
 
 export const PublicWorkView = observer(() => {
@@ -34,25 +34,7 @@ export const PublicWorkView = observer(() => {
                     <article className="media">
                         <div className="media-content">
                             <div className="content has-text-left">
-                                <p>
-                                    <strong> Obra Pública: </strong>
-                                    <br/>
-                                    Nome: {publicWork.name}
-                                    <br/>
-                                    ID: {publicWork.id}
-                                    <br/>
-                                    <br/>
-                                    <strong>Endereço:</strong>
-                                    <br/>
-                                    {publicWork.address.street}, {publicWork.address.number} - {publicWork.address.neighborhood}
-                                    <br/>
-                                    {publicWork.address.city} - {publicWork.address.cep}
-                                    <br/>
-                                    Latitude: {publicWork.address.latitude} - Longitude: {publicWork.address.longitude}
-                                </p>
-                                <MapView latitude={publicWork.address.latitude} longitude={publicWork.address.longitude}
-                                         zoom={14}/>
-                                <br/>
+                                <PublicWorkDetails publicWork={publicWork}/>
                                 <PublicWorkMenu collectCount={collectCount}
                                                 workStateUser={getWorkStatus(publicWork?.user_status)}
                                                 workStateIA={getWorkStatus(publicWork?.rnn_status)}

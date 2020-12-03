@@ -1,7 +1,7 @@
 import React from "react";
 import {ListPublicWork} from "../components/lists/ListPublicWork";
 import {useStores} from "../core/contexts/UseStores";
-import {PublicWorkView} from "../views/publicWork/PublicWorkView";
+import {PublicWorkView} from "./views/publicWork/PublicWorkView";
 
 interface PublicWorkScreenProps {
 

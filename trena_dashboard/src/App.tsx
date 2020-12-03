@@ -2,6 +2,7 @@ import React from 'react';
 import './styles/App.css';
 import './styles/trena.css';
 import 'bulma/css/bulma.css';
+import 'bulma-o-steps/bulma-steps.css'
 
 import {Switch, Route, HashRouter} from 'react-router-dom';
 import {ActionModal} from "./components/base/ActionModal";

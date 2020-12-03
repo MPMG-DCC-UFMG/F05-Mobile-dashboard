@@ -2,12 +2,11 @@ import {observer} from "mobx-react";
 import {ItemActionsMenu} from "../menus/ItemActionsMenu";
 import React from "react";
 import {useStores} from "../../core/contexts/UseStores";
-import {ItemTypePhoto} from "./items/ItemTypePhoto";
 import {Search} from "../form/Search";
-import {DeleteView} from "../../views/DeleteView";
+import {DeleteView} from "../../screens/views/DeleteView";
 import {TypePhoto} from "../../core/models/TypePhoto";
 import {WorkStatus} from "../../core/models/WorkStatus";
-import WorkStatusCRUDView from "../../views/workStatus/WorkStatusCRUDView";
+import WorkStatusCRUDView from "../../screens/views/workStatus/WorkStatusCRUDView";
 import {ItemWorkStatus} from "./items/ItemWorkStatus";
 
 export const ListWorkStatus = observer(() => {

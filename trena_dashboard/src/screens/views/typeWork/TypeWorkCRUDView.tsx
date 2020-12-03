@@ -1,7 +1,7 @@
 import React from "react";
-import {InputField} from "../components/form/InputField";
-import {TypeWork} from "../core/models/TypeWork";
-import {BaseCRUDView} from "../components/base/BaseCRUDView";
+import {InputField} from "../../../components/form/InputField";
+import {TypeWork} from "../../../core/models/TypeWork";
+import {BaseCRUDView} from "../../../components/base/BaseCRUDView";
 
 interface TypeWorkCRUDViewProps {
     defaultTypeWork?: TypeWorkCRUDViewState,

@@ -4,9 +4,9 @@ import React from "react";
 import {useStores} from "../../core/contexts/UseStores";
 import {ItemTypePhoto} from "./items/ItemTypePhoto";
 import {Search} from "../form/Search";
-import {DeleteView} from "../../views/DeleteView";
+import {DeleteView} from "../../screens/views/DeleteView";
 import {TypePhoto} from "../../core/models/TypePhoto";
-import TypePhotoCRUDView from "../../views/typePhoto/TypePhotoCRUDView";
+import TypePhotoCRUDView from "../../screens/views/typePhoto/TypePhotoCRUDView";
 
 export const ListTypePhoto = observer(() => {
     const {typePhotoStore, viewStore} = useStores()

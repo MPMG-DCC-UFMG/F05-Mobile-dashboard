@@ -2,9 +2,9 @@ import {observer} from "mobx-react";
 import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEdit} from "@fortawesome/free-solid-svg-icons";
-import {useStores} from "../../core/contexts/UseStores";
+import {useStores} from "../../../core/contexts/UseStores";
 import TypePhotoSelect from "./TypePhotoSelect";
-import {TagList} from "../../components/lists/TagList";
+import {TagList} from "../../../components/lists/TagList";
 
 export const TypePhotoBox: React.FC<any> = observer((props) => {
     const {viewStore, typePhotoStore, typeWorkStore} = useStores()

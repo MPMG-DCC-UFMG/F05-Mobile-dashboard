@@ -1,5 +1,5 @@
 import React from "react"
-import {UserCRUDView} from "../views/user/UserCRUDView";
+import {UserCRUDView} from "./views/user/UserCRUDView";
 import {ListUser} from "../components/lists/ListUser";
 import {useStores} from "../core/contexts/UseStores";
 

@@ -4,8 +4,8 @@ import React from "react";
 import {ItemTypeWork} from "./items/ItemTypeWork";
 import {Search} from "../form/Search";
 import {ItemActionsMenu} from "../menus/ItemActionsMenu";
-import {DeleteView} from "../../views/DeleteView";
-import TypeWorkCRUDView from "../../views/TypeWorkCRUDView";
+import {DeleteView} from "../../screens/views/DeleteView";
+import TypeWorkCRUDView from "../../screens/views/typeWork/TypeWorkCRUDView";
 import {TypeWork} from "../../core/models/TypeWork";
 
 export const ListTypeWork = observer(() => {
