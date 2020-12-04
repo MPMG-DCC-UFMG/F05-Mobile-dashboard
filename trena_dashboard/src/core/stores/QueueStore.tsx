@@ -11,6 +11,7 @@ export class QueueStore extends BaseStore {
     @observable selectedQueueItem?: QueueItem = undefined
     @observable collectsOfPublicWork: Collect[] = []
     @observable selectedCollect?: Collect = undefined
+    @observable ignoredPhotoIds: Set<string> = new Set<string>()
 
     @action
     async loadQueueItem() {
@@ -41,6 +42,22 @@ export class QueueStore extends BaseStore {
         } else {
             this.selectedCollect = undefined
         }
+        this.clearIgnoredPhotos()
+    }
+
+    @action
+    clearIgnoredPhotos() {
+        this.ignoredPhotoIds.clear()
+    }
+
+    @action
+    addIgnoredPhotoId(photoId: string) {
+        this.ignoredPhotoIds.add(photoId)
+    }
+
+    @action
+    removeIgnoredPhotoId(photoId: string) {
+        this.ignoredPhotoIds.delete(photoId)
     }
 
     @action
@@ -51,5 +68,43 @@ export class QueueStore extends BaseStore {
                 this.collectsOfPublicWork = collects;
             })
         })
+    }
+
+    @action
+    confirmCollect() {
+        const item = this.selectedQueueItem
+        const collect = this.selectedCollect
+        if (item !== undefined) {
+            const publicWorkId = item.public_work.id
+            this.baseCall(async () => {
+                if (item.public_work_count > 0) {
+                    const response = await QueueService.acceptPublicWork(publicWorkId)
+                    if (!response.success) {
+                        return
+                    }
+                }
+
+                if (collect !== undefined) {
+                    const collectId = collect.id!
+                    const collectAccept = await QueueService.acceptCollect(publicWorkId, collectId)
+                    if (collectAccept.success) {
+                        for (const photo of collect.photos) {
+                            if (this.ignoredPhotoIds.has(photo.id)) {
+                                await QueueService.deletePhoto(publicWorkId, photo.id)
+                            } else {
+                                await QueueService.acceptPhoto(publicWorkId, photo.id)
+                            }
+                        }
+
+                    }
+                }
+
+                runInAction(() => {
+                    this.selectQueueItem()
+                    this.loadQueueItem()
+                })
+            })
+        }
+
     }
 }

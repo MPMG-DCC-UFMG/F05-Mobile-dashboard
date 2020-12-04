@@ -1,13 +1,20 @@
 import React, {useState} from "react";
 import {QueueItem} from "../../../core/models/QueueItem";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTimesCircle} from "@fortawesome/free-solid-svg-icons";
+import {
+    faBookOpen,
+    faBuilding,
+    faCamera,
+    faCheck,
+    faTimesCircle
+} from "@fortawesome/free-solid-svg-icons";
 import {useStores} from "../../../core/contexts/UseStores";
 import {Steps} from "../../../components/lists/Steps";
 import {PublicWorkDetails} from "../../../components/details/PublicWorkDetails";
 import {QueueCollectView} from "./QueueCollectView";
 import {QueuePhotoView} from "./QueuePhotoView";
 import {observer} from "mobx-react";
+import {QueueConfirmation} from "./QueueConfirmation";
 
 interface AcceptViewProps {
     queueItem: QueueItem
@@ -18,6 +25,7 @@ export const AcceptView: React.FC<AcceptViewProps> = observer((props) => {
     const {queueItem} = props
     const {queueStore} = useStores()
     const allSteps = ["Obra pública", "Coletas", "Fotos", "Confirmar"]
+    const icons = [faBuilding, faBookOpen, faCamera, faCheck]
     const [state, setState] = useState({step: 0})
 
     const handleCloseClick = () => {
@@ -30,7 +38,13 @@ export const AcceptView: React.FC<AcceptViewProps> = observer((props) => {
             setState((prevState) => {
                 return {...prevState, step: newStep}
             })
+        } else {
+            handleConfirmation()
         }
+    }
+
+    const handleConfirmation = () => {
+        queueStore.confirmCollect()
     }
 
     const nextEnabled = (): boolean => {
@@ -59,11 +73,17 @@ export const AcceptView: React.FC<AcceptViewProps> = observer((props) => {
     const createStepViews = () => {
         switch (state.step) {
             case 0:
-                return <PublicWorkDetails publicWork={queueItem.public_work}/>
+                return (
+                    <div className="container is-flex">
+                        <PublicWorkDetails publicWork={queueItem.public_work}/>
+                    </div>
+                )
             case 1:
                 return <QueueCollectView/>
             case 2:
                 return <QueuePhotoView photos={queueStore.selectedCollect!!.photos}/>
+            case 3:
+                return <QueueConfirmation/>
         }
     }
 
@@ -86,26 +106,28 @@ export const AcceptView: React.FC<AcceptViewProps> = observer((props) => {
                 </nav>
             </div>
             <div className="panel-block">
-                <Steps stepsList={allSteps} currentStep={state.step}/>
+                <Steps stepsList={allSteps} currentStep={state.step} icons={icons}/>
             </div>
             <div className="panel-block" style={{height: "600px"}}>
-                <div className="container is-flex has-text-left" style={{height: "100%"}}>
+                <div className="container has-text-left" style={{height: "100%"}}>
                     {createStepViews()}
                 </div>
             </div>
             <div className="panel-block">
-                <div className="container is-flex has-text-centered">
-                    <button
-                        className="button is-primary is-rounded"
-                        disabled={state.step === 0}
-                        onClick={onPrevClicked}>
-                        Anterior
-                    </button>
-                    <button className="button is-primary is-rounded"
-                            onClick={onNextClicked}
-                            disabled={!nextEnabled()}>
-                        {state.step < allSteps.length - 1 ? "Próximo" : "Confirmar"}
-                    </button>
+                <div className="container has-content-centered">
+                    <div className="buttons" style={{width: "100%", justifyContent: "center"}}>
+                        <button
+                            className="button is-primary is-rounded"
+                            disabled={state.step === 0}
+                            onClick={onPrevClicked}>
+                            Anterior
+                        </button>
+                        <button className="button is-primary is-rounded"
+                                onClick={onNextClicked}
+                                disabled={!nextEnabled()}>
+                            {state.step < allSteps.length - 1 ? "Próximo" : "Confirmar"}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
