@@ -29,3 +29,12 @@ REACT_APP_ENVIRONMENT=development
 REACT_APP_BASE_URL=http://0.0.0.0:8000
 REACT_APP_SENTRY_DNS=<SENTRY_DNS>
 ```
+
+## 3. Build
+
+The dashboard was made to be deployed using docker. To build the docker image just go to the
+root of the folder where the Dockerfile.prod file is and run the command:
+
+```bash
+docker build -t f05_dashboard -f Dockerfile.prod .
+```
