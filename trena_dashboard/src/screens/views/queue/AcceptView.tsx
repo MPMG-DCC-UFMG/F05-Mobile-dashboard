@@ -34,7 +34,7 @@ export const AcceptView: React.FC<AcceptViewProps> = observer((props) => {
 
     const onNextClicked = () => {
         if (state.step < allSteps.length - 1) {
-            const newStep = state.step + 1
+            const newStep = getNextStep()
             setState((prevState) => {
                 return {...prevState, step: newStep}
             })
@@ -45,6 +45,14 @@ export const AcceptView: React.FC<AcceptViewProps> = observer((props) => {
 
     const handleConfirmation = () => {
         queueStore.confirmCollect()
+    }
+
+    const getNextStep = () :number =>{
+        const currStep = state.step
+        if(currStep === 0 && queueStore.collectsOfPublicWork.length === 0){
+            return 3
+        }
+        return currStep+1
     }
 
     const nextEnabled = (): boolean => {
@@ -127,6 +135,7 @@ export const AcceptView: React.FC<AcceptViewProps> = observer((props) => {
                                 disabled={!nextEnabled()}>
                             {state.step < allSteps.length - 1 ? "Próximo" : "Confirmar"}
                         </button>
+                        {state.step}
                     </div>
                 </div>
             </div>
