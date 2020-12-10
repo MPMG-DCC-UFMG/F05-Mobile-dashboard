@@ -46,6 +46,32 @@ export class QueueStore extends BaseStore {
     }
 
     @action
+    deletePublicWork(publicWorkId: string){
+        this.baseCall(async () => {
+            const deletePublicWork = await QueueService.deletePublicWork(publicWorkId)
+            if (deletePublicWork.success) {
+                runInAction(() => {
+                    this.selectQueueItem()
+                    this.loadQueueItem()
+                })
+            }
+        })
+    }
+
+    @action
+    deleteCollect(publicWorkId: string,collectId: string){
+        this.baseCall(async () => {
+            const deleteCollect = await QueueService.deleteCollect(publicWorkId,collectId)
+            if (deleteCollect.success) {
+                runInAction(() => {
+                    this.selectQueueItem()
+                    this.loadQueueItem()
+                })
+            }
+        })
+    }
+
+    @action
     clearIgnoredPhotos() {
         this.ignoredPhotoIds.clear()
     }

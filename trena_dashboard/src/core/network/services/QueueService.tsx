@@ -67,4 +67,21 @@ export class QueueService {
             return response
         })
     }
+
+    static async deletePublicWork(publicWorkId: string): Promise<MPResponse>{
+        const call = Config.BASE_URL+ `/queue/publicwork/${publicWorkId}/delete`
+
+        return TrenaAPI.network().post(call).then(res => {
+            let response: MPResponse = res.body
+            return response
+        })
+    }
+
+    static async deleteCollect(publicWorkId: string, collectId: string): Promise<MPResponse>{
+        const call = Config.BASE_URL+ `/queue/publicwork/${publicWorkId}/collect/${collectId}/delete`
+        return TrenaAPI.network().post(call).then(res => {
+            let response: MPResponse = res.body
+            return response
+        })
+    }
 }

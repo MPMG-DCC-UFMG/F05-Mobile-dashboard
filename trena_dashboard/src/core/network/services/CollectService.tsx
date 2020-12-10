@@ -1,6 +1,7 @@
 import {Collect} from "../../models/Collect";
 import Config from "../../../config/Config";
 import TrenaAPI from "../TrenaAPI";
+import {PaginatedResponse} from "../models/PaginatedResponse";
 
 export class CollectService {
 
@@ -13,6 +14,20 @@ export class CollectService {
 
                 return listCollects
             })
+    }
+
+    static async loadCollectsPaginated(page: number): Promise<PaginatedResponse<Collect>> {
+        const call = Config.BASE_URL + "/collects/paginated"
+        return TrenaAPI.network().get(call)
+            .query({page: page, per_page: 20})
+            .then(res => {
+                console.log(res)
+
+                let listCollects: PaginatedResponse<Collect> = res.body
+
+                    return listCollects
+                }
+            )
     }
 
     static async collectMonthCount(): Promise<number> {

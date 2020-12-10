@@ -6,17 +6,18 @@ interface CollectViewProps {
     collects: Collect[],
     onCollectClicked?: (collect: Collect) => void
     selectedId?: string
+    showPublicWork: boolean
 }
 
 export const CollectList: React.FC<CollectViewProps> = (props) => {
 
-    const {collects, onCollectClicked, selectedId} = props
+    const {collects, onCollectClicked, selectedId, showPublicWork} = props
 
     return (
         <table className="table is-fullwidth is-hoverable">
             <thead>
             <tr>
-                <th>ID da coleta</th>
+                <th>{showPublicWork ? "ID da obra" : "ID da coleta"}</th>
                 <th>Data da coleta</th>
                 <th>Estado da obra</th>
                 <th>Quantidade de fotos</th>
@@ -28,7 +29,8 @@ export const CollectList: React.FC<CollectViewProps> = (props) => {
                 return <ItemCollect key={collect.id}
                                     collect={collect}
                                     onClick={onCollectClicked}
-                                    selectedId={selectedId}/>
+                                    selectedId={selectedId}
+                                    showPublicWork={showPublicWork}/>
             })}
             </tbody>
         </table>

@@ -18,7 +18,8 @@ export const QueueCollectView: React.FC<any> = observer((props) => {
             <CollectList
                 collects={queueStore.collectsOfPublicWork}
                 onCollectClicked={onCollectSelected}
-                selectedId={queueStore.selectedCollect?.id}/>
+                selectedId={queueStore.selectedCollect?.id}
+                showPublicWork={false}/>
         </div>
     )
 })

@@ -15,6 +15,7 @@ import {QueueCollectView} from "./QueueCollectView";
 import {QueuePhotoView} from "./QueuePhotoView";
 import {observer} from "mobx-react";
 import {QueueConfirmation} from "./QueueConfirmation";
+import {DeleteView} from "../DeleteView";
 
 interface AcceptViewProps {
     queueItem: QueueItem
@@ -23,7 +24,7 @@ interface AcceptViewProps {
 export const AcceptView: React.FC<AcceptViewProps> = observer((props) => {
 
     const {queueItem} = props
-    const {queueStore} = useStores()
+    const {queueStore, viewStore} = useStores()
     const allSteps = ["Obra pública", "Coletas", "Fotos", "Confirmar"]
     const icons = [faBuilding, faBookOpen, faCamera, faCheck]
     const [state, setState] = useState({step: 0})
@@ -45,6 +46,65 @@ export const AcceptView: React.FC<AcceptViewProps> = observer((props) => {
 
     const handleConfirmation = () => {
         queueStore.confirmCollect()
+    }
+
+    const handlePublicWorkDeleteClicked = () => {
+        if (queueStore.selectedQueueItem !== undefined) {
+            const publicWork = queueStore.selectedQueueItem.public_work
+            let deleteView = {
+                title: "Deletar obra pública",
+                confirmButton: "Deletar",
+                onConfirmClick: () => {
+                    if (publicWork.id) {
+                        queueStore.deletePublicWork(publicWork.id)
+                    }
+                },
+                contentView: <DeleteView toDelete={publicWork.name}/>
+            }
+            viewStore.setViewInModal(deleteView)
+        }
+    }
+
+    const handleCollectDeleteClicked = () => {
+        if (queueStore.selectedCollect !== undefined) {
+            const collect = queueStore.selectedCollect
+            let deleteView = {
+                title: "Deletar coleta",
+                confirmButton: "Deletar",
+                onConfirmClick: () => {
+                    if (collect.id) {
+                        queueStore.deleteCollect(collect.public_work_id,collect.id)
+                    }
+                },
+                contentView: <DeleteView toDelete="coleta selecionada e fotos"/>
+            }
+            viewStore.setViewInModal(deleteView)
+        }
+    }
+
+    const deleteButton = () => {
+        switch (state.step) {
+            case 0:
+                return (
+                    <button
+                        className="button is-warning is-danger"
+                        onClick={handlePublicWorkDeleteClicked}>
+                        Deletar Obra
+                    </button>
+                )
+            case 1:
+                return ""
+            case 2:
+                return (
+                    <button
+                        className="button is-warning is-danger"
+                        onClick={handleCollectDeleteClicked}>
+                        Deletar Coleta
+                    </button>
+                )
+            case 3:
+                return ""
+        }
     }
 
     const getNextStep = () :number =>{
@@ -135,7 +195,7 @@ export const AcceptView: React.FC<AcceptViewProps> = observer((props) => {
                                 disabled={!nextEnabled()}>
                             {state.step < allSteps.length - 1 ? "Próximo" : "Confirmar"}
                         </button>
-                        {state.step}
+                        {deleteButton()}
                     </div>
                 </div>
             </div>
