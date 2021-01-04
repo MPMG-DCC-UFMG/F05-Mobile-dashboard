@@ -20,8 +20,8 @@ export const ItemQueue: React.FC<ItemQueueProps> = (props) => {
              onClick={handleClick}>
             <div className="level-item has-text-centered">
                 <div>
-                    <p className="heading">Obras públicas</p>
-                    <p className="title">{queueItem.public_work_count}</p>
+                    <p className="heading">Novos dados da obra</p>
+                    <p className="title">{queueItem.public_work_count>0 ? "Sim" : "Não"}</p>
                 </div>
             </div>
             <div className="level-item has-text-centered">

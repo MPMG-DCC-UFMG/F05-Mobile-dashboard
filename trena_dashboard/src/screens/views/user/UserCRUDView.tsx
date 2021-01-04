@@ -1,12 +1,33 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {InputField} from "../../../components/form/InputField";
 import {useStores} from "../../../core/contexts/UseStores";
 import {MPNotification} from "../../../components/elements/Notification";
-import {observer} from "mobx-react";
+import {Dropdown} from "../../../components/form/Dropdown";
+import {User} from "../../../core/models/User";
 
-export const UserCRUDView: React.FC<any> = observer(() => {
+interface UserCRUDViewProps {
+    initialUser?: User
+}
+
+export const UserCRUDView: React.FC<UserCRUDViewProps> = (props) => {
+    const {initialUser} = props
     const {userStore} = useStores()
-    const [user, setUser] = useState({username: "", password1: "", password2: ""})
+    const [user, setUser] = useState(
+        {
+            username: initialUser?.email ?? "",
+            password1: "",
+            password2: "",
+            role: (initialUser?.role === "ADMIN") ? "admin" : "normal"
+        })
+
+    useEffect(() => {
+        setUser({
+            username: initialUser?.email ?? "",
+            password1: "",
+            password2: "",
+            role: (initialUser?.role === "ADMIN") ? "admin" : "normal"
+        });
+    }, [props.initialUser])
 
     const onValueChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUser({...user, [e.target.name]: e.target.value})
@@ -19,6 +40,8 @@ export const UserCRUDView: React.FC<any> = observer(() => {
     const formValid = (): boolean => {
         return (user.password1 === user.password2) && user.password1.length > 0
     }
+
+    const options = [{key: "normal", value: "Padrão"}, {key: "admin", value: "Administrador"}]
 
     return (
         <>
@@ -48,20 +71,23 @@ export const UserCRUDView: React.FC<any> = observer(() => {
                                     onValueChanged={onValueChanged}
                                     inputName="password2"
                                     type="password"/>
+                        <Dropdown inputLabel="Tipo de usuário"
+                                  optionsList={options}
+                                  inputDefaultValue={user.role}/>
                     </div>
                 </div>
                 {userStore.addResult &&
-                <div className="panel-block" style={{'display':'block'}}>
+                <div className="panel-block" style={{'display': 'block'}}>
                     <MPNotification message={userStore.addResult}/>
                 </div>
                 }
                 <div className="panel-block">
                     <button className="button is-link is-outlined is-fullwidth" onClick={onAddUserClicked}
                             disabled={!formValid()}>
-                        Adicionar usuário
+                        {initialUser === undefined ? "Adicionar usuário" : "Atualizar usuário"}
                     </button>
                 </div>
             </div>
         </>
     )
-})
+}

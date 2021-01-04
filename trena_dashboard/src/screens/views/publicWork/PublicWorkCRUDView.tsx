@@ -73,7 +73,7 @@ export default class PublicWorkCRUDView extends BaseCRUDView<PublicWorkCRUDViewP
                     onValueChanged={this.handleFormChange}/>
                 <Dropdown inputLabel="Tipo de Obra"
                           optionsList={typeOfWorkList}
-                          inputDefaultValue={this.state.type_work_flag}
+                          inputDefaultValue={this.state.type_work_flag.toString()}
                           onValueChanged={this.onTypeWorkSelected}/>
                 <AddressCRUDView
                     defaultAddress={this.state.address}

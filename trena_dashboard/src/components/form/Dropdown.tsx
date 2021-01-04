@@ -4,7 +4,7 @@ interface DropdownProps {
     inputLabel: string,
     optionsList: DropdownOptions[],
     inputKey?: string,
-    inputDefaultValue?: number,
+    inputDefaultValue?: string,
     onValueChanged?: (value: string, key?: string) => void,
 }
 
@@ -15,8 +15,7 @@ export interface DropdownOptions {
 
 export const Dropdown: React.FC<DropdownProps> = (props) => {
     const {inputLabel, optionsList, inputKey, inputDefaultValue} = props
-
-    const defaultValue = optionsList.find(element => element.key === inputDefaultValue?.toString())
+    const defaultValue = optionsList.find(element => element.key === inputDefaultValue)
 
     const handleOnValueChanged = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const elementFlag = optionsList.find(element => element.value === event.currentTarget.value)

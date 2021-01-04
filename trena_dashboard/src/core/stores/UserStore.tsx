@@ -10,6 +10,7 @@ export class UserStore extends BaseStore {
     @observable addResult?: string = undefined
     @observable usersList: User[] = []
     @observable loginResult?: string = undefined
+    @observable selectedUser? : User = undefined
 
     @action
     async login(email: string, password: string) {
@@ -37,7 +38,6 @@ export class UserStore extends BaseStore {
         this.baseCall(async () => {
             const response = await SecurityService.createUser(email, password)
             runInAction(() => {
-                console.log(response)
                 this.userCreated = response.success
                 this.addResult = response.error?.message
                 if (response.success) {
@@ -68,6 +68,11 @@ export class UserStore extends BaseStore {
                 })
             }
         })
+    }
+
+    @action
+    selectUser(user?:User){
+        this.selectedUser = user
     }
 
 }

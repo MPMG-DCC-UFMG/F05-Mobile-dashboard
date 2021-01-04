@@ -54,7 +54,6 @@ export default class AddressCRUDView extends BaseCRUDView<AddressCRUDViewProps, 
                 let newState = {...prevState, ...response}
                 return newState
             })
-            console.log(response)
         } catch (e) {
             console.log(e)
         }

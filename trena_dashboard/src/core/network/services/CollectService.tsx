@@ -21,9 +21,7 @@ export class CollectService {
         return TrenaAPI.network().get(call)
             .query({page: page, per_page: 20})
             .then(res => {
-                console.log(res)
-
-                let listCollects: PaginatedResponse<Collect> = res.body
+                    let listCollects: PaginatedResponse<Collect> = res.body
 
                     return listCollects
                 }
