@@ -21,7 +21,7 @@
     "@types/react-leaflet": "^2.5.2",
     "@types/react-router-dom": "^5.1.5",
     "@types/superagent": "^4.1.8",
-    "bulma": "^0.9.0",
+    "bulma": "^0.9.1",
     "bulma-o-steps": "^1.0.9",
     "history": "^5.0.0",
     "leaflet": "^1.6.0",
