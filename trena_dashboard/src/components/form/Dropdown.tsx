@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 interface DropdownProps {
     inputLabel: string,
@@ -16,11 +16,24 @@ export interface DropdownOptions {
 export const Dropdown: React.FC<DropdownProps> = (props) => {
     const {inputLabel, optionsList, inputKey, inputDefaultValue} = props
     const defaultValue = optionsList.find(element => element.key === inputDefaultValue)
+    const [selectedValue, setSelectedValue] = useState(defaultValue)
+    console.log("Selected Value",selectedValue)
+    console.log("Default Value",defaultValue)
+
+    useEffect(() => {
+        setSelectedValue({
+            key: defaultValue?.key ?? optionsList[0].key,
+            value: defaultValue?.value ?? optionsList[0].value
+        });
+    }, [defaultValue])
 
     const handleOnValueChanged = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const elementFlag = optionsList.find(element => element.value === event.currentTarget.value)
-        if (props.onValueChanged && elementFlag) {
-            props.onValueChanged(elementFlag.key, inputKey)
+        if(elementFlag){
+            setSelectedValue(elementFlag)
+            if(props.onValueChanged){
+                props.onValueChanged(elementFlag.key, inputKey)
+            }
         }
     }
 
@@ -29,7 +42,7 @@ export const Dropdown: React.FC<DropdownProps> = (props) => {
             <label className="label">{inputLabel}</label>
             <div className="control is-expanded">
                 <div className="select">
-                    <select onChange={handleOnValueChanged} defaultValue={defaultValue?.value}>
+                    <select onChange={handleOnValueChanged} value={selectedValue?.value}>
                         {optionsList.map(options => {
                             return <option key={options.key}>{options.value}</option>
                         })}
