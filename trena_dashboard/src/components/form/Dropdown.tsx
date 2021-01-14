@@ -17,8 +17,6 @@ export const Dropdown: React.FC<DropdownProps> = (props) => {
     const {inputLabel, optionsList, inputKey, inputDefaultValue} = props
     const defaultValue = optionsList.find(element => element.key === inputDefaultValue)
     const [selectedValue, setSelectedValue] = useState(defaultValue)
-    console.log("Selected Value",selectedValue)
-    console.log("Default Value",defaultValue)
 
     useEffect(() => {
         setSelectedValue({
