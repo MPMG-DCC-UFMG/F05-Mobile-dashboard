@@ -16,24 +16,29 @@ export const ItemQueue: React.FC<ItemQueueProps> = (props) => {
     }
 
     return (
-        <a className={"panel-block level"} key={queueItem.public_work.id}
-             onClick={handleClick}>
-            <div className="level-item has-text-centered">
-                <div>
-                    <p className="heading">Novos dados da obra</p>
-                    <p className="title">{queueItem.public_work_count>0 ? "Sim" : "Não"}</p>
-                </div>
-            </div>
-            <div className="level-item has-text-centered">
-                <div>
-                    <p className="heading">Coletas</p>
-                    <p className="title">{queueItem.collect_count}</p>
-                </div>
-            </div>
-            <div className="level-item has-text-centered">
-                <div>
-                    <p className="heading">Fotos</p>
-                    <p className="title">{queueItem.photo_count}</p>
+        <a className={"panel-block"} key={queueItem.public_work.id}
+           onClick={handleClick}>
+            <div className="container content is-small">
+                <h1 className="title">{queueItem.public_work.name}</h1>
+                <div className="level">
+                    <div className="level-item has-text-centered">
+                        <div>
+                            <p className="heading">Novos dados da obra</p>
+                            <p className="title">{queueItem.public_work_count > 0 ? "Sim" : "Não"}</p>
+                        </div>
+                    </div>
+                    <div className="level-item has-text-centered">
+                        <div>
+                            <p className="heading">Coletas</p>
+                            <p className="title">{queueItem.collect_count}</p>
+                        </div>
+                    </div>
+                    <div className="level-item has-text-centered">
+                        <div>
+                            <p className="heading">Fotos</p>
+                            <p className="title">{queueItem.photo_count}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </a>
