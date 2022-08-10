@@ -11,7 +11,7 @@ export const Home: React.FC<HomeProps> = (props) => {
 
     statisticsStore.countMonthCollects()
     statisticsStore.countPublicWork()
-    statisticsStore.countQueue()
+    // statisticsStore.countQueue()
 
     return (
         <div>

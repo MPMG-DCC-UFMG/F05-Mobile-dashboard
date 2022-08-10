@@ -8,6 +8,7 @@ import {StatisticsStore} from "../stores/StatisticsStore";
 import {WorkStatusStore} from "../stores/WorkStatusStore";
 import {QueueStore} from "../stores/QueueStore";
 import {CollectStore} from "../stores/CollectStore";
+import {InspectionStore} from "../stores/InspectionStore";
 
 export const rootContext = React.createContext({
     typeWorkStore: new TypeWorkStore(),
@@ -18,5 +19,6 @@ export const rootContext = React.createContext({
     statisticsStore: new StatisticsStore(),
     workStatusStore: new WorkStatusStore(),
     queueStore: new QueueStore(),
-    collectStore: new CollectStore()
+    collectStore: new CollectStore(),
+    inspectionStore: new InspectionStore()
 })

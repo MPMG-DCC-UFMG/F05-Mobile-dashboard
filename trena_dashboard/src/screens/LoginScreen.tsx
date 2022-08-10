@@ -9,7 +9,7 @@ import {MPNotification} from "../components/elements/Notification";
 export const LoginScreen: React.FC<any> = observer(() => {
 
     const {userStore} = useStores()
-    const [user, setUser] = useState({username: "", password: ""})
+    const [user, setUser] = useState({username: "admin", password: "@dminUs3r!"})
 
     const onLoginClicked = async () => {
         await userStore.login(user.username, user.password)

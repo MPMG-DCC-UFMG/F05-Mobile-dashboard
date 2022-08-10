@@ -12,9 +12,9 @@ export class QueueService {
             let queueCount: number = res.body
 
             return queueCount
-        })
+        }).catch(error => 0)
     }
-
+ 
     static async loadQueueItems(): Promise<QueueItem[]> {
         const call = Config.BASE_URL + "/queue/items"
         return TrenaAPI.network().get(call).then(res => {
