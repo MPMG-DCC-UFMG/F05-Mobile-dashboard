@@ -27,7 +27,6 @@ export const NavigationMenu: React.FC<any> = () => {
                 <NavLink activeClassName="is-active" to="/typeOfWork">Tipos de Obra</NavLink>
                 <NavLink activeClassName="is-active" to="/typePhoto">Tipos de Fotos</NavLink>
                 <NavLink activeClassName="is-active" to="/workStatus">Estados das Obras</NavLink>
-                <NavLink activeClassName="is-active" to="/inspections">Vistorias</NavLink>
             </ul>
             <p className="menu-label">
                 Dados

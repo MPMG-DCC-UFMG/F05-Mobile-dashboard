@@ -36,11 +36,11 @@ export const ListInspection = observer(() => {
     const handleAddClick = () => {
         let mInspection: Inspection = {name: ""}
         createInspectionView(
-            "Adicionar tipo de foto",
+            "Adicionar Vistoria",
             "Adicionar",
             () => {
                 mInspection.status = 0
-                inspectionStore.addInspection(mInspection)
+                inspectionStore.addInspection(mInspection) 
             },
             (inspection:Inspection) => {
                 mInspection = inspection

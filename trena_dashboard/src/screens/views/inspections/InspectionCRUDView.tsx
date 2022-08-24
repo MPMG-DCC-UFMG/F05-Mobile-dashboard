@@ -69,12 +69,6 @@ export default class InspectionCRUDView extends BaseCRUDView<InspectionCRUDViewP
                                inputDefaultValue={this.state.description}
                                inputName="description"
                                onValueChanged={this.onDescriptionChanged}/>
-                <InputField
-                    inputLabel="Id Obra Pública"
-                    inputHint="Id Obra Pública..."
-                    inputDefaultValue={this.state.public_work_id}
-                    inputName="public_work_id"
-                    onValueChanged={this.handleFormChange}/>
             </div>
         )
     }

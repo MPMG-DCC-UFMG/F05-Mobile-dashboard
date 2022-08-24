@@ -23,6 +23,20 @@ export class InspectionStore extends BaseStore {
     }
 
     @action
+    async loadInspectionsByWorkId(public_work_id: string) {
+        this.baseCall(async () => {
+            const inspections = await InspectionService.loadInspections()
+            runInAction(() => {
+                    this.inspectionsFullList = inspections.filter(item => {
+                        return item.public_work_id === public_work_id
+                     });
+                    this.search("")
+                }
+            )
+        })
+    }
+
+    @action
     search(query?: string) {
         if (query) {
             this.inspectionList = this.inspectionsFullList.filter(item => item.name.toUpperCase().includes(query.toUpperCase()))

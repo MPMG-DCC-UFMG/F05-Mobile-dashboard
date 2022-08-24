@@ -26,8 +26,7 @@ export const ItemInspection: React.FC<ItemInspectionProps> = observer((props) =>
         case "2":
             return 'Verificada';
         case "3":
-            return 'Negada';
-        
+            return 'Negada';        
         default:
             return  '--';
         }

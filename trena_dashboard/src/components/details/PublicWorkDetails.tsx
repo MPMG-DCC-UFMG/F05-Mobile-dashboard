@@ -2,6 +2,7 @@ import {MapView} from "../../screens/views/publicWork/MapView";
 import React from "react";
 import {PublicWork} from "../../core/models/PublicWork";
 
+
 interface PublicWorkDetailsProps {
     publicWork: PublicWork
 }
@@ -31,6 +32,7 @@ export const PublicWorkDetails: React.FC<PublicWorkDetailsProps> = (props) => {
             <MapView latitude={publicWork.address.latitude} longitude={publicWork.address.longitude}
                      zoom={14}/>
             <br/>
+            
         </>
     )
 }

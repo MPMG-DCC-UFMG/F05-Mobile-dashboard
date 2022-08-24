@@ -4,12 +4,14 @@ import React from "react";
 import {EmptyView} from "../EmptyView";
 import {PublicWorkMenu} from "../../../components/menus/PublicWorkMenu";
 import {PublicWorkDetails} from "../../../components/details/PublicWorkDetails";
-
+import {ListInspection} from "../../../components/lists/ListInspection";
 
 export const PublicWorkView = observer(() => {
-    const {publicWorkStore, workStatusStore} = useStores()
+    const {publicWorkStore, workStatusStore, inspectionStore} = useStores()
     const publicWork = publicWorkStore.selectedPublicWork
     const collectCount = publicWorkStore.collectsOfPublicWork.length
+
+    inspectionStore.loadInspectionsByWorkId(publicWork?.id || "")
 
     const handleDownloadCollectClicked = () => {
         if (publicWork) {
@@ -39,6 +41,7 @@ export const PublicWorkView = observer(() => {
                                                 workStateUser={getWorkStatus(publicWork?.user_status)}
                                                 workStateIA={getWorkStatus(publicWork?.rnn_status)}
                                                 onDownloadClicked={handleDownloadCollectClicked}/>
+                                <ListInspection/>
                             </div>
                         </div>
                     </article>
