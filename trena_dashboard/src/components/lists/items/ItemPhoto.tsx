@@ -13,7 +13,9 @@ export const ItemPhoto: React.FC<ItemPhotoProps> = (props) => {
     const {photo,footer,filter} = props
 
     const createUrl = (): string => {
-        return photo.filepath + `?X-TRENA-KEY=${Config.API_KEY}`
+        var url_photo = photo.filepath + `?X-TRENA-KEY=${Config.API_KEY}`
+        console.log(url_photo)
+        return url_photo
     }
 
     return (

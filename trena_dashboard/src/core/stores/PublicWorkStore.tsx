@@ -13,6 +13,7 @@ export class PublicWorkStore extends BaseStore {
     @observable publicWorkList: PublicWork[] = [];
     @observable selectedPublicWork?: PublicWork = undefined;
     @observable collectsOfPublicWork: Collect[] = [];
+    @observable photos: string[] = [];
 
     @action
     async loadPublicWorkList() {
@@ -82,8 +83,17 @@ export class PublicWorkStore extends BaseStore {
         })
     }
 
+    @action
+    async retrievePhotos(publicWorkId: string) {
+        this.photos = []
+        CollectService.retrievePhotos(publicWorkId).then(p => {
+            this.photos = p
+            console.log(p)
+        })
+    }
+
     downloadCollectJSONReport = (publicWorkId: string) => {
-        CollectService.downloadJSONReport(publicWorkId)
+        CollectService.retrievePhotos(publicWorkId)
     }
 
 }

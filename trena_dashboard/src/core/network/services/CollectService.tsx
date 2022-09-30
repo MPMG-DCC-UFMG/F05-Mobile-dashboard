@@ -37,6 +37,23 @@ export class CollectService {
         })
     }
 
+    static async retrievePhotos(publicWorkId: string) : Promise<string[]> {
+        const call = Config.BASE_URL + "/collects/report/json"
+        //const call = Config.BASE_URL + "/collects/publicWork"
+        return TrenaAPI.network().get(call)
+            .query({public_work_id: publicWorkId}).then(res => {
+
+                var photos:string[] = []
+                var collects = res.body
+                for (let index = 0; index < collects.length; index++) {
+                    const collect = collects[index]
+                    photos.push(collect.photos[0].filepath)
+                }
+
+                return photos
+        })
+    }
+
     static async downloadJSONReport(publicWorkId: string) {
         const call = Config.BASE_URL + "/collects/report/json/file"
         TrenaAPI.network().get(call)

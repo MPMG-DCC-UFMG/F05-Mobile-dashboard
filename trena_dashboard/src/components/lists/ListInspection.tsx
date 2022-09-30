@@ -12,6 +12,8 @@ import InspectionStatusView from "../../screens/views/inspections/InspectionStat
 export const ListInspection = observer(() => {
     const {inspectionStore, viewStore} = useStores()
 
+    
+
     const createInspectionView = (title: string,
         confirm: string,
         onConfirmClick: () => void,
@@ -40,6 +42,7 @@ export const ListInspection = observer(() => {
             "Adicionar",
             () => {
                 mInspection.status = 0
+                mInspection.public_work_id = inspectionStore.selectedInspection?.public_work_id
                 inspectionStore.addInspection(mInspection) 
             },
             (inspection:Inspection) => {

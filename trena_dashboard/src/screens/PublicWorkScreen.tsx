@@ -2,6 +2,7 @@ import React from "react";
 import {ListPublicWork} from "../components/lists/ListPublicWork";
 import {useStores} from "../core/contexts/UseStores";
 import {PublicWorkView} from "./views/publicWork/PublicWorkView";
+import { Row, Col } from "reactstrap";
 
 interface PublicWorkScreenProps {
 
@@ -15,13 +16,13 @@ export const PublicWorkScreen: React.FC<PublicWorkScreenProps> = (props) => {
    
 
     return (
-        <div className="columns">
-            <div className="column is-one-third">
+        <Col>
+            <Row>
                 <ListPublicWork/>
-            </div>
-            <div className="column is-two-thirds">
+            </Row>
+            <Row>
                 <PublicWorkView/>
-            </div>
-        </div>
+            </Row>
+        </Col>
     )
 }

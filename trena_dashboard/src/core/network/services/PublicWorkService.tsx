@@ -9,6 +9,7 @@ export class PublicWorkService {
             .then(res => {
                 let listPublicWorks: PublicWork[] = res.body
 
+                console.log(listPublicWorks)
                 return listPublicWorks
             })
     }
