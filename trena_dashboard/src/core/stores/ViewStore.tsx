@@ -1,5 +1,5 @@
 import { action, observable } from "mobx";
-import { BaseActionView } from "../../components/Base/BaseActionView";
+import { BaseActionView } from "../../components/base/BaseActionView";
 
 export class ViewStore {
   @observable viewInModal?: BaseActionView<any, any> = undefined;

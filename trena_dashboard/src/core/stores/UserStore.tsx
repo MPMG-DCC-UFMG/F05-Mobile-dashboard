@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { action, observable, runInAction } from "mobx";
 import { User } from "../models/User";
 import { SecurityService } from "../network/services/SecurityService";
