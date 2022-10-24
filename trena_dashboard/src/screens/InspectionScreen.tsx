@@ -1,22 +1,24 @@
+import { observer } from "mobx-react";
 import React from "react";
-import {CollectView} from "./views/collect/CollectView";
-import {useStores} from "../core/contexts/UseStores";
-import {observer} from "mobx-react";
-import {PhotoView} from "./views/photo/PhotoView";
-import {ListInspection} from "../components/lists/ListInspection";
+import { DashboardContentContainer } from "../components/containers/ContentContainer";
+import { DashboardContainer } from "../components/containers/DashboardContainer";
+import { ListInspection } from "../components/lists/ListInspection";
+import { useStores } from "../core/contexts/UseStores";
 
 export const InspectionScreen: React.FC<any> = observer((props) => {
+  const { inspectionStore } = useStores();
+  inspectionStore.loadInspections();
 
-    const {inspectionStore} = useStores()
-    inspectionStore.loadInspections()
-
-    return (
+  return (
+    <DashboardContainer>
+      <DashboardContentContainer>
         <div className="columns">
-            <div className="column is-two-thirds">
-                <ListInspection/>
-            </div>
-            <div className="column">
-            </div>
+          <div className="column is-two-thirds">
+            <ListInspection />
+          </div>
+          <div className="column"></div>
         </div>
-    )
-})
+      </DashboardContentContainer>
+    </DashboardContainer>
+  );
+});

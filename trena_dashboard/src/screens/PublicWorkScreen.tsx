@@ -1,28 +1,29 @@
 import React from "react";
-import {ListPublicWork} from "../components/lists/ListPublicWork";
-import {useStores} from "../core/contexts/UseStores";
-import {PublicWorkView} from "./views/publicWork/PublicWorkView";
-import { Row, Col } from "reactstrap";
+import { Col, Row } from "reactstrap";
+import { DashboardContentContainer } from "../components/containers/ContentContainer";
+import { DashboardContainer } from "../components/containers/DashboardContainer";
+import { ListPublicWork } from "../components/lists/ListPublicWork";
+import { useStores } from "../core/contexts/UseStores";
+import { PublicWorkView } from "./views/publicWork/PublicWorkView";
 
-interface PublicWorkScreenProps {
+export const PublicWorkScreen: React.FC = () => {
+  const { publicWorkStore, typeWorkStore } = useStores();
 
-}
+  publicWorkStore.loadPublicWorkList();
+  typeWorkStore.loadTypeWorkList();
 
-export const PublicWorkScreen: React.FC<PublicWorkScreenProps> = (props) => {
-    const {publicWorkStore, typeWorkStore, inspectionStore} = useStores()
-    
-    publicWorkStore.loadPublicWorkList()
-    typeWorkStore.loadTypeWorkList()
-   
-
-    return (
+  return (
+    <DashboardContainer>
+      <DashboardContentContainer>
         <Col>
-            <Row>
-                <ListPublicWork/>
-            </Row>
-            <Row>
-                <PublicWorkView/>
-            </Row>
+          <Row>
+            <ListPublicWork />
+          </Row>
+          <Row>
+            <PublicWorkView />
+          </Row>
         </Col>
-    )
-}
+      </DashboardContentContainer>
+    </DashboardContainer>
+  );
+};
