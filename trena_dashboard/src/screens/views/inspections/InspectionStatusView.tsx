@@ -1,5 +1,5 @@
 import React from "react";
-import { BaseCRUDView } from "../../../components/Base/BaseCRUDView";
+import { BaseCRUDView } from "../../../components/base/BaseCRUDView";
 import { Dropdown } from "../../../components/Form/Dropdown";
 import { Inspection } from "../../../core/models/Inspection";
 

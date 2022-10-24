@@ -1,5 +1,5 @@
 import React from "react";
-import { BaseCRUDView } from "../../../components/Base/BaseCRUDView";
+import { BaseCRUDView } from "../../../components/base/BaseCRUDView";
 import { InputField } from "../../../components/Form/InputField";
 import { InputFieldWithAction } from "../../../components/Form/InputFieldWithAction";
 import { Address } from "../../../core/models/Address";

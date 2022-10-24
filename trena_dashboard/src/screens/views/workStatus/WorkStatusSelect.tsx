@@ -1,5 +1,5 @@
 import React from "react";
-import { BaseCRUDView } from "../../../components/Base/BaseCRUDView";
+import { BaseCRUDView } from "../../../components/base/BaseCRUDView";
 import { MultipleSelector } from "../../../components/Form/MultipleSelector";
 
 interface WorkStatusSelectProps {

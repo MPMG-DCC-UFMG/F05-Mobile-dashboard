@@ -1,5 +1,5 @@
 import React from "react";
-import { BaseCRUDView } from "../../../components/Base/BaseCRUDView";
+import { BaseCRUDView } from "../../../components/base/BaseCRUDView";
 import { Dropdown, DropdownOptions } from "../../../components/Form/Dropdown";
 import { InputField } from "../../../components/Form/InputField";
 import { Address } from "../../../core/models/Address";
