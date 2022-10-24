@@ -1,7 +1,7 @@
 import React from "react";
+import { HomeCards } from "../components/Cards";
 import { DashboardContentContainer } from "../components/Containers/ContentContainer";
 import { DashboardContainer } from "../components/Containers/DashboardContainer";
-import { StatsSummary } from "../components/stats/StatsSummary";
 import { useStores } from "../core/contexts/UseStores";
 
 interface HomeProps {}
@@ -16,7 +16,7 @@ export const Home: React.FC<HomeProps> = (props) => {
   return (
     <DashboardContainer>
       <DashboardContentContainer>
-        <StatsSummary />
+        <HomeCards />
       </DashboardContentContainer>
     </DashboardContainer>
   );
