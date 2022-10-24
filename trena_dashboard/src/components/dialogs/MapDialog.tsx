@@ -9,8 +9,8 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { useStores } from "../../core/contexts/UseStores";
 import { PublicWork } from "../../core/models/PublicWork";
 import { MapView } from "../../screens/views/publicWork/MapView";
-import { InfoIconInput } from "../inputs/InfoIconInput";
-import { PublicWorkMenu } from "../menus/PublicWorkMenu";
+import { InfoIconInput } from "../Inputs/InfoIconInput";
+import { PublicWorkMenu } from "../Menus/PublicWorkMenu";
 
 interface MapDialogProps {
   state: boolean[];

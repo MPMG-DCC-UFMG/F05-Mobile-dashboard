@@ -2,7 +2,6 @@ import { ChevronLeft } from "@material-ui/icons";
 import { Divider, IconButton, styled, Toolbar } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import React from "react";
-
 import { DrawerListItem } from "./DrawerListItem";
 
 interface DrawerProps {

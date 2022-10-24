@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { DashboardContainer } from "../components/containers/DashboardContainer";
+import { DashboardContainer } from "../components/Containers/DashboardContainer";
 import { useStores } from "../core/contexts/UseStores";
 import { CollectScreen } from "./CollectScreen";
 import { Home } from "./Home";

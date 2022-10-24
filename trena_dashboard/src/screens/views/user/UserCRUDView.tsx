@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { MPNotification } from "../../../components/elements/Notification";
-import { Dropdown } from "../../../components/form/Dropdown";
-import { InputField } from "../../../components/form/InputField";
+import { MPNotification } from "../../../components/Elements/Notification";
+import { Dropdown } from "../../../components/Form/Dropdown";
+import { InputField } from "../../../components/Form/InputField";
 import { useStores } from "../../../core/contexts/UseStores";
 import { User } from "../../../core/models/User";
 

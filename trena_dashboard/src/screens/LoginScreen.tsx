@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { MPNotification } from "../components/elements/Notification";
-import { InputField } from "../components/form/InputField";
+import { MPNotification } from "../components/Elements/Notification";
+import { InputField } from "../components/Form/InputField";
 import { useStores } from "../core/contexts/UseStores";
 import { ReactComponent as Logo } from "../images/logo.svg";
 

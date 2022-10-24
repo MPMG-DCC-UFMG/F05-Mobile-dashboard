@@ -1,7 +1,7 @@
 import { Box, Container, CssBaseline, Grid } from "@mui/material";
 import React, { useState } from "react";
-import { AppBar } from "../appbar";
-import { Drawer } from "../drawer";
+import { AppBar } from "../AppBar";
+import { Drawer } from "../Drawer";
 
 interface DashboardContainerProps {
   children?: React.ReactNode;
