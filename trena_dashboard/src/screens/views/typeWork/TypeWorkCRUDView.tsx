@@ -1,60 +1,61 @@
 import React from "react";
-import {InputField} from "../../../components/form/InputField";
-import {TypeWork} from "../../../core/models/TypeWork";
-import {BaseCRUDView} from "../../../components/base/BaseCRUDView";
+import { BaseCRUDView } from "../../../components/Base/BaseCRUDView";
+import { InputField } from "../../../components/Form/InputField";
+import { TypeWork } from "../../../core/models/TypeWork";
 
 interface TypeWorkCRUDViewProps {
-    defaultTypeWork?: TypeWorkCRUDViewState,
-    onChangeTypeWork?: (typeWork: TypeWork) => void
+  defaultTypeWork?: TypeWorkCRUDViewState;
+  onChangeTypeWork?: (typeWork: TypeWork) => void;
 }
 
 const initialState = {
-    flag: 0,
-    name: ""
-}
+  flag: 0,
+  name: "",
+};
 
-type TypeWorkCRUDViewState = typeof initialState | TypeWork
+type TypeWorkCRUDViewState = typeof initialState | TypeWork;
 
-export default class TypeWorkCRUDView extends BaseCRUDView<TypeWorkCRUDViewProps, TypeWorkCRUDViewState> {
+export default class TypeWorkCRUDView extends BaseCRUDView<
+  TypeWorkCRUDViewProps,
+  TypeWorkCRUDViewState
+> {
+  readonly state: TypeWorkCRUDViewState = initialState;
 
-    readonly state: TypeWorkCRUDViewState = initialState
+  constructor(props: TypeWorkCRUDViewProps) {
+    super(props);
 
-    constructor(props: TypeWorkCRUDViewProps) {
-        super(props);
-
-        if (props.defaultTypeWork) {
-            this.state = props.defaultTypeWork
-        }
+    if (props.defaultTypeWork) {
+      this.state = props.defaultTypeWork;
     }
+  }
 
-    onChange = (value: TypeWorkCRUDViewState) => {
-        if (this.props.onChangeTypeWork) {
-            this.props.onChangeTypeWork(value as TypeWork)
-        }
+  onChange = (value: TypeWorkCRUDViewState) => {
+    if (this.props.onChangeTypeWork) {
+      this.props.onChangeTypeWork(value as TypeWork);
     }
+  };
 
-    isValid(): boolean {
-        let valid = true
-        Object.values(this.state).forEach(value => {
-            if (!value) {
-                valid = false
-            }
-        })
-        return valid
-    }
+  isValid(): boolean {
+    let valid = true;
+    Object.values(this.state).forEach((value) => {
+      if (!value) {
+        valid = false;
+      }
+    });
+    return valid;
+  }
 
-    render() {
-        return (
-            <div className="container has-text-left">
-                <InputField
-                    inputLabel="Tipo de Obra"
-                    inputHint="Adicionar novo tipo de obra ..."
-                    inputDefaultValue={this.state.name}
-                    inputName="name"
-                    onValueChanged={this.handleFormChange}/>
-            </div>
-        )
-    }
-
-
+  render() {
+    return (
+      <div className="container has-text-left">
+        <InputField
+          inputLabel="Tipo de Obra"
+          inputHint="Adicionar novo tipo de obra ..."
+          inputDefaultValue={this.state.name}
+          inputName="name"
+          onValueChanged={this.handleFormChange}
+        />
+      </div>
+    );
+  }
 }

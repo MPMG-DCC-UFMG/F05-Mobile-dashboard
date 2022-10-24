@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react";
-import { DashboardContentContainer } from "../components/containers/ContentContainer";
-import { DashboardContainer } from "../components/containers/DashboardContainer";
+import { DashboardContentContainer } from "../components/Containers/ContentContainer";
+import { DashboardContainer } from "../components/Containers/DashboardContainer";
 import { ListInspection } from "../components/lists/ListInspection";
 import { useStores } from "../core/contexts/UseStores";
 

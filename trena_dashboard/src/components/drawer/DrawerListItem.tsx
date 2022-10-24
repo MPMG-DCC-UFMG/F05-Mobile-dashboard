@@ -65,7 +65,7 @@ export function DrawerListItem() {
       <MyListItem icon={<QueuePlayNext />} url="/collect" iconText="Coletas" />
       <Divider />
       <MyListItem icon={<People />} url="/users" iconText="Usuários" />
-      <MyListItem icon={<Logout />} url="/logout" iconText="Sair" />
+      <MyListItem icon={<Logout />} url="/" iconText="Sair" />
     </List>
   );
 }

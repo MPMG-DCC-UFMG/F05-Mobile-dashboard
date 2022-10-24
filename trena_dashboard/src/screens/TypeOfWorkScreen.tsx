@@ -1,6 +1,6 @@
 import React from "react";
-import { DashboardContentContainer } from "../components/containers/ContentContainer";
-import { DashboardContainer } from "../components/containers/DashboardContainer";
+import { DashboardContentContainer } from "../components/Containers/ContentContainer";
+import { DashboardContainer } from "../components/Containers/DashboardContainer";
 import { ListTypeWork } from "../components/lists/ListTypeWork";
 import { useStores } from "../core/contexts/UseStores";
 import { TypePhotoBox } from "./views/typePhoto/TypePhotoBox";

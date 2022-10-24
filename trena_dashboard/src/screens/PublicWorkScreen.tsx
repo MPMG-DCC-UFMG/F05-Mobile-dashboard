@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Row } from "reactstrap";
-import { DashboardContentContainer } from "../components/containers/ContentContainer";
-import { DashboardContainer } from "../components/containers/DashboardContainer";
+import { DashboardContentContainer } from "../components/Containers/ContentContainer";
+import { DashboardContainer } from "../components/Containers/DashboardContainer";
 import { ListPublicWork } from "../components/lists/ListPublicWork";
 import { useStores } from "../core/contexts/UseStores";
 import { PublicWorkView } from "./views/publicWork/PublicWorkView";

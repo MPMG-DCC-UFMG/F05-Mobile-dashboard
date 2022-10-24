@@ -4,8 +4,8 @@ import { useStores } from "../../core/contexts/UseStores";
 import { PublicWork } from "../../core/models/PublicWork";
 import { DeleteView } from "../../screens/views/DeleteView";
 import PublicWorkCRUDView from "../../screens/views/publicWork/PublicWorkCRUDView";
-import { DropdownOptions } from "../form/Dropdown";
-import { ItemActionsMenu } from "../menus/ItemActionsMenu";
+import { DropdownOptions } from "../Form/Dropdown";
+import { ItemActionsMenu } from "../Menus/ItemActionsMenu";
 
 import { faEye, faMap } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,7 +19,7 @@ import {
   Row,
 } from "reactstrap";
 import { Address } from "../../core/models/Address";
-import { MapDialog } from "../dialogs/MapDialog";
+import { MapDialog } from "../Dialogs/MapDialog";
 
 export const ListPublicWork = observer(() => {
   const { publicWorkStore, viewStore, typeWorkStore } = useStores();

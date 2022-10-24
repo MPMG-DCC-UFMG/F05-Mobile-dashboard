@@ -1,204 +1,211 @@
-import React, {useState} from "react";
-import {QueueItem} from "../../../core/models/QueueItem";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
-    faBookOpen,
-    faBuilding,
-    faCamera,
-    faCheck,
-    faTimesCircle
+  faBookOpen,
+  faBuilding,
+  faCamera,
+  faCheck,
+  faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import {useStores} from "../../../core/contexts/UseStores";
-import {Steps} from "../../../components/lists/Steps";
-import {PublicWorkDetails} from "../../../components/details/PublicWorkDetails";
-import {QueueCollectView} from "./QueueCollectView";
-import {QueuePhotoView} from "./QueuePhotoView";
-import {observer} from "mobx-react";
-import {QueueConfirmation} from "./QueueConfirmation";
-import {DeleteView} from "../DeleteView";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { observer } from "mobx-react";
+import React, { useState } from "react";
+import { PublicWorkDetails } from "../../../components/Details/PublicWorkDetails";
+import { Steps } from "../../../components/lists/Steps";
+import { useStores } from "../../../core/contexts/UseStores";
+import { QueueItem } from "../../../core/models/QueueItem";
+import { DeleteView } from "../DeleteView";
+import { QueueCollectView } from "./QueueCollectView";
+import { QueueConfirmation } from "./QueueConfirmation";
+import { QueuePhotoView } from "./QueuePhotoView";
 
 interface AcceptViewProps {
-    queueItem: QueueItem
+  queueItem: QueueItem;
 }
 
 export const AcceptView: React.FC<AcceptViewProps> = observer((props) => {
+  const { queueItem } = props;
+  const { queueStore, viewStore } = useStores();
+  const allSteps = ["Obra pública", "Coletas", "Fotos", "Confirmar"];
+  const icons = [faBuilding, faBookOpen, faCamera, faCheck];
+  const [state, setState] = useState({ step: 0 });
 
-    const {queueItem} = props
-    const {queueStore, viewStore} = useStores()
-    const allSteps = ["Obra pública", "Coletas", "Fotos", "Confirmar"]
-    const icons = [faBuilding, faBookOpen, faCamera, faCheck]
-    const [state, setState] = useState({step: 0})
+  const handleCloseClick = () => {
+    queueStore.selectQueueItem(undefined);
+  };
 
-    const handleCloseClick = () => {
-        queueStore.selectQueueItem(undefined)
+  const onNextClicked = () => {
+    if (state.step < allSteps.length - 1) {
+      const newStep = getNextStep();
+      setState((prevState) => {
+        return { ...prevState, step: newStep };
+      });
+    } else {
+      handleConfirmation();
     }
+  };
 
-    const onNextClicked = () => {
-        if (state.step < allSteps.length - 1) {
-            const newStep = getNextStep()
-            setState((prevState) => {
-                return {...prevState, step: newStep}
-            })
-        } else {
-            handleConfirmation()
-        }
+  const handleConfirmation = () => {
+    queueStore.confirmCollect();
+  };
+
+  const handlePublicWorkDeleteClicked = () => {
+    if (queueStore.selectedQueueItem !== undefined) {
+      const publicWork = queueStore.selectedQueueItem.public_work;
+      let deleteView = {
+        title: "Deletar obra pública",
+        confirmButton: "Deletar",
+        onConfirmClick: () => {
+          if (publicWork.id) {
+            queueStore.deletePublicWork(publicWork.id);
+          }
+        },
+        contentView: <DeleteView toDelete={publicWork.name} />,
+      };
+      viewStore.setViewInModal(deleteView);
     }
+  };
 
-    const handleConfirmation = () => {
-        queueStore.confirmCollect()
+  const handleCollectDeleteClicked = () => {
+    if (queueStore.selectedCollect !== undefined) {
+      const collect = queueStore.selectedCollect;
+      let deleteView = {
+        title: "Deletar coleta",
+        confirmButton: "Deletar",
+        onConfirmClick: () => {
+          if (collect.id) {
+            queueStore.deleteCollect(collect.public_work_id, collect.id);
+          }
+        },
+        contentView: <DeleteView toDelete="coleta selecionada e fotos" />,
+      };
+      viewStore.setViewInModal(deleteView);
     }
+  };
 
-    const handlePublicWorkDeleteClicked = () => {
-        if (queueStore.selectedQueueItem !== undefined) {
-            const publicWork = queueStore.selectedQueueItem.public_work
-            let deleteView = {
-                title: "Deletar obra pública",
-                confirmButton: "Deletar",
-                onConfirmClick: () => {
-                    if (publicWork.id) {
-                        queueStore.deletePublicWork(publicWork.id)
-                    }
-                },
-                contentView: <DeleteView toDelete={publicWork.name}/>
-            }
-            viewStore.setViewInModal(deleteView)
-        }
+  const deleteButton = () => {
+    switch (state.step) {
+      case 0:
+        return (
+          <button
+            className="button is-warning is-danger"
+            onClick={handlePublicWorkDeleteClicked}
+          >
+            Deletar Obra
+          </button>
+        );
+      case 1:
+        return "";
+      case 2:
+        return (
+          <button
+            className="button is-warning is-danger"
+            onClick={handleCollectDeleteClicked}
+          >
+            Deletar Coleta
+          </button>
+        );
+      case 3:
+        return "";
     }
+  };
 
-    const handleCollectDeleteClicked = () => {
-        if (queueStore.selectedCollect !== undefined) {
-            const collect = queueStore.selectedCollect
-            let deleteView = {
-                title: "Deletar coleta",
-                confirmButton: "Deletar",
-                onConfirmClick: () => {
-                    if (collect.id) {
-                        queueStore.deleteCollect(collect.public_work_id,collect.id)
-                    }
-                },
-                contentView: <DeleteView toDelete="coleta selecionada e fotos"/>
-            }
-            viewStore.setViewInModal(deleteView)
-        }
+  const getNextStep = (): number => {
+    const currStep = state.step;
+    if (currStep === 0 && queueStore.collectsOfPublicWork.length === 0) {
+      return 3;
     }
+    return currStep + 1;
+  };
 
-    const deleteButton = () => {
-        switch (state.step) {
-            case 0:
-                return (
-                    <button
-                        className="button is-warning is-danger"
-                        onClick={handlePublicWorkDeleteClicked}>
-                        Deletar Obra
-                    </button>
-                )
-            case 1:
-                return ""
-            case 2:
-                return (
-                    <button
-                        className="button is-warning is-danger"
-                        onClick={handleCollectDeleteClicked}>
-                        Deletar Coleta
-                    </button>
-                )
-            case 3:
-                return ""
-        }
+  const nextEnabled = (): boolean => {
+    if (state.step === 1 && queueStore.selectedCollect === undefined) {
+      return false;
     }
+    return true;
+  };
 
-    const getNextStep = () :number =>{
-        const currStep = state.step
-        if(currStep === 0 && queueStore.collectsOfPublicWork.length === 0){
-            return 3
-        }
-        return currStep+1
+  const onPrevClicked = () => {
+    if (state.step > 0) {
+      const newStep = state.step - 1;
+      stepActions(newStep);
+      setState((prevState) => {
+        return { ...prevState, step: newStep };
+      });
     }
+  };
 
-    const nextEnabled = (): boolean => {
-        if (state.step === 1 && queueStore.selectedCollect === undefined) {
-            return false
-        }
-        return true
+  const stepActions = (newStep: number) => {
+    if (newStep === 0) {
+      queueStore.selectCollect(undefined);
     }
+  };
 
-    const onPrevClicked = () => {
-        if (state.step > 0) {
-            const newStep = state.step - 1
-            stepActions(newStep)
-            setState((prevState) => {
-                return {...prevState, step: newStep}
-            })
-        }
+  const createStepViews = () => {
+    switch (state.step) {
+      case 0:
+        return (
+          <div className="container is-flex">
+            <PublicWorkDetails publicWork={queueItem.public_work} />
+          </div>
+        );
+      case 1:
+        return <QueueCollectView />;
+      case 2:
+        return <QueuePhotoView photos={queueStore.selectedCollect!!.photos} />;
+      case 3:
+        return <QueueConfirmation />;
     }
+  };
 
-    const stepActions = (newStep: number) => {
-        if (newStep === 0) {
-            queueStore.selectCollect(undefined)
-        }
-    }
-
-    const createStepViews = () => {
-        switch (state.step) {
-            case 0:
-                return (
-                    <div className="container is-flex">
-                        <PublicWorkDetails publicWork={queueItem.public_work}/>
-                    </div>
-                )
-            case 1:
-                return <QueueCollectView/>
-            case 2:
-                return <QueuePhotoView photos={queueStore.selectedCollect!!.photos}/>
-            case 3:
-                return <QueueConfirmation/>
-        }
-    }
-
-    return (
-        <div className="panel">
-            <div className="panel-heading">
-                <nav className="level">
-                    <div className="level-left">
-                        <div className="level-item">
-                            <button className="button is-danger" onClick={handleCloseClick}>
-                            <span className="icon is-small">
-                                <FontAwesomeIcon icon={faTimesCircle}/>
-                            </span>
-                            </button>
-                        </div>
-                    </div>
-                    <p className="level-item has-text-centered">
-                        {queueItem.public_work.name}
-                    </p>
-                </nav>
+  return (
+    <div className="panel">
+      <div className="panel-heading">
+        <nav className="level">
+          <div className="level-left">
+            <div className="level-item">
+              <button className="button is-danger" onClick={handleCloseClick}>
+                <span className="icon is-small">
+                  <FontAwesomeIcon icon={faTimesCircle} />
+                </span>
+              </button>
             </div>
-            <div className="panel-block">
-                <Steps stepsList={allSteps} currentStep={state.step} icons={icons}/>
-            </div>
-            <div className="panel-block" style={{height: "600px"}}>
-                <div className="container has-text-left" style={{height: "100%"}}>
-                    {createStepViews()}
-                </div>
-            </div>
-            <div className="panel-block">
-                <div className="container has-content-centered">
-                    <div className="buttons" style={{width: "100%", justifyContent: "center"}}>
-                        <button
-                            className="button is-primary is-rounded"
-                            disabled={state.step === 0}
-                            onClick={onPrevClicked}>
-                            Anterior
-                        </button>
-                        <button className="button is-primary is-rounded"
-                                onClick={onNextClicked}
-                                disabled={!nextEnabled()}>
-                            {state.step < allSteps.length - 1 ? "Próximo" : "Confirmar"}
-                        </button>
-                        {deleteButton()}
-                    </div>
-                </div>
-            </div>
+          </div>
+          <p className="level-item has-text-centered">
+            {queueItem.public_work.name}
+          </p>
+        </nav>
+      </div>
+      <div className="panel-block">
+        <Steps stepsList={allSteps} currentStep={state.step} icons={icons} />
+      </div>
+      <div className="panel-block" style={{ height: "600px" }}>
+        <div className="container has-text-left" style={{ height: "100%" }}>
+          {createStepViews()}
         </div>
-    )
-})
+      </div>
+      <div className="panel-block">
+        <div className="container has-content-centered">
+          <div
+            className="buttons"
+            style={{ width: "100%", justifyContent: "center" }}
+          >
+            <button
+              className="button is-primary is-rounded"
+              disabled={state.step === 0}
+              onClick={onPrevClicked}
+            >
+              Anterior
+            </button>
+            <button
+              className="button is-primary is-rounded"
+              onClick={onNextClicked}
+              disabled={!nextEnabled()}
+            >
+              {state.step < allSteps.length - 1 ? "Próximo" : "Confirmar"}
+            </button>
+            {deleteButton()}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+});

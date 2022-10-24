@@ -40,7 +40,7 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
   const handleLogout = () => userStore.logout();
 
   return (
-    <AppBarSetup position="absolute" open={open}>
+    <AppBarSetup color="primary" position="absolute" open={open}>
       <Toolbar sx={{ pr: "24px" }}>
         <IconButton
           edge="start"
