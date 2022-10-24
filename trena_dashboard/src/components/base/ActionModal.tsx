@@ -1,46 +1,49 @@
-import {observer} from "mobx-react";
+import { observer } from "mobx-react";
 import React from "react";
-import {useStores} from "../../core/contexts/UseStores";
+import { useStores } from "../../core/contexts/UseStores";
 
-interface ActionModalProps {
-
-}
+interface ActionModalProps {}
 
 export const ActionModal: React.FC<ActionModalProps> = observer((props) => {
-    const {viewStore} = useStores()
-    const viewInModal = viewStore.viewInModal
+  const { viewStore } = useStores();
+  const viewInModal = viewStore.viewInModal;
 
-    const closeModal = () => {
-        viewStore.setViewInModal()
+  const closeModal = () => {
+    viewStore.setViewInModal();
+  };
+
+  const handleConfirmClick = () => {
+    let onConfirmClick = viewInModal?.onConfirmClick;
+    if (onConfirmClick) {
+      onConfirmClick();
     }
+    closeModal();
+  };
 
-    const handleConfirmClick = () => {
-        let onConfirmClick = viewInModal?.onConfirmClick;
-        if (onConfirmClick) {
-            onConfirmClick()
-        }
-        closeModal()
-    }
+  const isValid = viewInModal?.contentView.isValid;
 
-    const isValid = viewInModal?.contentView.isValid
-
-    return (
-        <div className={"modal " + (viewInModal !== undefined ? "is-active" : "")}>
-            <div className="modal-background"></div>
-            <div className="modal-card">
-                <header className="modal-card-head">
-                    <p className="modal-card-title">{viewInModal?.title}</p>
-                    <button className="delete" aria-label="close" onClick={closeModal}/>
-                </header>
-                <section className="modal-card-body">
-                    {viewInModal?.contentView}
-                </section>
-                <footer className="card-footer-right modal-card-foot">
-                    <button className="button" onClick={closeModal}>Cancel</button>
-                    <button className="button is-success" disabled={isValid ? !isValid() : false}
-                            onClick={handleConfirmClick}>{viewInModal?.confirmButton}</button>
-                </footer>
-            </div>
-        </div>
-    )
-})
+  return (
+    <div className={"modal " + (viewInModal !== undefined ? "is-active" : "")}>
+      <div className="modal-background"></div>
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <p className="modal-card-title">{viewInModal?.title}</p>
+          <button className="delete" aria-label="close" onClick={closeModal} />
+        </header>
+        <section className="modal-card-body"></section>
+        <footer className="card-footer-right modal-card-foot">
+          <button className="button" onClick={closeModal}>
+            Cancel
+          </button>
+          <button
+            className="button is-success"
+            disabled={isValid ? !isValid() : false}
+            onClick={handleConfirmClick}
+          >
+            {viewInModal?.confirmButton}
+          </button>
+        </footer>
+      </div>
+    </div>
+  );
+});
