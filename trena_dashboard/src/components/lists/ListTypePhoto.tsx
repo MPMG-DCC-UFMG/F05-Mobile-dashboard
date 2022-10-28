@@ -1,3 +1,18 @@
+import { Edit, Delete, Add } from "@mui/icons-material";
+import {
+  Divider,
+  Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  IconButton,
+  Button,
+} from "@mui/material";
 import { observer } from "mobx-react";
 import React from "react";
 import { useStores } from "../../core/contexts/UseStores";
@@ -5,8 +20,6 @@ import { TypePhoto } from "../../core/models/TypePhoto";
 import { DeleteView } from "../../screens/views/DeleteView";
 import TypePhotoCRUDView from "../../screens/views/typePhoto/TypePhotoCRUDView";
 import { Search } from "../Form/Search";
-import { ItemActionsMenu } from "../Menus/ItemActionsMenu";
-import { ItemTypePhoto } from "./items/ItemTypePhoto";
 
 export const ListTypePhoto = observer(() => {
   const { typePhotoStore, viewStore } = useStores();
@@ -85,45 +98,64 @@ export const ListTypePhoto = observer(() => {
     }
   };
 
+  const handleSelectPhoto = (typePhoto: TypePhoto) => {
+    typePhotoStore.selectTypePhoto(typePhoto);
+  };
+
+  const handleEdit = (typePhoto: TypePhoto) => {};
+
   return (
-    <div className="panel">
-      <div className="panel-heading">
-        <nav className="level">
-          <div className="level-left">
-            <div className="level-item">Tipos de fotos</div>
-          </div>
-          <div className="level-right">
-            <div className="level-item">
-              <ItemActionsMenu
-                itemSelected={typePhotoStore.selectedTypePhoto !== undefined}
-                onAddClicked={handleAddClick}
-                onDeleteClicked={handleDeleteClick}
-                onEditClicked={handleEditClick}
-              />
-            </div>
-          </div>
-        </nav>
-      </div>
-      <div className="panel-block">
-        <Search onTextChanged={handleSearch} />
-      </div>
-      <div className="panel-block">
-        <table className="table is-fullwidth is-hoverable">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Descrição</th>
-            </tr>
-          </thead>
-          <tbody>
-            {typePhotoStore.typePhotoList.map((typePhoto) => {
-              return (
-                <ItemTypePhoto key={typePhoto.flag} typePhoto={typePhoto} />
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <Grid>
+      <Paper
+        sx={{
+          flexDirection: "column",
+        }}
+      >
+        <Grid item display="flex" justifyContent="space-between" padding={3}>
+          <Typography variant="h6">Tipos de Fotos</Typography>
+          <Button variant="contained" startIcon={<Add />}>
+            Tipo De Foto
+          </Button>
+        </Grid>
+        <Divider />
+        <Grid item display="flex" padding={2} justifyContent="flex-Start">
+          <Search label="Tipo de Foto" onTextChanged={handleSearch} />
+        </Grid>
+        <Divider />
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Nome</TableCell>
+                <TableCell>Descrição</TableCell>
+                <TableCell>Editar</TableCell>
+                <TableCell>Remover</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {typePhotoStore.typePhotoList.map((typePhoto) => (
+                <TableRow hover onClick={() => handleSelectPhoto(typePhoto)}>
+                  <TableCell>{typePhoto.name}</TableCell>
+                  <TableCell>{typePhoto.description}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      onClick={() => handleEdit(typePhoto)}
+                      color="info"
+                    >
+                      <Edit />
+                    </IconButton>
+                  </TableCell>
+                  <TableCell>
+                    <IconButton color="error">
+                      <Delete />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+    </Grid>
   );
 });

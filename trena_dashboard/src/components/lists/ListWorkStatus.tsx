@@ -1,3 +1,18 @@
+import { Add, Visibility, Edit, Delete } from "@mui/icons-material";
+import {
+  Grid,
+  Paper,
+  Typography,
+  Divider,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  IconButton,
+  Button,
+  Table,
+} from "@mui/material";
 import { observer } from "mobx-react";
 import React from "react";
 import { useStores } from "../../core/contexts/UseStores";
@@ -6,8 +21,6 @@ import { WorkStatus } from "../../core/models/WorkStatus";
 import { DeleteView } from "../../screens/views/DeleteView";
 import WorkStatusCRUDView from "../../screens/views/workStatus/WorkStatusCRUDView";
 import { Search } from "../Form/Search";
-import { ItemActionsMenu } from "../Menus/ItemActionsMenu";
-import { ItemWorkStatus } from "./items/ItemWorkStatus";
 
 export const ListWorkStatus = observer(() => {
   const { workStatusStore, viewStore } = useStores();
@@ -87,44 +100,60 @@ export const ListWorkStatus = observer(() => {
   };
 
   return (
-    <div className="panel">
-      <div className="panel-heading">
-        <nav className="level">
-          <div className="level-left">
-            <div className="level-item">Estados das obras</div>
-          </div>
-          <div className="level-right">
-            <div className="level-item">
-              <ItemActionsMenu
-                itemSelected={workStatusStore.selectedWorkStatus !== undefined}
-                onAddClicked={handleAddClick}
-                onDeleteClicked={handleDeleteClick}
-                onEditClicked={handleEditClick}
-              />
-            </div>
-          </div>
-        </nav>
-      </div>
-      <div className="panel-block">
-        <Search onTextChanged={handleSearch} />
-      </div>
-      <div className="panel-block">
-        <table className="table is-fullwidth is-hoverable">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Descrição</th>
-            </tr>
-          </thead>
-          <tbody>
-            {workStatusStore.workStatusList.map((workStatus) => {
-              return (
-                <ItemWorkStatus key={workStatus.flag} workStatus={workStatus} />
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <Grid>
+      <Paper
+        sx={{
+          flexDirection: "column",
+        }}
+      >
+        <Grid item display="flex" justifyContent="space-between" padding={3}>
+          <Typography variant="h6">Estados das Obras</Typography>
+          <Button color="info" variant="contained" startIcon={<Add />}>
+            Estados da Obra
+          </Button>
+        </Grid>
+        <Divider />
+        <Grid item display="flex" padding={2} justifyContent="flex-Start">
+          <Search label="Estado da Obra" onTextChanged={handleSearch} />
+        </Grid>
+        <Divider />
+        <Grid item display="flex">
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">Nome</TableCell>
+                  <TableCell align="center">Decrição</TableCell>
+                  <TableCell align="center">Editar</TableCell>
+                  <TableCell align="center">Remover</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {workStatusStore.workStatusList.map((workStatus) => (
+                  <TableRow hover>
+                    <TableCell align="center">{workStatus.name}</TableCell>
+                    <TableCell align="center" key={workStatus.flag}>
+                      <IconButton>
+                        <Visibility />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="center" key={workStatus.flag}>
+                      <IconButton color="info">
+                        <Edit />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="center" key={workStatus.flag}>
+                      <IconButton color="error">
+                        <Delete />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      </Paper>
+    </Grid>
   );
 });

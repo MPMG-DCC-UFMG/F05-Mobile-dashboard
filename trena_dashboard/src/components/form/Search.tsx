@@ -5,7 +5,8 @@ import { InputAdornment, TextField } from "@mui/material";
 import { ManageSearch } from "@mui/icons-material";
 
 interface SearchProps {
-  onTextChanged: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onTextChanged: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  label: string,
 }
 
 export const Search: React.FC<SearchProps> = (props) => {
@@ -14,7 +15,7 @@ export const Search: React.FC<SearchProps> = (props) => {
       fullWidth
       size="small"
       onChange={props.onTextChanged}
-      label="Tipo de Obra"
+      label={props.label}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
@@ -23,11 +24,5 @@ export const Search: React.FC<SearchProps> = (props) => {
         ),
       }}
     />
-    // <p className="control has-icons-left">
-    //     <input className="input" type="text" placeholder="Buscar" onChange={props.onTextChanged}/>
-    //     <span className="icon is-left">
-    //         <FontAwesomeIcon icon={faSearch}/>
-    //     </span>
-    // </p>
   )
 }
