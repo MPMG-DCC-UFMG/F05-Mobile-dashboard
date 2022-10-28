@@ -22,6 +22,18 @@ export class InspectionStore extends BaseStore {
   }
 
   @action
+  async getInspectionsByPublicWorkId(publicWorkId: string) {
+    this.baseCall(async () => {
+      const inspections = await InspectionService.getPublicWorkInspections(
+        publicWorkId
+      );
+      runInAction(() => {
+        this.inspectionList = inspections;
+      });
+    });
+  }
+
+  @action
   async loadInspectionsByWorkId(public_work_id: string) {
     this.baseCall(async () => {
       const inspections = await InspectionService.loadInspections();

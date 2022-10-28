@@ -1,9 +1,11 @@
 import { observer } from "mobx-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { Navigate } from "react-router-dom";
 import { MPNotification } from "../components/Elements/Notification";
 import { InputField } from "../components/Form/InputField";
 import { useStores } from "../core/contexts/UseStores";
+import { SecurityServiceQuery } from "../core/network/services/SecurityService";
 import { ReactComponent as Logo } from "../images/logo.svg";
 
 export const LoginScreen: React.FC<any> = observer(() => {
@@ -13,7 +15,16 @@ export const LoginScreen: React.FC<any> = observer(() => {
     password: "@dminUs3r!",
   });
 
+  const { isError, isSuccess, error, refetch } = useQuery(
+    "login",
+    () => SecurityServiceQuery.login(user.username, user.password),
+    {
+      enabled: false,
+    }
+  );
+
   const onLoginClicked = async () => {
+    refetch();
     await userStore.login(user.username, user.password);
   };
 
@@ -36,9 +47,11 @@ export const LoginScreen: React.FC<any> = observer(() => {
     return valid;
   };
 
+  useEffect(() => {}, [userStore.login]);
+
   return (
     <>
-      {userStore.loggedUser ? (
+      {userStore.loggedUser || isSuccess ? (
         <Navigate to="/dashboard" />
       ) : (
         <section className="hero is-fullheight">
@@ -71,11 +84,18 @@ export const LoginScreen: React.FC<any> = observer(() => {
                     Logar
                   </button>
                 </form>
-                {userStore.loginResult && (
-                  <div className="panel-block" style={{ display: "block" }}>
-                    <MPNotification message={userStore.loginResult} />
-                  </div>
-                )}
+                {userStore.loginResult ||
+                  (isError && (
+                    <div className="panel-block" style={{ display: "block" }}>
+                      <MPNotification
+                        message={
+                          userStore.loginResult
+                            ? userStore.loginResult
+                            : (error as string)
+                        }
+                      />
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
