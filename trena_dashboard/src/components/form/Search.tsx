@@ -1,25 +1,23 @@
-import * as React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { InputAdornment, TextField } from "@mui/material";
 import { ManageSearch } from "@mui/icons-material";
+import { InputAdornment, TextField } from "@mui/material";
+import * as React from "react";
 
 interface SearchProps {
-  onTextChanged: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  onTextChanged: (event: React.ChangeEvent<HTMLInputElement>) => void;
   label: string,
 }
 
-export const Search: React.FC<SearchProps> = (props) => {
+export function Search({ onTextChanged, label }: SearchProps) {
   return (
     <TextField
       fullWidth
       size="small"
-      onChange={props.onTextChanged}
-      label={props.label}
+      onChange={onTextChanged}
+      label={label}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <ManageSearch/>
+            <ManageSearch />
           </InputAdornment>
         ),
       }}

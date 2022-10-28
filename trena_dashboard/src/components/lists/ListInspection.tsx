@@ -38,7 +38,7 @@ export const ListInspection = observer(() => {
   };
 
   const handleAddClick = () => {
-    let mInspection: Inspection = { name: "" };
+    let mInspection: Inspection = { name: "", user_email: "" };
     createInspectionView(
       "Adicionar Vistoria",
       "Adicionar",
@@ -99,7 +99,7 @@ export const ListInspection = observer(() => {
         </nav>
       </div>
       <div className="panel-block">
-        <Search onTextChanged={handleSearch} />
+        <Search label="Tipo de Obra" onTextChanged={handleSearch} />
       </div>
       <div className="panel-block">
         <table className="table is-fullwidth is-hoverable">

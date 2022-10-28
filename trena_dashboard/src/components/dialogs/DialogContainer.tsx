@@ -4,11 +4,11 @@ import { DialogContent, Divider, Grid, IconButton } from "@mui/material";
 import React from "react";
 
 interface BasicDialogProps {
-  children: React.ReactNode[];
+  children?: React.ReactNode[] | React.ReactNode;
   title: string;
 }
 
-interface SingleDialogContainerProps extends BasicDialogProps {
+export interface SingleDialogContainerProps extends BasicDialogProps {
   state: boolean;
   setState(state: boolean): void;
 }
@@ -23,7 +23,7 @@ export function SingleDialogContainer({
 
   return (
     <Dialog
-      TransitionProps={{ unmountOnExit: true }}
+      TransitionProps={{ unmountOnExit: true, mountOnEnter: true }}
       open={state}
       scroll="body"
       fullWidth
@@ -50,7 +50,7 @@ export function SingleDialogContainer({
   );
 }
 
-interface TableDialogProps extends BasicDialogProps {
+export interface TableDialogProps extends BasicDialogProps {
   state: boolean[];
   setState(state: boolean[]): void;
   index: number;
@@ -70,7 +70,7 @@ export function TableDialogContainer({
 
   return (
     <Dialog
-      TransitionProps={{ unmountOnExit: true }}
+      TransitionProps={{ unmountOnExit: true, mountOnEnter: true }}
       open={state[index]}
       scroll="body"
       fullWidth

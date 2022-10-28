@@ -1,149 +1,129 @@
 import { observer } from "mobx-react";
-import React, { Fragment, useEffect, useState } from "react";
-import { useStores } from "../../core/contexts/UseStores";
-import { PublicWork } from "../../core/models/PublicWork";
-import { DeleteView } from "../../screens/views/DeleteView";
-import PublicWorkCRUDView from "../../screens/views/publicWork/PublicWorkCRUDView";
-import { DropdownOptions } from "../Form/Dropdown";
-import { ItemActionsMenu } from "../Menus/ItemActionsMenu";
+import React, { useState } from "react";
 
-import { faEye, faMap } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { SelectRow } from "react-bootstrap-table";
-import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
+import { Details, Edit } from "@material-ui/icons";
+import { Delete, Map } from "@mui/icons-material";
 import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Row,
-} from "reactstrap";
+  Box,
+  Grid,
+  IconButton,
+  LinearProgress,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Tooltip,
+} from "@mui/material";
+import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
+import { useMutation, useQuery } from "react-query";
 import { Address } from "../../core/models/Address";
+import {
+  PublicWorkService,
+  PublicWorkServiceQuery,
+} from "../../core/network/services/PublicWorkService";
 import { MapDialog } from "../Dialogs/MapDialog";
+import { AddPublicWorkDialog } from "../Dialogs/PublicWork/AddPublicWorkDialog";
+import { PublicWorkInspectionsDialog } from "../Dialogs/PublicWork/PublicWorkInspectionsDialog";
+import { Heading } from "../Heading";
+import { TablePagination } from "../TablePagination";
 
 export const ListPublicWork = observer(() => {
-  const { publicWorkStore, viewStore, typeWorkStore } = useStores();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [status, setStatus] = useState("Todos");
-  const toggle = () => setDropdownOpen((prevState) => !prevState);
-
-  const typeWorks = Array<DropdownOptions>();
-  typeWorkStore.typeWorksList.forEach((typeWork) => {
-    if (typeWork.flag) {
-      typeWorks.push({ key: typeWork.flag.toString(), value: typeWork.name });
-    }
-  });
-
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const query = event.currentTarget.value;
-    publicWorkStore.search(query);
-  };
-
-  const handleAddClick = () => {
-    let mPublicWork = {} as PublicWork;
-    createPublicWork(
-      "Adicionar obra pública",
-      "Adicionar",
-      () => {
-        publicWorkStore.addPublicWork(mPublicWork);
+  const { data: publicWorks, isLoading } = useQuery(
+    "getPublicWorks",
+    () => PublicWorkService.loadPublicWorks(),
+    {
+      onSuccess: (data) => {
+        setOpenInspectionsModal(Array(data.length).fill(false));
+        setOpenLocalizationModal(Array(data.length).fill(false));
       },
-      (publicWork: PublicWork) => {
-        mPublicWork = publicWork;
-      }
-    );
-  };
-
-  const handleEditClick = () => {
-    if (publicWorkStore.selectedPublicWork !== undefined) {
-      let mPublicWork = publicWorkStore.selectedPublicWork;
-      createPublicWork(
-        "Editar obra pública",
-        "Editar",
-        () => {
-          publicWorkStore.updatePublicWork(mPublicWork);
-        },
-        (publicWork: PublicWork) => {
-          mPublicWork = publicWork;
-        },
-        mPublicWork
-      );
     }
-  };
-
-  const createPublicWork = (
-    title: string,
-    confirm: string,
-    onConfirmClick: () => void,
-    onChangePublicWork: (publicWork: PublicWork) => void,
-    defaultPublicWork?: PublicWork
-  ) => {
-    let publicWorkView = {
-      title: title,
-      confirmButton: confirm,
-      onConfirmClick: onConfirmClick,
-      contentView: (
-        <PublicWorkCRUDView
-          onChangePublicWork={onChangePublicWork}
-          defaultPublicWork={defaultPublicWork}
-          typeOfWorkList={typeWorks}
-        />
-      ),
-    };
-    viewStore.setViewInModal(publicWorkView);
-  };
-
-  const handleDeleteClick = () => {
-    if (publicWorkStore.selectedPublicWork !== undefined) {
-      const publicWork = publicWorkStore.selectedPublicWork;
-      let deleteView = {
-        title: "Deletar obra pública",
-        confirmButton: "Deletar",
-        onConfirmClick: () => {
-          if (publicWork.id) {
-            publicWorkStore.deletePublicWork(publicWork.id);
-          }
-        },
-        contentView: <DeleteView toDelete={publicWork.name} />,
-      };
-      viewStore.setViewInModal(deleteView);
-    }
-  };
-
-  const onSelect = (
-    row: any,
-    isSelected: boolean,
-    event: any,
-    rowIndex: number
-  ) => {
-    var selected = publicWorkStore.publicWorkList.filter(
-      (item) => item.id === row.id
-    );
-    publicWorkStore.selectPublicWork(selected[0]);
-  };
-
-  const addressFormatter = (cell: any, row: any) => {
-    console.log(cell);
-    console.log(row);
-    return (
-      row.address.street + ", " + row.address.number + " - " + row.address.city
-    );
-  };
-
-  const selectRowProp: SelectRow = {
-    mode: "radio",
-    clickToSelect: true,
-    // You can assign className with a string or function
-    // String is most easy case but if you want to have more ability to custom the class name
-    // you can assign a function
-    onSelect: onSelect,
-  };
-
-  const [openLocalizationModal, setOpenLocalizationModal] = useState(
-    Array(publicWorkStore.publicWorkList.length).fill(false)
   );
-  const [openInspectionsModal, setOpenInspectionsModal] = useState(
-    Array(publicWorkStore.publicWorkList.length).fill(false)
+  const [openActionDialog, setOpenActionDialog] = useState(false);
+  const [openAddPublicWorkDialog, setOpenAddPublicWorkDialog] = useState(false);
+  const [openLocalizationModal, setOpenLocalizationModal] = useState<boolean[]>(
+    []
   );
+  const [openInspectionsModal, setOpenInspectionsModal] = useState<boolean[]>(
+    []
+  );
+
+  // const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const query = event.currentTarget.value;
+  //   publicWorkStore.search(query);
+  // };
+
+  // const handleAddClick = () => {
+  //   let mPublicWork = {} as PublicWork;
+  //   createPublicWork(
+  //     "Adicionar obra pública",
+  //     "Adicionar",
+  //     () => {
+  //       publicWorkStore.addPublicWork(mPublicWork);
+  //     },
+  //     (publicWork: PublicWork) => {
+  //       mPublicWork = publicWork;
+  //     }
+  //   );
+  // };
+
+  // const handleEditClick = () => {
+  //   if (publicWorkStore.selectedPublicWork !== undefined) {
+  //     let mPublicWork = publicWorkStore.selectedPublicWork;
+  //     createPublicWork(
+  //       "Editar obra pública",
+  //       "Editar",
+  //       () => {
+  //         publicWorkStore.updatePublicWork(mPublicWork);
+  //       },
+  //       (publicWork: PublicWork) => {
+  //         mPublicWork = publicWork;
+  //       },
+  //       mPublicWork
+  //     );
+  //   }
+  // };
+
+  // const createPublicWork = (
+  //   title: string,
+  //   confirm: string,
+  //   onConfirmClick: () => void,
+  //   onChangePublicWork: (publicWork: PublicWork) => void,
+  //   defaultPublicWork?: PublicWork
+  // ) => {
+  //   let publicWorkView = {
+  //     title: title,
+  //     confirmButton: confirm,
+  //     onConfirmClick: onConfirmClick,
+  //     contentView: (
+  //       <PublicWorkCRUDView
+  //         onChangePublicWork={onChangePublicWork}
+  //         defaultPublicWork={defaultPublicWork}
+  //         typeOfWorkList={typeWorks}
+  //       />
+  //     ),
+  //   };
+  //   viewStore.setViewInModal(publicWorkView);
+  // };
+
+  // const handleDeleteClick = () => {
+  //   if (publicWorkStore.selectedPublicWork !== undefined) {
+  //     const publicWork = publicWorkStore.selectedPublicWork;
+  //     let deleteView = {
+  //       title: "Deletar obra pública",
+  //       confirmButton: "Deletar",
+  //       onConfirmClick: () => {
+  //         if (publicWork.id) {
+  //           publicWorkStore.deletePublicWork(publicWork.id);
+  //         }
+  //       },
+  //       contentView: <DeleteView toDelete={publicWork.name} />,
+  //     };
+  //     viewStore.setViewInModal(deleteView);
+  //   }
+  // };
+
   const handleOpenLocalizationModal = (index: number) =>
     setOpenLocalizationModal(
       openInspectionsModal.map((value, pos) => (index === pos ? true : value))
@@ -153,117 +133,133 @@ export const ListPublicWork = observer(() => {
       openInspectionsModal.map((value, pos) => (index === pos ? true : value))
     );
 
-  const newAddressFormatter = (adress: Address) =>
+  const addressFormatter = (adress: Address) =>
     `${adress.street}, ${adress.number} - ${adress.city}`;
 
-  useEffect(() => {
-    setOpenInspectionsModal(
-      Array(publicWorkStore.publicWorkList.length).fill(false)
+  if (isLoading) {
+    return (
+      <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
+        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+          <Heading
+            buttonTitle="Adicionar Obra Pública"
+            title="Obras Públicas"
+            steps={[
+              { title: "Dashboard", url: "/" },
+              { title: "Obras Públicas", url: "/" },
+            ]}
+            handleAction={() => setOpenAddPublicWorkDialog(true)}
+          >
+            <Box width="100%">
+              <LinearProgress />
+            </Box>
+          </Heading>
+        </Paper>
+      </Grid>
     );
-    setOpenLocalizationModal(
-      Array(publicWorkStore.publicWorkList.length).fill(false)
-    );
-  }, [publicWorkStore.publicWorkList]);
+  }
+
+  if (!publicWorks) {
+    return <h1>Is loading...</h1>;
+  }
+
+  const deletePublicWorkMutation = (publicWorkId: string) =>
+    useMutation(PublicWorkServiceQuery.deletePublicWork).mutate(publicWorkId);
+
   return (
     <>
-      <div>
-        <div className="panel-heading">
-          <nav className="level">
-            <div className="level-left">
-              <div className="level-item">Obras Públicas</div>
-            </div>
-            <div className="level-right">
-              <div className="level-item">
-                <ItemActionsMenu
-                  itemSelected={
-                    publicWorkStore.selectedPublicWork !== undefined
-                  }
-                  onAddClicked={handleAddClick}
-                  onDeleteClicked={handleDeleteClick}
-                  onEditClicked={handleEditClick}
-                />
-              </div>
-            </div>
-          </nav>
-        </div>
-
-        <Row>
-          <Dropdown
-            style={{ marginTop: "30px" }}
-            isOpen={dropdownOpen}
-            toggle={toggle}
+      <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
+        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+          <Heading
+            buttonTitle="Adicionar Obra Pública"
+            title="Obras Públicas"
+            steps={[
+              { title: "Dashboard", url: "/" },
+              { title: "Obras Públicas", url: "/" },
+            ]}
+            handleAction={() => setOpenAddPublicWorkDialog(true)}
           >
-            <DropdownToggle color="primary" caret>
-              {status}
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem onClick={() => setStatus("Todos")}>
-                Todos
-              </DropdownItem>
-              <DropdownItem onClick={() => setStatus("Pendente")}>
-                Pendente
-              </DropdownItem>
-              <DropdownItem onClick={() => setStatus("Com Vistoria")}>
-                Com Vistoria
-              </DropdownItem>
-              <DropdownItem onClick={() => setStatus("Sem Vistoria")}>
-                Sem Vistoria
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        </Row>
-
-        <div className="panel-block">
-          <table className="table is-fullwidth is-hoverable">
-            <thead>
-              <tr>
-                <th align="left">Nome</th>
-                <th align="left">Endereço</th>
-                <th align="left">Id</th>
-                <th align="center">Localização</th>
-                <th align="center">Vistorias</th>
-              </tr>
-            </thead>
-            <tbody>
-              {publicWorkStore.publicWorkList.map((publicWork, index) => (
-                <Fragment key={publicWork.id}>
-                  <tr>
-                    <td>{publicWork.name}</td>
-                    <td>{newAddressFormatter(publicWork.address)}</td>
-                    <td>{publicWork.id}</td>
-                    <td>
-                      <button
-                        style={{ background: "transparent", border: "none" }}
-                        onClick={() => handleOpenLocalizationModal(index)}
-                      >
-                        <span>
-                          <FontAwesomeIcon color="green" icon={faMap} />
-                        </span>
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        style={{ background: "transparent", border: "none" }}
-                        onClick={() => handleOpenLocalizationModal(index)}
-                      >
-                        <span>
-                          <FontAwesomeIcon color="gray" icon={faEye} />
-                        </span>
-                      </button>
-                    </td>
-                  </tr>
-                  <MapDialog
-                    state={openLocalizationModal}
-                    setState={setOpenLocalizationModal}
-                    publicWork={publicWork}
-                    index={index}
-                  />
-                </Fragment>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">Id</TableCell>
+                  <TableCell align="center">Nome</TableCell>
+                  <TableCell align="center">Endereço</TableCell>
+                  <TableCell align="center">Localização</TableCell>
+                  <TableCell align="center">Vistorias</TableCell>
+                  <TableCell align="center">Editar</TableCell>
+                  <TableCell align="center">Deletar</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {publicWorks.map((publicWork, index) => (
+                  <TableRow key={publicWork.id}>
+                    <TableCell align="center">{publicWork.id}</TableCell>
+                    <TableCell align="center">{publicWork.name}</TableCell>
+                    <TableCell align="center">
+                      {addressFormatter(publicWork.address)}
+                    </TableCell>
+                    <TableCell align="center">
+                      <Tooltip title="Mapa">
+                        <IconButton
+                          onClick={() => handleOpenLocalizationModal(index)}
+                        >
+                          <Map htmlColor="#76BA99" />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Tooltip title="Vistorias">
+                        <IconButton
+                          onClick={() => handleOpenInspectionsModal(index)}
+                        >
+                          <Details htmlColor="#03a9f4" />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Tooltip title="Editar">
+                        <IconButton>
+                          <Edit htmlColor="#03a9f4" />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Tooltip title="Deletar">
+                        <IconButton
+                          onClick={() =>
+                            deletePublicWorkMutation(publicWork.id)
+                          }
+                        >
+                          <Delete color="error" />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                    <MapDialog
+                      state={openLocalizationModal}
+                      setState={setOpenLocalizationModal}
+                      publicWork={publicWork}
+                      index={index}
+                    />
+                    <PublicWorkInspectionsDialog
+                      state={openInspectionsModal}
+                      setState={setOpenInspectionsModal}
+                      publicWorkId={publicWork.id}
+                      index={index}
+                      title={`Vistorias: ${publicWork.name}`}
+                    />
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <TablePagination data={publicWorks} />
+            <AddPublicWorkDialog
+              state={openAddPublicWorkDialog}
+              setState={setOpenAddPublicWorkDialog}
+              title="Nova Obra Pública"
+            />
+          </Heading>
+        </Paper>
+      </Grid>
     </>
   );
 });

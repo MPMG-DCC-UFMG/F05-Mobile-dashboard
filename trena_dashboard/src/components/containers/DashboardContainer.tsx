@@ -25,7 +25,7 @@ export function DashboardContainer({ children }: DashboardContainerProps) {
           backgroundColor: (theme) => theme.palette.grey[100],
         }}
       >
-        <Container maxWidth="lg" sx={{ mt: 6, mb: 6 }}>
+        <Container maxWidth="lg" sx={{ mt: 10, mb: 6 }}>
           <Grid container spacing={3}>
             {children}
           </Grid>

@@ -1,13 +1,25 @@
 import { CalendarMonth, Gite, Queue } from "@mui/icons-material";
 import { Container, Grid } from "@mui/material";
 import React from "react";
+import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { useStores } from "../../core/contexts/UseStores";
+import { CollectServiceQuery } from "../../core/network/services/CollectService";
+import { PublicWorkServiceQuery } from "../../core/network/services/PublicWorkService";
+import { QueueServiceQuery } from "../../core/network/services/QueueService";
 import { Card } from "./CardModel";
 
 export function HomeCards() {
-  const { statisticsStore } = useStores();
   const navigate = useNavigate();
+  const { data: publicWorkCount } = useQuery<number>(["publicWorkCount"], () =>
+    PublicWorkServiceQuery.countPublicWork()
+  );
+  const { data: collectMountCount } = useQuery<number>(
+    ["collectMounthCount"],
+    () => CollectServiceQuery.collectMonthCount()
+  );
+  const { data: queueCount } = useQuery<number>(["queueCount"], () =>
+    QueueServiceQuery.countQueue()
+  );
 
   const handleClickWorks = () => navigate("/publicWork");
   const handleClickCollect = () => navigate("/collect");
@@ -22,7 +34,7 @@ export function HomeCards() {
           <Card
             title="Obras cadastradas"
             icon={<Gite />}
-            value={statisticsStore.publicWorkCount.toString()}
+            value={publicWorkCount ? publicWorkCount.toString() : "0"}
             iconColor="gold"
             onClick={handleClickWorks}
           />
@@ -31,7 +43,7 @@ export function HomeCards() {
           <Card
             title="Coletas no Mês"
             icon={<CalendarMonth />}
-            value={statisticsStore.collectMonthCount.toString()}
+            value={collectMountCount ? collectMountCount.toString() : "0"}
             iconColor="gray"
             onClick={handleClickCollect}
           />
@@ -40,8 +52,8 @@ export function HomeCards() {
           <Card
             title="Dados na Fila"
             icon={<Queue />}
-            value={statisticsStore.queueCount.toString()}
-            iconColor="gray"
+            value={queueCount ? queueCount.toString() : "0"}
+            iconColor="green"
             onClick={handleClickQueue}
           />
         </Grid>
