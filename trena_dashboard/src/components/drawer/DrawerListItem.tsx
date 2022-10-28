@@ -38,7 +38,7 @@ function MyListItem({ icon, url, iconText }: MyListItemProps) {
 export function DrawerListItem() {
   return (
     <List>
-      <MyListItem icon={<Dashboard />} url="/" iconText="Home" />
+      <MyListItem icon={<Dashboard />} url="/dashboard" iconText="Home" />
       <Divider />
       <MyListItem
         icon={<EngineeringIcon />}

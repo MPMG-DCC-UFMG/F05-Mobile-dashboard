@@ -1,16 +1,18 @@
+import { LocationCity, Public } from "@material-ui/icons";
 import {
-  faCity,
-  faHashtag,
-  faRoad,
-  faUsers,
-} from "@fortawesome/free-solid-svg-icons";
+  HolidayVillage,
+  LocationOn,
+  NearMe,
+  Numbers,
+} from "@mui/icons-material";
+import { Divider, Grid } from "@mui/material";
 import React from "react";
-import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { useStores } from "../../core/contexts/UseStores";
 import { PublicWork } from "../../core/models/PublicWork";
 import { MapView } from "../../screens/views/publicWork/MapView";
-import { InfoIconInput } from "../Inputs/InfoIconInput";
+import { InfoTextField } from "../Inputs/InfoTextField";
 import { PublicWorkMenu } from "../Menus/PublicWorkMenu";
+import { TableDialogContainer } from "./DialogContainer";
 
 interface MapDialogProps {
   state: boolean[];
@@ -25,10 +27,8 @@ export function MapDialog({
   publicWork,
   index,
 }: MapDialogProps) {
-  const handleCloseModal = () =>
-    setState(state.map((value, pos) => (pos === index ? false : value)));
-
   const { publicWorkStore, workStatusStore } = useStores();
+  publicWorkStore.loadPublicWorkCollects(publicWork.id);
   const collectCount = publicWorkStore.collectsOfPublicWork.length;
   const workStateUser = workStatusStore.getWorkStatusByFlag(
     publicWork.type_work_flag
@@ -37,63 +37,68 @@ export function MapDialog({
     ? workStatusStore.getWorkStatusByFlag(publicWork?.rnn_status)
     : null;
 
-  const handleDownloadClick = () => console.log("FVCK CHRISTIAN");
+  const handleDownloadClick = () => console.log("Download");
 
   return (
-    <Modal
-      backdrop={false}
-      size="xl"
-      isOpen={state[index]}
-      toggle={handleCloseModal}
-      unmountOnClose={true}
+    <TableDialogContainer
+      state={state}
+      setState={setState}
+      index={index}
+      title={`Localização - ${publicWork.name}`}
     >
-      <ModalHeader toggle={handleCloseModal}>
-        Localização - {publicWork.name}
-      </ModalHeader>
-      <ModalBody>
-        <div style={{ marginBottom: "20px" }}>
-          <InfoIconInput
-            iconDescription="Cidade"
-            width="150px"
-            icon={faCity}
-            placeholder={publicWork.address.city}
-          />
-          <br />
-          <InfoIconInput
-            iconDescription="Bairro"
-            width="150px"
-            icon={faUsers}
-            placeholder={publicWork.address.neighborhood}
-          />
-          <br />
-          <InfoIconInput
-            iconDescription="Logradouro"
-            width="150px"
-            icon={faRoad}
-            placeholder={publicWork.address.street}
-          />
-          <br />
-          <InfoIconInput
-            iconDescription="Número"
-            width="150px"
-            icon={faHashtag}
-            placeholder={publicWork.address.number}
-          />
-        </div>
+      <Grid container justifyContent="space-between" alignItems="center">
+        <InfoTextField
+          disabled
+          defaultValue={publicWork.address.city}
+          icon={<LocationCity />}
+          label="Cidade"
+        />
+        <InfoTextField
+          disabled
+          defaultValue={publicWork.address.cep}
+          icon={<Public />}
+          label="CEP"
+        />
+        <InfoTextField
+          disabled
+          defaultValue={publicWork.address.state}
+          icon={<LocationOn />}
+          label="UF"
+        />
+        <InfoTextField
+          disabled
+          defaultValue={publicWork.address.neighborhood}
+          icon={<HolidayVillage />}
+          label="Bairro"
+        />
+        <InfoTextField
+          disabled
+          defaultValue={publicWork.address.street}
+          icon={<NearMe />}
+          label="Rua"
+        />
+        <InfoTextField
+          disabled
+          defaultValue={publicWork.address.number}
+          icon={<Numbers />}
+          label="Logradouro"
+        />
+      </Grid>
+
+      <Grid container>
         <MapView
           latitude={publicWork.address.latitude}
           longitude={publicWork.address.longitude}
           zoom={15}
         />
-      </ModalBody>
-      <ModalFooter>
+        <Divider />
         <PublicWorkMenu
           collectCount={collectCount}
-          workStateUser={workStateUser?.name ? workStateUser.name : "--"}
           workStateIA={workStateIA?.name ? workStateIA.name : "--"}
+          workStateUser={workStateUser?.name ? workStateUser.name : "--"}
           onDownloadClicked={collectCount > 0 ? handleDownloadClick : undefined}
         />
-      </ModalFooter>
-    </Modal>
+      </Grid>
+    </TableDialogContainer>
   );
 }
