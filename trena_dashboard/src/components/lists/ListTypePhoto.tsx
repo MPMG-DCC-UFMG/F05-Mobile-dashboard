@@ -105,7 +105,7 @@ export const ListTypePhoto = observer(() => {
         </nav>
       </div>
       <div className="panel-block">
-        <Search onTextChanged={handleSearch} />
+        <Search label="Tipo de Foto" onTextChanged={handleSearch} />
       </div>
       <div className="panel-block">
         <table className="table is-fullwidth is-hoverable">

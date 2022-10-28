@@ -105,7 +105,7 @@ export const ListTypeWork = observer(() => {
         </nav>
       </div>
       <div className="panel-block">
-        <Search onTextChanged={handleSearch} />
+        <Search label="Tipo de Foto" onTextChanged={handleSearch} />
       </div>
       {typeWorkStore.typeWorksList.map((typeWork) => {
         return <ItemTypeWork key={typeWork.flag} typeWork={typeWork} />;
