@@ -4,7 +4,7 @@ import * as React from "react";
 
 interface SearchProps {
   onTextChanged: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  label: string,
+  label: string;
 }
 
 export function Search({ onTextChanged, label }: SearchProps) {
@@ -22,5 +22,5 @@ export function Search({ onTextChanged, label }: SearchProps) {
         ),
       }}
     />
-  )
+  );
 }
