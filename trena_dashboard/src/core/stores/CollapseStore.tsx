@@ -16,7 +16,7 @@ export class CollapseStore {
 
   @action
   toggleAppBar() {
-    this.workConfig = false;
-    this.trena = false;
+    this.workConfig = !this.workConfig;
+    this.trena = !this.trena;
   }
 }
