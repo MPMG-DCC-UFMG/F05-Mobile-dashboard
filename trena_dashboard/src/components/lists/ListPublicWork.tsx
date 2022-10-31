@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import React, { useState } from "react";
 
-import { Details, Edit } from "@material-ui/icons";
-import { Delete, Map } from "@mui/icons-material";
+import { Edit } from "@material-ui/icons";
+import { Delete, LocalSee, Map } from "@mui/icons-material";
 import {
   Box,
   Grid,
@@ -167,7 +167,7 @@ export const ListPublicWork = observer(() => {
 
   return (
     <>
-      <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
+      <Grid style={{ width: "100%", marginTop: 14 }} item>
         <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
           <Heading
             buttonTitle="Adicionar Obra Pública"
@@ -212,7 +212,7 @@ export const ListPublicWork = observer(() => {
                         <IconButton
                           onClick={() => handleOpenInspectionsModal(index)}
                         >
-                          <Details htmlColor="#03a9f4" />
+                          <LocalSee htmlColor="#03a9f4" />
                         </IconButton>
                       </Tooltip>
                     </TableCell>
