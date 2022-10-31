@@ -24,17 +24,27 @@ import {
   DialogTitle,
   Checkbox,
   DialogActions,
+  LinearProgress,
+  Box,
 } from "@mui/material";
-import { Add, Close, Delete, Edit, Visibility } from "@mui/icons-material";
+import { Close, Delete, Edit, Visibility } from "@mui/icons-material";
+import { TablePagination } from "../TablePagination";
+import { useQuery } from "react-query";
+import { TypeWorkService } from "../../core/network/services/TypeWorkService";
+import { Heading } from "../Heading";
 
 export const ListTypeWork = observer(() => {
+  const { data: typeWorks, isLoading } = useQuery("getTypeWork", () =>
+    TypeWorkService.loadTypeWorks(),
+  );
+
   const { typeWorkStore, viewStore, typePhotoStore } = useStores();
-  const [addTypeWorkDialog, setAddTypeWorkDialog] = useState(false);
+  const [addTypeWorkDialog, setOpenAddTypeWorkDialog] = useState(false);
   const [form, setForm] = useState<string>("");
- 
+
   const handleSetAddTypeWorkDialog = async () => {
-    await typePhotoStore.loadTypePhotoList()
-    setAddTypeWorkDialog(!addTypeWorkDialog);
+    await typePhotoStore.loadTypePhotoList();
+    setOpenAddTypeWorkDialog(!addTypeWorkDialog);
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,20 +52,20 @@ export const ListTypeWork = observer(() => {
     typeWorkStore.search(query);
   };
 
-  const handleAddTypeWork = (name: string) =>{
-        const work : TypeWork = {flag: 3, name: name, status_list: []}
-        typeWorkStore.addTypeWork(work)  
-  }
+  const handleAddTypeWork = (name: string) => {
+    const work: TypeWork = { flag: 3, name: name, status_list: [] };
+    typeWorkStore.addTypeWork(work);
+  };
 
   const handleSubmit = () => {
     handleAddTypeWork(form);
-  }
+  };
 
   const handleDeleteTypeWork = (typeWork: TypeWork) => {
-     if(typeWork.flag){
+    if (typeWork.flag) {
       typeWorkStore.deleteTypeOfWork(typeWork.flag);
-     }
-  }
+    }
+  };
 
   const createTypeWorkView = (
     title: string,
@@ -112,6 +122,32 @@ export const ListTypeWork = observer(() => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
+        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+          <Heading
+            buttonTitle="Adicionar Tipo de Obra"
+            title="Tipos de Obra"
+            steps={[
+              { title: "Dashboard", url: "/" },
+              { title: "Tipos de Obra", url: "/" },
+            ]}
+            handleAction={() => setOpenAddTypeWorkDialog(true)}
+          >
+            <Box width="100%">
+              <LinearProgress />
+            </Box>
+          </Heading>
+        </Paper>
+      </Grid>
+    );
+  }
+
+  if (!typeWorks) {
+    return <h1>Is loading...</h1>;
+  }
+
   return (
     <>
       <Dialog fullWidth open={addTypeWorkDialog}>
@@ -123,12 +159,15 @@ export const ListTypeWork = observer(() => {
         </DialogTitle>
         <Divider />
         <DialogContent>
-          <TextField 
+          <TextField
             onChange={(event) => setForm(event.currentTarget.value)}
-            required 
-            label="Tipo da Obra" 
-            fullWidth/>
-          <Typography sx={{mt: 3}} variant="subtitle1">Tipos de Foto:</Typography>
+            required
+            label="Tipo da Obra"
+            fullWidth
+          />
+          <Typography sx={{ mt: 3 }} variant="subtitle1">
+            Tipos de Foto:
+          </Typography>
           <TableContainer>
             <Table>
               {typePhotoStore.typePhotoList.map((options) => (
@@ -143,82 +182,71 @@ export const ListTypeWork = observer(() => {
           </TableContainer>
         </DialogContent>
         <DialogActions>
-          <Button 
+          <Button
             onClick={handleSetAddTypeWorkDialog}
-            color="error" 
-            variant="contained">Cancelar</Button>
-          <Button 
-             color="success"  
-             variant="contained"
-             onClick={handleSubmit}>Confirmar</Button>
+            color="error"
+            variant="contained"
+          >
+            Cancelar
+          </Button>
+          <Button color="success" variant="contained" onClick={handleSubmit}>
+            Confirmar
+          </Button>
         </DialogActions>
       </Dialog>
 
-      <Grid>
-        <Paper
-          sx={{
-            flexDirection: "column",
-          }}
-        >
-          <Grid item display="flex" justifyContent="space-between" padding={3}>
-            <Typography variant="h6">Tipos de Obras</Typography>
-            <Button
-              onClick={handleSetAddTypeWorkDialog}
-              variant="contained"
-              startIcon={<Add />}
-            >
-              Tipo De Obra
-            </Button>
-          </Grid>
-          <Divider />
+      <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
+        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+          <Heading
+            buttonTitle = "Adicionar Tipo de Obra"
+            title="Tipos de Obras" 
+            steps={[
+              {title:"Dashboard",url:"/"},
+              {title:"Tipos de Obras",url:"/"}
+            ]} 
+            handleAction={() =>  setOpenAddTypeWorkDialog(true)}
+          >
           <Grid item display="flex" padding={2} justifyContent="flex-Start">
             <Search label="Tipo de Obra" onTextChanged={handleSearch} />
           </Grid>
           <Divider />
-          <Grid item display="flex">
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Nome</TableCell>
-                    <TableCell align="center">Detalhes</TableCell>
-                    <TableCell align="center">Editar</TableCell>
-                    <TableCell align="center">Remover</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {typeWorkStore.typeWorksList.map((typeWork) => (
-                    <TableRow hover>
-                      <TableCell align="center">{typeWork.name}</TableCell>
-                      <TableCell 
-                        align="center"
-                        key={typeWork.flag}>
-                        <IconButton>
-                          <Visibility />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell 
-                        align="center"
-                        key={typeWork.flag}>
-                        <IconButton color="info">
-                          <Edit />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell 
-                        align="center"
-                        key={typeWork.flag}>
-                        <IconButton 
-                          onClick={()=> handleDeleteTypeWork(typeWork)}
-                          color="error">
-                          <Delete />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Grid>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">Nome</TableCell>
+                <TableCell align="center">Detalhes</TableCell>
+                <TableCell align="center">Editar</TableCell>
+                <TableCell align="center">Remover</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {typeWorkStore.typeWorksList.map((typeWork) => (
+                <TableRow hover>
+                  <TableCell align="center">{typeWork.name}</TableCell>
+                  <TableCell align="center" key={typeWork.flag}>
+                    <IconButton>
+                      <Visibility />
+                    </IconButton>
+                  </TableCell>
+                  <TableCell align="center" key={typeWork.flag}>
+                    <IconButton color="info">
+                      <Edit />
+                    </IconButton>
+                  </TableCell>
+                  <TableCell align="center" key={typeWork.flag}>
+                    <IconButton
+                      onClick={() => handleDeleteTypeWork(typeWork)}
+                      color="error"
+                    >
+                      <Delete />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <TablePagination data={typeWorks} />
+          </Heading>
         </Paper>
       </Grid>
     </>

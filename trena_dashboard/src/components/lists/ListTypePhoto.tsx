@@ -12,18 +12,28 @@ import {
   Typography,
   IconButton,
   Button,
+  Box, 
+  LinearProgress
 } from "@mui/material";
 import { observer } from "mobx-react";
-import React from "react";
+import React, { useState } from "react";
+import { useQuery } from "react-query";
 import { useStores } from "../../core/contexts/UseStores";
 import { TypePhoto } from "../../core/models/TypePhoto";
+import { TypePhotoService } from "../../core/network/services/TypePhotoService";
 import { DeleteView } from "../../screens/views/DeleteView";
 import TypePhotoCRUDView from "../../screens/views/typePhoto/TypePhotoCRUDView";
 import { Search } from "../Form/Search";
+import { Heading } from "../Heading";
+import { TablePagination } from "../TablePagination";
 
 export const ListTypePhoto = observer(() => {
-  const { typePhotoStore, viewStore } = useStores();
 
+  const { data: typePhoto, isLoading } = useQuery("getTypePhoto", () =>
+    TypePhotoService.loadTypePhotos(),
+  );
+  const { typePhotoStore, viewStore } = useStores();
+  const [addTypePhotoDialog, setOpenAddTypePhotoDialog] = useState(false);
   const createTypePhotoView = (
     title: string,
     confirm: string,
@@ -104,25 +114,49 @@ export const ListTypePhoto = observer(() => {
 
   const handleEdit = (typePhoto: TypePhoto) => {};
 
+  if (isLoading) {
+    return (
+      <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
+        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+          <Heading
+            buttonTitle="Adicionar Tipo de Foto"
+            title="Tipos de Fotos"
+            steps={[
+              { title: "Dashboard", url: "/" },
+              { title: "Tipos de Fotos", url: "/" },
+            ]}
+            handleAction={() => setOpenAddTypePhotoDialog(true)}
+          >
+            <Box width="100%">
+              <LinearProgress />
+            </Box>
+          </Heading>
+        </Paper>
+      </Grid>
+    );
+  }
+
+  if (!typePhoto) {
+    return <h1>Is loading...</h1>;
+  }
+
   return (
-    <Grid>
-      <Paper
-        sx={{
-          flexDirection: "column",
-        }}
-      >
-        <Grid item display="flex" justifyContent="space-between" padding={3}>
-          <Typography variant="h6">Tipos de Fotos</Typography>
-          <Button variant="contained" startIcon={<Add />}>
-            Tipo De Foto
-          </Button>
-        </Grid>
-        <Divider />
+    <>
+    <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
+    <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+        <Heading 
+             buttonTitle = "Adicionar Tipo de Foto"
+             title="Tipos de Fotos" 
+             steps={[
+               {title:"Dashboard",url:"/"},
+               {title:"Tipos de Fotos",url:"/"}
+             ]} 
+             handleAction={() => setOpenAddTypePhotoDialog(true)}
+        >
         <Grid item display="flex" padding={2} justifyContent="flex-Start">
           <Search label="Tipo de Foto" onTextChanged={handleSearch} />
         </Grid>
         <Divider />
-        <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
@@ -154,8 +188,10 @@ export const ListTypePhoto = observer(() => {
               ))}
             </TableBody>
           </Table>
-        </TableContainer>
+          <TablePagination data={typePhoto} />
+        </Heading>
       </Paper>
     </Grid>
+    </>
   );
 });

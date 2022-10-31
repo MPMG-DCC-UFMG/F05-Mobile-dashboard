@@ -12,17 +12,27 @@ import {
   IconButton,
   Button,
   Table,
+  Box,
+  LinearProgress,
 } from "@mui/material";
 import { observer } from "mobx-react";
-import React from "react";
+import React, { useState } from "react";
+import { useQuery } from "react-query";
 import { useStores } from "../../core/contexts/UseStores";
 import { TypePhoto } from "../../core/models/TypePhoto";
 import { WorkStatus } from "../../core/models/WorkStatus";
+import { WorkStatusService } from "../../core/network/services/WorkStatusService";
 import { DeleteView } from "../../screens/views/DeleteView";
 import WorkStatusCRUDView from "../../screens/views/workStatus/WorkStatusCRUDView";
 import { Search } from "../Form/Search";
+import { Heading } from "../Heading";
+import { TablePagination } from "../TablePagination";
 
 export const ListWorkStatus = observer(() => {
+  const { data: workStatus, isLoading } = useQuery("getWorkStatus", () =>
+    WorkStatusService.loadWorkStatus()
+  );
+  const [addWorkStatusDialog, setOpenAddWorkStatusDialog] = useState(false);
   const { workStatusStore, viewStore } = useStores();
 
   const createWorkStatusView = (
@@ -99,26 +109,49 @@ export const ListWorkStatus = observer(() => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
+        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+          <Heading
+            buttonTitle="Adicionar Estado de Obra"
+            title="Estado das Obras"
+            steps={[
+              { title: "Dashboard", url: "/" },
+              { title: "Estado das Obras", url: "/" },
+            ]}
+            handleAction={() => setOpenAddWorkStatusDialog(true)}
+          >
+            <Box width="100%">
+              <LinearProgress />
+            </Box>
+          </Heading>
+        </Paper>
+      </Grid>
+    );
+  }
+
+  if (!workStatus) {
+    return <h1>Is loading...</h1>;
+  }
+
   return (
-    <Grid>
-      <Paper
-        sx={{
-          flexDirection: "column",
-        }}
-      >
-        <Grid item display="flex" justifyContent="space-between" padding={3}>
-          <Typography variant="h6">Estados das Obras</Typography>
-          <Button color="info" variant="contained" startIcon={<Add />}>
-            Estados da Obra
-          </Button>
-        </Grid>
-        <Divider />
-        <Grid item display="flex" padding={2} justifyContent="flex-Start">
-          <Search label="Estado da Obra" onTextChanged={handleSearch} />
-        </Grid>
-        <Divider />
-        <Grid item display="flex">
-          <TableContainer>
+    <>
+      <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
+        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+          <Heading
+            buttonTitle="Adicionar Estado de Obra"
+            title="Estado das Obras"
+            steps={[
+              { title: "Dashboard", url: "/" },
+              { title: "Estado das Obras", url: "/" },
+            ]}
+            handleAction={() => setOpenAddWorkStatusDialog(true)}
+          >
+            <Grid item display="flex" padding={2} justifyContent="flex-Start">
+              <Search label="Estado da Obra" onTextChanged={handleSearch} />
+            </Grid>
+            <Divider />
             <Table>
               <TableHead>
                 <TableRow>
@@ -151,9 +184,10 @@ export const ListWorkStatus = observer(() => {
                 ))}
               </TableBody>
             </Table>
-          </TableContainer>
-        </Grid>
-      </Paper>
-    </Grid>
+            <TablePagination data={workStatus}/>
+          </Heading>
+        </Paper>
+      </Grid>
+    </>
   );
 });
