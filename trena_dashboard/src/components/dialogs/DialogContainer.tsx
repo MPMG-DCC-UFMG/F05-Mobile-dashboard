@@ -6,6 +6,7 @@ import React from "react";
 interface BasicDialogProps {
   children?: React.ReactNode[] | React.ReactNode;
   title: string;
+  fullScreen?: boolean;
 }
 
 export interface SingleDialogContainerProps extends BasicDialogProps {
@@ -18,6 +19,7 @@ export function SingleDialogContainer({
   setState,
   children,
   title,
+  fullScreen,
 }: SingleDialogContainerProps) {
   const theme = useTheme();
 
@@ -27,6 +29,7 @@ export function SingleDialogContainer({
       open={state}
       scroll="body"
       fullWidth
+      fullScreen={fullScreen}
     >
       <DialogTitle color={theme.palette.grey[400]}>
         <Grid container justifyContent="space-between" alignItems="center">
@@ -62,6 +65,7 @@ export function TableDialogContainer({
   index,
   children,
   title,
+  fullScreen,
 }: TableDialogProps) {
   const theme = useTheme();
 
@@ -74,6 +78,7 @@ export function TableDialogContainer({
       open={state[index]}
       scroll="body"
       fullWidth
+      fullScreen={fullScreen}
     >
       <DialogTitle color={theme.palette.grey[400]}>
         <Grid container justifyContent="space-between" alignItems="center">

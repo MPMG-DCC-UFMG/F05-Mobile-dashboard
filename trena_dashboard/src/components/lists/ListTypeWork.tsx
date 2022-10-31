@@ -1,41 +1,41 @@
-import { observer } from "mobx-react";
-import { useStores } from "../../core/contexts/UseStores";
-import React, { useState } from "react";
-import { Search } from "../Form/Search";
-import { DeleteView } from "../../screens/views/DeleteView";
-import TypeWorkCRUDView from "../../screens/views/typeWork/TypeWorkCRUDView";
-import { TypeWork } from "../../core/models/TypeWork";
+import { Close, Delete, Edit, Visibility } from "@mui/icons-material";
 import {
+  Box,
+  Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
   Grid,
+  IconButton,
+  LinearProgress,
   Paper,
   Table,
-  TableRow,
-  Typography,
-  Divider,
+  TableBody,
+  TableCell,
   TableContainer,
   TableHead,
-  TableCell,
-  TableBody,
-  IconButton,
-  Button,
-  Dialog,
-  DialogContent,
+  TableRow,
   TextField,
-  DialogTitle,
-  Checkbox,
-  DialogActions,
-  LinearProgress,
-  Box,
+  Typography,
 } from "@mui/material";
-import { Close, Delete, Edit, Visibility } from "@mui/icons-material";
-import { TablePagination } from "../TablePagination";
+import { observer } from "mobx-react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
+import { useStores } from "../../core/contexts/UseStores";
+import { TypeWork } from "../../core/models/TypeWork";
 import { TypeWorkService } from "../../core/network/services/TypeWorkService";
+import { DeleteView } from "../../screens/views/DeleteView";
+import TypeWorkCRUDView from "../../screens/views/typeWork/TypeWorkCRUDView";
+import { Search } from "../Form/Search";
 import { Heading } from "../Heading";
+import { TablePagination } from "../TablePagination";
 
 export const ListTypeWork = observer(() => {
   const { data: typeWorks, isLoading } = useQuery("getTypeWork", () =>
-    TypeWorkService.loadTypeWorks(),
+    TypeWorkService.loadTypeWorks()
   );
 
   const { typeWorkStore, viewStore, typePhotoStore } = useStores();
@@ -53,7 +53,7 @@ export const ListTypeWork = observer(() => {
   };
 
   const handleAddTypeWork = (name: string) => {
-    const work: TypeWork = { flag: 3, name: name, status_list: [] };
+    const work: TypeWork = { name: name, status_list: [] };
     typeWorkStore.addTypeWork(work);
   };
 
@@ -198,54 +198,54 @@ export const ListTypeWork = observer(() => {
       <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
         <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
           <Heading
-            buttonTitle = "Adicionar Tipo de Obra"
-            title="Tipos de Obras" 
+            buttonTitle="Adicionar Tipo de Obra"
+            title="Tipos de Obras"
             steps={[
-              {title:"Dashboard",url:"/"},
-              {title:"Tipos de Obras",url:"/"}
-            ]} 
-            handleAction={() =>  setOpenAddTypeWorkDialog(true)}
+              { title: "Dashboard", url: "/" },
+              { title: "Tipos de Obras", url: "/" },
+            ]}
+            handleAction={() => setOpenAddTypeWorkDialog(true)}
           >
-          <Grid item display="flex" padding={2} justifyContent="flex-Start">
-            <Search label="Tipo de Obra" onTextChanged={handleSearch} />
-          </Grid>
-          <Divider />
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">Nome</TableCell>
-                <TableCell align="center">Detalhes</TableCell>
-                <TableCell align="center">Editar</TableCell>
-                <TableCell align="center">Remover</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {typeWorkStore.typeWorksList.map((typeWork) => (
-                <TableRow hover>
-                  <TableCell align="center">{typeWork.name}</TableCell>
-                  <TableCell align="center" key={typeWork.flag}>
-                    <IconButton>
-                      <Visibility />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell align="center" key={typeWork.flag}>
-                    <IconButton color="info">
-                      <Edit />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell align="center" key={typeWork.flag}>
-                    <IconButton
-                      onClick={() => handleDeleteTypeWork(typeWork)}
-                      color="error"
-                    >
-                      <Delete />
-                    </IconButton>
-                  </TableCell>
+            <Grid item display="flex" padding={2} justifyContent="flex-Start">
+              <Search label="Tipo de Obra" onTextChanged={handleSearch} />
+            </Grid>
+            <Divider />
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">Nome</TableCell>
+                  <TableCell align="center">Detalhes</TableCell>
+                  <TableCell align="center">Editar</TableCell>
+                  <TableCell align="center">Remover</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <TablePagination data={typeWorks} />
+              </TableHead>
+              <TableBody>
+                {typeWorkStore.typeWorksList.map((typeWork) => (
+                  <TableRow hover>
+                    <TableCell align="center">{typeWork.name}</TableCell>
+                    <TableCell align="center" key={typeWork.flag}>
+                      <IconButton>
+                        <Visibility />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="center" key={typeWork.flag}>
+                      <IconButton color="info">
+                        <Edit />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="center" key={typeWork.flag}>
+                      <IconButton
+                        onClick={() => handleDeleteTypeWork(typeWork)}
+                        color="error"
+                      >
+                        <Delete />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <TablePagination data={typeWorks} />
           </Heading>
         </Paper>
       </Grid>

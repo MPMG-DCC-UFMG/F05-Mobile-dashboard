@@ -63,6 +63,7 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
         <IconButton onClick={handleLogout}>
           <Logout htmlColor="#FFFFFF" />
         </IconButton>
+        <IconButton></IconButton>
       </Toolbar>
     </AppBarSetup>
   );
