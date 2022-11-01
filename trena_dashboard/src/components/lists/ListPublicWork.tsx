@@ -256,6 +256,7 @@ export const ListPublicWork = observer(() => {
               state={openAddPublicWorkDialog}
               setState={setOpenAddPublicWorkDialog}
               title="Nova Obra Pública"
+              fullScreen={true}
             />
           </Heading>
         </Paper>

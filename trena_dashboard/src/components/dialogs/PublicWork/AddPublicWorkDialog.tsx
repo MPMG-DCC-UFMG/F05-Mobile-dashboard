@@ -14,6 +14,7 @@ import {
   AccordionSummary,
   Autocomplete,
   Button,
+  CircularProgress,
   Grid,
   TextField,
   Typography,
@@ -27,13 +28,18 @@ import {
   SingleDialogContainerProps,
 } from "../DialogContainer";
 
+import { useMutation } from "react-query";
+import uuid from "react-uuid";
+import { PublicWorkServiceQuery } from "../../../core/network/services/PublicWorkService";
+import { WarningField } from "../../WarningField";
+
 export function AddPublicWorkDialog({
   state,
   setState,
   title,
+  fullScreen,
 }: SingleDialogContainerProps) {
-  const { typeWorkStore, publicWorkStore } = useStores();
-
+  const { typeWorkStore } = useStores();
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
   const [cep, setCep] = useState("");
@@ -46,29 +52,48 @@ export function AddPublicWorkDialog({
   const [selectedTypeWork, setSelectedTypeWork] = useState<TypeWork | null>(
     null
   );
+  const [errorWarning, setErrorWarning] = useState(false);
+  const [successWaning, setSuccessWarning] = useState(false);
+
+  const { mutate, isLoading } = useMutation(
+    PublicWorkServiceQuery.addPublicWork
+  );
 
   const handleSubmitPublicWork = () => {
-    publicWorkStore.addPublicWork({
-      name: name,
-      type_work_flag: selectedTypeWork?.flag!,
-      id: "6",
-      address: {
-        cep,
-        city,
-        latitude,
-        longitude,
-        neighborhood,
-        number,
-        state: "MG",
-        street,
-        id: "645",
-        public_work_id: "6",
+    const id = uuid();
+    const addressId = uuid();
+    mutate(
+      {
+        name: name,
+        type_work_flag: selectedTypeWork?.flag!,
+        id: id,
+        address: {
+          cep,
+          city,
+          latitude,
+          longitude,
+          neighborhood,
+          number,
+          state: "MG",
+          street,
+          id: addressId,
+          public_work_id: id,
+        },
       },
-    });
+      {
+        onError: () => setErrorWarning(true),
+        onSuccess: () => setSuccessWarning(true),
+      }
+    );
   };
 
   return (
-    <SingleDialogContainer state={state} setState={setState} title={title}>
+    <SingleDialogContainer
+      fullScreen={fullScreen}
+      state={state}
+      setState={setState}
+      title={title}
+    >
       <InfoTextField
         label="Nome"
         fullWidth
@@ -150,13 +175,28 @@ export function AddPublicWorkDialog({
       </Accordion>
       <Grid sx={{ mt: 2 }} item display="flex" justifyContent="flex-end">
         <Button
+          disabled={isLoading || successWaning}
           variant="contained"
           color="success"
           onClick={handleSubmitPublicWork}
         >
-          Salvar
+          {isLoading ? <CircularProgress /> : "Salvar"}
         </Button>
       </Grid>
+      {successWaning && (
+        <WarningField
+          title="Obra adicionada com sucesso!"
+          message={`A Obra ${name}, do tipo ${selectedTypeWork?.name} foi adicionada com sucesso!`}
+          severity="success"
+        />
+      )}
+      {errorWarning && (
+        <WarningField
+          title="Falha ao realizar o cadastro!"
+          message={`Verifique a integridade dos campos!`}
+          severity="error"
+        />
+      )}
     </SingleDialogContainer>
   );
 }

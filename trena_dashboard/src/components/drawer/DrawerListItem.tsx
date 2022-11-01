@@ -25,6 +25,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useStores } from "../../core/contexts/UseStores";
 
 interface MyListItemProps {
   icon: JSX.Element;
@@ -46,8 +47,19 @@ function MyListItem({ icon, url, iconText, sx }: MyListItemProps) {
 }
 
 export function DrawerListItem() {
-  const [openWorkConfiguration, setOpenWorkConfiguration] = useState(false);
-  const [collects, setCollects] = useState(false);
+  const { collapseStore } = useStores();
+  const [workConfig, setWorkConfig] = useState(collapseStore.workConfig);
+  const [trena, setTrena] = useState(collapseStore.trena);
+
+  const handleToggleWorkConfig = () => {
+    setWorkConfig(!workConfig);
+    collapseStore.toggleWorkConfiguration();
+  };
+
+  const handleToggleTrena = () => {
+    setTrena(!trena);
+    collapseStore.toggleTrena();
+  };
 
   return (
     <List>
@@ -56,9 +68,7 @@ export function DrawerListItem() {
         url="/dashboard"
         iconText="Tela Inicial"
       />
-      <ListItemButton
-        onClick={() => setOpenWorkConfiguration(!openWorkConfiguration)}
-      >
+      <ListItemButton onClick={handleToggleWorkConfig}>
         <ListItemIcon>
           <Settings />
         </ListItemIcon>
@@ -69,9 +79,9 @@ export function DrawerListItem() {
             style: { whiteSpace: "normal" },
           }}
         />
-        {openWorkConfiguration ? <ExpandLess /> : <ExpandMore />}
+        {workConfig ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={openWorkConfiguration} unmountOnExit>
+      <Collapse in={workConfig} unmountOnExit>
         <MyListItem
           sx={{ pl: 4 }}
           icon={<EngineeringIcon />}
@@ -92,14 +102,14 @@ export function DrawerListItem() {
         />
       </Collapse>
 
-      <ListItemButton onClick={() => setCollects(!collects)}>
+      <ListItemButton onClick={handleToggleTrena}>
         <ListItemIcon>
           <Folder />
         </ListItemIcon>
         <ListItemText primary="Trena" />
-        {collects ? <ExpandLess /> : <ExpandMore />}
+        {trena ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={collects} unmountOnExit>
+      <Collapse in={trena} unmountOnExit>
         <MyListItem
           sx={{ pl: 4 }}
           icon={<QueuePlayNext />}

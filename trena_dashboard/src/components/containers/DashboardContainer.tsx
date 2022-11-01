@@ -1,5 +1,6 @@
 import { Box, Container, CssBaseline, Grid } from "@mui/material";
 import React, { useState } from "react";
+import { useStores } from "../../core/contexts/UseStores";
 import { AppBar } from "../AppBar";
 import { Drawer } from "../Drawer";
 
@@ -9,7 +10,11 @@ interface DashboardContainerProps {
 
 export function DashboardContainer({ children }: DashboardContainerProps) {
   const [open, setOpen] = useState(true);
-  const toggleDrawer = () => setOpen(!open);
+  const { collapseStore } = useStores();
+  const toggleDrawer = () => {
+    setOpen(!open);
+    collapseStore.toggleAppBar();
+  };
 
   return (
     <Box display="flex">
