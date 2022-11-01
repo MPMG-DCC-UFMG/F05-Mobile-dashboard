@@ -24,6 +24,7 @@ import { WorkStatus } from "../../core/models/WorkStatus";
 import { WorkStatusService } from "../../core/network/services/WorkStatusService";
 import { DeleteView } from "../../screens/views/DeleteView";
 import WorkStatusCRUDView from "../../screens/views/workStatus/WorkStatusCRUDView";
+import { AddWorkStatusDialog } from "../Dialogs/StatusWork/AddWorkStatusDialog";
 import { Search } from "../Form/Search";
 import { Heading } from "../Heading";
 import { TablePagination } from "../TablePagination";
@@ -109,6 +110,12 @@ export const ListWorkStatus = observer(() => {
     }
   };
 
+  const handleDeleteWorkStatus = (workStatus: WorkStatus) => {
+    if (workStatus.flag) {
+     workStatusStore.deleteWorkStatus(workStatus.flag);
+    }
+  };
+
   if (isLoading) {
     return (
       <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
@@ -148,6 +155,11 @@ export const ListWorkStatus = observer(() => {
             ]}
             handleAction={() => setOpenAddWorkStatusDialog(true)}
           >
+            <AddWorkStatusDialog
+              state={addWorkStatusDialog}
+              setState={setOpenAddWorkStatusDialog}
+              title="Adicionar Estado De Obra"
+            />
             <Grid item display="flex" padding={2} justifyContent="flex-Start">
               <Search label="Estado da Obra" onTextChanged={handleSearch} />
             </Grid>
@@ -176,7 +188,9 @@ export const ListWorkStatus = observer(() => {
                       </IconButton>
                     </TableCell>
                     <TableCell align="center" key={workStatus.flag}>
-                      <IconButton color="error">
+                      <IconButton 
+                        onClick={()=> handleDeleteWorkStatus(workStatus)}
+                        color="error">
                         <Delete />
                       </IconButton>
                     </TableCell>
@@ -184,7 +198,7 @@ export const ListWorkStatus = observer(() => {
                 ))}
               </TableBody>
             </Table>
-            <TablePagination data={workStatus}/>
+            <TablePagination data={workStatus} />
           </Heading>
         </Paper>
       </Grid>

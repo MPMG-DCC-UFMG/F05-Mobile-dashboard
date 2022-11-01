@@ -6,12 +6,9 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
-  Typography,
   IconButton,
-  Button,
   Box, 
   LinearProgress
 } from "@mui/material";
@@ -23,6 +20,7 @@ import { TypePhoto } from "../../core/models/TypePhoto";
 import { TypePhotoService } from "../../core/network/services/TypePhotoService";
 import { DeleteView } from "../../screens/views/DeleteView";
 import TypePhotoCRUDView from "../../screens/views/typePhoto/TypePhotoCRUDView";
+import { AddTypeOfPhotoDialog } from "../Dialogs/TypePhoto/AddTypeOfPhotoDialog";
 import { Search } from "../Form/Search";
 import { Heading } from "../Heading";
 import { TablePagination } from "../TablePagination";
@@ -34,78 +32,10 @@ export const ListTypePhoto = observer(() => {
   );
   const { typePhotoStore, viewStore } = useStores();
   const [addTypePhotoDialog, setOpenAddTypePhotoDialog] = useState(false);
-  const createTypePhotoView = (
-    title: string,
-    confirm: string,
-    onConfirmClick: () => void,
-    onChangeTypePhoto: (typePhoto: TypePhoto) => void,
-    defaultTypePhoto?: TypePhoto
-  ) => {
-    let typePhotoView = {
-      title: title,
-      confirmButton: confirm,
-      onConfirmClick: onConfirmClick,
-      contentView: (
-        <TypePhotoCRUDView
-          onChangeTypePhoto={onChangeTypePhoto}
-          defaultTypePhoto={defaultTypePhoto}
-        />
-      ),
-    };
-    viewStore.setViewInModal(typePhotoView);
-  };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.currentTarget.value;
     typePhotoStore.search(query);
-  };
-
-  const handleAddClick = () => {
-    let mTypePhoto: TypePhoto = { name: "" };
-    createTypePhotoView(
-      "Adicionar tipo de foto",
-      "Adicionar",
-      () => {
-        typePhotoStore.addTypePhoto(mTypePhoto);
-      },
-      (typePhoto: TypePhoto) => {
-        mTypePhoto = typePhoto;
-      }
-    );
-  };
-
-  const handleEditClick = () => {
-    if (typePhotoStore.selectedTypePhoto) {
-      let mTypePhoto = typePhotoStore.selectedTypePhoto;
-      createTypePhotoView(
-        "Editar tipo de foto",
-        "Editar",
-        () => {
-          typePhotoStore.updateTypePhoto(mTypePhoto);
-        },
-        (typePhoto: TypePhoto) => {
-          mTypePhoto = typePhoto;
-        },
-        mTypePhoto
-      );
-    }
-  };
-
-  const handleDeleteClick = () => {
-    if (typePhotoStore.selectedTypePhoto !== undefined) {
-      const typePhoto = typePhotoStore.selectedTypePhoto;
-      let deleteView = {
-        title: "Deletar tipo de foto",
-        confirmButton: "Deletar",
-        onConfirmClick: () => {
-          if (typePhoto.flag) {
-            typePhotoStore.deleteTypeOfPhoto(typePhoto.flag);
-          }
-        },
-        contentView: <DeleteView toDelete={typePhoto.name} />,
-      };
-      viewStore.setViewInModal(deleteView);
-    }
   };
 
   const handleSelectPhoto = (typePhoto: TypePhoto) => {
@@ -113,6 +43,12 @@ export const ListTypePhoto = observer(() => {
   };
 
   const handleEdit = (typePhoto: TypePhoto) => {};
+
+  const handleDeleteTypePhoto = (typePhoto: TypePhoto) => {
+    if (typePhoto.flag) {
+      typePhotoStore.deleteTypeOfPhoto(typePhoto.flag);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -153,6 +89,10 @@ export const ListTypePhoto = observer(() => {
              ]} 
              handleAction={() => setOpenAddTypePhotoDialog(true)}
         >
+          <AddTypeOfPhotoDialog
+            state={addTypePhotoDialog}
+            setState={setOpenAddTypePhotoDialog}
+            title='Adicionar tipo de foto'/> 
         <Grid item display="flex" padding={2} justifyContent="flex-Start">
           <Search label="Tipo de Foto" onTextChanged={handleSearch} />
         </Grid>
@@ -180,7 +120,10 @@ export const ListTypePhoto = observer(() => {
                     </IconButton>
                   </TableCell>
                   <TableCell>
-                    <IconButton color="error">
+                    <IconButton 
+                      color="error"
+                      onClick={() => handleDeleteTypePhoto(typePhoto)}
+                    >
                       <Delete />
                     </IconButton>
                   </TableCell>
