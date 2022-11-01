@@ -48,6 +48,7 @@ export function PublicWorkInspectionsDialog({
       setState={setState}
       index={index}
       title={title}
+      fullScreen={true}
     >
       {data?.map((inspection: Inspection) => (
         <InfoAccorion

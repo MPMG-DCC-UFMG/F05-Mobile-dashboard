@@ -1,3 +1,4 @@
+import { useQueryClient } from "react-query";
 import Config from "../../../config/Config";
 import { PublicWork } from "../../models/PublicWork";
 import TrenaAPI from "../TrenaAPI";
@@ -64,6 +65,8 @@ export class PublicWorkService {
 }
 
 const loadPublicWorks = async () => {
+  const queryClient = useQueryClient();
+  queryClient.invalidateQueries("getPublicWorks");
   const call = Config.BASE_URL + "/publicworks/";
   const res = await TrenaAPI.network().get(call);
   return res.body;
@@ -71,38 +74,46 @@ const loadPublicWorks = async () => {
 
 const deletePublicWork = async (publicWorkId: string) => {
   const call = Config.BASE_URL + "/publicworks/delete";
+  const queryClient = useQueryClient();
   const res = await TrenaAPI.network()
     .post(call)
     .type("application/json")
     .query({ public_work_id: publicWorkId });
 
+  queryClient.invalidateQueries("getPublicWorks");
   return res.body;
 };
 
 const addPublicWork = async (publicWork: PublicWork) => {
   const call = Config.BASE_URL + "/publicworks/add";
+  const queryClient = useQueryClient();
   const res = await TrenaAPI.network()
     .post(call)
     .type("application/json")
     .send(publicWork);
 
+  queryClient.invalidateQueries("getPublicWorks");
   return res.body;
 };
 
 const updatePublicWork = async (publicWork: PublicWork) => {
   const call = Config.BASE_URL + "/publicworks/update";
+  const queryClient = useQueryClient();
   const res = await TrenaAPI.network()
     .put(call)
     .type("application/json")
     .send(publicWork);
 
+  queryClient.invalidateQueries("getPublicWorks");
   return res.body;
 };
 
 const countPublicWork = async () => {
   const call = Config.BASE_URL + "/publicworks/count";
+  const queryClient = useQueryClient();
   const res = await TrenaAPI.network().get(call);
 
+  queryClient.invalidateQueries("getPublicWorks");
   return res.body;
 };
 
