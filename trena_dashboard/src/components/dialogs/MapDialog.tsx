@@ -19,6 +19,7 @@ interface MapDialogProps {
   setState(state: boolean[]): void;
   publicWork: PublicWork;
   index: number;
+  fullScreen?: boolean;
 }
 
 export function MapDialog({
@@ -26,6 +27,7 @@ export function MapDialog({
   setState,
   publicWork,
   index,
+  fullScreen,
 }: MapDialogProps) {
   const { publicWorkStore, workStatusStore } = useStores();
   publicWorkStore.loadPublicWorkCollects(publicWork.id);
@@ -45,6 +47,7 @@ export function MapDialog({
       setState={setState}
       index={index}
       title={`Localização - ${publicWork.name}`}
+      fullScreen={fullScreen}
     >
       <Grid container justifyContent="space-between" alignItems="center">
         <InfoTextField
@@ -85,7 +88,7 @@ export function MapDialog({
         />
       </Grid>
 
-      <Grid container>
+      <Grid container style={{ width: "100%", height: "100%" }}>
         <MapView
           latitude={publicWork.address.latitude}
           longitude={publicWork.address.longitude}
