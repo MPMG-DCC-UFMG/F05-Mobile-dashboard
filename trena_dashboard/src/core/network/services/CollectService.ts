@@ -90,6 +90,13 @@ const loadPublicWorkCollects = async (publicWorkId: string) => {
   return res.body;
 };
 
+const loadAllCollects = async () => {
+  const call = Config.BASE_URL + "/collects/";
+  const res = await TrenaAPI.network().get(call);
+
+  return res.body;
+};
+
 const loadCollectsPaginated = async (page: number) => {
   const call = Config.BASE_URL + "/collects/paginated";
   const res = await TrenaAPI.network()
@@ -139,6 +146,7 @@ const saveData = (data: Blob, filename: string = "filename") => {
 export const CollectServiceQuery = {
   loadPublicWorkCollects,
   loadCollectsPaginated,
+  loadAllCollects,
   collectMonthCount,
   retrievePhotos,
   downloadJSONReport,

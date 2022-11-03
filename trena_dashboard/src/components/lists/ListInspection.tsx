@@ -1,125 +1,126 @@
-import { observer } from "mobx-react";
-import React from "react";
-import { useStores } from "../../core/contexts/UseStores";
+import { Collections } from "@mui/icons-material";
+import {
+  Grid,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Tooltip,
+} from "@mui/material";
+import React, { useState } from "react";
+import { useQuery } from "react-query";
 import { Inspection } from "../../core/models/Inspection";
-import InspectionCRUDView from "../../screens/views/inspections/InspectionCRUDView";
-import InspectionStatusView from "../../screens/views/inspections/InspectionStatusView";
-import { Search } from "../Form/Search";
-import { ItemActionsMenu } from "../Menus/ItemActionsMenu";
-import { ItemInspection } from "./items/ItemInspection";
+import { InspectionServiceQuery } from "../../core/network/services/InspectionService";
+import { inspectionsStatusMapping } from "../../utils/mapper";
+import { InspectionCollectsDialog } from "../Dialogs/Inspection/InspectionCollects";
+import { Heading } from "../Heading";
+import { LoadingTableData } from "../Loading/LoadingTableData";
+import { TablePagination } from "../TablePagination";
 
-export const ListInspection = observer(() => {
-  const { inspectionStore, viewStore } = useStores();
-
-  const createInspectionView = (
-    title: string,
-    confirm: string,
-    onConfirmClick: () => void,
-    onChangeInspection: (inspection: Inspection) => void,
-    defaultInspection?: Inspection
-  ) => {
-    let inspectionView = {
-      title: title,
-      confirmButton: confirm,
-      onConfirmClick: onConfirmClick,
-      contentView: (
-        <InspectionCRUDView
-          onChangeInspection={onChangeInspection}
-          defaultInspection={defaultInspection}
-        />
-      ),
-    };
-    viewStore.setViewInModal(inspectionView);
-  };
-
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const query = event.currentTarget.value;
-    inspectionStore.search(query);
-  };
-
-  const handleAddClick = () => {
-    let mInspection: Inspection = { name: "", user_email: "" };
-    createInspectionView(
-      "Adicionar Vistoria",
-      "Adicionar",
-      () => {
-        mInspection.status = 0;
-        mInspection.public_work_id =
-          inspectionStore.selectedInspection?.public_work_id;
-        inspectionStore.addInspection(mInspection);
+export function ListInspection() {
+  const { data: inspections, isLoading } = useQuery<Inspection[]>(
+    "getInspections",
+    InspectionServiceQuery.loadInspections,
+    {
+      onSuccess: (data) => {
+        setOpenCollectsModal(Array(data.length).fill(false));
       },
-      (inspection: Inspection) => {
-        mInspection = inspection;
-      }
+    }
+  );
+  const [openCollectsModal, setOpenCollectsModal] = useState<boolean[]>([]);
+
+  const handleOpenCollectsModal = (index: number) => {
+    setOpenCollectsModal(
+      openCollectsModal.map((value, pos) => (index === pos ? true : value))
     );
   };
 
-  const handleEditClick = () => {
-    viewStore.setViewInModal({
-      title: "Mudar Status",
-      confirmButton: "Alterar",
-      onConfirmClick: () => {
-        var inspection = inspectionStore.selectedInspection;
-        if (inspection != null) {
-          inspectionStore.updateInspection(inspection);
-        }
-      },
-      contentView: (
-        <InspectionStatusView
-          onChangeState={(key?: string) => {
-            var inspection = inspectionStore.selectedInspection;
-            if (inspection != null && key != null) {
-              inspection.status = parseInt(key);
-            }
-          }}
-        />
-      ),
-    });
-  };
-
-  const handleDeleteClick = () => {};
-
   return (
-    <div className="panel">
-      <div className="panel-heading">
-        <nav className="level">
-          <div className="level-left">
-            <div className="level-item">Vistorias</div>
-          </div>
-          <div className="level-right">
-            <div className="level-item">
-              <ItemActionsMenu
-                itemSelected={inspectionStore.selectedInspection !== undefined}
-                onAddClicked={handleAddClick}
-                onDeleteClicked={handleDeleteClick}
-                onEditClicked={handleEditClick}
-              />
-            </div>
-          </div>
-        </nav>
-      </div>
-      <div className="panel-block">
-        <Search label="Tipo de Obra" onTextChanged={handleSearch} />
-      </div>
-      <div className="panel-block">
-        <table className="table is-fullwidth is-hoverable">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Descrição</th>
-              <th>ID Obra Pública</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {inspectionStore.inspectionList.map((inspection) => {
-              return (
-                <ItemInspection key={inspection.flag} inspection={inspection} />
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <>
+      {isLoading || !inspections ? (
+        <LoadingTableData
+          headingTitle="Vistorias"
+          headingSteps={[
+            {
+              title: "Dashboard",
+              url: "/",
+            },
+            {
+              title: "Vistorias",
+              url: "/",
+            },
+          ]}
+        />
+      ) : (
+        <Grid style={{ width: "100%", marginTop: 14 }} item>
+          <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+            <Heading
+              title="Vistorias"
+              steps={[
+                {
+                  title: "Dashboard",
+                  url: "/",
+                },
+                {
+                  title: "Vistorias",
+                  url: "/",
+                },
+              ]}
+            >
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">Nome</TableCell>
+                    <TableCell align="center">Usuário Responsável</TableCell>
+                    <TableCell align="center">ID Obra</TableCell>
+                    <TableCell align="center">Status</TableCell>
+                    <TableCell align="center">Coletas</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {inspections.map((inspection, index) => (
+                    <>
+                      <TableRow key={inspection.flag}>
+                        <TableCell align="center">{inspection.name}</TableCell>
+                        <TableCell align="center">
+                          {inspection.user_email}
+                        </TableCell>
+                        <TableCell align="center">
+                          {inspection.public_work_id}
+                        </TableCell>
+                        <TableCell align="center">
+                          {inspectionsStatusMapping(inspection.status!)}
+                        </TableCell>
+                        <TableCell align="center">
+                          <Tooltip title="Coletas">
+                            <IconButton
+                              onClick={() => handleOpenCollectsModal(index)}
+                            >
+                              <Collections />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      </TableRow>
+                      <InspectionCollectsDialog
+                        index={index}
+                        inspectionId={inspection.flag!}
+                        state={openCollectsModal}
+                        setState={setOpenCollectsModal}
+                        fullScreen
+                        title={`Coletas - ${inspection.flag}`}
+                      />
+                    </>
+                  ))}
+                </TableBody>
+              </Table>
+              <TablePagination data={inspections!} />
+            </Heading>
+          </Paper>
+        </Grid>
+      )}
+    </>
   );
-});
+}

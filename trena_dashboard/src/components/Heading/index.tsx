@@ -19,8 +19,8 @@ export type BreadCrumbSteps = {
 interface HeadingProps {
   title: string;
   steps: BreadCrumbSteps[];
-  buttonTitle: string;
-  handleAction(): void;
+  buttonTitle?: string;
+  handleAction?(): void;
   children: React.ReactNode;
 }
 
@@ -47,7 +47,7 @@ export function Heading({
             <Typography
               fontSize="1.5rem"
               style={{ color: "#0288d1" }}
-              variant="h3"
+              variant="h4"
             >
               {title}
             </Typography>
@@ -66,16 +66,19 @@ export function Heading({
               ))}
             </Breadcrumbs>
           </Grid>
-          <Grid item sx={{ pl: "40px", pt: "40px", pb: "20px" }}>
-            <Button
-              onClick={handleAction}
-              color="info"
-              startIcon={<Add />}
-              variant="contained"
-            >
-              {buttonTitle}
-            </Button>
-          </Grid>
+
+          {buttonTitle && (
+            <Grid item sx={{ pl: "40px", pt: "40px", pb: "20px" }}>
+              <Button
+                onClick={handleAction}
+                color="info"
+                startIcon={<Add />}
+                variant="contained"
+              >
+                {buttonTitle}
+              </Button>
+            </Grid>
+          )}
         </Grid>
         <Divider />
         <Grid

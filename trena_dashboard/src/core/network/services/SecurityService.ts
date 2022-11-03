@@ -22,6 +22,7 @@ export class SecurityService {
       })
       .then((res) => {
         let accessToken: string = res.body["access_token"];
+        localStorage.setItem("TOKEN", accessToken);
         let role: string = res.body["role"];
 
         if (role !== "ADMIN") {

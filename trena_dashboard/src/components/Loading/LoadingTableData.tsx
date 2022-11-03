@@ -3,10 +3,10 @@ import React from "react";
 import { BreadCrumbSteps, Heading } from "../Heading";
 
 interface LoadingTableDataProps {
-  headingButtonTitle: string;
+  headingButtonTitle?: string;
   headingTitle: string;
   headingSteps: BreadCrumbSteps[];
-  headingAction(): void;
+  headingAction?(): void;
 }
 
 export function LoadingTableData({
