@@ -17,7 +17,8 @@ import {
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import { useQuery } from "react-query";
 import { Address } from "../../core/models/Address";
-import { PublicWorkService } from "../../core/network/services/PublicWorkService";
+import { PublicWork } from "../../core/models/PublicWork";
+import { PublicWorkServiceQuery } from "../../core/network/services/PublicWorkService";
 import { MapDialog } from "../Dialogs/MapDialog";
 import { AddPublicWorkDialog } from "../Dialogs/PublicWork/AddPublicWorkDialog";
 import { HandlePublicWorkDialog } from "../Dialogs/PublicWork/HandlePublicWorkDialog";
@@ -28,8 +29,8 @@ import { TablePagination } from "../TablePagination";
 
 export const ListPublicWork = observer(() => {
   const { data: publicWorks, isLoading } = useQuery(
-    "getPublicWorks",
-    () => PublicWorkService.loadPublicWorks(),
+    ["getPublicWorks"],
+    PublicWorkServiceQuery.loadPublicWorks,
     {
       onSuccess: (data) => {
         setOpenInspectionsModal(Array(data.length).fill(false));
@@ -69,7 +70,7 @@ export const ListPublicWork = observer(() => {
 
   return (
     <>
-      {isLoading ? (
+      {isLoading || !publicWorks ? (
         <LoadingTableData
           headingButtonTitle="Adicionar Obra Pública"
           headingTitle="Obras Públicas"
@@ -104,7 +105,7 @@ export const ListPublicWork = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {publicWorks!.map((publicWork, index) => (
+                  {publicWorks!.map((publicWork: PublicWork, index: number) => (
                     <TableRow key={publicWork.id}>
                       <TableCell align="center">{publicWork.id}</TableCell>
                       <TableCell align="center">{publicWork.name}</TableCell>
