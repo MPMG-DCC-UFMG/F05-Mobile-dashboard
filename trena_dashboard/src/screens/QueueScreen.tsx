@@ -14,7 +14,7 @@ export function QueueScreen() {
           <>
             <QueueItem
               title="Não há novos dados da obra"
-              value="1 Coleta"
+              value="3 Coletas"
               onClick={() => setOpen(!open)}
             />
             <QueueItem

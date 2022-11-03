@@ -13,7 +13,7 @@ import { observer } from "mobx-react";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useStores } from "../../core/contexts/UseStores";
-import { SecurityService } from "../../core/network/services/SecurityService";
+import { SecurityServiceQuery } from "../../core/network/services/SecurityService";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
@@ -22,7 +22,7 @@ export const ListUser = observer(() => {
   const { userStore } = useStores();
   const { data: users, isLoading } = useQuery(
     "getUsers",
-    SecurityService.loadUsersList
+    SecurityServiceQuery.loadUsersList
   );
   const [addUserDialog, setOpenAddUserDialog] = useState(false);
 
@@ -32,7 +32,7 @@ export const ListUser = observer(() => {
 
   return (
     <>
-      {isLoading ? (
+      {isLoading || !users ? (
         <LoadingTableData
           headingAction={() => setOpenAddUserDialog(true)}
           headingButtonTitle="Adicionar Usuário"
