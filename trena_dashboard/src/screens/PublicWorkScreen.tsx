@@ -8,14 +8,7 @@ export const PublicWorkScreen: React.FC = () => {
   return (
     <DashboardContainer>
       <DashboardContentContainer>
-        <Col>
-          <Row>
             <ListPublicWork />
-          </Row>
-          {/* <Row>
-            <PublicWorkView />
-          </Row> */}
-        </Col>
       </DashboardContentContainer>
     </DashboardContainer>
   );

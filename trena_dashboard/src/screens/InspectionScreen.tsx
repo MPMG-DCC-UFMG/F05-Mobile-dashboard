@@ -12,12 +12,7 @@ export const InspectionScreen: React.FC<any> = observer((props) => {
   return (
     <DashboardContainer>
       <DashboardContentContainer>
-        <div className="columns">
-          <div className="column is-two-thirds">
             <ListInspection />
-          </div>
-          <div className="column"></div>
-        </div>
       </DashboardContentContainer>
     </DashboardContainer>
   );

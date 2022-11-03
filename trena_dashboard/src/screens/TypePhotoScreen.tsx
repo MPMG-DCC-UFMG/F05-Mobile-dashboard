@@ -12,9 +12,7 @@ export const TypePhotoScreen: React.FC<any> = (props) => {
   return (
     <DashboardContainer>
       <DashboardContentContainer>
-        <Grid item xs={12}>
           <ListTypePhoto />
-        </Grid>
       </DashboardContentContainer>
     </DashboardContainer>
   );

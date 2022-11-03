@@ -1,4 +1,4 @@
-import { Edit, Delete, Add } from "@mui/icons-material";
+import { Edit, Delete } from "@mui/icons-material";
 import {
   Divider,
   Grid,
@@ -9,8 +9,6 @@ import {
   TableHead,
   TableRow,
   IconButton,
-  Box, 
-  LinearProgress
 } from "@mui/material";
 import { observer } from "mobx-react";
 import React, { useState } from "react";
@@ -18,17 +16,15 @@ import { useQuery } from "react-query";
 import { useStores } from "../../core/contexts/UseStores";
 import { TypePhoto } from "../../core/models/TypePhoto";
 import { TypePhotoService } from "../../core/network/services/TypePhotoService";
-import { DeleteView } from "../../screens/views/DeleteView";
-import TypePhotoCRUDView from "../../screens/views/typePhoto/TypePhotoCRUDView";
 import { AddTypeOfPhotoDialog } from "../Dialogs/TypePhoto/AddTypeOfPhotoDialog";
 import { Search } from "../Form/Search";
 import { Heading } from "../Heading";
+import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListTypePhoto = observer(() => {
-
   const { data: typePhoto, isLoading } = useQuery("getTypePhoto", () =>
-    TypePhotoService.loadTypePhotos(),
+    TypePhotoService.loadTypePhotos()
   );
   const { typePhotoStore, viewStore } = useStores();
   const [addTypePhotoDialog, setOpenAddTypePhotoDialog] = useState(false);
@@ -50,91 +46,82 @@ export const ListTypePhoto = observer(() => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
-        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-          <Heading
-            buttonTitle="Adicionar Tipo de Foto"
-            title="Tipos de Fotos"
-            steps={[
-              { title: "Dashboard", url: "/" },
-              { title: "Tipos de Fotos", url: "/" },
-            ]}
-            handleAction={() => setOpenAddTypePhotoDialog(true)}
-          >
-            <Box width="100%">
-              <LinearProgress />
-            </Box>
-          </Heading>
-        </Paper>
-      </Grid>
-    );
-  }
-
-  if (!typePhoto) {
-    return <h1>Is loading...</h1>;
-  }
-
   return (
     <>
-    <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
-    <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-        <Heading 
-             buttonTitle = "Adicionar Tipo de Foto"
-             title="Tipos de Fotos" 
-             steps={[
-               {title:"Dashboard",url:"/"},
-               {title:"Tipos de Fotos",url:"/"}
-             ]} 
-             handleAction={() => setOpenAddTypePhotoDialog(true)}
-        >
-          <AddTypeOfPhotoDialog
-            state={addTypePhotoDialog}
-            setState={setOpenAddTypePhotoDialog}
-            title='Adicionar tipo de foto'/> 
-        <Grid item display="flex" padding={2} justifyContent="flex-Start">
-          <Search label="Tipo de Foto" onTextChanged={handleSearch} />
+      {isLoading || !typePhoto ? (
+        <LoadingTableData
+          headingAction={() => setOpenAddTypePhotoDialog(true)}
+          headingTitle="Tipo de Foto"
+          headingButtonTitle="Adicionar Tipo de Foto"
+          headingSteps={[
+            { title: "Dashboard", url: "/" },
+            { title: "Estado das Obras", url: "/" },
+          ]}
+        />
+      ) : (
+        <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
+          <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+            <Heading
+              buttonTitle="Adicionar Tipo de Foto"
+              title="Tipos de Fotos"
+              steps={[
+                { title: "Dashboard", url: "/" },
+                { title: "Tipos de Fotos", url: "/" },
+              ]}
+              handleAction={() => setOpenAddTypePhotoDialog(true)}
+            >
+              <AddTypeOfPhotoDialog
+                state={addTypePhotoDialog}
+                setState={setOpenAddTypePhotoDialog}
+                title="Adicionar tipo de foto"
+              />
+              <Grid item display="flex" padding={2} justifyContent="flex-Start">
+                <Search label="Tipo de Foto" onTextChanged={handleSearch} />
+              </Grid>
+              <Divider />
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Nome</TableCell>
+                    <TableCell>Descrição</TableCell>
+                    <TableCell>Editar</TableCell>
+                    <TableCell>Remover</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {typePhotoStore.typePhotoList.map((typePhoto) => (
+                    <TableRow
+                      key={typePhoto.flag}
+                      hover
+                      onClick={() => handleSelectPhoto(typePhoto)}
+                    >
+                      <TableCell>{typePhoto.name}</TableCell>
+                      <TableCell>{typePhoto.description}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={() => handleEdit(typePhoto)}
+                          color="info"
+                        >
+                          <Edit />
+                        </IconButton>
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          color="error"
+                          onClick={() => handleDeleteTypePhoto(typePhoto)}
+                        >
+                          <Delete />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              <TablePagination data={typePhoto} />
+            </Heading>
+          </Paper>
         </Grid>
-        <Divider />
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Nome</TableCell>
-                <TableCell>Descrição</TableCell>
-                <TableCell>Editar</TableCell>
-                <TableCell>Remover</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {typePhotoStore.typePhotoList.map((typePhoto) => (
-                <TableRow hover onClick={() => handleSelectPhoto(typePhoto)}>
-                  <TableCell>{typePhoto.name}</TableCell>
-                  <TableCell>{typePhoto.description}</TableCell>
-                  <TableCell>
-                    <IconButton
-                      onClick={() => handleEdit(typePhoto)}
-                      color="info"
-                    >
-                      <Edit />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell>
-                    <IconButton 
-                      color="error"
-                      onClick={() => handleDeleteTypePhoto(typePhoto)}
-                    >
-                      <Delete />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <TablePagination data={typePhoto} />
-        </Heading>
-      </Paper>
-    </Grid>
+      )}
     </>
   );
 });
