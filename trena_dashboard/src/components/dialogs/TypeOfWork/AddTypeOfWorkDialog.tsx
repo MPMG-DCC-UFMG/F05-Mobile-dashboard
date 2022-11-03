@@ -35,8 +35,6 @@ export function AddTypeOfWorkDialog({
     setState(false);
   }
 
-  console.log(form)
-
   return (
     <SingleDialogContainer state={state} setState={setState} title={title}>
       <TextField
@@ -63,7 +61,7 @@ export function AddTypeOfWorkDialog({
       <Grid
         container
         spacing={2}
-        sx={{ display: "flex", justifyContent: "flex-end" }}
+        sx={{ display: "flex", justifyContent: "flex-end", mt:2 }}
       >
         <Grid item display="flex">
           <Button 
