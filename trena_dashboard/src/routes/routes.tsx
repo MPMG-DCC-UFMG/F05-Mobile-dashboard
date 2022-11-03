@@ -1,6 +1,5 @@
 import React from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
-import { CollectScreen } from "../screens/CollectScreen";
 import { Home } from "../screens/Home";
 import { InspectionScreen } from "../screens/InspectionScreen";
 import { LoginScreen } from "../screens/LoginScreen";
@@ -22,7 +21,6 @@ export function AppRoutes() {
         <Route path="/publicWork" element={<PublicWorkScreen />} />
         <Route path="/workStatus" element={<WorkStatusScreen />} />
         <Route path="/users" element={<UserManagementScreen />} />
-        <Route path="/collect" element={<CollectScreen />} />
         <Route path="/queue" element={<QueueScreen />} />
         <Route path="/inspections" element={<InspectionScreen />} />
       </Routes>
