@@ -1,10 +1,8 @@
 import { Delete, Edit, Visibility } from "@mui/icons-material";
 import {
-  Box,
   Divider,
   Grid,
   IconButton,
-  LinearProgress,
   Paper,
   Table,
   TableBody,
@@ -44,28 +42,6 @@ export const ListTypeWork = observer(() => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
-        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-          <Heading
-            buttonTitle="Adicionar Tipo de Obra"
-            title="Tipos de Obra"
-            steps={[
-              { title: "Dashboard", url: "/" },
-              { title: "Tipos de Obra", url: "/" },
-            ]}
-            handleAction={() => setOpenAddTypeWorkDialog(true)}
-          >
-            <Box width="100%">
-              <LinearProgress />
-            </Box>
-          </Heading>
-        </Paper>
-      </Grid>
-    );
-  }
-
   return (
     <>
       {isLoading || !typeWorks ? (
@@ -103,26 +79,26 @@ export const ListTypeWork = observer(() => {
                 <TableHead>
                   <TableRow>
                     <TableCell align="center">Nome</TableCell>
-                    <TableCell align="center">Detalhes</TableCell>
+                    {/* <TableCell align="center">Detalhes</TableCell> */}
                     <TableCell align="center">Editar</TableCell>
                     <TableCell align="center">Remover</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {typeWorks.map((typeWork) => (
-                    <TableRow hover>
+                    <TableRow hover key={typeWork.flag}>
                       <TableCell align="center">{typeWork.name}</TableCell>
-                      <TableCell align="center" key={typeWork.flag}>
+                      {/* <TableCell align="center">
                         <IconButton>
                           <Visibility />
                         </IconButton>
-                      </TableCell>
-                      <TableCell align="center" key={typeWork.flag}>
+                      </TableCell> */}
+                      <TableCell align="center" >
                         <IconButton color="info">
                           <Edit />
                         </IconButton>
                       </TableCell>
-                      <TableCell align="center" key={typeWork.flag}>
+                      <TableCell align="center">
                         <IconButton
                           onClick={() => handleDeleteTypeWork(typeWork)}
                           color="error"

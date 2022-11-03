@@ -1,4 +1,4 @@
-import { Delete, Edit, Visibility } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import {
   Grid,
   IconButton,
@@ -13,7 +13,7 @@ import { observer } from "mobx-react";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useStores } from "../../core/contexts/UseStores";
-import { SecurityServiceQuery } from "../../core/network/services/SecurityService";
+import { AddUsersDialog } from "../Dialogs/Users/AddUsersDialog";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
@@ -54,33 +54,41 @@ export const ListUser = observer(() => {
               ]}
               handleAction={() => setOpenAddUserDialog(true)}
             >
+              <AddUsersDialog
+                title="Adicionar Usuário"
+                state={addUserDialog}
+                setState={setOpenAddUserDialog}
+              />
               <Table>
                 <TableHead>
                   <TableRow>
                     <TableCell align="center">Email</TableCell>
                     <TableCell align="center">Função</TableCell>
-                    <TableCell align="center">Detalhes</TableCell>
+                    {/* <TableCell align="center">Detalhes</TableCell> */}
                     <TableCell align="center">Editar</TableCell>
                     <TableCell align="center">Remover</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {userStore.usersList.map((user) => (
-                    <TableRow hover>
+                  {users.map((user) => (
+                    <TableRow hover key={user.email}>
                       <TableCell align="center">{user.email}</TableCell>
                       <TableCell align="center">{user.role}</TableCell>
-                      <TableCell align="center" key={user.email}>
+                      {/* <TableCell align="center">
                         <IconButton>
                           <Visibility />
                         </IconButton>
-                      </TableCell>
-                      <TableCell align="center" key={user.email}>
+                      </TableCell> */}
+                      <TableCell align="center">
                         <IconButton color="info">
                           <Edit />
                         </IconButton>
                       </TableCell>
-                      <TableCell align="center" key={user.email}>
-                        <IconButton color="error">
+                      <TableCell align="center">
+                        <IconButton
+                          onClick={() => handleUserDeleted(user.email)}
+                          color="error"
+                        >
                           <Delete />
                         </IconButton>
                       </TableCell>
@@ -88,7 +96,7 @@ export const ListUser = observer(() => {
                   ))}
                 </TableBody>
               </Table>
-              <TablePagination data={users!} />
+              <TablePagination data={users} />
             </Heading>
           </Paper>
         </Grid>

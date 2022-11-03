@@ -12,9 +12,7 @@ export const TypeOfWorkScreen: React.FC<any> = (props) => {
   return (
     <DashboardContainer>
       <DashboardContentContainer>
-        <Grid item xs={12}>
           <ListTypeWork />
-        </Grid>
       </DashboardContentContainer>
     </DashboardContainer>
   );

@@ -8,9 +8,7 @@ export const WorkStatusScreen: React.FC<any> = (props) => {
   return (
     <DashboardContainer>
       <DashboardContentContainer>
-        <Grid item xs={12}>
           <ListWorkStatus />
-        </Grid>
       </DashboardContentContainer>
     </DashboardContainer>
   );

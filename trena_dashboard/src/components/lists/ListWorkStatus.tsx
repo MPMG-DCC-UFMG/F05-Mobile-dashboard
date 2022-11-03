@@ -157,19 +157,22 @@ export const ListWorkStatus = observer(() => {
                 </TableHead>
                 <TableBody>
                   {workStatus.map((workStatus) => (
-                    <TableRow hover>
+                    <TableRow hover key={workStatus.flag}>
                       <TableCell align="center">{workStatus.name}</TableCell>
-                      <TableCell align="center" key={workStatus.flag}>
+                      {/* <TableCell align="center">
                         <IconButton>
                           <Visibility />
                         </IconButton>
+                      </TableCell> */}
+                      <TableCell align="center">
+                        {workStatus.description}
                       </TableCell>
-                      <TableCell align="center" key={workStatus.flag}>
+                      <TableCell align="center">
                         <IconButton color="info">
                           <Edit />
                         </IconButton>
                       </TableCell>
-                      <TableCell align="center" key={workStatus.flag}>
+                      <TableCell align="center">
                         <IconButton
                           onClick={() => handleDeleteWorkStatus(workStatus)}
                           color="error"

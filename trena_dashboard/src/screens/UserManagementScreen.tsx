@@ -13,9 +13,7 @@ export const UserManagementScreen: React.FC<any> = observer(() => {
   return (
     <DashboardContainer>
       <DashboardContentContainer>
-        <Grid item xs={12}>
           <ListUser />
-        </Grid>
       </DashboardContentContainer>
     </DashboardContainer>
   );
