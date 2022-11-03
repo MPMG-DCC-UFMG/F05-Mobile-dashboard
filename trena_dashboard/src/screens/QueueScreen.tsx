@@ -1,20 +1,23 @@
 import React from "react";
 import { DashboardContentContainer } from "../components/Containers/ContentContainer";
 import { DashboardContainer } from "../components/Containers/DashboardContainer";
-import { ListQueue } from "../components/lists/ListQueue";
-import { useStores } from "../core/contexts/UseStores";
+import { QueueItem } from "../components/Queue/QueueItem";
 
-export const QueueScreen: React.FC<any> = (props) => {
-  const { queueStore } = useStores();
-  queueStore.loadQueueItem();
-
+export function QueueScreen() {
   return (
     <DashboardContainer>
       <DashboardContentContainer>
-        <div>
-          <ListQueue />
-        </div>
+        <QueueItem
+          title="Não há novos dados da obra"
+          value="1 Coleta"
+          onClick={() => console.log("a")}
+        />
+        <QueueItem
+          title="Não há novos dados da obra"
+          value="2 Coletas"
+          onClick={() => console.log("a")}
+        />
       </DashboardContentContainer>
     </DashboardContainer>
   );
-};
+}
