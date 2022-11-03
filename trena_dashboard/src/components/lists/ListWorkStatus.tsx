@@ -159,10 +159,13 @@ export const ListWorkStatus = observer(() => {
                   {workStatus.map((workStatus) => (
                     <TableRow hover key={workStatus.flag}>
                       <TableCell align="center">{workStatus.name}</TableCell>
-                      <TableCell align="center">
+                      {/* <TableCell align="center">
                         <IconButton>
                           <Visibility />
                         </IconButton>
+                      </TableCell> */}
+                      <TableCell align="center">
+                        {workStatus.description}
                       </TableCell>
                       <TableCell align="center">
                         <IconButton color="info">
