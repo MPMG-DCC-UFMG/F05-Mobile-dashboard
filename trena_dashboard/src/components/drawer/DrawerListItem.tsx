@@ -1,10 +1,4 @@
-import {
-  Dashboard,
-  LinkedCamera,
-  People,
-  Queue,
-  QueuePlayNext,
-} from "@material-ui/icons";
+import { Dashboard, LinkedCamera, People, Queue } from "@material-ui/icons";
 import {
   Construction,
   ExpandLess,
@@ -112,12 +106,6 @@ export function DrawerListItem() {
       <Collapse in={trena} unmountOnExit>
         <MyListItem
           sx={{ pl: 4 }}
-          icon={<QueuePlayNext />}
-          url="/collect"
-          iconText="Coletas"
-        />
-        <MyListItem
-          sx={{ pl: 4 }}
           icon={<Queue />}
           url="/queue"
           iconText="Fila de Envios"
@@ -125,7 +113,7 @@ export function DrawerListItem() {
         <MyListItem
           sx={{ pl: 4 }}
           icon={<LocalSee />}
-          url="/collect"
+          url="/inspections"
           iconText="Vistorias"
         />
       </Collapse>
