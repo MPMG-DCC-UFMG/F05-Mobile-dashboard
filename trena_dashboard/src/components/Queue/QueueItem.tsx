@@ -17,11 +17,10 @@ interface QueueItemProps {
 
 export function QueueItem({ onClick, title, value }: QueueItemProps) {
   return (
-    <CardActionArea>
+    <CardActionArea sx={{ mt: 4 }}>
       <Card
         sx={{
           height: "100%",
-          mt: 4,
         }}
       >
         <CardContent onClick={onClick}>

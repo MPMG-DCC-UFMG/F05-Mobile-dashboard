@@ -1,10 +1,8 @@
 import { Delete, Edit, Visibility } from "@mui/icons-material";
 import {
-  Box,
   Divider,
   Grid,
   IconButton,
-  LinearProgress,
   Paper,
   Table,
   TableBody,
@@ -114,32 +112,6 @@ export const ListWorkStatus = observer(() => {
       workStatusStore.deleteWorkStatus(workStatus.flag);
     }
   };
-
-  if (isLoading) {
-    return (
-      <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
-        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-          <Heading
-            buttonTitle="Adicionar Estado de Obra"
-            title="Estado das Obras"
-            steps={[
-              { title: "Dashboard", url: "/" },
-              { title: "Estado das Obras", url: "/" },
-            ]}
-            handleAction={() => setOpenAddWorkStatusDialog(true)}
-          >
-            <Box width="100%">
-              <LinearProgress />
-            </Box>
-          </Heading>
-        </Paper>
-      </Grid>
-    );
-  }
-
-  if (!workStatus) {
-    return <h1>Is loading...</h1>;
-  }
 
   return (
     <>
