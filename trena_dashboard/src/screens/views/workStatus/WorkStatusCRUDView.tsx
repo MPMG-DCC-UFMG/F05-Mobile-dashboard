@@ -1,7 +1,7 @@
 import React from "react";
 import { BaseCRUDView } from "../../../components/base/BaseCRUDView";
-import { InputField } from "../../../components/Form/InputField";
-import { InputTextArea } from "../../../components/Form/InputTextArea";
+import { InputField } from "../../../components/form/InputField";
+import { InputTextArea } from "../../../components/form/InputTextArea";
 import { WorkStatus } from "../../../core/models/WorkStatus";
 
 interface WorkStatusCRUDViewProps {
@@ -76,3 +76,4 @@ export default class WorkStatusCRUDView extends BaseCRUDView<
     );
   }
 }
+

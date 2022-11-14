@@ -10,8 +10,8 @@ import React from "react";
 import { useStores } from "../../core/contexts/UseStores";
 import { PublicWork } from "../../core/models/PublicWork";
 import { MapView } from "../../screens/views/publicWork/MapView";
-import { InfoTextField } from "../Inputs/InfoTextField";
-import { PublicWorkMenu } from "../Menus/PublicWorkMenu";
+import { InfoTextField } from "../inputs/InfoTextField";
+import { PublicWorkMenu } from "../menus/PublicWorkMenu";
 import { TableDialogContainer } from "./DialogContainer";
 
 interface MapDialogProps {
@@ -105,3 +105,4 @@ export function MapDialog({
     </TableDialogContainer>
   );
 }
+

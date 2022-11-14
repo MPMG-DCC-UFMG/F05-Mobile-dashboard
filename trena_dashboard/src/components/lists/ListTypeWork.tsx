@@ -1,4 +1,4 @@
-import { Delete, Edit, Visibility } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import {
   Divider,
   Grid,
@@ -16,8 +16,8 @@ import { useQuery } from "react-query";
 import { useStores } from "../../core/contexts/UseStores";
 import { TypeWork } from "../../core/models/TypeWork";
 import { TypeWorkServiceQuery } from "../../core/network/services/TypeWorkService";
-import { AddTypeOfWorkDialog } from "../Dialogs/TypeOfWork/AddTypeOfWorkDialog";
-import { Search } from "../Form/Search";
+import { AddTypeOfWorkDialog } from "../dialogs/TypeOfWork/AddTypeOfWorkDialog";
+import { Search } from "../form/Search";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
@@ -93,7 +93,7 @@ export const ListTypeWork = observer(() => {
                           <Visibility />
                         </IconButton>
                       </TableCell> */}
-                      <TableCell align="center" >
+                      <TableCell align="center">
                         <IconButton color="info">
                           <Edit />
                         </IconButton>
@@ -118,3 +118,4 @@ export const ListTypeWork = observer(() => {
     </>
   );
 });
+

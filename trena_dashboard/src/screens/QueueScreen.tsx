@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { DashboardContentContainer } from "../components/Containers/ContentContainer";
-import { DashboardContainer } from "../components/Containers/DashboardContainer";
+import { DashboardContentContainer } from "../components/containers/ContentContainer";
+import { DashboardContainer } from "../components/containers/DashboardContainer";
 import { QueueItem } from "../components/Queue/QueueItem";
 import { QueueStepper } from "../components/Queue/QueueStepper";
 
@@ -30,3 +30,4 @@ export function QueueScreen() {
     </DashboardContainer>
   );
 }
+

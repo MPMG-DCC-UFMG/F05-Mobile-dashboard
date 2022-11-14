@@ -1,14 +1,14 @@
-import { Edit, Delete } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import {
   Divider,
   Grid,
+  IconButton,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  IconButton,
 } from "@mui/material";
 import { observer } from "mobx-react";
 import React, { useState } from "react";
@@ -16,8 +16,8 @@ import { useQuery } from "react-query";
 import { useStores } from "../../core/contexts/UseStores";
 import { TypePhoto } from "../../core/models/TypePhoto";
 import { TypePhotoService } from "../../core/network/services/TypePhotoService";
-import { AddTypeOfPhotoDialog } from "../Dialogs/TypePhoto/AddTypeOfPhotoDialog";
-import { Search } from "../Form/Search";
+import { AddTypeOfPhotoDialog } from "../dialogs/TypePhoto/AddTypeOfPhotoDialog";
+import { Search } from "../form/Search";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
@@ -125,3 +125,4 @@ export const ListTypePhoto = observer(() => {
     </>
   );
 });
+

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react";
-import { DashboardContentContainer } from "../components/Containers/ContentContainer";
-import { DashboardContainer } from "../components/Containers/DashboardContainer";
+import { DashboardContentContainer } from "../components/containers/ContentContainer";
+import { DashboardContainer } from "../components/containers/DashboardContainer";
 import { ListInspection } from "../components/lists/ListInspection";
 import { useStores } from "../core/contexts/UseStores";
 
@@ -12,8 +12,9 @@ export const InspectionScreen: React.FC<any> = observer((props) => {
   return (
     <DashboardContainer>
       <DashboardContentContainer>
-            <ListInspection />
+        <ListInspection />
       </DashboardContentContainer>
     </DashboardContainer>
   );
 });
+

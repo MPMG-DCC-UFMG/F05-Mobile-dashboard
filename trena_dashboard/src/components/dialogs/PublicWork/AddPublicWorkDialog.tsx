@@ -27,7 +27,6 @@ import {
 import React, { useState } from "react";
 import { useStores } from "../../../core/contexts/UseStores";
 import { TypeWork } from "../../../core/models/TypeWork";
-import { InfoTextField } from "../../Inputs/InfoTextField";
 import {
   SingleDialogContainer,
   SingleDialogContainerProps,
@@ -38,6 +37,7 @@ import { useMutation } from "react-query";
 import uuid from "react-uuid";
 import * as XLSX from "xlsx";
 import { PublicWorkServiceQuery } from "../../../core/network/services/PublicWorkService";
+import { InfoTextField } from "../../inputs/InfoTextField";
 import { WarningField } from "../../WarningField";
 
 export function AddPublicWorkDialog({
@@ -262,3 +262,4 @@ export function AddPublicWorkDialog({
     </SingleDialogContainer>
   );
 }
+

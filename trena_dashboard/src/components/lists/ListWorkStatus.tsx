@@ -1,4 +1,4 @@
-import { Delete, Edit, Visibility } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import {
   Divider,
   Grid,
@@ -19,8 +19,8 @@ import { WorkStatus } from "../../core/models/WorkStatus";
 import { WorkStatusServiceQuery } from "../../core/network/services/WorkStatusService";
 import { DeleteView } from "../../screens/views/DeleteView";
 import WorkStatusCRUDView from "../../screens/views/workStatus/WorkStatusCRUDView";
-import { AddWorkStatusDialog } from "../Dialogs/StatusWork/AddWorkStatusDialog";
-import { Search } from "../Form/Search";
+import { AddWorkStatusDialog } from "../dialogs/StatusWork/AddWorkStatusDialog";
+import { Search } from "../form/Search";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
@@ -192,3 +192,4 @@ export const ListWorkStatus = observer(() => {
     </>
   );
 });
+

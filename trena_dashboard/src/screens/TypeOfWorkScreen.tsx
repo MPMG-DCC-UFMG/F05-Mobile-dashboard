@@ -1,7 +1,6 @@
-import { Grid } from "@mui/material";
 import React from "react";
-import { DashboardContentContainer } from "../components/Containers/ContentContainer";
-import { DashboardContainer } from "../components/Containers/DashboardContainer";
+import { DashboardContentContainer } from "../components/containers/ContentContainer";
+import { DashboardContainer } from "../components/containers/DashboardContainer";
 import { ListTypeWork } from "../components/lists/ListTypeWork";
 import { useStores } from "../core/contexts/UseStores";
 
@@ -12,8 +11,9 @@ export const TypeOfWorkScreen: React.FC<any> = (props) => {
   return (
     <DashboardContainer>
       <DashboardContentContainer>
-          <ListTypeWork />
+        <ListTypeWork />
       </DashboardContentContainer>
     </DashboardContainer>
   );
 };
+

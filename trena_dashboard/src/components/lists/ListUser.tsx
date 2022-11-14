@@ -15,7 +15,7 @@ import { useQuery } from "react-query";
 import { useStores } from "../../core/contexts/UseStores";
 import { User } from "../../core/models/User";
 import { SecurityServiceQuery } from "../../core/network/services/SecurityService";
-import { AddUsersDialog } from "../Dialogs/Users/AddUsersDialog";
+import { AddUsersDialog } from "../dialogs/Users/AddUsersDialog";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
@@ -106,3 +106,4 @@ export const ListUser = observer(() => {
     </>
   );
 });
+

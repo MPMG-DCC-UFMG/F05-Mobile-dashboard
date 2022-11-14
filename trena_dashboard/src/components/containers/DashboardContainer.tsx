@@ -1,8 +1,8 @@
 import { Box, Container, CssBaseline, Grid } from "@mui/material";
 import React, { useState } from "react";
 import { useStores } from "../../core/contexts/UseStores";
-import { AppBar } from "../AppBar";
-import { Drawer } from "../Drawer";
+import { AppBar } from "../appbar";
+import { Drawer } from "../drawer";
 
 interface DashboardContainerProps {
   children?: React.ReactNode;
@@ -39,3 +39,4 @@ export function DashboardContainer({ children }: DashboardContainerProps) {
     </Box>
   );
 }
+

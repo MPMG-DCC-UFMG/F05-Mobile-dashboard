@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react";
-import { DashboardContentContainer } from "../components/Containers/ContentContainer";
-import { DashboardContainer } from "../components/Containers/DashboardContainer";
+import { DashboardContentContainer } from "../components/containers/ContentContainer";
+import { DashboardContainer } from "../components/containers/DashboardContainer";
 import { useStores } from "../core/contexts/UseStores";
 import { CollectView } from "./views/collect/CollectView";
 import { PhotoView } from "./views/photo/PhotoView";
@@ -25,3 +25,4 @@ export const CollectScreen: React.FC<any> = observer((props) => {
     </DashboardContainer>
   );
 });
+

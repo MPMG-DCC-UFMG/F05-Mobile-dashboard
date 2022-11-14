@@ -19,10 +19,10 @@ import { useQuery } from "react-query";
 import { Address } from "../../core/models/Address";
 import { PublicWork } from "../../core/models/PublicWork";
 import { PublicWorkServiceQuery } from "../../core/network/services/PublicWorkService";
-import { MapDialog } from "../Dialogs/MapDialog";
-import { AddPublicWorkDialog } from "../Dialogs/PublicWork/AddPublicWorkDialog";
-import { HandlePublicWorkDialog } from "../Dialogs/PublicWork/HandlePublicWorkDialog";
-import { PublicWorkInspectionsDialog } from "../Dialogs/PublicWork/PublicWorkInspectionsDialog";
+import { MapDialog } from "../dialogs/MapDialog";
+import { AddPublicWorkDialog } from "../dialogs/PublicWork/AddPublicWorkDialog";
+import { HandlePublicWorkDialog } from "../dialogs/PublicWork/HandlePublicWorkDialog";
+import { PublicWorkInspectionsDialog } from "../dialogs/PublicWork/PublicWorkInspectionsDialog";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
@@ -194,3 +194,4 @@ export const ListPublicWork = observer(() => {
     </>
   );
 });
+

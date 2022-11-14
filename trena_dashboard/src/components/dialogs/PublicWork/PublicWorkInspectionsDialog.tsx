@@ -6,7 +6,7 @@ import { Inspection } from "../../../core/models/Inspection";
 import { InspectionServiceQuery } from "../../../core/network/services/InspectionService";
 import { inspectionsStatusMapping } from "../../../utils/mapper";
 import { InfoAccorion } from "../../Accordion";
-import { InfoTextField } from "../../Inputs/InfoTextField";
+import { InfoTextField } from "../../inputs/InfoTextField";
 import { MockSwiper } from "../../Swiper";
 import { TableDialogContainer } from "../DialogContainer";
 
@@ -91,3 +91,4 @@ export function PublicWorkInspectionsDialog({
     </TableDialogContainer>
   );
 }
+

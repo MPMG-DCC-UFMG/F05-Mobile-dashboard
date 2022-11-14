@@ -2,7 +2,7 @@ import { Construction, Map } from "@mui/icons-material";
 import { Grid } from "@mui/material";
 import React from "react";
 import { MapView } from "../../screens/views/publicWork/MapView";
-import { InfoTextField } from "../Inputs/InfoTextField";
+import { InfoTextField } from "../inputs/InfoTextField";
 
 export function QueuePublicWork() {
   return (
@@ -25,3 +25,4 @@ export function QueuePublicWork() {
     </Grid>
   );
 }
+

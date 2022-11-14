@@ -1,8 +1,7 @@
-import { Grid } from "@mui/material";
 import { observer } from "mobx-react";
 import React from "react";
-import { DashboardContentContainer } from "../components/Containers/ContentContainer";
-import { DashboardContainer } from "../components/Containers/DashboardContainer";
+import { DashboardContentContainer } from "../components/containers/ContentContainer";
+import { DashboardContainer } from "../components/containers/DashboardContainer";
 import { ListUser } from "../components/lists/ListUser";
 import { useStores } from "../core/contexts/UseStores";
 
@@ -13,8 +12,9 @@ export const UserManagementScreen: React.FC<any> = observer(() => {
   return (
     <DashboardContainer>
       <DashboardContentContainer>
-          <ListUser />
+        <ListUser />
       </DashboardContentContainer>
     </DashboardContainer>
   );
 });
+

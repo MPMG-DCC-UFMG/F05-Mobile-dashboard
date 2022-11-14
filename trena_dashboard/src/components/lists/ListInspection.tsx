@@ -15,7 +15,7 @@ import { useQuery } from "react-query";
 import { Inspection } from "../../core/models/Inspection";
 import { InspectionServiceQuery } from "../../core/network/services/InspectionService";
 import { inspectionsStatusMapping } from "../../utils/mapper";
-import { InspectionCollectsDialog } from "../Dialogs/Inspection/InspectionCollects";
+import { InspectionCollectsDialog } from "../dialogs/Inspection/InspectionCollects";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
@@ -124,3 +124,4 @@ export function ListInspection() {
     </>
   );
 }
+

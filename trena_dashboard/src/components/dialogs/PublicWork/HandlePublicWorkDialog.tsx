@@ -21,12 +21,12 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useStores } from "../../../core/contexts/UseStores";
-import { InfoTextField } from "../../Inputs/InfoTextField";
 import { TableDialogContainer, TableDialogProps } from "../DialogContainer";
 
 import { useMutation } from "react-query";
 import { PublicWork } from "../../../core/models/PublicWork";
 import { PublicWorkServiceQuery } from "../../../core/network/services/PublicWorkService";
+import { InfoTextField } from "../../inputs/InfoTextField";
 import { WarningField } from "../../WarningField";
 
 interface HandlePublicWorkDialogProps extends TableDialogProps {
@@ -237,3 +237,4 @@ export function HandlePublicWorkDialog({
     </TableDialogContainer>
   );
 }
+

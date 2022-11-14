@@ -10,7 +10,7 @@ import "swiper/css/pagination";
 
 import { inspectionsStatusMapping } from "../../../utils/mapper";
 import { InfoAccorion } from "../../Accordion";
-import { InfoTextField } from "../../Inputs/InfoTextField";
+import { InfoTextField } from "../../inputs/InfoTextField";
 import { MockSwiper } from "../../Swiper";
 import { TableDialogContainer, TableDialogProps } from "../DialogContainer";
 
@@ -72,3 +72,4 @@ export function InspectionCollectsDialog({
     </TableDialogContainer>
   );
 }
+

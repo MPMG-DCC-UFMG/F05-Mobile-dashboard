@@ -2,8 +2,8 @@ import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Navigate } from "react-router-dom";
-import { MPNotification } from "../components/Elements/Notification";
-import { InputField } from "../components/Form/InputField";
+import { MPNotification } from "../components/elements/Notification";
+import { InputField } from "../components/form/InputField";
 import { useStores } from "../core/contexts/UseStores";
 import { SecurityServiceQuery } from "../core/network/services/SecurityService";
 import { ReactComponent as Logo } from "../images/logo.svg";
@@ -104,3 +104,4 @@ export const LoginScreen: React.FC<any> = observer(() => {
     </>
   );
 });
+
