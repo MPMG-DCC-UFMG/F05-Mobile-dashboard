@@ -17,19 +17,26 @@ import { useStores } from "../../core/contexts/UseStores";
 import { TypeWork } from "../../core/models/TypeWork";
 import { TypeWorkServiceQuery } from "../../core/network/services/TypeWorkService";
 import { AddTypeOfWorkDialog } from "../Dialogs/TypeOfWork/AddTypeOfWorkDialog";
+import { EditTypeOfWorkDialog } from "../Dialogs/TypeOfWork/EditTypeOfWorkDialog";
 import { Search } from "../Form/Search";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListTypeWork = observer(() => {
-  const { data: typeWorks, isLoading } = useQuery<TypeWork[]>(
-    "getTypeWork",
-    TypeWorkServiceQuery.loadTypeWorks
-  );
 
+  const { data: typeWorks, isLoading } = useQuery(
+    ["getTypeWork"],
+    TypeWorkServiceQuery.loadTypeWorks,
+    {
+      onSuccess: (data) => {
+        setOpenEditTypeWorkDialog(Array(data.length).fill(false));
+      },
+    }
+  );
   const { typeWorkStore, viewStore, typePhotoStore } = useStores();
   const [addTypeWorkDialog, setOpenAddTypeWorkDialog] = useState(false);
+  const [editTypeWorkDialog, setOpenEditTypeWorkDialog] = useState<boolean[]>([]);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.currentTarget.value;
@@ -41,6 +48,13 @@ export const ListTypeWork = observer(() => {
       typeWorkStore.deleteTypeOfWork(typeWork.flag);
     }
   };
+
+  const handleOpenEditDialog = (index: number) => {
+    setOpenEditTypeWorkDialog(
+      editTypeWorkDialog.map((value, position) =>
+      (index === position ? true : value))
+    );
+  }
 
   return (
     <>
@@ -85,7 +99,7 @@ export const ListTypeWork = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {typeWorks.map((typeWork) => (
+                  {typeWorks!.map((typeWork: TypeWork, index: number) => (
                     <TableRow hover key={typeWork.flag}>
                       <TableCell align="center">{typeWork.name}</TableCell>
                       {/* <TableCell align="center">
@@ -93,9 +107,9 @@ export const ListTypeWork = observer(() => {
                           <Visibility />
                         </IconButton>
                       </TableCell> */}
-                      <TableCell align="center" >
-                        <IconButton color="info">
-                          <Edit />
+                      <TableCell align="center">
+                        <IconButton color="info" onClick={()=> handleOpenEditDialog(index)}>
+                          <Edit/>
                         </IconButton>
                       </TableCell>
                       <TableCell align="center">
@@ -106,6 +120,13 @@ export const ListTypeWork = observer(() => {
                           <Delete />
                         </IconButton>
                       </TableCell>
+                      <EditTypeOfWorkDialog
+                      state={editTypeWorkDialog}
+                      setState={setOpenEditTypeWorkDialog}
+                      typeWork={typeWork}
+                      index={index}
+                      title='Editar Tipo de Obra'
+                    />
                     </TableRow>
                   ))}
                 </TableBody>

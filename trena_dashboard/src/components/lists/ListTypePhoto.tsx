@@ -17,17 +17,25 @@ import { useStores } from "../../core/contexts/UseStores";
 import { TypePhoto } from "../../core/models/TypePhoto";
 import { TypePhotoService } from "../../core/network/services/TypePhotoService";
 import { AddTypeOfPhotoDialog } from "../Dialogs/TypePhoto/AddTypeOfPhotoDialog";
+import { EditTypeOfPhotoDialog } from "../Dialogs/TypePhoto/EditTypeOfPhotoDialog";
 import { Search } from "../Form/Search";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListTypePhoto = observer(() => {
-  const { data: typePhoto, isLoading } = useQuery("getTypePhoto", () =>
-    TypePhotoService.loadTypePhotos()
+  const { data: typePhoto, isLoading } = useQuery(
+    ["getTypePhoto"], 
+    TypePhotoService.loadTypePhotos,
+    {
+      onSuccess: (data) => {
+        setOpenEditTypePhotoDialog(Array(data.length).fill(false));
+      }
+    }
   );
   const { typePhotoStore, viewStore } = useStores();
   const [addTypePhotoDialog, setOpenAddTypePhotoDialog] = useState(false);
+  const [editTypePhotoDialog, setOpenEditTypePhotoDialog] = useState<boolean[]>([]);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.currentTarget.value;
@@ -38,13 +46,17 @@ export const ListTypePhoto = observer(() => {
     typePhotoStore.selectTypePhoto(typePhoto);
   };
 
-  const handleEdit = (typePhoto: TypePhoto) => {};
-
   const handleDeleteTypePhoto = (typePhoto: TypePhoto) => {
     if (typePhoto.flag) {
       typePhotoStore.deleteTypeOfPhoto(typePhoto.flag);
     }
   };
+
+  const handleOpenEditDialog = (index: number) => {
+    setOpenEditTypePhotoDialog(editTypePhotoDialog.map((value, position) => 
+      (position === index ? true : value)
+    ))
+  }
 
   return (
     <>
@@ -89,7 +101,7 @@ export const ListTypePhoto = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {typePhotoStore.typePhotoList.map((typePhoto) => (
+                  {typePhotoStore.typePhotoList.map((typePhoto: TypePhoto, index: number) => (
                     <TableRow
                       key={typePhoto.flag}
                       hover
@@ -99,7 +111,7 @@ export const ListTypePhoto = observer(() => {
                       <TableCell>{typePhoto.description}</TableCell>
                       <TableCell>
                         <IconButton
-                          onClick={() => handleEdit(typePhoto)}
+                          onClick={() => handleOpenEditDialog(index)}
                           color="info"
                         >
                           <Edit />
@@ -113,6 +125,13 @@ export const ListTypePhoto = observer(() => {
                           <Delete />
                         </IconButton>
                       </TableCell>
+                      <EditTypeOfPhotoDialog
+                      state={editTypePhotoDialog}
+                      setState={setOpenEditTypePhotoDialog}
+                      typePhoto={typePhoto}
+                      index={index}
+                      title='Editar Tipo De Foto'
+                    />
                     </TableRow>
                   ))}
                 </TableBody>

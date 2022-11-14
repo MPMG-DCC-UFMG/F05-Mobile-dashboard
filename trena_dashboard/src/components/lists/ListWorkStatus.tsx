@@ -20,74 +20,29 @@ import { WorkStatusServiceQuery } from "../../core/network/services/WorkStatusSe
 import { DeleteView } from "../../screens/views/DeleteView";
 import WorkStatusCRUDView from "../../screens/views/workStatus/WorkStatusCRUDView";
 import { AddWorkStatusDialog } from "../Dialogs/StatusWork/AddWorkStatusDialog";
+import { EditWorkStatusDialog } from "../Dialogs/StatusWork/EditWorkStatusDialog";
 import { Search } from "../Form/Search";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListWorkStatus = observer(() => {
-  const { data: workStatus, isLoading } = useQuery<WorkStatus[]>(
-    "getWorkStatus",
-    WorkStatusServiceQuery.loadWorkStatus
+  const { data: workStatus, isLoading } = useQuery(
+    ["getWorkStatus"],
+    WorkStatusServiceQuery.loadWorkStatus,
+    {
+      onSuccess: (data) => {
+        setOpenEditWorkStatusDialog(Array(data.length).fill(false));
+      }
+    }
   );
   const [addWorkStatusDialog, setOpenAddWorkStatusDialog] = useState(false);
+  const [editWorkStatusDialog, setOpenEditWorkStatusDialog] = useState<boolean[]>([]);
   const { workStatusStore, viewStore } = useStores();
-
-  const createWorkStatusView = (
-    title: string,
-    confirm: string,
-    onConfirmClick: () => void,
-    onChangeWorkStatus: (workStatus: WorkStatus) => void,
-    defaultWorkStatus?: WorkStatus
-  ) => {
-    let workStatusView = {
-      title: title,
-      confirmButton: confirm,
-      onConfirmClick: onConfirmClick,
-      contentView: (
-        <WorkStatusCRUDView
-          onChangeWorkStatus={onChangeWorkStatus}
-          defaultWorkStatus={defaultWorkStatus}
-        />
-      ),
-    };
-    viewStore.setViewInModal(workStatusView);
-  };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.currentTarget.value;
     workStatusStore.search(query);
-  };
-
-  const handleAddClick = () => {
-    let mWorkStatus: WorkStatus = { name: "", description: "" };
-    createWorkStatusView(
-      "Adicionar estado da obra",
-      "Adicionar",
-      () => {
-        workStatusStore.addWorkStatus(mWorkStatus);
-      },
-      (typePhoto: TypePhoto) => {
-        mWorkStatus = typePhoto;
-      }
-    );
-  };
-
-  const handleEditClick = () => {
-    if (workStatusStore.selectedWorkStatus) {
-      let mWorkStatus = workStatusStore.selectedWorkStatus;
-      createWorkStatusView(
-        "Editar possível estado da obra",
-        "Editar",
-        () => {
-          workStatusStore.updateWorkStatus(mWorkStatus);
-        },
-        (workStatus: WorkStatus) => {
-          mWorkStatus = workStatus;
-        },
-        mWorkStatus
-      );
-    }
   };
 
   const handleDeleteClick = () => {
@@ -112,6 +67,12 @@ export const ListWorkStatus = observer(() => {
       workStatusStore.deleteWorkStatus(workStatus.flag);
     }
   };
+
+  const handleOpenEditDialog = (index: number) => {
+    setOpenEditWorkStatusDialog(editWorkStatusDialog.map((value, position) => 
+      (position === index ? true : value)
+    ))
+  }
 
   return (
     <>
@@ -156,7 +117,7 @@ export const ListWorkStatus = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {workStatus.map((workStatus) => (
+                  {workStatus!.map((workStatus: WorkStatus, index: number) => (
                     <TableRow hover key={workStatus.flag}>
                       <TableCell align="center">{workStatus.name}</TableCell>
                       {/* <TableCell align="center">
@@ -168,7 +129,7 @@ export const ListWorkStatus = observer(() => {
                         {workStatus.description}
                       </TableCell>
                       <TableCell align="center">
-                        <IconButton color="info">
+                        <IconButton color="info" onClick={()=> handleOpenEditDialog(index)}>
                           <Edit />
                         </IconButton>
                       </TableCell>
@@ -180,6 +141,13 @@ export const ListWorkStatus = observer(() => {
                           <Delete />
                         </IconButton>
                       </TableCell>
+                      <EditWorkStatusDialog
+                        state={editWorkStatusDialog}
+                        setState={setOpenEditWorkStatusDialog}
+                        workStatus={workStatus}
+                        index={index}
+                        title='Editar Estado Da Obra'
+                      />  
                     </TableRow>
                   ))}
                 </TableBody>

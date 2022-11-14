@@ -43,7 +43,7 @@ export function AddTypeOfWorkDialog({
         label="Tipo da Obra"
         fullWidth
       />
-      <Typography sx={{ mt: 3 }} variant="subtitle1">
+      {/* <Typography sx={{ mt: 3 }} variant="subtitle1">
         Tipos de Foto:
       </Typography>
       <TableContainer>
@@ -57,7 +57,7 @@ export function AddTypeOfWorkDialog({
             </TableRow>
           ))}
         </Table>
-      </TableContainer>
+      </TableContainer> */}
       <Grid
         container
         spacing={2}

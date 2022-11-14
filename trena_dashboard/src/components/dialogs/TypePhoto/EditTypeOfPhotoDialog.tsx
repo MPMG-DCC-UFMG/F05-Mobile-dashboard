@@ -1,47 +1,43 @@
 import {
     Button,
-    Checkbox,
     Grid,
-    Table,
-    TableCell,
-    TableContainer,
-    TableRow,
     TextField,
-    Typography,
   } from "@mui/material";
   import React, { useState } from "react";
   import { useStores } from "../../../core/contexts/UseStores";
-  import { TypeWork } from "../../../core/models/TypeWork";
+import { TypePhoto } from "../../../core/models/TypePhoto";
   import {TableDialogContainer} from "../DialogContainer";
 
-  interface EditTypeOfWorkDialog{
+  interface EditTypeOfPhotoDialog{
     state: boolean[];
     setState(state: boolean[]): void;
-    typeWork: TypeWork;
+    typePhoto: TypePhoto;
     index: number;
     title: string;
   }
   
-  export function EditTypeOfWorkDialog({
+  export function EditTypeOfPhotoDialog({
     state,
     setState,
-    typeWork,
+    typePhoto,
     index,
     title,
-  }: EditTypeOfWorkDialog) {
+  }: EditTypeOfPhotoDialog) {
     
-    const { typeWorkStore, typePhotoStore } = useStores();
-    const [form, setForm] = useState<string>("");
+    const {typePhotoStore } = useStores();
+    const [name, setName] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
     
     const handleCloseDialog = (index: number) =>{
       setState(state.map((value, position) => position === index ? false : value))
     }
 
-    const handleTypeOfWorkStatus = (typeWork: TypeWork) =>{
-      typeWork.name = form;
-      typeWorkStore.updateTypeWork(typeWork);
-      handleCloseDialog(index);
-  }
+    const handleEditTypePhoto = (typePhoto: TypePhoto) =>{
+        typePhoto.name = name;
+        typePhoto.description = description;
+        typePhotoStore.updateTypePhoto(typePhoto);
+        handleCloseDialog(index);
+    }
   
     return (
       <TableDialogContainer
@@ -52,24 +48,20 @@ import {
       >
         <Grid container justifyContent="space-between" alignItems="center">
         <TextField
-          onChange={(event) => setForm(event.currentTarget.value)}
+          onChange={(event) => setName(event.currentTarget.value)}
           required
-          label='Tipo da Obra'
-          defaultValue={typeWork.name}
+          label='Tipo Da Foto'
+          defaultValue={typePhoto.name}
           fullWidth
         />
-        <TableContainer>
-          <Table>
-            {typePhotoStore.typePhotoList.map((options) => (
-              <TableRow>
-                <TableCell>
-                  <Checkbox />
-                </TableCell>
-                <TableCell>{options.name}</TableCell>
-              </TableRow>
-            ))}
-          </Table>
-        </TableContainer>
+         <TextField
+          onChange={(event) => setDescription(event.currentTarget.value)}
+          required
+          label='Descrição Da Foto'
+          defaultValue={typePhoto.description}
+          fullWidth
+          sx={{mt:2}}
+        />
          <Grid
           container
           spacing={2}
@@ -84,7 +76,7 @@ import {
           </Grid>
           <Grid item display="flex">
             <Button 
-              onClick={()=> handleTypeOfWorkStatus(typeWork)}
+              onClick={()=> handleEditTypePhoto(typePhoto)}
               color="success" variant="contained">
               Salvar
             </Button>
