@@ -1,4 +1,3 @@
-import { Grid } from "@mui/material";
 import React from "react";
 import { DashboardContentContainer } from "../components/Containers/ContentContainer";
 import { DashboardContainer } from "../components/Containers/DashboardContainer";
@@ -8,7 +7,7 @@ export const WorkStatusScreen: React.FC<any> = (props) => {
   return (
     <DashboardContainer>
       <DashboardContentContainer>
-          <ListWorkStatus />
+        <ListWorkStatus />
       </DashboardContentContainer>
     </DashboardContainer>
   );
