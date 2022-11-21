@@ -1,14 +1,21 @@
 import { TablePagination as MuiTablePagination } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
 interface TablePaginationProps {
+  rowsPerPage: number;
+  setRowsPerPage(rows: number): void;
+  page: number;
+  setPage(page: number): void;
   data: any[];
 }
 
-export function TablePagination({ data }: TablePaginationProps) {
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
-
+export function TablePagination({
+  data,
+  rowsPerPage,
+  setRowsPerPage,
+  page,
+  setPage,
+}: TablePaginationProps) {
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
     page: number
