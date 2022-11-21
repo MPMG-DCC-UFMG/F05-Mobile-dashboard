@@ -1,11 +1,11 @@
-import { CalendarMonth, Gite, Queue } from "@mui/icons-material";
+import { CalendarMonth, Gite, Security } from "@mui/icons-material";
 import { Container, Grid } from "@mui/material";
 import React from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { CollectServiceQuery } from "../../core/network/services/CollectService";
+import { InspectionServiceQuery } from "../../core/network/services/InspectionService";
 import { PublicWorkServiceQuery } from "../../core/network/services/PublicWorkService";
-import { QueueServiceQuery } from "../../core/network/services/QueueService";
 import { Card } from "./CardModel";
 
 export function HomeCards() {
@@ -13,12 +13,12 @@ export function HomeCards() {
   const { data: publicWorkCount } = useQuery<number>(["publicWorkCount"], () =>
     PublicWorkServiceQuery.countPublicWork()
   );
-  const { data: collectMountCount } = useQuery<number>(
-    ["collectMounthCount"],
-    () => CollectServiceQuery.collectMonthCount()
+  const { data: mpInspections } = useQuery<number>(["mpInspectionsCount"], () =>
+    InspectionServiceQuery.countMpInspections()
   );
-  const { data: queueCount } = useQuery<number>(["queueCount"], () =>
-    QueueServiceQuery.countQueue()
+  const { data: usersInspections } = useQuery<number>(
+    ["usersInspectionsCount"],
+    () => CollectServiceQuery.collectMonthCount()
   );
 
   const handleClickWorks = () => navigate("/publicWork");
@@ -41,20 +41,20 @@ export function HomeCards() {
         </Grid>
         <Grid item style={{ width: "33.3%" }}>
           <Card
-            title="Coletas no Mês"
-            icon={<CalendarMonth />}
-            value={collectMountCount ? collectMountCount.toString() : "0"}
-            iconColor="gray"
-            onClick={handleClickCollect}
+            title="Vistorias Técnicas"
+            icon={<Security />}
+            value={mpInspections ? mpInspections.toString() : "0"}
+            iconColor="green"
+            onClick={handleClickQueue}
           />
         </Grid>
         <Grid item style={{ width: "33.3%" }}>
           <Card
-            title="Dados na Fila"
-            icon={<Queue />}
-            value={queueCount ? queueCount.toString() : "0"}
-            iconColor="green"
-            onClick={handleClickQueue}
+            title="Vistorias Cidadãs no mês"
+            icon={<CalendarMonth />}
+            value={usersInspections ? usersInspections.toString() : "0"}
+            iconColor="gray"
+            onClick={handleClickCollect}
           />
         </Grid>
       </Grid>

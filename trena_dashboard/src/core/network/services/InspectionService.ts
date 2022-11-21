@@ -49,6 +49,12 @@ const loadInspections = async () => {
   return res.body;
 };
 
+const countMpInspections = async () => {
+  const call = Config.BASE_URL + "/inspections/count";
+  const res = await TrenaAPI.network().get(call);
+  return res.body;
+};
+
 const getPublicWorkInspections = async (publicWorkId: string) => {
   const call = Config.BASE_URL + "/inspections/publicwork/" + publicWorkId;
   const res = await TrenaAPI.network().get(call).type("application/json");
@@ -75,6 +81,7 @@ const updateInspection = async (inspection: Inspection) => {
 
 export const InspectionServiceQuery = {
   loadInspections,
+  countMpInspections,
   getPublicWorkInspections,
   addInspection,
   updateInspection,
