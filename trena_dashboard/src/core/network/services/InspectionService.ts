@@ -79,10 +79,23 @@ const updateInspection = async (inspection: Inspection) => {
   return res.body;
 };
 
+const getInspectionReport = async (inspectionFlag: number) => {
+  const call = Config.BASE_URL + `/inspections/report/${inspectionFlag}`;
+  const res = await TrenaAPI.network().get(call).responseType("blob");
+
+  const url = window.URL.createObjectURL(res.body);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = `relatorio-automatico-vistoria${inspectionFlag}`;
+  anchor.click();
+  anchor.remove();
+};
+
 export const InspectionServiceQuery = {
   loadInspections,
   countMpInspections,
   getPublicWorkInspections,
   addInspection,
   updateInspection,
+  getInspectionReport,
 };
