@@ -1,4 +1,4 @@
-import { Delete, Edit, Visibility } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import {
   Divider,
   Grid,
@@ -27,6 +27,8 @@ export const ListTypeWork = observer(() => {
     "getTypeWork",
     TypeWorkServiceQuery.loadTypeWorks
   );
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(0);
 
   const { typeWorkStore, viewStore, typePhotoStore } = useStores();
   const [addTypeWorkDialog, setOpenAddTypeWorkDialog] = useState(false);
@@ -85,32 +87,40 @@ export const ListTypeWork = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {typeWorks.map((typeWork) => (
-                    <TableRow hover key={typeWork.flag}>
-                      <TableCell align="center">{typeWork.name}</TableCell>
-                      {/* <TableCell align="center">
+                  {typeWorks
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((typeWork) => (
+                      <TableRow hover key={typeWork.flag}>
+                        <TableCell align="center">{typeWork.name}</TableCell>
+                        {/* <TableCell align="center">
                         <IconButton>
                           <Visibility />
                         </IconButton>
                       </TableCell> */}
-                      <TableCell align="center" >
-                        <IconButton color="info">
-                          <Edit />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell align="center">
-                        <IconButton
-                          onClick={() => handleDeleteTypeWork(typeWork)}
-                          color="error"
-                        >
-                          <Delete />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        <TableCell align="center">
+                          <IconButton color="info">
+                            <Edit />
+                          </IconButton>
+                        </TableCell>
+                        <TableCell align="center">
+                          <IconButton
+                            onClick={() => handleDeleteTypeWork(typeWork)}
+                            color="error"
+                          >
+                            <Delete />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
-              <TablePagination data={typeWorks} />
+              <TablePagination
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                page={page}
+                setPage={setPage}
+                data={typeWorks}
+              />
             </Heading>
           </Paper>
         </Grid>

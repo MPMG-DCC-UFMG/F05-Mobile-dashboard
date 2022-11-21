@@ -1,21 +1,21 @@
-import { Edit, Delete } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import {
   Divider,
   Grid,
+  IconButton,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  IconButton,
 } from "@mui/material";
 import { observer } from "mobx-react";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useStores } from "../../core/contexts/UseStores";
 import { TypePhoto } from "../../core/models/TypePhoto";
-import { TypePhotoService } from "../../core/network/services/TypePhotoService";
+import { TypePhotoServiceQuery } from "../../core/network/services/TypePhotoService";
 import { AddTypeOfPhotoDialog } from "../Dialogs/TypePhoto/AddTypeOfPhotoDialog";
 import { Search } from "../Form/Search";
 import { Heading } from "../Heading";
@@ -23,11 +23,14 @@ import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListTypePhoto = observer(() => {
-  const { data: typePhoto, isLoading } = useQuery("getTypePhoto", () =>
-    TypePhotoService.loadTypePhotos()
+  const { data: typePhoto, isLoading } = useQuery<TypePhoto[]>(
+    "getTypePhoto",
+    () => TypePhotoServiceQuery.loadTypePhotos()
   );
   const { typePhotoStore, viewStore } = useStores();
   const [addTypePhotoDialog, setOpenAddTypePhotoDialog] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(0);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.currentTarget.value;
@@ -89,35 +92,43 @@ export const ListTypePhoto = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {typePhotoStore.typePhotoList.map((typePhoto) => (
-                    <TableRow
-                      key={typePhoto.flag}
-                      hover
-                      onClick={() => handleSelectPhoto(typePhoto)}
-                    >
-                      <TableCell>{typePhoto.name}</TableCell>
-                      <TableCell>{typePhoto.description}</TableCell>
-                      <TableCell>
-                        <IconButton
-                          onClick={() => handleEdit(typePhoto)}
-                          color="info"
-                        >
-                          <Edit />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell>
-                        <IconButton
-                          color="error"
-                          onClick={() => handleDeleteTypePhoto(typePhoto)}
-                        >
-                          <Delete />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {typePhoto
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((typePhoto) => (
+                      <TableRow
+                        key={typePhoto.flag}
+                        hover
+                        onClick={() => handleSelectPhoto(typePhoto)}
+                      >
+                        <TableCell>{typePhoto.name}</TableCell>
+                        <TableCell>{typePhoto.description}</TableCell>
+                        <TableCell>
+                          <IconButton
+                            onClick={() => handleEdit(typePhoto)}
+                            color="info"
+                          >
+                            <Edit />
+                          </IconButton>
+                        </TableCell>
+                        <TableCell>
+                          <IconButton
+                            color="error"
+                            onClick={() => handleDeleteTypePhoto(typePhoto)}
+                          >
+                            <Delete />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
-              <TablePagination data={typePhoto} />
+              <TablePagination
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                page={page}
+                setPage={setPage}
+                data={typePhoto}
+              />
             </Heading>
           </Paper>
         </Grid>

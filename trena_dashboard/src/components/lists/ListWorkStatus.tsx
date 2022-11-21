@@ -1,4 +1,4 @@
-import { Delete, Edit, Visibility } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import {
   Divider,
   Grid,
@@ -32,6 +32,8 @@ export const ListWorkStatus = observer(() => {
   );
   const [addWorkStatusDialog, setOpenAddWorkStatusDialog] = useState(false);
   const { workStatusStore, viewStore } = useStores();
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(0);
 
   const createWorkStatusView = (
     title: string,
@@ -156,35 +158,43 @@ export const ListWorkStatus = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {workStatus.map((workStatus) => (
-                    <TableRow hover key={workStatus.flag}>
-                      <TableCell align="center">{workStatus.name}</TableCell>
-                      {/* <TableCell align="center">
+                  {workStatus
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((workStatus) => (
+                      <TableRow hover key={workStatus.flag}>
+                        <TableCell align="center">{workStatus.name}</TableCell>
+                        {/* <TableCell align="center">
                         <IconButton>
                           <Visibility />
                         </IconButton>
                       </TableCell> */}
-                      <TableCell align="center">
-                        {workStatus.description}
-                      </TableCell>
-                      <TableCell align="center">
-                        <IconButton color="info">
-                          <Edit />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell align="center">
-                        <IconButton
-                          onClick={() => handleDeleteWorkStatus(workStatus)}
-                          color="error"
-                        >
-                          <Delete />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        <TableCell align="center">
+                          {workStatus.description}
+                        </TableCell>
+                        <TableCell align="center">
+                          <IconButton color="info">
+                            <Edit />
+                          </IconButton>
+                        </TableCell>
+                        <TableCell align="center">
+                          <IconButton
+                            onClick={() => handleDeleteWorkStatus(workStatus)}
+                            color="error"
+                          >
+                            <Delete />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
-              <TablePagination data={workStatus} />
+              <TablePagination
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                page={page}
+                setPage={setPage}
+                data={workStatus}
+              />
             </Heading>
           </Paper>
         </Grid>
