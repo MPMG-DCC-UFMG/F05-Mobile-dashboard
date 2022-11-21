@@ -35,7 +35,7 @@ export function HomeCards() {
             title="Obras cadastradas"
             icon={<Gite />}
             value={publicWorkCount ? publicWorkCount.toString() : "0"}
-            iconColor="gold"
+            iconColor="blue"
             onClick={handleClickWorks}
           />
         </Grid>
@@ -44,7 +44,7 @@ export function HomeCards() {
             title="Vistorias Técnicas"
             icon={<Security />}
             value={mpInspections ? mpInspections.toString() : "0"}
-            iconColor="green"
+            iconColor="#ED0000"
             onClick={handleClickQueue}
           />
         </Grid>
@@ -53,7 +53,7 @@ export function HomeCards() {
             title="Vistorias Cidadãs no mês"
             icon={<CalendarMonth />}
             value={usersInspections ? usersInspections.toString() : "0"}
-            iconColor="gray"
+            iconColor="#000000"
             onClick={handleClickCollect}
           />
         </Grid>

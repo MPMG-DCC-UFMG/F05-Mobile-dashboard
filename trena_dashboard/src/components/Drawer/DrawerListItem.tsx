@@ -1,4 +1,4 @@
-import { Dashboard, LinkedCamera, People, Queue } from "@material-ui/icons";
+import { Dashboard, LinkedCamera, People } from "@material-ui/icons";
 import {
   Construction,
   ExpandLess,
@@ -6,6 +6,7 @@ import {
   Folder,
   LocalSee,
   Logout,
+  Security,
   Settings,
   Troubleshoot,
 } from "@mui/icons-material";
@@ -100,21 +101,21 @@ export function DrawerListItem() {
         <ListItemIcon>
           <Folder />
         </ListItemIcon>
-        <ListItemText primary="Trena" />
+        <ListItemText primary="Vistorias" />
         {trena ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={trena} unmountOnExit>
         <MyListItem
           sx={{ pl: 4 }}
-          icon={<Queue />}
-          url="/queue"
-          iconText="Fila de Envios"
+          icon={<Security />}
+          url="/inspections"
+          iconText="Vistorias Técnicas"
         />
         <MyListItem
           sx={{ pl: 4 }}
           icon={<LocalSee />}
-          url="/inspections"
-          iconText="Vistorias"
+          url="/queue"
+          iconText="Vistorias Cidadãs"
         />
       </Collapse>
       <MyListItem
