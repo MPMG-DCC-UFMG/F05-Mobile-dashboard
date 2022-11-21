@@ -31,9 +31,7 @@ export function ListInspection() {
     }
   );
 
-  const { mutate, isLoading: isMutationLoading } = useMutation(
-    InspectionServiceQuery.getInspectionReport
-  );
+  const { mutate } = useMutation(InspectionServiceQuery.getInspectionReport);
 
   const [openCollectsModal, setOpenCollectsModal] = useState<boolean[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
