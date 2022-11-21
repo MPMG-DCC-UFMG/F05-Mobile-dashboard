@@ -1,4 +1,4 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, Visibility } from "@mui/icons-material";
 import {
   Grid,
   IconButton,
@@ -13,24 +13,37 @@ import { observer } from "mobx-react";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useStores } from "../../core/contexts/UseStores";
-import { User } from "../../core/models/User";
-import { SecurityServiceQuery } from "../../core/network/services/SecurityService";
+import { SecurityService } from "../../core/network/services/SecurityService";
 import { AddUsersDialog } from "../Dialogs/Users/AddUsersDialog";
+import { EditUserDialog } from "../Dialogs/Users/EditUserDialog";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListUser = observer(() => {
   const { userStore } = useStores();
-  const { data: users, isLoading } = useQuery<User[]>(
+  const { data: users, isLoading } = useQuery(
     "getUsers",
-    SecurityServiceQuery.loadUsersList
+    SecurityService.loadUsersList,
+    {
+      onSuccess: (data) => {
+        setOpenEditUserDialog(Array(data.length).fill(false));
+      },
+    }
   );
   const [addUserDialog, setOpenAddUserDialog] = useState(false);
+  const [editUserDialog, setOpenEditUserDialog] = useState<boolean[]>([]);
 
   const handleUserDeleted = (username: string) => {
     userStore.deleteUser(username);
   };
+
+  const handleOpenEditDialog = (index: number) => {
+    setOpenEditUserDialog(
+      editUserDialog.map((value, position) =>
+      (index === position ? true : value))
+    );
+  }
 
   return (
     <>
@@ -72,7 +85,7 @@ export const ListUser = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {users.map((user) => (
+                  {users.map((user, index) => (
                     <TableRow hover key={user.email}>
                       <TableCell align="center">{user.email}</TableCell>
                       <TableCell align="center">{user.role}</TableCell>
@@ -94,6 +107,13 @@ export const ListUser = observer(() => {
                           <Delete />
                         </IconButton>
                       </TableCell>
+                      <EditUserDialog
+                        state={editUserDialog}
+                        setState={setOpenEditUserDialog}
+                        user={user}
+                        index={index}
+                        title="Editar Usuário"
+                      />
                     </TableRow>
                   ))}
                 </TableBody>
