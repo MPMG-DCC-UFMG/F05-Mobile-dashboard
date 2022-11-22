@@ -1,4 +1,4 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, Visibility } from "@mui/icons-material";
 import {
   Divider,
   Grid,
@@ -14,99 +14,36 @@ import { observer } from "mobx-react";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useStores } from "../../core/contexts/UseStores";
-import { TypePhoto } from "../../core/models/TypePhoto";
 import { WorkStatus } from "../../core/models/WorkStatus";
 import { WorkStatusServiceQuery } from "../../core/network/services/WorkStatusService";
-import { DeleteView } from "../../screens/views/DeleteView";
-import WorkStatusCRUDView from "../../screens/views/workStatus/WorkStatusCRUDView";
 import { AddWorkStatusDialog } from "../Dialogs/StatusWork/AddWorkStatusDialog";
+import { EditWorkStatusDialog } from "../Dialogs/StatusWork/EditWorkStatusDialog";
 import { Search } from "../Form/Search";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListWorkStatus = observer(() => {
-  const { data: workStatus, isLoading } = useQuery<WorkStatus[]>(
-    "getWorkStatus",
-    WorkStatusServiceQuery.loadWorkStatus
+  const { data: workStatus, isLoading } = useQuery(
+    ["getWorkStatus"],
+    WorkStatusServiceQuery.loadWorkStatus,
+    {
+      onSuccess: (data) => {
+        setOpenEditWorkStatusDialog(Array(data.length).fill(false));
+        setAtualTable(workStatusStore.workStatusList);
+      }
+    }
   );
+   const { workStatusStore} = useStores();
   const [addWorkStatusDialog, setOpenAddWorkStatusDialog] = useState(false);
-  const { workStatusStore, viewStore } = useStores();
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
-
-  const createWorkStatusView = (
-    title: string,
-    confirm: string,
-    onConfirmClick: () => void,
-    onChangeWorkStatus: (workStatus: WorkStatus) => void,
-    defaultWorkStatus?: WorkStatus
-  ) => {
-    let workStatusView = {
-      title: title,
-      confirmButton: confirm,
-      onConfirmClick: onConfirmClick,
-      contentView: (
-        <WorkStatusCRUDView
-          onChangeWorkStatus={onChangeWorkStatus}
-          defaultWorkStatus={defaultWorkStatus}
-        />
-      ),
-    };
-    viewStore.setViewInModal(workStatusView);
-  };
+  const [editWorkStatusDialog, setOpenEditWorkStatusDialog] = useState<boolean[]>([]);
+  const [atualTable, setAtualTable] = useState<WorkStatus[]>(workStatusStore.workStatusList);
+ 
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.currentTarget.value;
     workStatusStore.search(query);
-  };
-
-  const handleAddClick = () => {
-    let mWorkStatus: WorkStatus = { name: "", description: "" };
-    createWorkStatusView(
-      "Adicionar estado da obra",
-      "Adicionar",
-      () => {
-        workStatusStore.addWorkStatus(mWorkStatus);
-      },
-      (typePhoto: TypePhoto) => {
-        mWorkStatus = typePhoto;
-      }
-    );
-  };
-
-  const handleEditClick = () => {
-    if (workStatusStore.selectedWorkStatus) {
-      let mWorkStatus = workStatusStore.selectedWorkStatus;
-      createWorkStatusView(
-        "Editar possível estado da obra",
-        "Editar",
-        () => {
-          workStatusStore.updateWorkStatus(mWorkStatus);
-        },
-        (workStatus: WorkStatus) => {
-          mWorkStatus = workStatus;
-        },
-        mWorkStatus
-      );
-    }
-  };
-
-  const handleDeleteClick = () => {
-    if (workStatusStore.selectedWorkStatus !== undefined) {
-      const mWorkStatus = workStatusStore.selectedWorkStatus;
-      let deleteView = {
-        title: "Deletar tipo de foto",
-        confirmButton: "Deletar",
-        onConfirmClick: () => {
-          if (mWorkStatus.flag) {
-            workStatusStore.deleteWorkStatus(mWorkStatus.flag);
-          }
-        },
-        contentView: <DeleteView toDelete={mWorkStatus.name} />,
-      };
-      viewStore.setViewInModal(deleteView);
-    }
+    setAtualTable(workStatusStore.workStatusList);
   };
 
   const handleDeleteWorkStatus = (workStatus: WorkStatus) => {
@@ -114,6 +51,12 @@ export const ListWorkStatus = observer(() => {
       workStatusStore.deleteWorkStatus(workStatus.flag);
     }
   };
+
+  const handleOpenEditDialog = (index: number) => {
+    setOpenEditWorkStatusDialog(editWorkStatusDialog.map((value, position) => 
+      (position === index ? true : value)
+    ))
+  }
 
   return (
     <>
@@ -158,43 +101,42 @@ export const ListWorkStatus = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {workStatus
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((workStatus) => (
-                      <TableRow hover key={workStatus.flag}>
-                        <TableCell align="center">{workStatus.name}</TableCell>
-                        {/* <TableCell align="center">
+                  {workStatus!.map((workStatus: WorkStatus, index: number) => (
+                    <TableRow hover key={workStatus.flag}>
+                      <TableCell align="center">{workStatus.name}</TableCell>
+                      {/* <TableCell align="center">
                         <IconButton>
                           <Visibility />
                         </IconButton>
                       </TableCell> */}
-                        <TableCell align="center">
-                          {workStatus.description}
-                        </TableCell>
-                        <TableCell align="center">
-                          <IconButton color="info">
-                            <Edit />
-                          </IconButton>
-                        </TableCell>
-                        <TableCell align="center">
-                          <IconButton
-                            onClick={() => handleDeleteWorkStatus(workStatus)}
-                            color="error"
-                          >
-                            <Delete />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                      <TableCell align="center">
+                        {workStatus.description}
+                      </TableCell>
+                      <TableCell align="center">
+                        <IconButton color="info" onClick={()=> handleOpenEditDialog(index)}>
+                          <Edit />
+                        </IconButton>
+                      </TableCell>
+                      <TableCell align="center">
+                        <IconButton
+                          onClick={() => handleDeleteWorkStatus(workStatus)}
+                          color="error"
+                        >
+                          <Delete />
+                        </IconButton>
+                      </TableCell>
+                      <EditWorkStatusDialog
+                        state={editWorkStatusDialog}
+                        setState={setOpenEditWorkStatusDialog}
+                        workStatus={workStatus}
+                        index={index}
+                        title='Editar Estado Da Obra'
+                      />  
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
-              <TablePagination
-                rowsPerPage={rowsPerPage}
-                setRowsPerPage={setRowsPerPage}
-                page={page}
-                setPage={setPage}
-                data={workStatus}
-              />
+              <TablePagination data={workStatus} />
             </Heading>
           </Paper>
         </Grid>

@@ -1,4 +1,4 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, Visibility } from "@mui/icons-material";
 import {
   Divider,
   Grid,
@@ -16,26 +16,37 @@ import { useQuery } from "react-query";
 import { useStores } from "../../core/contexts/UseStores";
 import { TypeWork } from "../../core/models/TypeWork";
 import { TypeWorkServiceQuery } from "../../core/network/services/TypeWorkService";
+import { ConfirmActionDialog } from "../Dialogs/ConfirmActionDialog";
 import { AddTypeOfWorkDialog } from "../Dialogs/TypeOfWork/AddTypeOfWorkDialog";
+import { EditTypeOfWorkDialog } from "../Dialogs/TypeOfWork/EditTypeOfWorkDialog";
 import { Search } from "../Form/Search";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListTypeWork = observer(() => {
-  const { data: typeWorks, isLoading } = useQuery<TypeWork[]>(
-    "getTypeWork",
-    TypeWorkServiceQuery.loadTypeWorks
-  );
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
 
-  const { typeWorkStore, viewStore, typePhotoStore } = useStores();
+  const { data: typeWorks, isLoading } = useQuery(
+    ["getTypeWork"],
+    TypeWorkServiceQuery.loadTypeWorks,
+    {
+      onSuccess: (data) => {
+        setOpenEditTypeWorkDialog(Array(data.length).fill(false));
+        setOpenDeleteDialog(Array(data.length).fill(false));
+        setAtualTable(typeWorkStore.typeWorksList);
+      },
+    }
+  );
+  const { typeWorkStore} = useStores();
   const [addTypeWorkDialog, setOpenAddTypeWorkDialog] = useState(false);
+  const [editTypeWorkDialog, setOpenEditTypeWorkDialog] = useState<boolean[]>([]);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean[]>([]);
+  const [atualTable, setAtualTable] = useState<TypeWork[]>(typeWorkStore.typeWorksList);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.currentTarget.value;
     typeWorkStore.search(query);
+    setAtualTable(typeWorkStore.typeWorksList);
   };
 
   const handleDeleteTypeWork = (typeWork: TypeWork) => {
@@ -43,6 +54,20 @@ export const ListTypeWork = observer(() => {
       typeWorkStore.deleteTypeOfWork(typeWork.flag);
     }
   };
+
+  const handleOpenEditDialog = (index: number) => {
+    setOpenEditTypeWorkDialog(
+      editTypeWorkDialog.map((value, position) =>
+      (index === position ? true : value))
+    );
+  }
+
+  const handleOpenDeleteDialog = (index: number) => {
+    setOpenDeleteDialog(
+      openDeleteDialog.map((value, position) =>
+      (index === position ? true : value))
+    );
+  }
 
   return (
     <>
@@ -87,40 +112,45 @@ export const ListTypeWork = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {typeWorks
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((typeWork) => (
-                      <TableRow hover key={typeWork.flag}>
-                        <TableCell align="center">{typeWork.name}</TableCell>
-                        {/* <TableCell align="center">
+                  {atualTable.map((typeWork: TypeWork, index: number) => (
+                    <TableRow hover key={typeWork.flag}>
+                      <TableCell align="center">{typeWork.name}</TableCell>
+                      {/* <TableCell align="center">
                         <IconButton>
                           <Visibility />
                         </IconButton>
                       </TableCell> */}
-                        <TableCell align="center">
-                          <IconButton color="info">
-                            <Edit />
-                          </IconButton>
-                        </TableCell>
-                        <TableCell align="center">
-                          <IconButton
-                            onClick={() => handleDeleteTypeWork(typeWork)}
-                            color="error"
-                          >
-                            <Delete />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                      <TableCell align="center">
+                        <IconButton color="info" onClick={()=> handleOpenEditDialog(index)}>
+                          <Edit/>
+                        </IconButton>
+                      </TableCell>
+                      <TableCell align="center">
+                        <IconButton
+                          onClick={() => handleDeleteTypeWork(typeWork)}
+                          color="error"
+                        >
+                          <Delete />
+                        </IconButton>
+                      </TableCell>
+                      <EditTypeOfWorkDialog
+                      state={editTypeWorkDialog}
+                      setState={setOpenEditTypeWorkDialog}
+                      typeWork={typeWork}
+                      index={index}
+                      title='Editar Tipo de Obra'
+                    />
+                    <ConfirmActionDialog 
+                      message="Confirmar Exclusão"
+                      action={() => handleDeleteTypeWork(typeWork)}
+                      state={openDeleteDialog}
+                      setState={() => setOpenDeleteDialog}
+                    />  
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
-              <TablePagination
-                rowsPerPage={rowsPerPage}
-                setRowsPerPage={setRowsPerPage}
-                page={page}
-                setPage={setPage}
-                data={typeWorks}
-              />
+              <TablePagination data={typeWorks} />
             </Heading>
           </Paper>
         </Grid>

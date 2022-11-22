@@ -1,85 +1,99 @@
 import {
-    Button,
-    Checkbox,
-    Grid,
-    Table,
-    TableCell,
-    TableContainer,
-    TableRow,
-    TextField,
-    Typography,
-  } from "@mui/material";
-  import React, { useState } from "react";
-  import { useStores } from "../../../core/contexts/UseStores";
-  import { TypeWork } from "../../../core/models/TypeWork";
-  import {
-    SingleDialogContainer,
-    SingleDialogContainerProps,
-  } from "../DialogContainer";
+  Button,
+  Checkbox,
+  Grid,
+  Table,
+  TableCell,
+  TableContainer,
+  TableRow,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React, { useState } from "react";
+import { useStores } from "../../../core/contexts/UseStores";
+import { TypeWork } from "../../../core/models/TypeWork";
+import { TableDialogContainer } from "../DialogContainer";
+
+
+interface EditTypeOfWorkDialog{
+  state: boolean[];
+  setState(state: boolean[]): void;
+  typeWork: TypeWork;
+  index: number;
+  title: string;
+}
+
+export function EditTypeOfWorkDialog({
+  state,
+  setState,
+  typeWork,
+  index,
+  title,
+}: EditTypeOfWorkDialog) {
   
-  export function EditTypeOfWorkDialog({
-    state,
-    setState,
-    title,
-  }: SingleDialogContainerProps, typeWork: TypeWork) {
-    const { typeWorkStore, typePhotoStore } = useStores();
-    const [form, setForm] = useState<string>("");
-   
-    const handleEditTypeOfWork = () => {
-      const work: TypeWork = { name: form, status_list: [] };
-      typeWorkStore.updateTypeWork(work);
-      setState(false);
-    };
+  const { typeWorkStore, typePhotoStore } = useStores();
+  const [form, setForm] = useState<string>("");
   
-    const handleCloseDialog = () => {
-      setState(false);
-    }
-  
-    return (
-      <SingleDialogContainer state={state} setState={setState} title={title}>
-        <TextField
-          onChange={(event) => setForm(event.currentTarget.value)}
-          required
-          label="Tipo da Obra"
-          defaultValue={typeWork.name}
-          fullWidth
-        />
-        <Typography sx={{ mt: 3 }} variant="subtitle1">
-          Tipos de Foto:
-        </Typography>
-        <TableContainer>
-          <Table>
-            {typePhotoStore.typePhotoList.map((options) => (
-              <TableRow>
-                <TableCell>
-                  <Checkbox />
-                </TableCell>
-                <TableCell>{options.name}</TableCell>
-              </TableRow>
-            ))}
-          </Table>
-        </TableContainer>
-        <Grid
-          container
-          spacing={2}
-          sx={{ display: "flex", justifyContent: "flex-end", mt:2 }}
-        >
-          <Grid item display="flex">
-            <Button 
-             onClick={handleCloseDialog}
-             color="error" variant="contained">
-              Cancelar
-            </Button>
-          </Grid>
-          <Grid item display="flex">
-            <Button 
-              onClick={handleEditTypeOfWork}
-              color="success" variant="contained">
-              Confirmar
-            </Button>
-          </Grid>
-        </Grid>
-      </SingleDialogContainer>
-    );
+  const handleCloseDialog = (index: number) =>{
+    setState(state.map((value, position) => position === index ? false : value))
   }
+
+  const handleTypeOfWorkStatus = (typeWork: TypeWork) =>{
+    typeWork.name = form;
+    typeWorkStore.updateTypeWork(typeWork);
+    handleCloseDialog(index);
+}
+
+  return (
+    <TableDialogContainer
+      state={state}
+      setState={setState}
+      index={index}
+      title={title}
+    >
+      <Grid container justifyContent="space-between" alignItems="center">
+      <TextField
+        onChange={(event) => setForm(event.currentTarget.value)}
+        required
+        label='Tipo da Obra'
+        defaultValue={typeWork.name}
+        fullWidth
+      />
+      <TableContainer>
+        <Table>
+          {typePhotoStore.typePhotoList.map((options) => (
+            <TableRow>
+              <TableCell>
+                <Checkbox />
+              </TableCell>
+              <TableCell>{options.name}</TableCell>
+            </TableRow>
+          ))}
+        </Table>
+      </TableContainer>
+       <Grid
+        container
+        spacing={2}
+        sx={{ display: "flex", justifyContent: "flex-end", mt:2 }}
+      >
+        <Grid item display="flex">
+          <Button 
+           onClick={() => handleCloseDialog(index)}
+           color="error" variant="contained">
+            Cancelar
+          </Button>
+        </Grid>
+        <Grid item display="flex">
+          <Button 
+            onClick={()=> handleTypeOfWorkStatus(typeWork)}
+            color="success" variant="contained">
+            Salvar
+          </Button>
+        </Grid>
+      </Grid> 
+      </Grid>
+      </TableDialogContainer>
+  );
+}
+
   
