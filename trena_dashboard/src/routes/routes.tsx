@@ -8,6 +8,7 @@ import { QueueScreen } from "../screens/QueueScreen";
 import { TypeOfWorkScreen } from "../screens/TypeOfWorkScreen";
 import { TypePhotoScreen } from "../screens/TypePhotoScreen";
 import { UserManagementScreen } from "../screens/UserManagementScreen";
+import { UserSettingScreen } from "../screens/UserSettingsScreen";
 import { WorkStatusScreen } from "../screens/WorkStatusScreen";
 
 export function AppRoutes() {
@@ -23,6 +24,7 @@ export function AppRoutes() {
         <Route path="/users" element={<UserManagementScreen />} />
         <Route path="/queue" element={<QueueScreen />} />
         <Route path="/inspections" element={<InspectionScreen />} />
+        <Route path="/userSettings" element={<UserSettingScreen/>}/>
       </Routes>
     </HashRouter>
   );
