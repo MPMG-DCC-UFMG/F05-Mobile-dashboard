@@ -38,6 +38,8 @@ export const ListTypePhoto = observer(() => {
   const [addTypePhotoDialog, setOpenAddTypePhotoDialog] = useState(false);
   const [editTypePhotoDialog, setOpenEditTypePhotoDialog] = useState<boolean[]>([]);
   const [atualTable, setAtualTable] = useState<TypePhoto[]>(typePhotoStore.typePhotoList);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(0);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.currentTarget.value;
@@ -104,7 +106,9 @@ export const ListTypePhoto = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {atualTable.map((typePhoto: TypePhoto, index: number) => (
+                  {atualTable
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((typePhoto: TypePhoto, index: number) => (
                     <TableRow
                       key={typePhoto.flag}
                       hover
@@ -139,7 +143,12 @@ export const ListTypePhoto = observer(() => {
                   ))}
                 </TableBody>
               </Table>
-              <TablePagination data={typePhoto} />
+              <TablePagination 
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                page={page}
+                setPage={setPage}
+                data={atualTable} />
             </Heading>
           </Paper>
         </Grid>

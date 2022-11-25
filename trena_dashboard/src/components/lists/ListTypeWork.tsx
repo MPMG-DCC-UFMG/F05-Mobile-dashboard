@@ -25,7 +25,6 @@ import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListTypeWork = observer(() => {
-
   const { data: typeWorks, isLoading } = useQuery(
     ["getTypeWork"],
     TypeWorkServiceQuery.loadTypeWorks,
@@ -37,11 +36,17 @@ export const ListTypeWork = observer(() => {
       },
     }
   );
-  const { typeWorkStore} = useStores();
+  const { typeWorkStore } = useStores();
   const [addTypeWorkDialog, setOpenAddTypeWorkDialog] = useState(false);
-  const [editTypeWorkDialog, setOpenEditTypeWorkDialog] = useState<boolean[]>([]);
+  const [editTypeWorkDialog, setOpenEditTypeWorkDialog] = useState<boolean[]>(
+    []
+  );
   const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean[]>([]);
-  const [atualTable, setAtualTable] = useState<TypeWork[]>(typeWorkStore.typeWorksList);
+  const [atualTable, setAtualTable] = useState<TypeWork[]>(
+    typeWorkStore.typeWorksList
+  );
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(0);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.currentTarget.value;
@@ -58,16 +63,18 @@ export const ListTypeWork = observer(() => {
   const handleOpenEditDialog = (index: number) => {
     setOpenEditTypeWorkDialog(
       editTypeWorkDialog.map((value, position) =>
-      (index === position ? true : value))
+        index === position ? true : value
+      )
     );
-  }
+  };
 
   const handleOpenDeleteDialog = (index: number) => {
     setOpenDeleteDialog(
       openDeleteDialog.map((value, position) =>
-      (index === position ? true : value))
+        index === position ? true : value
+      )
     );
-  }
+  };
 
   return (
     <>
@@ -112,45 +119,55 @@ export const ListTypeWork = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {atualTable.map((typeWork: TypeWork, index: number) => (
-                    <TableRow hover key={typeWork.flag}>
-                      <TableCell align="center">{typeWork.name}</TableCell>
-                      {/* <TableCell align="center">
+                  {atualTable
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((typeWork: TypeWork, index: number) => (
+                      <TableRow hover key={typeWork.flag}>
+                        <TableCell align="center">{typeWork.name}</TableCell>
+                        {/* <TableCell align="center">
                         <IconButton>
                           <Visibility />
                         </IconButton>
                       </TableCell> */}
-                      <TableCell align="center">
-                        <IconButton color="info" onClick={()=> handleOpenEditDialog(index)}>
-                          <Edit/>
-                        </IconButton>
-                      </TableCell>
-                      <TableCell align="center">
-                        <IconButton
-                          onClick={() => handleDeleteTypeWork(typeWork)}
-                          color="error"
-                        >
-                          <Delete />
-                        </IconButton>
-                      </TableCell>
-                      <EditTypeOfWorkDialog
-                      state={editTypeWorkDialog}
-                      setState={setOpenEditTypeWorkDialog}
-                      typeWork={typeWork}
-                      index={index}
-                      title='Editar Tipo de Obra'
-                    />
-                    <ConfirmActionDialog 
-                      message="Confirmar Exclusão"
-                      action={() => handleDeleteTypeWork(typeWork)}
-                      state={openDeleteDialog}
-                      setState={() => setOpenDeleteDialog}
-                    />  
-                    </TableRow>
-                  ))}
+                        <TableCell align="center">
+                          <IconButton
+                            color="info"
+                            onClick={() => handleOpenEditDialog(index)}
+                          >
+                            <Edit />
+                          </IconButton>
+                        </TableCell>
+                        <TableCell align="center">
+                          <IconButton
+                            onClick={() => handleDeleteTypeWork(typeWork)}
+                            color="error"
+                          >
+                            <Delete />
+                          </IconButton>
+                        </TableCell>
+                        <EditTypeOfWorkDialog
+                          state={editTypeWorkDialog}
+                          setState={setOpenEditTypeWorkDialog}
+                          typeWork={typeWork}
+                          index={index}
+                          title="Editar Tipo de Obra"
+                        />
+                        <ConfirmActionDialog
+                          message="Confirmar Exclusão"
+                          action={() => handleDeleteTypeWork(typeWork)}
+                          state={openDeleteDialog}
+                          setState={() => setOpenDeleteDialog}
+                        />
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
-              <TablePagination data={typeWorks} />
+              <TablePagination 
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                page={page}
+                setPage={setPage}
+                data={atualTable} />
             </Heading>
           </Paper>
         </Grid>
@@ -158,3 +175,4 @@ export const ListTypeWork = observer(() => {
     </>
   );
 });
+

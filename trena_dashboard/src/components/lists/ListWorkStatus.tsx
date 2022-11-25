@@ -38,6 +38,8 @@ export const ListWorkStatus = observer(() => {
   const [addWorkStatusDialog, setOpenAddWorkStatusDialog] = useState(false);
   const [editWorkStatusDialog, setOpenEditWorkStatusDialog] = useState<boolean[]>([]);
   const [atualTable, setAtualTable] = useState<WorkStatus[]>(workStatusStore.workStatusList);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(0);
  
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +103,9 @@ export const ListWorkStatus = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {workStatus!.map((workStatus: WorkStatus, index: number) => (
+                  {workStatus!
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((workStatus: WorkStatus, index: number) => (
                     <TableRow hover key={workStatus.flag}>
                       <TableCell align="center">{workStatus.name}</TableCell>
                       {/* <TableCell align="center">
@@ -136,7 +140,12 @@ export const ListWorkStatus = observer(() => {
                   ))}
                 </TableBody>
               </Table>
-              <TablePagination data={workStatus} />
+              <TablePagination 
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                page={page}
+                setPage={setPage}
+                data={workStatus} />
             </Heading>
           </Paper>
         </Grid>
