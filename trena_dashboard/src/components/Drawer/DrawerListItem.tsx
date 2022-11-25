@@ -114,7 +114,7 @@ export function DrawerListItem() {
         <MyListItem
           sx={{ pl: 4 }}
           icon={<LocalSee />}
-          url="/queue"
+          url="/collect"
           iconText="Vistorias Cidadãs"
         />
       </Collapse>
