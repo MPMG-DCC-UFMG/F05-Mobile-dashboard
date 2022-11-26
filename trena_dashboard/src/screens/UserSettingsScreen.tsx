@@ -1,6 +1,4 @@
-import { DataUsageRounded } from "@mui/icons-material";
 import { Avatar, Button, Grid, Paper, Typography } from "@mui/material";
-import { User } from "@sentry/react";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { DashboardContentContainer } from "../components/Containers/ContentContainer";
@@ -9,11 +7,14 @@ import { DigitalSignature } from "../components/Dialogs/Users/DigitalSignature";
 import { EditUserEmailDialog } from "../components/Dialogs/Users/UserSettings/EditUserEmail";
 import { EditUserPasswordDialog } from "../components/Dialogs/Users/UserSettings/EditUserPassword";
 import { Heading } from "../components/Heading";
-import { useStores } from "../core/contexts/UseStores";
-import { SecurityServiceQuery } from "../core/network/services/SecurityService";
+import {
+  LoggedUserResponse,
+  SecurityServiceQuery,
+} from "../core/network/services/SecurityService";
 
 export function UserSettingScreen() {
-  const { data: userData } = useQuery<User>(["getLoggedUserData"], 
+  const { data: userData } = useQuery<LoggedUserResponse>(
+    ["getLoggedUserData"],
     () => SecurityServiceQuery.getLoggedUser()
   );
 
@@ -29,9 +30,9 @@ export function UserSettingScreen() {
     setOpenEditEmailDialog(true);
   };
 
-  const handleEditPassword = () =>{
-    setOpenEditPasswordDialog(true)
-  }
+  const handleEditPassword = () => {
+    setOpenEditPasswordDialog(true);
+  };
 
   return (
     <DashboardContainer>
@@ -58,7 +59,10 @@ export function UserSettingScreen() {
                     alignItems: "center",
                   }}
                 >
-                  <Avatar style={{ width: 60, height: 60 }} src="avatar.jpg" />
+                  <Avatar
+                    style={{ width: 60, height: 60 }}
+                    src={`${userData?.picture ? userData.picture : ""}`}
+                  />
                   <Button
                     style={{ height: 30, width: 150 }}
                     variant="contained"
@@ -77,7 +81,9 @@ export function UserSettingScreen() {
                 >
                   <Grid item style={{ flexDirection: "column" }}>
                     <Typography>EMAIL:</Typography>
-                    <Typography>{userData?.email ? userData.email : ""}</Typography>
+                    <Typography>
+                      {userData?.email ? userData.email : ""}
+                    </Typography>
                   </Grid>
                   <Button
                     onClick={handleEditEmail}
@@ -97,7 +103,7 @@ export function UserSettingScreen() {
                   }}
                 >
                   <Grid item style={{ flexDirection: "column" }}>
-                    <Typography>PASSWORD:</Typography>
+                    <Typography>SENHA:</Typography>
                     <Typography>***********</Typography>
                   </Grid>
                   <Button
@@ -134,13 +140,13 @@ export function UserSettingScreen() {
                   setState={setOpenEditEmailDialog}
                   user="tuliomarco9704@hotmail.com"
                   title="Editar Email"
-                />  
-                 <EditUserPasswordDialog
+                />
+                <EditUserPasswordDialog
                   state={openEditPasswordDialog}
                   setState={setOpenEditPasswordDialog}
                   user="tuliomarco9704@hotmail.com"
                   title="Editar Senha"
-                /> 
+                />
               </>
             </Heading>
           </Paper>

@@ -5,7 +5,12 @@ import MuiAppBar from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import React from "react";
+import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
+import {
+  LoggedUserResponse,
+  SecurityServiceQuery,
+} from "../../core/network/services/SecurityService";
 
 interface AppBarProps {
   open?: boolean;
@@ -36,6 +41,10 @@ const AppBarSetup = styled(MuiAppBar, {
 
 export function AppBar({ open, toggleDrawer }: AppBarProps) {
   const navigate = useNavigate();
+  const { data: loggedUserData } = useQuery<LoggedUserResponse>([
+    "appBarIcon",
+    () => SecurityServiceQuery.getLoggedUser(),
+  ]);
 
   const handleLogout = () => {
     navigate("/login");
@@ -67,7 +76,7 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
           {"Dashboard - Trena"}
         </Typography>
         <Avatar
-          src="avatar.jpg"
+          src={loggedUserData ? loggedUserData.picture : ""}
           style={{ width: 25, height: 25, cursor: "pointer" }}
           onClick={handleUser}
         />

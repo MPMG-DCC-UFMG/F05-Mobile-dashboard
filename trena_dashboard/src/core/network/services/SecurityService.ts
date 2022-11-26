@@ -3,6 +3,14 @@ import { User } from "../../models/User";
 import { MPResponse } from "../models/Response";
 import TrenaAPI from "../TrenaAPI";
 
+export type LoggedUserResponse = {
+  email: string;
+  authentication: string;
+  full_name: string;
+  picture: string;
+  role: string;
+};
+
 export class SecurityService {
   static async login(email: string, password: string): Promise<User> {
     const call = Config.BASE_URL + "/security/users/login";
@@ -122,7 +130,9 @@ const createUser = async (email: string, password: string) => {
 
 const loadUsersList = async () => {
   const call = Config.BASE_URL + "/security/users";
-  const res = await TrenaAPI.network().get(call);
+  const token = localStorage.getItem("TOKEN");
+
+  const res = await TrenaAPI.network().get(call).query({ token: token });
 
   return res.body;
 };
@@ -137,9 +147,21 @@ const deleteUser = async (email: string) => {
   return res.body;
 };
 
+const getLoggedUser = async (): Promise<LoggedUserResponse> => {
+  const call = Config.BASE_URL + "/security/users/me";
+  const token = localStorage.getItem("TOKEN");
+  const res = await TrenaAPI.network()
+    .get(call)
+    .type("application/json")
+    .query({ token: token });
+
+  return res.body;
+};
+
 export const SecurityServiceQuery = {
   login,
   loadUsersList,
+  getLoggedUser,
   createUser,
   deleteUser,
 };
