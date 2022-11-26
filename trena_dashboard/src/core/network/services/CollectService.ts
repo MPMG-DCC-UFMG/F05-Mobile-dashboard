@@ -142,6 +142,27 @@ const downloadJSONReport = async (publicWorkId: string) => {
   return saveData(data, publicWorkId);
 };
 
+const getMediaMetaDataByCollectId = async (collectId: string) => {
+  const call = Config.BASE_URL + `/photos/collect/${collectId}`;
+  const res = await TrenaAPI.network().get(call);
+
+  return res.body;
+};
+
+const getMediaByCollectFilePath = async (filepath: string) => {
+  const call = Config.BASE_URL + `/images/${filepath}`;
+  const res = await TrenaAPI.network().get(call).responseType("blob");
+
+  return res.body;
+};
+
+const getQueueCollects = async () => {
+  const call = Config.BASE_URL + "/collects/citizen/queue";
+  const res = await TrenaAPI.network().get(call);
+
+  return res.body;
+};
+
 const saveData = (data: Blob, filename: string = "filename") => {
   const csvURL = window.URL.createObjectURL(data);
   let tempLink = document.createElement("a");
@@ -155,6 +176,9 @@ export const CollectServiceQuery = {
   loadCollectsPaginated,
   loadAllCollects,
   loadAllCitizenCollects,
+  getMediaMetaDataByCollectId,
+  getMediaByCollectFilePath,
+  getQueueCollects,
   collectMonthCount,
   retrievePhotos,
   downloadJSONReport,

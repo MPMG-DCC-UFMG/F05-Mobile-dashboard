@@ -9,8 +9,8 @@ import { Divider, Grid } from "@mui/material";
 import React from "react";
 import { useStores } from "../../core/contexts/UseStores";
 import { PublicWork } from "../../core/models/PublicWork";
-import { MapView } from "../../screens/views/publicWork/MapView";
 import { InfoTextField } from "../Inputs/InfoTextField";
+import { Map } from "../Map";
 import { PublicWorkMenu } from "../Menus/PublicWorkMenu";
 import { TableDialogContainer } from "./DialogContainer";
 
@@ -55,12 +55,14 @@ export function MapDialog({
           defaultValue={publicWork.address.city}
           icon={<LocationCity />}
           label="Cidade"
+          fullWidth
         />
         <InfoTextField
           disabled
           defaultValue={publicWork.address.cep}
           icon={<Public />}
           label="CEP"
+          fullWidth
         />
         <InfoTextField
           disabled
@@ -89,7 +91,7 @@ export function MapDialog({
       </Grid>
 
       <Grid container style={{ width: "100%", height: "100%" }}>
-        <MapView
+        <Map
           latitude={publicWork.address.latitude}
           longitude={publicWork.address.longitude}
           zoom={15}

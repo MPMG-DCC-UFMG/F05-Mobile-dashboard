@@ -7,7 +7,6 @@ import { QueueStore } from "../stores/QueueStore";
 import { StatisticsStore } from "../stores/StatisticsStore";
 import { TypePhotoStore } from "../stores/TypePhotoStore";
 import { TypeWorkStore } from "../stores/TypeWorkStore";
-import { UserStore } from "../stores/UserStore";
 import { ViewStore } from "../stores/ViewStore";
 import { WorkStatusStore } from "../stores/WorkStatusStore";
 
@@ -16,7 +15,6 @@ export const rootContext = React.createContext({
   publicWorkStore: new PublicWorkStore(),
   viewStore: new ViewStore(),
   typePhotoStore: new TypePhotoStore(),
-  userStore: new UserStore(),
   statisticsStore: new StatisticsStore(),
   workStatusStore: new WorkStatusStore(),
   queueStore: new QueueStore(),
@@ -24,3 +22,4 @@ export const rootContext = React.createContext({
   inspectionStore: new InspectionStore(),
   collapseStore: new CollapseStore(),
 });
+

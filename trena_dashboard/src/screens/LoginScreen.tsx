@@ -1,31 +1,45 @@
-import { observer } from "mobx-react";
-import React, { useEffect, useState } from "react";
+import { Button, TextField } from "@mui/material";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { Navigate } from "react-router-dom";
-import { MPNotification } from "../components/Elements/Notification";
-import { InputField } from "../components/Form/InputField";
-import { useStores } from "../core/contexts/UseStores";
+import { useNavigate } from "react-router-dom";
+import { AsideLoginContainer } from "../components/Containers/AsideLoginContainer";
+import { WarningField } from "../components/WarningField";
 import { SecurityServiceQuery } from "../core/network/services/SecurityService";
-import { ReactComponent as Logo } from "../images/logo.svg";
 
-export const LoginScreen: React.FC<any> = observer(() => {
-  const { userStore } = useStores();
-  const [user, setUser] = useState({
-    username: "dashboard_admin",
-    password: "@dminUs3r!",
+type LoginUser = {
+  username: string;
+  password: string;
+};
+
+export function LoginScreen() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<LoginUser>({
+    username: "",
+    password: "",
+  });
+  const [error, setError] = useState({
+    hasError: false,
+    message: "",
   });
 
-  const { isError, isSuccess, error, refetch } = useQuery(
+  const { refetch } = useQuery(
     "login",
     () => SecurityServiceQuery.login(user.username, user.password),
     {
       enabled: false,
+      onSuccess: () => navigate("/dashboard"),
+      onError(err) {
+        setError({
+          hasError: true,
+          message:
+            "Este usuário não possui acesso ao Painel ou as credenciais estão incorretas",
+        });
+      },
     }
   );
 
   const onLoginClicked = async () => {
     refetch();
-    await userStore.login(user.username, user.password);
   };
 
   const onSubmit = (e: React.FormEvent) => {
@@ -33,74 +47,48 @@ export const LoginScreen: React.FC<any> = observer(() => {
     onLoginClicked();
   };
 
-  const onValueChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
-
-  const isFormValid = (): boolean => {
-    let valid = true;
-    Object.values(user).forEach((value) => {
-      if (!value) {
-        valid = false;
-      }
-    });
-    return valid;
-  };
-
-  useEffect(() => {}, [userStore.login]);
-
   return (
-    <>
-      {userStore.loggedUser || isSuccess ? (
-        <Navigate to="/dashboard" />
-      ) : (
-        <section className="hero is-fullheight">
-          <div className="hero-body is-flex">
-            <div className="container">
-              <div className="box" style={{ width: "300px", margin: "auto" }}>
-                <figure className="image">
-                  <Logo />
-                </figure>
-                <form onSubmit={onSubmit}>
-                  <InputField
-                    inputLabel="Usuário"
-                    inputDefaultValue={user.username}
-                    onValueChanged={onValueChanged}
-                    inputName="username"
-                  />
-                  <InputField
-                    inputLabel="Senha"
-                    inputDefaultValue={user.password}
-                    onValueChanged={onValueChanged}
-                    inputName="password"
-                    type="password"
-                  />
-                  <button
-                    disabled={!isFormValid()}
-                    className="button is-info"
-                    onClick={onLoginClicked}
-                    type={"submit"}
-                  >
-                    Logar
-                  </button>
-                </form>
-                {userStore.loginResult ||
-                  (isError && (
-                    <div className="panel-block" style={{ display: "block" }}>
-                      <MPNotification
-                        message={
-                          userStore.loginResult
-                            ? userStore.loginResult
-                            : (error as string)
-                        }
-                      />
-                    </div>
-                  ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-    </>
+    <AsideLoginContainer>
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        id="email"
+        label="Email"
+        type="email"
+        autoFocus
+        defaultValue={user.username}
+        onChange={(e) => setUser({ ...user, username: e.target.value })}
+      />
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        name="password"
+        type="password"
+        label="Senha"
+        id="password"
+        autoComplete="current-password"
+        defaultValue={user.password}
+        onChange={(e) => setUser({ ...user, password: e.target.value })}
+      />
+      <Button
+        fullWidth
+        onClick={onSubmit}
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+      >
+        Entrar
+      </Button>
+      <>
+        {error.hasError && (
+          <WarningField
+            title="Falha ao verificar credenciais"
+            severity="error"
+            message={error.message}
+          />
+        )}
+      </>
+    </AsideLoginContainer>
   );
-});
+}

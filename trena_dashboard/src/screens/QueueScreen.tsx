@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { DashboardContentContainer } from "../components/Containers/ContentContainer";
 import { DashboardContainer } from "../components/Containers/DashboardContainer";
-import { QueueItem } from "../components/Queue/QueueItem";
-import { QueueStepper } from "../components/Queue/QueueStepper";
+import { ListQueue } from "../components/lists/ListQueue";
 
 export function QueueScreen() {
   const [open, setOpen] = useState(false);
@@ -10,23 +9,9 @@ export function QueueScreen() {
   return (
     <DashboardContainer>
       <DashboardContentContainer>
-        {open ? (
-          <>
-            <QueueItem
-              title="Não há novos dados da obra"
-              value="3 Coletas"
-              onClick={() => setOpen(!open)}
-            />
-            <QueueItem
-              title="Não há novos dados da obra"
-              value="2 Coletas"
-              onClick={() => setOpen(!open)}
-            />
-          </>
-        ) : (
-          <QueueStepper close={open} setClose={setOpen} />
-        )}
+        <ListQueue />
       </DashboardContentContainer>
     </DashboardContainer>
   );
 }
+

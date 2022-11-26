@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { CollectScreen } from "../screens/CollectScreen";
 import { Home } from "../screens/Home";
 import { InspectionScreen } from "../screens/InspectionScreen";
@@ -13,9 +13,10 @@ import { WorkStatusScreen } from "../screens/WorkStatusScreen";
 
 export function AppRoutes() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginScreen />} />
+        <Route path="/login" element={<LoginScreen />} />
         <Route path="/dashboard" element={<Home />} />
         <Route path="/typeOfWork" element={<TypeOfWorkScreen />} />
         <Route path="/typePhoto" element={<TypePhotoScreen />} />
@@ -26,7 +27,6 @@ export function AppRoutes() {
         <Route path="/collect" element={<CollectScreen />} />
         <Route path="/inspections" element={<InspectionScreen />} />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
-

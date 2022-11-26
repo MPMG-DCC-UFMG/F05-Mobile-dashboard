@@ -7,7 +7,6 @@ import { InspectionServiceQuery } from "../../../core/network/services/Inspectio
 import { inspectionsStatusMapping } from "../../../utils/mapper";
 import { InfoAccorion } from "../../Accordion";
 import { InfoTextField } from "../../Inputs/InfoTextField";
-import { MockSwiper } from "../../Swiper";
 import { TableDialogContainer } from "../DialogContainer";
 
 interface PublicWorkInspectionsDialogProps {
@@ -85,9 +84,9 @@ export function PublicWorkInspectionsDialog({
             defaultValue={inspection.description}
             type="text"
           />
-          <MockSwiper />
         </InfoAccorion>
       ))}
     </TableDialogContainer>
   );
 }
+

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React, { useState } from "react";
 
-import { Edit } from "@material-ui/icons";
+import { AddAPhoto, Edit } from "@material-ui/icons";
 import { Delete, LocalSee, Map } from "@mui/icons-material";
 import {
   Grid,
@@ -14,11 +14,11 @@ import {
   TableRow,
   Tooltip,
 } from "@mui/material";
-import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import { useQuery } from "react-query";
 import { Address } from "../../core/models/Address";
 import { PublicWork } from "../../core/models/PublicWork";
 import { PublicWorkServiceQuery } from "../../core/network/services/PublicWorkService";
+import { DelegateInspectionDialog } from "../Dialogs/Inspection/DelegateInspection";
 import { MapDialog } from "../Dialogs/MapDialog";
 import { AddPublicWorkDialog } from "../Dialogs/PublicWork/AddPublicWorkDialog";
 import { HandlePublicWorkDialog } from "../Dialogs/PublicWork/HandlePublicWorkDialog";
@@ -36,6 +36,7 @@ export const ListPublicWork = observer(() => {
         setOpenInspectionsModal(Array(data.length).fill(false));
         setOpenLocalizationModal(Array(data.length).fill(false));
         setOpenActionDialog(Array(data.length).fill(false));
+        setOpenAddInspectionModal(Array(data.length).fill(false));
       },
     }
   );
@@ -47,6 +48,9 @@ export const ListPublicWork = observer(() => {
   const [openInspectionsModal, setOpenInspectionsModal] = useState<boolean[]>(
     []
   );
+  const [openAddInspectionModal, setOpenAddInspectionModal] = useState<
+    boolean[]
+  >([]);
   const [actionMode, setActionMode] = useState<"edit" | "delete">("edit");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
@@ -58,6 +62,11 @@ export const ListPublicWork = observer(() => {
   const handleOpenInspectionsModal = (index: number) =>
     setOpenInspectionsModal(
       openInspectionsModal.map((value, pos) => (index === pos ? true : value))
+    );
+
+  const handleOpenAddInspectionModal = (index: number) =>
+    setOpenAddInspectionModal(
+      openAddInspectionModal.map((value, pos) => (index === pos ? true : value))
     );
 
   const handleOpenActionModal = (index: number, mode: "edit" | "delete") => {
@@ -101,6 +110,7 @@ export const ListPublicWork = observer(() => {
                     <TableCell align="center">Endereço</TableCell>
                     <TableCell align="center">Localização</TableCell>
                     <TableCell align="center">Vistorias</TableCell>
+                    <TableCell align="center">Nova Vistoria</TableCell>
                     <TableCell align="center">Editar</TableCell>
                     <TableCell align="center">Deletar</TableCell>
                   </TableRow>
@@ -133,6 +143,17 @@ export const ListPublicWork = observer(() => {
                           </Tooltip>
                         </TableCell>
                         <TableCell align="center">
+                          <Tooltip title="Adicionar Vistoria">
+                            <IconButton
+                              onClick={() =>
+                                handleOpenAddInspectionModal(index)
+                              }
+                            >
+                              <AddAPhoto htmlColor="#03A9F4" />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell align="center">
                           <Tooltip title="Editar">
                             <IconButton
                               onClick={() =>
@@ -159,6 +180,7 @@ export const ListPublicWork = observer(() => {
                           setState={setOpenLocalizationModal}
                           publicWork={publicWork}
                           index={index}
+                          fullScreen
                         />
                         <PublicWorkInspectionsDialog
                           state={openInspectionsModal}
@@ -179,6 +201,12 @@ export const ListPublicWork = observer(() => {
                               : "Deletar Obra Pública"
                           }
                           fullScreen
+                        />
+                        <DelegateInspectionDialog
+                          index={index}
+                          publicWork={publicWork}
+                          state={openAddInspectionModal}
+                          setState={setOpenAddInspectionModal}
                         />
                       </TableRow>
                     ))}

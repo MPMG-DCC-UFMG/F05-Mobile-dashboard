@@ -6,6 +6,7 @@ import {
   Folder,
   LocalSee,
   Logout,
+  Queue,
   Security,
   Settings,
   Troubleshoot,
@@ -117,6 +118,12 @@ export function DrawerListItem() {
           url="/collect"
           iconText="Vistorias Cidadãs"
         />
+        <MyListItem
+          sx={{ pl: 4 }}
+          icon={<Queue />}
+          url="/queue"
+          iconText="Fila de Envios"
+        />
       </Collapse>
       <MyListItem
         icon={<Construction />}
@@ -124,7 +131,7 @@ export function DrawerListItem() {
         iconText="Obras Públicas"
       />
       <MyListItem icon={<People />} url="/users" iconText="Usuários" />
-      <MyListItem icon={<Logout />} url="/" iconText="Sair" />
+      <MyListItem icon={<Logout />} url="/login" iconText="Sair" />
     </List>
   );
 }

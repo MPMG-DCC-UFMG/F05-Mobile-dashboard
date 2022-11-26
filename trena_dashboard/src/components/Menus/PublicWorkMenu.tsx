@@ -1,5 +1,3 @@
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
 interface PublicWorkMenuProps {
@@ -42,9 +40,7 @@ export const PublicWorkMenu: React.FC<PublicWorkMenuProps> = (props) => {
       {onDownloadClicked && (
         <div className="level-item">
           <button className="button is-medium" onClick={onDownloadClicked}>
-            <span className="icon">
-              <FontAwesomeIcon icon={faDownload} />
-            </span>
+            <span className="icon"></span>
             <span>Baixar dados de coletas</span>
           </button>
         </div>
@@ -52,3 +48,4 @@ export const PublicWorkMenu: React.FC<PublicWorkMenuProps> = (props) => {
     </div>
   );
 };
+

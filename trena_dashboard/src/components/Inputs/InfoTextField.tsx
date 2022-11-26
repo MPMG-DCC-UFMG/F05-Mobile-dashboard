@@ -10,6 +10,7 @@ interface InfoTextFieldProps {
   value?: string | Date;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: string;
+  multiline?: boolean;
 }
 
 export function InfoTextField({
@@ -21,6 +22,7 @@ export function InfoTextField({
   value,
   onChange,
   type,
+  multiline,
 }: InfoTextFieldProps) {
   return (
     <TextField
@@ -33,6 +35,7 @@ export function InfoTextField({
       value={value}
       type={type}
       onChange={onChange}
+      multiline={multiline}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">{icon}</InputAdornment>

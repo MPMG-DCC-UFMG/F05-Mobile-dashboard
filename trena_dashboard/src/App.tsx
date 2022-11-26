@@ -1,5 +1,3 @@
-import "bulma-o-steps/bulma-steps.css";
-import "bulma/css/bulma.css";
 import React from "react";
 import "./styles/App.css";
 import "./styles/trena.css";
@@ -31,3 +29,4 @@ function App() {
 }
 
 export default App;
+

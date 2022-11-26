@@ -5,7 +5,7 @@ import MuiAppBar from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import React from "react";
-import { useStores } from "../../core/contexts/UseStores";
+import { useNavigate } from "react-router-dom";
 
 interface AppBarProps {
   open?: boolean;
@@ -35,9 +35,11 @@ const AppBarSetup = styled(MuiAppBar, {
 }));
 
 export function AppBar({ open, toggleDrawer }: AppBarProps) {
-  const { userStore } = useStores();
+  const navigate = useNavigate();
 
-  const handleLogout = () => userStore.logout();
+  const handleLogout = () => {
+    navigate("/login");
+  };
 
   return (
     <AppBarSetup color="primary" position="absolute" open={open}>

@@ -89,8 +89,17 @@ const login = async (email: string, password: string) => {
       client_secret: "",
     });
 
+  if (res.status === 401) {
+    throw new Error("Usuário não possui acesso ao painel");
+  }
+
+  if (res.status === 500) {
+    throw new Error("O Servidor encontra-se offline!");
+  }
+
   const accessToken = res.body["access_token"];
   const role = res.body["role"];
+  localStorage.setItem("TOKEN", accessToken);
 
   role !== "ADMIN"
     ? () => {

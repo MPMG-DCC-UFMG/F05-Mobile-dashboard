@@ -1,6 +1,7 @@
 export interface Inspection {
   flag?: number;
   name: string;
+  inquiry_number: number;
   description?: string;
   public_work_id?: string;
   collect_id?: string;

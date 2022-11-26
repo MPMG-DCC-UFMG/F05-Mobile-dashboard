@@ -26,7 +26,10 @@ import { TableDialogContainer, TableDialogProps } from "../DialogContainer";
 
 import { useMutation } from "react-query";
 import { PublicWork } from "../../../core/models/PublicWork";
-import { PublicWorkServiceQuery } from "../../../core/network/services/PublicWorkService";
+import {
+  PublicWorkService,
+  PublicWorkServiceQuery,
+} from "../../../core/network/services/PublicWorkService";
 import { WarningField } from "../../WarningField";
 
 interface HandlePublicWorkDialogProps extends TableDialogProps {
@@ -44,16 +47,7 @@ export function HandlePublicWorkDialog({
   fullScreen,
 }: HandlePublicWorkDialogProps) {
   const { typeWorkStore } = useStores();
-  const [name, setName] = useState(publicWork.name);
-  const [city, setCity] = useState(publicWork.address.city);
-  const [cep, setCep] = useState(publicWork.address.cep);
-  const [neighborhood, setNeighborhood] = useState(
-    publicWork.address.neighborhood
-  );
-  const [street, setStreet] = useState(publicWork.address.street);
-  const [number, setNumber] = useState(publicWork.address.number);
-  const [latitude, setLatitude] = useState(publicWork.address.latitude);
-  const [longitude, setLongitude] = useState(publicWork.address.longitude);
+  const [newPublicWork, setNewPublicWork] = useState<PublicWork>(publicWork);
   const [typeWorks] = useState(typeWorkStore.typeWorksList);
   const [selectedTypeWork, setSelectedTypeWork] = useState<number>(
     publicWork.type_work_flag
@@ -66,27 +60,19 @@ export function HandlePublicWorkDialog({
   );
 
   const { mutate: deleteMutate, isLoading: deleteLoading } = useMutation(
-    PublicWorkServiceQuery.deletePublicWork
+    PublicWorkService.deletePublicWork
   );
 
   const handleSubmitChanges = () => {
     mode === "edit"
       ? editMutate(
           {
-            name: name,
+            name: newPublicWork.name,
             type_work_flag: selectedTypeWork,
             id: publicWork.id,
             address: {
-              cep,
-              city,
-              latitude,
-              longitude,
-              neighborhood,
-              number,
+              ...newPublicWork.address,
               state: "MG",
-              street,
-              id: publicWork.address.id,
-              public_work_id: publicWork.id,
             },
           },
           {
@@ -112,8 +98,10 @@ export function HandlePublicWorkDialog({
         disabled={mode === "delete"}
         label="Nome"
         fullWidth
-        defaultValue={name}
-        onChange={(e) => setName(e.target.value)}
+        defaultValue={newPublicWork.name}
+        onChange={(e) =>
+          setNewPublicWork({ ...newPublicWork, name: e.target.value })
+        }
         icon={<TextFields />}
       />
       <Autocomplete
@@ -137,16 +125,26 @@ export function HandlePublicWorkDialog({
             disabled={mode === "delete"}
             icon={<LocationCity />}
             label="Cidade"
-            defaultValue={city}
-            onChange={(e) => setCity(e.target.value)}
+            defaultValue={newPublicWork.address.city}
+            onChange={(e) =>
+              setNewPublicWork({
+                ...newPublicWork,
+                address: { ...newPublicWork.address, city: e.target.value },
+              })
+            }
           />
           <InfoTextField
             fullWidth
             disabled={mode === "delete"}
             icon={<Public />}
             label="CEP"
-            defaultValue={cep}
-            onChange={(e) => setCep(e.target.value)}
+            defaultValue={newPublicWork.address.cep}
+            onChange={(e) =>
+              setNewPublicWork({
+                ...newPublicWork,
+                address: { ...newPublicWork.address, cep: e.target.value },
+              })
+            }
           />
           <InfoTextField
             fullWidth
@@ -158,42 +156,82 @@ export function HandlePublicWorkDialog({
           <InfoTextField
             fullWidth
             disabled={mode === "delete"}
-            defaultValue={neighborhood}
+            defaultValue={newPublicWork.address.neighborhood}
             icon={<HolidayVillage />}
             label="Bairro"
-            onChange={(e) => setNeighborhood(e.target.value)}
+            onChange={(e) =>
+              setNewPublicWork({
+                ...newPublicWork,
+                address: {
+                  ...newPublicWork.address,
+                  neighborhood: e.target.value,
+                },
+              })
+            }
           />
           <InfoTextField
             fullWidth
             disabled={mode === "delete"}
-            defaultValue={street}
+            defaultValue={newPublicWork.address.street}
             icon={<NearMe />}
             label="Rua"
-            onChange={(e) => setStreet(e.target.value)}
+            onChange={(e) =>
+              setNewPublicWork({
+                ...newPublicWork,
+                address: {
+                  ...newPublicWork.address,
+                  street: e.target.value,
+                },
+              })
+            }
           />
           <InfoTextField
             fullWidth
             disabled={mode === "delete"}
-            defaultValue={number}
+            defaultValue={newPublicWork.address.number}
             icon={<Numbers />}
             label="Logradouro"
-            onChange={(e) => setNumber(e.target.value)}
+            onChange={(e) =>
+              setNewPublicWork({
+                ...newPublicWork,
+                address: {
+                  ...newPublicWork.address,
+                  number: e.target.value,
+                },
+              })
+            }
           />
           <InfoTextField
             fullWidth
             disabled={mode === "delete"}
-            defaultValue={latitude.toString()}
+            defaultValue={newPublicWork.address.latitude.toString()}
             icon={<Numbers />}
             label="Latitude"
-            onChange={(e) => setLatitude(Number(e.target.value))}
+            onChange={(e) =>
+              setNewPublicWork({
+                ...newPublicWork,
+                address: {
+                  ...newPublicWork.address,
+                  latitude: Number(e.target.value),
+                },
+              })
+            }
           />
           <InfoTextField
             fullWidth
             disabled={mode === "delete"}
-            defaultValue={longitude.toString()}
+            defaultValue={newPublicWork.address.longitude.toString()}
             icon={<Numbers />}
             label="Longitude"
-            onChange={(e) => setLongitude(Number(e.target.value))}
+            onChange={(e) =>
+              setNewPublicWork({
+                ...newPublicWork,
+                address: {
+                  ...newPublicWork.address,
+                  longitude: Number(e.target.value),
+                },
+              })
+            }
           />
         </AccordionDetails>
       </Accordion>

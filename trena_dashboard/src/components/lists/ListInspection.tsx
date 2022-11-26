@@ -51,14 +51,14 @@ export function ListInspection() {
     <>
       {isLoading || !inspections ? (
         <LoadingTableData
-          headingTitle="Vistorias"
+          headingTitle="Vistorias Técnicas"
           headingSteps={[
             {
               title: "Dashboard",
-              url: "/",
+              url: "/dashboard",
             },
             {
-              title: "Vistorias",
+              title: "Vistorias Técnicas",
               url: "/",
             },
           ]}
@@ -67,14 +67,14 @@ export function ListInspection() {
         <Grid style={{ width: "100%", marginTop: 14 }} item>
           <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
             <Heading
-              title="Vistorias"
+              title="Vistorias Técnicas"
               steps={[
                 {
                   title: "Dashboard",
-                  url: "/",
+                  url: "/dashboard",
                 },
                 {
-                  title: "Vistorias",
+                  title: "Vistorias Técnicas",
                   url: "/",
                 },
               ]}
@@ -82,9 +82,9 @@ export function ListInspection() {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">Nome</TableCell>
-                    <TableCell align="center">Usuário Responsável</TableCell>
-                    <TableCell align="center">ID Obra</TableCell>
+                    <TableCell align="center">Número de Inquérito</TableCell>
+                    <TableCell align="center">Obra</TableCell>
+                    <TableCell align="center">Vistoriador</TableCell>
                     <TableCell align="center">Status</TableCell>
                     <TableCell align="center">Coletas</TableCell>
                     <TableCell align="center">Relatório</TableCell>
@@ -96,14 +96,14 @@ export function ListInspection() {
                     .map((inspection, index) => (
                       <React.Fragment key={inspection.flag}>
                         <TableRow>
+                          <TableCell align="right">
+                            {inspection.inquiry_number.toString()}
+                          </TableCell>
                           <TableCell align="center">
                             {inspection.name}
                           </TableCell>
                           <TableCell align="center">
                             {inspection.user_email}
-                          </TableCell>
-                          <TableCell align="center">
-                            {inspection.public_work_id}
                           </TableCell>
                           <TableCell align="center">
                             {inspectionsStatusMapping(inspection.status!)}
@@ -135,7 +135,11 @@ export function ListInspection() {
                           state={openCollectsModal}
                           setState={setOpenCollectsModal}
                           fullScreen
-                          title={`Coletas - ${inspection.flag}`}
+                          title={`${
+                            inspection.description
+                              ? `${inspection.description} - `
+                              : "Coletas - "
+                          }${inspection.name}`}
                         />
                       </React.Fragment>
                     ))}

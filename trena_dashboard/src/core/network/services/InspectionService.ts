@@ -1,4 +1,5 @@
 import Config from "../../../config/Config";
+import { CreateInspectionDTO } from "../../models/dto/CreateInspectionDTO";
 import { Inspection } from "../../models/Inspection";
 import TrenaAPI from "../TrenaAPI";
 
@@ -61,7 +62,7 @@ const getPublicWorkInspections = async (publicWorkId: string) => {
   return res.body;
 };
 
-const addInspection = async (inspection: Inspection) => {
+const addInspection = async (inspection: CreateInspectionDTO) => {
   const call = Config.BASE_URL + "/inspections/add";
   const res = await TrenaAPI.network()
     .post(call)
@@ -76,6 +77,13 @@ const updateInspection = async (inspection: Inspection) => {
     .put(call)
     .type("application/json")
     .send(inspection);
+  return res.body;
+};
+
+const getInspectionCollects = async (inspection_flag: number) => {
+  const call = Config.BASE_URL + `/inspections/collect/${inspection_flag}`;
+  const res = await TrenaAPI.network().get(call);
+
   return res.body;
 };
 
@@ -95,6 +103,7 @@ export const InspectionServiceQuery = {
   loadInspections,
   countMpInspections,
   getPublicWorkInspections,
+  getInspectionCollects,
   addInspection,
   updateInspection,
   getInspectionReport,

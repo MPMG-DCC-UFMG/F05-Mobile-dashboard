@@ -22,7 +22,7 @@ export function HomeCards() {
   );
 
   const handleClickWorks = () => navigate("/publicWork");
-  const handleClickCollect = () => navigate("/collect");
+  const handleClickInspections = () => navigate("/inspections");
   const handleClickQueue = () => navigate("/queue");
 
   return (
@@ -45,7 +45,7 @@ export function HomeCards() {
             icon={<Security />}
             value={mpInspections ? mpInspections.toString() : "0"}
             iconColor="#ED0000"
-            onClick={handleClickQueue}
+            onClick={handleClickInspections}
           />
         </Grid>
         <Grid item style={{ width: "33.3%" }}>
@@ -54,7 +54,7 @@ export function HomeCards() {
             icon={<CalendarMonth />}
             value={usersInspections ? usersInspections.toString() : "0"}
             iconColor="#000000"
-            onClick={handleClickCollect}
+            onClick={handleClickQueue}
           />
         </Grid>
       </Grid>

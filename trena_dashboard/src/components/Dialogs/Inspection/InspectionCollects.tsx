@@ -2,16 +2,17 @@ import { VerifiedUser } from "@material-ui/icons";
 import { CalendarMonth, TextFields, Troubleshoot } from "@mui/icons-material";
 
 import React from "react";
-import uuid from "react-uuid";
+import { useQuery } from "react-query";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { Collect } from "../../../core/models/Collect";
+import { InspectionServiceQuery } from "../../../core/network/services/InspectionService";
 
-import { inspectionsStatusMapping } from "../../../utils/mapper";
+import { collectStatusMapping, convertEphocDate } from "../../../utils/mapper";
 import { InfoAccorion } from "../../Accordion";
 import { InfoTextField } from "../../Inputs/InfoTextField";
-import { MockSwiper } from "../../Swiper";
 import { TableDialogContainer, TableDialogProps } from "../DialogContainer";
 
 interface InspectionCollectsDialogProps extends TableDialogProps {
@@ -26,7 +27,23 @@ export function InspectionCollectsDialog({
   index,
   inspectionId,
 }: InspectionCollectsDialogProps) {
-  const mock = [1, 2, 3];
+  const { data: collects } = useQuery<Collect[]>(
+    ["getInspectionCollects", inspectionId],
+    () => InspectionServiceQuery.getInspectionCollects(inspectionId)
+  );
+
+  const ableToFetchMetadata = collects !== undefined && collects.length > 0;
+
+  // const collectsMetaDataQueries = useQueries(
+  //   collects!.map<UseQueryOptions<Photo[] | string, Error>>((collect) => {
+  //     return {
+  //       queryKey: ["collectMetaData", collect.id!],
+  //       queryFn: () =>
+  //         CollectServiceQuery.getMediaMetaDataByCollectId(collect.id!),
+  //       enabled: !!ableToFetchMetadata,
+  //     };
+  //   })
+  // );
 
   return (
     <TableDialogContainer
@@ -36,39 +53,52 @@ export function InspectionCollectsDialog({
       title={title}
       index={index}
     >
-      {mock.map((mock, index) => (
-        <InfoAccorion key={mock} title={`Coleta: ${uuid()}`}>
-          <InfoTextField
-            disabled
-            fullWidth
-            icon={<CalendarMonth />}
-            label="Data"
-            defaultValue={`1${mock}/11/2022`}
-          />
-          <InfoTextField
-            disabled
-            fullWidth
-            icon={<VerifiedUser />}
-            label="Usuário Responsável"
-            defaultValue={"admin_dashboard@gmail.com"}
-          />
-          <InfoTextField
-            disabled
-            fullWidth
-            icon={<Troubleshoot />}
-            label="Status"
-            defaultValue={inspectionsStatusMapping(mock)}
-          />
-          <InfoTextField
-            disabled
-            fullWidth
-            icon={<TextFields />}
-            label="Comentários"
-            defaultValue="Comentário genérico"
-          />
-          <MockSwiper />
-        </InfoAccorion>
-      ))}
+      {collects ? (
+        collects!.map((collect) => (
+          <InfoAccorion
+            key={collect.id!}
+            title={`Coleta realizada em: ${convertEphocDate(collect.date)}`}
+          >
+            <InfoTextField
+              disabled
+              fullWidth
+              icon={<CalendarMonth />}
+              label="Data de Aprovação"
+              defaultValue={convertEphocDate(collect.queue_status_date)}
+            />
+            <InfoTextField
+              disabled
+              fullWidth
+              icon={<VerifiedUser />}
+              label="Usuário Responsável"
+              defaultValue={collect.user_email}
+            />
+            <InfoTextField
+              disabled
+              fullWidth
+              icon={<Troubleshoot />}
+              label="Status"
+              defaultValue={collectStatusMapping(collect.queue_status)}
+            />
+            <InfoTextField
+              disabled
+              fullWidth
+              icon={<TextFields />}
+              label="Comentários"
+              defaultValue={
+                collect.comments
+                  ? collect.comments
+                  : "Nenhum comentário foi provido."
+              }
+            />
+            {/* <MediaSwiper
+              collectsMetadata={collectsMetaDataQueries.map((qr) => qr.data)}
+            /> */}
+          </InfoAccorion>
+        ))
+      ) : (
+        <p>Essa vistoria não possui coletas</p>
+      )}
     </TableDialogContainer>
   );
 }
