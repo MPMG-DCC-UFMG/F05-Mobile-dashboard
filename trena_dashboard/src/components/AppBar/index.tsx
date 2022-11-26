@@ -1,6 +1,6 @@
 import { Logout } from "@mui/icons-material";
 import Menu from "@mui/icons-material/Menu";
-import { styled, Typography } from "@mui/material";
+import { Avatar, styled, Typography } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
@@ -41,6 +41,10 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
     navigate("/login");
   };
 
+  const handleUser = () => {
+    navigate("/userSettings");
+  };
+
   return (
     <AppBarSetup color="primary" position="absolute" open={open}>
       <Toolbar sx={{ pr: "24px" }}>
@@ -62,10 +66,14 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
         >
           {"Dashboard - Trena"}
         </Typography>
+        <Avatar
+          src="avatar.jpg"
+          style={{ width: 25, height: 25, cursor: "pointer" }}
+          onClick={handleUser}
+        />
         <IconButton onClick={handleLogout}>
           <Logout htmlColor="#FFFFFF" />
         </IconButton>
-        <IconButton></IconButton>
       </Toolbar>
     </AppBarSetup>
   );

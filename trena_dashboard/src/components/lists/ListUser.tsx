@@ -33,6 +33,8 @@ export const ListUser = observer(() => {
   );
   const [addUserDialog, setOpenAddUserDialog] = useState(false);
   const [editUserDialog, setOpenEditUserDialog] = useState<boolean[]>([]);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(0);
 
   const handleUserDeleted = (username: string) => {
     userStore.deleteUser(username);
@@ -85,7 +87,9 @@ export const ListUser = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {users.map((user, index) => (
+                  {users
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((user, index) => (
                     <TableRow hover key={user.email}>
                       <TableCell align="center">{user.email}</TableCell>
                       <TableCell align="center">{user.role}</TableCell>
@@ -94,7 +98,7 @@ export const ListUser = observer(() => {
                           <Visibility />
                         </IconButton>
                       </TableCell> */}
-                      <TableCell align="center">
+                      <TableCell align="center" onClick={() => handleOpenEditDialog(index)}>
                         <IconButton color="info">
                           <Edit />
                         </IconButton>
@@ -118,7 +122,12 @@ export const ListUser = observer(() => {
                   ))}
                 </TableBody>
               </Table>
-              <TablePagination data={users} />
+              <TablePagination 
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                page={page}
+                setPage={setPage}
+                data={users} />
             </Heading>
           </Paper>
         </Grid>
