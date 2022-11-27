@@ -29,6 +29,8 @@ const AppBarSetup = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  backgroundColor: "#0288d1 !important",
+  color: "#ffff !important",
   ...(open && {
     marginLeft: 240,
     width: `calc(100% - ${240}px)`,
@@ -41,10 +43,14 @@ const AppBarSetup = styled(MuiAppBar, {
 
 export function AppBar({ open, toggleDrawer }: AppBarProps) {
   const navigate = useNavigate();
-  const { data: loggedUserData } = useQuery<LoggedUserResponse>([
-    "appBarIcon",
+  const { data: loggedUserData } = useQuery<LoggedUserResponse>(
+    ["appBarIcon"],
     () => SecurityServiceQuery.getLoggedUser(),
-  ]);
+    {
+      staleTime: 12000,
+      cacheTime: 12000,
+    }
+  );
 
   const handleLogout = () => {
     navigate("/login");

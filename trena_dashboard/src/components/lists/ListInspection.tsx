@@ -82,7 +82,7 @@ export function ListInspection() {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">Número de Inquérito</TableCell>
+                    <TableCell align="left">Número de Inquérito</TableCell>
                     <TableCell align="center">Obra</TableCell>
                     <TableCell align="center">Vistoriador</TableCell>
                     <TableCell align="center">Status</TableCell>
@@ -96,7 +96,7 @@ export function ListInspection() {
                     .map((inspection, index) => (
                       <React.Fragment key={inspection.flag}>
                         <TableRow>
-                          <TableCell align="right">
+                          <TableCell align="left">
                             {inspection.inquiry_number.toString()}
                           </TableCell>
                           <TableCell align="center">

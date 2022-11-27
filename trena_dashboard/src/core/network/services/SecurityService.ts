@@ -109,14 +109,12 @@ const login = async (email: string, password: string) => {
   const role = res.body["role"];
   localStorage.setItem("TOKEN", accessToken);
 
-  role !== "ADMIN"
-    ? () => {
-        throw new Error("Usuário não tem acesso ao painel");
-      }
-    : () => {
-        TrenaAPI.getInstance().setUserToken(accessToken);
-        return { email: email, token: accessToken, role: role };
-      };
+  if (role === "ADMIN" || role === "interno") {
+    TrenaAPI.getInstance().setUserToken(accessToken);
+    return { email: email, token: accessToken, role: role };
+  } else {
+    throw new Error("Usuário não possui acesso ao painel");
+  }
 };
 
 const createUser = async (email: string, password: string) => {
@@ -130,9 +128,8 @@ const createUser = async (email: string, password: string) => {
 
 const loadUsersList = async () => {
   const call = Config.BASE_URL + "/security/users";
-  const token = localStorage.getItem("TOKEN");
 
-  const res = await TrenaAPI.network().get(call).query({ token: token });
+  const res = await TrenaAPI.network().get(call);
 
   return res.body;
 };

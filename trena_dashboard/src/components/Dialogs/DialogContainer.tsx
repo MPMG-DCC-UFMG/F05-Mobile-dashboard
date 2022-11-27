@@ -30,6 +30,7 @@ export function SingleDialogContainer({
       scroll="body"
       fullWidth
       fullScreen={fullScreen}
+      onClose={() => setState(false)}
     >
       <DialogTitle color={theme.palette.grey[400]}>
         <Grid container justifyContent="space-between" alignItems="center">
@@ -79,6 +80,7 @@ export function TableDialogContainer({
       scroll="body"
       fullWidth
       fullScreen={fullScreen}
+      onClose={handleCloseDialog}
     >
       <DialogTitle color={theme.palette.grey[400]}>
         <Grid container justifyContent="space-between" alignItems="center">
