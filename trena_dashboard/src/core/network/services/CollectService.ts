@@ -1,5 +1,6 @@
 import Config from "../../../config/Config";
 import { Collect } from "../../models/Collect";
+import { Photo } from "../../models/Photo";
 import { PaginatedResponse } from "../models/PaginatedResponse";
 import TrenaAPI from "../TrenaAPI";
 
@@ -142,18 +143,27 @@ const downloadJSONReport = async (publicWorkId: string) => {
   return saveData(data, publicWorkId);
 };
 
-const getMediaMetaDataByCollectId = async (collectId: string) => {
+const getMediaMetaDataByCollectId = async (
+  collectId: string
+): Promise<Photo[]> => {
   const call = Config.BASE_URL + `/photos/collect/${collectId}`;
   const res = await TrenaAPI.network().get(call);
 
   return res.body;
 };
 
-const getMediaByCollectFilePath = async (filepath: string) => {
+const getMediaByCollectFileName = async (filepath: string) => {
   const call = Config.BASE_URL + `/images/${filepath}`;
-  const res = await TrenaAPI.network().get(call).responseType("blob");
+  const res = await TrenaAPI.network().get(call).responseType("arraybuffer");
 
-  return res.body;
+  const base64 = btoa(
+    new Uint8Array(res.body).reduce(
+      (data, byte) => data + String.fromCharCode(byte),
+      ""
+    )
+  );
+
+  return base64;
 };
 
 const getQueueCollects = async () => {
@@ -177,7 +187,7 @@ export const CollectServiceQuery = {
   loadAllCollects,
   loadAllCitizenCollects,
   getMediaMetaDataByCollectId,
-  getMediaByCollectFilePath,
+  getMediaByCollectFileName,
   getQueueCollects,
   collectMonthCount,
   retrievePhotos,

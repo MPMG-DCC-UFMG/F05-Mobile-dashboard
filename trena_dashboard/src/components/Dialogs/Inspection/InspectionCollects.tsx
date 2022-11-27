@@ -13,6 +13,7 @@ import { InspectionServiceQuery } from "../../../core/network/services/Inspectio
 import { collectStatusMapping, convertEphocDate } from "../../../utils/mapper";
 import { InfoAccorion } from "../../Accordion";
 import { InfoTextField } from "../../Inputs/InfoTextField";
+import { MediaSwiper } from "../../Swiper";
 import { TableDialogContainer, TableDialogProps } from "../DialogContainer";
 
 interface InspectionCollectsDialogProps extends TableDialogProps {
@@ -32,19 +33,6 @@ export function InspectionCollectsDialog({
     () => InspectionServiceQuery.getInspectionCollects(inspectionId)
   );
 
-  const ableToFetchMetadata = collects !== undefined && collects.length > 0;
-
-  // const collectsMetaDataQueries = useQueries(
-  //   collects!.map<UseQueryOptions<Photo[] | string, Error>>((collect) => {
-  //     return {
-  //       queryKey: ["collectMetaData", collect.id!],
-  //       queryFn: () =>
-  //         CollectServiceQuery.getMediaMetaDataByCollectId(collect.id!),
-  //       enabled: !!ableToFetchMetadata,
-  //     };
-  //   })
-  // );
-
   return (
     <TableDialogContainer
       fullScreen={fullScreen}
@@ -54,9 +42,9 @@ export function InspectionCollectsDialog({
       index={index}
     >
       {collects ? (
-        collects!.map((collect) => (
+        collects.map((collect) => (
           <InfoAccorion
-            key={collect.id!}
+            key={collect.id}
             title={`Coleta realizada em: ${convertEphocDate(collect.date)}`}
           >
             <InfoTextField
@@ -91,13 +79,11 @@ export function InspectionCollectsDialog({
                   : "Nenhum comentário foi provido."
               }
             />
-            {/* <MediaSwiper
-              collectsMetadata={collectsMetaDataQueries.map((qr) => qr.data)}
-            /> */}
+            <MediaSwiper collects={collects} />
           </InfoAccorion>
         ))
       ) : (
-        <p>Essa vistoria não possui coletas</p>
+        <p>Essa vistoria ainda não possui coletas</p>
       )}
     </TableDialogContainer>
   );
