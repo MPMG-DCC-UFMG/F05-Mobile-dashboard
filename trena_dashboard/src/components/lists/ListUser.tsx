@@ -1,4 +1,4 @@
-import { Delete, Edit, Visibility } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import {
   Grid,
   IconButton,
@@ -11,9 +11,9 @@ import {
 } from "@mui/material";
 import { observer } from "mobx-react";
 import React, { useState } from "react";
-import { useQuery } from "react-query";
-import { useStores } from "../../core/contexts/UseStores";
-import { SecurityService } from "../../core/network/services/SecurityService";
+import { useMutation, useQuery } from "react-query";
+import { User } from "../../core/models/User";
+import { SecurityServiceQuery } from "../../core/network/services/SecurityService";
 import { AddUsersDialog } from "../Dialogs/Users/AddUsersDialog";
 import { EditUserDialog } from "../Dialogs/Users/EditUserDialog";
 import { Heading } from "../Heading";
@@ -21,10 +21,9 @@ import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListUser = observer(() => {
-  const { userStore } = useStores();
-  const { data: users, isLoading } = useQuery(
-    "getUsers",
-    SecurityService.loadUsersList,
+  const { data: users, isLoading } = useQuery<User[]>(
+    ["getUsers"],
+    SecurityServiceQuery.loadUsersList,
     {
       onSuccess: (data) => {
         setOpenEditUserDialog(Array(data.length).fill(false));
@@ -36,16 +35,19 @@ export const ListUser = observer(() => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
 
+  const { mutate } = useMutation(SecurityServiceQuery.deleteUser);
+
   const handleUserDeleted = (username: string) => {
-    userStore.deleteUser(username);
+    mutate(username);
   };
 
   const handleOpenEditDialog = (index: number) => {
     setOpenEditUserDialog(
       editUserDialog.map((value, position) =>
-      (index === position ? true : value))
+        index === position ? true : value
+      )
     );
-  }
+  };
 
   return (
     <>
@@ -90,44 +92,48 @@ export const ListUser = observer(() => {
                   {users
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((user, index) => (
-                    <TableRow hover key={user.email}>
-                      <TableCell align="center">{user.email}</TableCell>
-                      <TableCell align="center">{user.role}</TableCell>
-                      {/* <TableCell align="center">
+                      <TableRow hover key={user.email}>
+                        <TableCell align="center">{user.email}</TableCell>
+                        <TableCell align="center">{user.role}</TableCell>
+                        {/* <TableCell align="center">
                         <IconButton>
                           <Visibility />
                         </IconButton>
                       </TableCell> */}
-                      <TableCell align="center" onClick={() => handleOpenEditDialog(index)}>
-                        <IconButton color="info">
-                          <Edit />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell align="center">
-                        <IconButton
-                          onClick={() => handleUserDeleted(user.email)}
-                          color="error"
+                        <TableCell
+                          align="center"
+                          onClick={() => handleOpenEditDialog(index)}
                         >
-                          <Delete />
-                        </IconButton>
-                      </TableCell>
-                      <EditUserDialog
-                        state={editUserDialog}
-                        setState={setOpenEditUserDialog}
-                        user={user}
-                        index={index}
-                        title="Editar Usuário"
-                      />
-                    </TableRow>
-                  ))}
+                          <IconButton color="info">
+                            <Edit />
+                          </IconButton>
+                        </TableCell>
+                        <TableCell align="center">
+                          <IconButton
+                            onClick={() => handleUserDeleted(user.email)}
+                            color="error"
+                          >
+                            <Delete />
+                          </IconButton>
+                        </TableCell>
+                        <EditUserDialog
+                          state={editUserDialog}
+                          setState={setOpenEditUserDialog}
+                          user={user}
+                          index={index}
+                          title="Editar Usuário"
+                        />
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
-              <TablePagination 
+              <TablePagination
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 page={page}
                 setPage={setPage}
-                data={users} />
+                data={users}
+              />
             </Heading>
           </Paper>
         </Grid>
