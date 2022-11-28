@@ -1,5 +1,6 @@
 import { VerifiedUser } from "@material-ui/icons";
 import { CalendarMonth, TextFields, Troubleshoot } from "@mui/icons-material";
+import { Box } from "@mui/material";
 
 import React from "react";
 import { useQuery } from "react-query";
@@ -47,31 +48,40 @@ export function InspectionCollectsDialog({
             key={collect.id}
             title={`Coleta realizada em: ${convertEphocDate(collect.date)}`}
           >
-            <InfoTextField
-              disabled
-              fullWidth
-              icon={<CalendarMonth />}
-              label="Data de Aprovação"
-              defaultValue={convertEphocDate(collect.queue_status_date)}
-            />
-            <InfoTextField
-              disabled
-              fullWidth
-              icon={<VerifiedUser />}
-              label="Usuário Responsável"
-              defaultValue={collect.user_email}
-            />
-            <InfoTextField
-              disabled
-              fullWidth
-              icon={<Troubleshoot />}
-              label="Status"
-              defaultValue={collectStatusMapping(collect.queue_status)}
-            />
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <InfoTextField
+                disabled
+                sx={{ width: "33%" }}
+                icon={<CalendarMonth />}
+                label="Data de Aprovação"
+                defaultValue={convertEphocDate(collect.queue_status_date)}
+              />
+              <InfoTextField
+                disabled
+                sx={{ width: "33%" }}
+                icon={<VerifiedUser />}
+                label="Usuário Responsável"
+                defaultValue={collect.user_email}
+              />
+              <InfoTextField
+                disabled
+                sx={{ width: "33%" }}
+                icon={<Troubleshoot />}
+                label="Status"
+                defaultValue={collectStatusMapping(collect.queue_status)}
+              />
+            </Box>
             <InfoTextField
               disabled
               fullWidth
               icon={<TextFields />}
+              multiline
               label="Comentários"
               defaultValue={
                 collect.comments

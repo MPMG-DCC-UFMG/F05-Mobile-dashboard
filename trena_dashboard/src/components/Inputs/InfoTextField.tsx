@@ -11,6 +11,7 @@ interface InfoTextFieldProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: string;
   multiline?: boolean;
+  sx?: {};
 }
 
 export function InfoTextField({
@@ -23,10 +24,12 @@ export function InfoTextField({
   onChange,
   type,
   multiline,
+  sx,
 }: InfoTextFieldProps) {
   return (
     <TextField
       margin="normal"
+      sx={sx}
       required
       fullWidth={fullWidth}
       label={label}

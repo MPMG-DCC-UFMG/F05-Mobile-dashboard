@@ -37,15 +37,15 @@ export function MediaSwiper({ collects }: MediaSwiperProps) {
       >
         {collectsMetadata.map((collect, index) =>
           collect.data ? (
-            <SwiperSlide key={index}>
-              {collect.data.map((photo, photoIndex) => (
+            collect.data.map((photo, photoIndex) => (
+              <SwiperSlide key={index}>
                 <PhotoCard
                   key={photo.id}
                   photo={photo}
                   photoNumber={photoIndex + 1}
                 />
-              ))}
-            </SwiperSlide>
+              </SwiperSlide>
+            ))
           ) : (
             <WarningField
               title="Não há envios para esta coleta"

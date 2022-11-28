@@ -30,3 +30,23 @@ export function convertEphocDate(seconds: number) {
 
   return `${day}/${month}/${year}`;
 }
+
+function getDMS(latLng: number) {
+  const value = Math.abs(latLng);
+  const degrees = Math.floor(value);
+  const minutes = Math.floor((value - degrees) * 60);
+  const seconds =
+    Math.floor((value - degrees - minutes / 60) * 3600 * 1000) / 1000;
+
+  return `${degrees}º${minutes}'${seconds}\"`;
+}
+
+export function convertLatLngToDMS(lat: number, lng: number) {
+  let finalLat = getDMS(lat);
+  finalLat += lat >= 0 ? "N" : "S";
+
+  let finalLng = getDMS(lng);
+  finalLng += lng >= 0 ? "L" : "O";
+
+  return `${finalLat}, ${finalLng}`;
+}
