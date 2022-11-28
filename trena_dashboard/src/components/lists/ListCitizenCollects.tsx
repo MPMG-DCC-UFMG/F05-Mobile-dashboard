@@ -129,7 +129,7 @@ export function ListCitizenCollects() {
                           state={openCollectSubmissionsDialog}
                           setState={setOpenCollectSubmissionsDialog}
                           fullScreen
-                          title="Envios - Vistoria Cidadã"
+                          title={`Envios - ${collect.id!}`}
                         />
                       </React.Fragment>
                     ))}
