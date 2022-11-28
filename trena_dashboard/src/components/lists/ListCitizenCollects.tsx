@@ -15,17 +15,33 @@ import { useQuery } from "react-query";
 import { Collect } from "../../core/models/Collect";
 import { CollectServiceQuery } from "../../core/network/services/CollectService";
 import { collectStatusMapping, convertEphocDate } from "../../utils/mapper";
+import { CollectSubmissionDialog } from "../Dialogs/Collect/CollectSubmission";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export function ListCitizenCollects() {
+  const [openCollectSubmissionsDialog, setOpenCollectSubmissionsDialog] =
+    useState<boolean[]>([]);
   const { data: collects, isLoading } = useQuery<Collect[]>(
     ["citizenCollects"],
-    () => CollectServiceQuery.loadAllCitizenCollects()
+    () => CollectServiceQuery.loadAllCitizenCollects(),
+    {
+      onSuccess(data) {
+        setOpenCollectSubmissionsDialog(Array(data.length).fill(false));
+      },
+    }
   );
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
+
+  const handleOpenDialog = (
+    state: boolean[],
+    setState: Function,
+    index: number
+  ) => {
+    setState(state.map((s, position) => (position === index ? true : s)));
+  };
 
   return (
     <>
@@ -86,7 +102,15 @@ export function ListCitizenCollects() {
                           </TableCell>
                           <TableCell align="center">
                             <Tooltip title="Envios">
-                              <IconButton>
+                              <IconButton
+                                onClick={() =>
+                                  handleOpenDialog(
+                                    openCollectSubmissionsDialog,
+                                    setOpenCollectSubmissionsDialog,
+                                    index
+                                  )
+                                }
+                              >
                                 <Collections />
                               </IconButton>
                             </Tooltip>
@@ -99,6 +123,14 @@ export function ListCitizenCollects() {
                             </Tooltip>
                           </TableCell>
                         </TableRow>
+                        <CollectSubmissionDialog
+                          collect={collect}
+                          index={index}
+                          state={openCollectSubmissionsDialog}
+                          setState={setOpenCollectSubmissionsDialog}
+                          fullScreen
+                          title="Envios - Vistoria Cidadã"
+                        />
                       </React.Fragment>
                     ))}
                 </TableBody>

@@ -108,11 +108,18 @@ const countPublicWork = async () => {
   return res.body;
 };
 
+const getPublicWorkById = async (id: string) => {
+  const call = Config.BASE_URL + `/publicworks/${id}`;
+  const res = await TrenaAPI.network().get(call);
+
+  return res.body;
+};
+
 export const PublicWorkServiceQuery = {
   loadPublicWorks,
+  getPublicWorkById,
   deletePublicWork,
   addPublicWork,
   updatePublicWork,
   countPublicWork,
 };
-

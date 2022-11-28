@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import React from "react";
-import { useQueries } from "react-query";
+import { useQueries, useQuery } from "react-query";
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Collect } from "../../core/models/Collect";
@@ -12,6 +12,42 @@ import "./styles.css";
 
 interface MediaSwiperProps {
   collects: Collect[];
+}
+
+interface RawSwiperProps {
+  collect: Collect;
+}
+
+export function RawSwiper({ collect }: RawSwiperProps) {
+  const { data: photos } = useQuery(["getCollectMedia", collect.id!], () =>
+    CollectServiceQuery.getMediaMetaDataByCollectId(collect.id!)
+  );
+
+  return (
+    <Swiper
+      modules={[Navigation, Pagination]}
+      pagination={true}
+      navigation={true}
+      speed={300}
+      spaceBetween={50}
+      slidesPerView={1}
+      className="mySwiper"
+    >
+      {photos ? (
+        photos.map((photo, index) => (
+          <SwiperSlide key={photo.id}>
+            <PhotoCard photo={photo} photoNumber={index + 1} key={photo.id} />
+          </SwiperSlide>
+        ))
+      ) : (
+        <WarningField
+          title="Não há envios para esta coleta"
+          message="Não foi anexada nenhuma Foto ou Vídeo para esta coleta."
+          severity="warning"
+        />
+      )}
+    </Swiper>
+  );
 }
 
 export function MediaSwiper({ collects }: MediaSwiperProps) {

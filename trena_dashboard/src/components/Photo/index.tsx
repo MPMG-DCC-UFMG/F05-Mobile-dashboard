@@ -22,7 +22,7 @@ export function PhotoCard({ photo, photoNumber }: PhotoCardProps) {
       <CardMedia
         component="img"
         height={400}
-        image={`data:;base64,${image}`}
+        src={`data:;base64,${image}`}
         alt={`Foto ${photoNumber}`}
       />
       <CardContent>

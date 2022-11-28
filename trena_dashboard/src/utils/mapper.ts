@@ -1,3 +1,5 @@
+import { Address } from "../core/models/Address";
+
 export function inspectionsStatusMapping(status: number) {
   switch (status) {
     case 0:
@@ -7,6 +9,10 @@ export function inspectionsStatusMapping(status: number) {
     case 2:
       return "Enviada";
   }
+}
+
+export function addressFormatter(adress: Address) {
+  return `${adress.street}, ${adress.number} - ${adress.city}`;
 }
 
 export function collectStatusMapping(status: number) {

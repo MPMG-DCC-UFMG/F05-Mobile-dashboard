@@ -11,10 +11,10 @@ import {
   Stepper,
 } from "@mui/material";
 import React, { useState } from "react";
+import { QueuePublicWork } from "./PublicWorkMapView";
 import { QueueCollects } from "./QueueCollects";
 import { QueueConfirm } from "./QueueConfirm";
 import { QueuePhotos } from "./QueuePhotos";
-import { QueuePublicWork } from "./QueuePublicWork";
 
 interface QueueStepperProps {
   setClose(state: boolean): void;
@@ -98,3 +98,4 @@ export function QueueStepper({ setClose, close }: QueueStepperProps) {
     </Container>
   );
 }
+
