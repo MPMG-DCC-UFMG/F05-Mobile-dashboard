@@ -1,4 +1,4 @@
-import { Check, Close, Collections } from "@mui/icons-material";
+import { Check, Close, Visibility } from "@mui/icons-material";
 import {
   Grid,
   IconButton,
@@ -15,18 +15,31 @@ import { useQuery } from "react-query";
 import { Collect } from "../../core/models/Collect";
 import { CollectServiceQuery } from "../../core/network/services/CollectService";
 import { convertEphocDate } from "../../utils/mapper";
+import { EvaluateQueueItemDialog } from "../Dialogs/Queue/EvaluateQueueItem";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export function ListQueue() {
+  const [openEvaluateCollect, setOpenEvaluateCollect] = useState<boolean[]>([]);
   const { data: queue, isLoading } = useQuery<Collect[]>(
     ["queueCollects"],
-    () => CollectServiceQuery.getQueueCollects()
+    () => CollectServiceQuery.getQueueCollects(),
+    {
+      onSuccess(data) {
+        setOpenEvaluateCollect(Array(data.length).fill(false));
+      },
+    }
   );
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
+
+  const handleOpenEvaluateDialog = (index: number) => {
+    setOpenEvaluateCollect(
+      openEvaluateCollect.map((s, pos) => (pos === index ? true : s))
+    );
+  };
 
   return (
     <>
@@ -66,7 +79,7 @@ export function ListQueue() {
                     <TableCell align="center">Obra</TableCell>
                     <TableCell align="center">Usuário Responsável</TableCell>
                     <TableCell align="center">Data</TableCell>
-                    <TableCell align="center">Envios</TableCell>
+                    <TableCell align="center">Avaliar</TableCell>
                     <TableCell align="center">Aceitar</TableCell>
                     <TableCell align="center">Recusar</TableCell>
                   </TableRow>
@@ -89,8 +102,10 @@ export function ListQueue() {
 
                           <TableCell align="center">
                             <Tooltip title="Envios">
-                              <IconButton>
-                                <Collections />
+                              <IconButton
+                                onClick={() => handleOpenEvaluateDialog(index)}
+                              >
+                                <Visibility />
                               </IconButton>
                             </Tooltip>
                           </TableCell>
@@ -109,6 +124,14 @@ export function ListQueue() {
                             </Tooltip>
                           </TableCell>
                         </TableRow>
+                        <EvaluateQueueItemDialog
+                          collect={collect}
+                          index={index}
+                          state={openEvaluateCollect}
+                          setState={setOpenEvaluateCollect}
+                          title={`Avaliação de Coleta`}
+                          fullScreen
+                        />
                       </React.Fragment>
                     ))}
                 </TableBody>
