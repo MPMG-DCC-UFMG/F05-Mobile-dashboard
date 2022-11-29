@@ -87,7 +87,7 @@ export function ListQueue() {
                 <TableBody>
                   {queue
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((collect, index) => (
+                    .map((collect: Collect, index: number) => (
                       <React.Fragment key={collect.id!}>
                         <TableRow>
                           <TableCell align="center">
@@ -101,7 +101,7 @@ export function ListQueue() {
                           </TableCell>
 
                           <TableCell align="center">
-                            <Tooltip title="Envios">
+                            <Tooltip title="Avaliar">
                               <IconButton
                                 onClick={() => handleOpenEvaluateDialog(index)}
                               >

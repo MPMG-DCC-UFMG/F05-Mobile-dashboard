@@ -58,6 +58,13 @@ const loadWorkStatus = async () => {
   return res.body;
 };
 
+const loadWorkStatusById = async (id: number) => {
+  const call = Config.BASE_URL + "/workstatus/id";
+  const res = await TrenaAPI.network().query({ work_status_id: id }).get(call);
+
+  return res.body;
+};
+
 const deleteWorkStatus = async (workStatusFlag: number) => {
   const call = Config.BASE_URL + "/workstatus/delete";
   const res = await TrenaAPI.network()
@@ -90,7 +97,9 @@ const updateWorkStatus = async (workStatus: WorkStatus) => {
 
 export const WorkStatusServiceQuery = {
   loadWorkStatus,
+  loadWorkStatusById,
   deleteWorkStatus,
   addWorkStatus,
   updateWorkStatus,
 };
+

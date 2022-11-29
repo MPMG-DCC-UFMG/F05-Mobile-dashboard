@@ -39,7 +39,7 @@ export function QueueStepper({ collect, publicWork }: QueueStepperProps) {
     handleNext();
   };
 
-  const steps = ["Obra Pública", "Coletas", "Fotos", "Confirmar"];
+  const steps = ["Obra Pública", "Envios", "Fotos", "Confirmar"];
 
   return (
     <Container style={{ width: "100%", height: "100%" }}>
@@ -57,7 +57,12 @@ export function QueueStepper({ collect, publicWork }: QueueStepperProps) {
 
       <Grid sx={{ pt: 2 }} container>
         {activeStep === 0 && <PublicWorkMapView publicWork={publicWork} />}
-        {activeStep === 1 && <QueueCollects />}
+        {activeStep === 1 && (
+          <QueueCollects
+            publicWorkStatusFlag={publicWork.user_status!}
+            collect={collect}
+          />
+        )}
         {activeStep === 2 && <QueuePhotos />}
         {activeStep === 3 && <QueueConfirm />}
       </Grid>
