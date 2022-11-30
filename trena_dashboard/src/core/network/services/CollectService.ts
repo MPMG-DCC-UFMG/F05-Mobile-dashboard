@@ -173,6 +173,15 @@ const getQueueCollects = async () => {
   return res.body;
 };
 
+const getQueueCollectsByPublicWorkId = async (publicWorkId: string) => {
+  const call = Config.BASE_URL + "/collects/publicwork/citizen";
+  const res = await TrenaAPI.network()
+    .query({ public_work_id: publicWorkId })
+    .get(call);
+
+  return res.body;
+};
+
 const saveData = (data: Blob, filename: string = "filename") => {
   const csvURL = window.URL.createObjectURL(data);
   let tempLink = document.createElement("a");
@@ -188,6 +197,7 @@ export const CollectServiceQuery = {
   loadAllCitizenCollects,
   getMediaMetaDataByCollectId,
   getMediaByCollectFileName,
+  getQueueCollectsByPublicWorkId,
   getQueueCollects,
   collectMonthCount,
   retrievePhotos,

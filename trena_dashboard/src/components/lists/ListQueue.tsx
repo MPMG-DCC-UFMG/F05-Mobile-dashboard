@@ -12,9 +12,10 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { Collect } from "../../core/models/Collect";
-import { CollectServiceQuery } from "../../core/network/services/CollectService";
-import { convertEphocDate } from "../../utils/mapper";
+import { PublicWork } from "../../core/models/PublicWork";
+import { WorkStatus } from "../../core/models/WorkStatus";
+import { PublicWorkServiceQuery } from "../../core/network/services/PublicWorkService";
+import { WorkStatusServiceQuery } from "../../core/network/services/WorkStatusService";
 import { EvaluateQueueItemDialog } from "../Dialogs/Queue/EvaluateQueueItem";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
@@ -22,14 +23,18 @@ import { TablePagination } from "../TablePagination";
 
 export function ListQueue() {
   const [openEvaluateCollect, setOpenEvaluateCollect] = useState<boolean[]>([]);
-  const { data: queue, isLoading } = useQuery<Collect[]>(
+  const { data: queue, isLoading } = useQuery<PublicWork[]>(
     ["queueCollects"],
-    () => CollectServiceQuery.getQueueCollects(),
+    () => PublicWorkServiceQuery.getPublicWorksWithCollectsInQueue(),
     {
       onSuccess(data) {
         setOpenEvaluateCollect(Array(data.length).fill(false));
       },
     }
+  );
+
+  const { data: workStatus } = useQuery<WorkStatus[]>(["getWorkStatus"], () =>
+    WorkStatusServiceQuery.loadWorkStatus()
   );
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -77,8 +82,7 @@ export function ListQueue() {
                 <TableHead>
                   <TableRow>
                     <TableCell align="center">Obra</TableCell>
-                    <TableCell align="center">Usuário Responsável</TableCell>
-                    <TableCell align="center">Data</TableCell>
+                    <TableCell align="center">Estado da Obra</TableCell>
                     <TableCell align="center">Avaliar</TableCell>
                     <TableCell align="center">Aceitar</TableCell>
                     <TableCell align="center">Recusar</TableCell>
@@ -87,17 +91,19 @@ export function ListQueue() {
                 <TableBody>
                   {queue
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((collect: Collect, index: number) => (
-                      <React.Fragment key={collect.id!}>
+                    .map((public_work: PublicWork, index: number) => (
+                      <React.Fragment key={public_work.id}>
                         <TableRow>
                           <TableCell align="center">
-                            {collect.public_work_id}
+                            {public_work.name}
                           </TableCell>
                           <TableCell align="center">
-                            {collect.user_email}
-                          </TableCell>
-                          <TableCell align="center">
-                            {convertEphocDate(collect.date)}
+                            {workStatus
+                              ? workStatus.find(
+                                  (status) =>
+                                    status.flag === public_work.user_status
+                                )?.name
+                              : ""}
                           </TableCell>
 
                           <TableCell align="center">
@@ -125,7 +131,7 @@ export function ListQueue() {
                           </TableCell>
                         </TableRow>
                         <EvaluateQueueItemDialog
-                          collect={collect}
+                          publicWork={public_work}
                           index={index}
                           state={openEvaluateCollect}
                           setState={setOpenEvaluateCollect}

@@ -1,6 +1,11 @@
 import { Grid, Typography } from "@mui/material";
 import React from "react";
 
+interface QueueConfirmProps {
+  publicWorkId: string;
+  photosIds: string[];
+}
+
 export function QueueConfirm() {
   return (
     <Grid
@@ -16,3 +21,4 @@ export function QueueConfirm() {
     </Grid>
   );
 }
+
