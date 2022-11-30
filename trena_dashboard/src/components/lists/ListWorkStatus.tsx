@@ -1,14 +1,16 @@
-import { Delete, Edit, Visibility } from "@mui/icons-material";
+import { Delete, Edit, ManageSearch } from "@mui/icons-material";
 import {
   Divider,
   Grid,
   IconButton,
+  InputAdornment,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
+  TextField,
 } from "@mui/material";
 import { observer } from "mobx-react";
 import React, { useState } from "react";
@@ -18,34 +20,40 @@ import { WorkStatus } from "../../core/models/WorkStatus";
 import { WorkStatusServiceQuery } from "../../core/network/services/WorkStatusService";
 import { AddWorkStatusDialog } from "../Dialogs/StatusWork/AddWorkStatusDialog";
 import { EditWorkStatusDialog } from "../Dialogs/StatusWork/EditWorkStatusDialog";
-import { Search } from "../Form/Search";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListWorkStatus = observer(() => {
-  const { data: workStatus, isLoading } = useQuery(
+  const { data: workStatus, isLoading } = useQuery<WorkStatus[]>(
     ["getWorkStatus"],
     WorkStatusServiceQuery.loadWorkStatus,
     {
       onSuccess: (data) => {
         setOpenEditWorkStatusDialog(Array(data.length).fill(false));
-        setAtualTable(workStatusStore.workStatusList);
-      }
+        setAtualTable(data);
+      },
     }
   );
-   const { workStatusStore} = useStores();
+  const { workStatusStore } = useStores();
   const [addWorkStatusDialog, setOpenAddWorkStatusDialog] = useState(false);
-  const [editWorkStatusDialog, setOpenEditWorkStatusDialog] = useState<boolean[]>([]);
-  const [atualTable, setAtualTable] = useState<WorkStatus[]>(workStatusStore.workStatusList);
+  const [editWorkStatusDialog, setOpenEditWorkStatusDialog] = useState<
+    boolean[]
+  >([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
- 
+  const [atualTable, setAtualTable] = useState<WorkStatus[]>([]);
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const query = event.currentTarget.value;
-    workStatusStore.search(query);
-    setAtualTable(workStatusStore.workStatusList);
+  const handleSearch = (value?: string) => {
+    if (value) {
+      setAtualTable(
+        workStatus!.filter((item) =>
+          item.name.toUpperCase().includes(value.toUpperCase())
+        )
+      );
+    } else {
+      setAtualTable(workStatus!);
+    }
   };
 
   const handleDeleteWorkStatus = (workStatus: WorkStatus) => {
@@ -55,10 +63,12 @@ export const ListWorkStatus = observer(() => {
   };
 
   const handleOpenEditDialog = (index: number) => {
-    setOpenEditWorkStatusDialog(editWorkStatusDialog.map((value, position) => 
-      (position === index ? true : value)
-    ))
-  }
+    setOpenEditWorkStatusDialog(
+      editWorkStatusDialog.map((value, position) =>
+        position === index ? true : value
+      )
+    );
+  };
 
   return (
     <>
@@ -90,7 +100,19 @@ export const ListWorkStatus = observer(() => {
                 title="Adicionar Estado De Obra"
               />
               <Grid item display="flex" padding={2} justifyContent="flex-Start">
-                <Search label="Estado da Obra" onTextChanged={handleSearch} />
+                <TextField
+                  fullWidth
+                  size="small"
+                  onChange={(e) => handleSearch(e.target.value)}
+                  label="Tipo de Obra"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <ManageSearch />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
               </Grid>
               <Divider />
               <Table>
@@ -103,49 +125,52 @@ export const ListWorkStatus = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {workStatus!
+                  {atualTable
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((workStatus: WorkStatus, index: number) => (
-                    <TableRow hover key={workStatus.flag}>
-                      <TableCell align="center">{workStatus.name}</TableCell>
-                      {/* <TableCell align="center">
-                        <IconButton>
-                          <Visibility />
-                        </IconButton>
-                      </TableCell> */}
-                      <TableCell align="center">
-                        {workStatus.description}
-                      </TableCell>
-                      <TableCell align="center">
-                        <IconButton color="info" onClick={()=> handleOpenEditDialog(index)}>
-                          <Edit />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell align="center">
-                        <IconButton
-                          onClick={() => handleDeleteWorkStatus(workStatus)}
-                          color="error"
-                        >
-                          <Delete />
-                        </IconButton>
-                      </TableCell>
-                      <EditWorkStatusDialog
-                        state={editWorkStatusDialog}
-                        setState={setOpenEditWorkStatusDialog}
-                        workStatus={workStatus}
-                        index={index}
-                        title='Editar Estado Da Obra'
-                      />  
-                    </TableRow>
-                  ))}
+                      <React.Fragment key={workStatus.flag!}>
+                        <TableRow hover>
+                          <TableCell align="center">
+                            {workStatus.name}
+                          </TableCell>
+                          <TableCell align="center">
+                            {workStatus.description}
+                          </TableCell>
+                          <TableCell align="center">
+                            <IconButton
+                              color="info"
+                              onClick={() => handleOpenEditDialog(index)}
+                            >
+                              <Edit />
+                            </IconButton>
+                          </TableCell>
+                          <TableCell align="center">
+                            <IconButton
+                              onClick={() => handleDeleteWorkStatus(workStatus)}
+                              color="error"
+                            >
+                              <Delete />
+                            </IconButton>
+                          </TableCell>
+                          <EditWorkStatusDialog
+                            state={editWorkStatusDialog}
+                            setState={setOpenEditWorkStatusDialog}
+                            workStatus={workStatus}
+                            index={index}
+                            title="Editar Estado Da Obra"
+                          />
+                        </TableRow>
+                      </React.Fragment>
+                    ))}
                 </TableBody>
               </Table>
-              <TablePagination 
+              <TablePagination
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 page={page}
                 setPage={setPage}
-                data={workStatus} />
+                data={atualTable}
+              />
             </Heading>
           </Paper>
         </Grid>

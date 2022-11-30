@@ -1,14 +1,16 @@
-import { Delete, Edit, Visibility } from "@mui/icons-material";
+import { Delete, Edit, ManageSearch } from "@mui/icons-material";
 import {
   Divider,
   Grid,
   IconButton,
+  InputAdornment,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
+  TextField,
 } from "@mui/material";
 import { observer } from "mobx-react";
 import React, { useState } from "react";
@@ -19,20 +21,19 @@ import { TypeWorkServiceQuery } from "../../core/network/services/TypeWorkServic
 import { ConfirmActionDialog } from "../Dialogs/ConfirmActionDialog";
 import { AddTypeOfWorkDialog } from "../Dialogs/TypeOfWork/AddTypeOfWorkDialog";
 import { EditTypeOfWorkDialog } from "../Dialogs/TypeOfWork/EditTypeOfWorkDialog";
-import { Search } from "../Form/Search";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListTypeWork = observer(() => {
-  const { data: typeWorks, isLoading } = useQuery(
+  const { data: typeWorks, isLoading } = useQuery<TypeWork[]>(
     ["getTypeWork"],
-    TypeWorkServiceQuery.loadTypeWorks,
+    () => TypeWorkServiceQuery.loadTypeWorks(),
     {
       onSuccess: (data) => {
         setOpenEditTypeWorkDialog(Array(data.length).fill(false));
         setOpenDeleteDialog(Array(data.length).fill(false));
-        setAtualTable(typeWorkStore.typeWorksList);
+        setAtualTable(data);
       },
     }
   );
@@ -42,16 +43,20 @@ export const ListTypeWork = observer(() => {
     []
   );
   const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean[]>([]);
-  const [atualTable, setAtualTable] = useState<TypeWork[]>(
-    typeWorkStore.typeWorksList
-  );
+  const [atualTable, setAtualTable] = useState<TypeWork[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const query = event.currentTarget.value;
-    typeWorkStore.search(query);
-    setAtualTable(typeWorkStore.typeWorksList);
+  const handleSearch = (value?: string) => {
+    if (value) {
+      setAtualTable(
+        typeWorks!.filter((item) =>
+          item.name.toUpperCase().includes(value.toUpperCase())
+        )
+      );
+    } else {
+      setAtualTable(typeWorks!);
+    }
   };
 
   const handleDeleteTypeWork = (typeWork: TypeWork) => {
@@ -106,14 +111,25 @@ export const ListTypeWork = observer(() => {
                 title="Adicionar Tipo De Obra"
               />
               <Grid item display="flex" padding={2} justifyContent="flex-Start">
-                <Search label="Tipo de Obra" onTextChanged={handleSearch} />
+                <TextField
+                  fullWidth
+                  size="small"
+                  onChange={(e) => handleSearch(e.target.value)}
+                  label="Tipo de Obra"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <ManageSearch />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
               </Grid>
               <Divider />
               <Table>
                 <TableHead>
                   <TableRow>
                     <TableCell align="center">Nome</TableCell>
-                    {/* <TableCell align="center">Detalhes</TableCell> */}
                     <TableCell align="center">Editar</TableCell>
                     <TableCell align="center">Remover</TableCell>
                   </TableRow>
@@ -122,52 +138,50 @@ export const ListTypeWork = observer(() => {
                   {atualTable
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((typeWork: TypeWork, index: number) => (
-                      <TableRow hover key={typeWork.flag}>
-                        <TableCell align="center">{typeWork.name}</TableCell>
-                        {/* <TableCell align="center">
-                        <IconButton>
-                          <Visibility />
-                        </IconButton>
-                      </TableCell> */}
-                        <TableCell align="center">
-                          <IconButton
-                            color="info"
-                            onClick={() => handleOpenEditDialog(index)}
-                          >
-                            <Edit />
-                          </IconButton>
-                        </TableCell>
-                        <TableCell align="center">
-                          <IconButton
-                            onClick={() => handleDeleteTypeWork(typeWork)}
-                            color="error"
-                          >
-                            <Delete />
-                          </IconButton>
-                        </TableCell>
-                        <EditTypeOfWorkDialog
-                          state={editTypeWorkDialog}
-                          setState={setOpenEditTypeWorkDialog}
-                          typeWork={typeWork}
-                          index={index}
-                          title="Editar Tipo de Obra"
-                        />
-                        <ConfirmActionDialog
-                          message="Confirmar Exclusão"
-                          action={() => handleDeleteTypeWork(typeWork)}
-                          state={openDeleteDialog}
-                          setState={() => setOpenDeleteDialog}
-                        />
-                      </TableRow>
+                      <React.Fragment key={typeWork.flag!}>
+                        <TableRow hover>
+                          <TableCell align="center">{typeWork.name}</TableCell>
+                          <TableCell align="center">
+                            <IconButton
+                              color="info"
+                              onClick={() => handleOpenEditDialog(index)}
+                            >
+                              <Edit />
+                            </IconButton>
+                          </TableCell>
+                          <TableCell align="center">
+                            <IconButton
+                              onClick={() => handleDeleteTypeWork(typeWork)}
+                              color="error"
+                            >
+                              <Delete />
+                            </IconButton>
+                          </TableCell>
+                          <EditTypeOfWorkDialog
+                            state={editTypeWorkDialog}
+                            setState={setOpenEditTypeWorkDialog}
+                            typeWork={typeWork}
+                            index={index}
+                            title="Editar Tipo de Obra"
+                          />
+                          <ConfirmActionDialog
+                            message="Confirmar Exclusão"
+                            action={() => handleDeleteTypeWork(typeWork)}
+                            state={openDeleteDialog}
+                            setState={() => setOpenDeleteDialog}
+                          />
+                        </TableRow>
+                      </React.Fragment>
                     ))}
                 </TableBody>
               </Table>
-              <TablePagination 
+              <TablePagination
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 page={page}
                 setPage={setPage}
-                data={atualTable} />
+                data={typeWorks}
+              />
             </Heading>
           </Paper>
         </Grid>
@@ -175,4 +189,3 @@ export const ListTypeWork = observer(() => {
     </>
   );
 });
-

@@ -1,4 +1,4 @@
-import { Edit, Delete } from "@mui/icons-material";
+import { Edit, Delete, ManageSearch } from "@mui/icons-material";
 import {
   Divider,
   Grid,
@@ -9,6 +9,8 @@ import {
   TableHead,
   TableRow,
   IconButton,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
 import { observer } from "mobx-react";
 import React, { useState } from "react";
@@ -18,33 +20,40 @@ import { TypePhoto } from "../../core/models/TypePhoto";
 import { TypePhotoService } from "../../core/network/services/TypePhotoService";
 import { AddTypeOfPhotoDialog } from "../Dialogs/TypePhoto/AddTypeOfPhotoDialog";
 import { EditTypeOfPhotoDialog } from "../Dialogs/TypePhoto/EditTypeOfPhotoDialog";
-import { Search } from "../Form/Search";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListTypePhoto = observer(() => {
-  const { data: typePhoto, isLoading } = useQuery(
-    ["getTypePhoto"], 
+  const { data: typePhotos, isLoading } = useQuery(
+    ["getTypePhoto"],
     TypePhotoService.loadTypePhotos,
     {
       onSuccess: (data) => {
         setOpenEditTypePhotoDialog(Array(data.length).fill(false));
-        setAtualTable(typePhotoStore.typePhotoList);
-      }
+        setAtualTable(data);
+      },
     }
   );
-  const { typePhotoStore, viewStore } = useStores();
+  const { typePhotoStore } = useStores();
   const [addTypePhotoDialog, setOpenAddTypePhotoDialog] = useState(false);
-  const [editTypePhotoDialog, setOpenEditTypePhotoDialog] = useState<boolean[]>([]);
-  const [atualTable, setAtualTable] = useState<TypePhoto[]>(typePhotoStore.typePhotoList);
+  const [editTypePhotoDialog, setOpenEditTypePhotoDialog] = useState<boolean[]>(
+    []
+  );
+  const [atualTable, setAtualTable] = useState<TypePhoto[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const query = event.currentTarget.value;
-    typePhotoStore.search(query);
-    setAtualTable(typePhotoStore.typePhotoList);
+  const handleSearch = (value?: string) => {
+    if (value) {
+      setAtualTable(
+        typePhotos!.filter((item) =>
+          item.name.toUpperCase().includes(value.toUpperCase())
+        )
+      );
+    } else {
+      setAtualTable(typePhotos!);
+    }
   };
 
   const handleSelectPhoto = (typePhoto: TypePhoto) => {
@@ -58,14 +67,16 @@ export const ListTypePhoto = observer(() => {
   };
 
   const handleOpenEditDialog = (index: number) => {
-    setOpenEditTypePhotoDialog(editTypePhotoDialog.map((value, position) => 
-      (position === index ? true : value)
-    ))
-  }
+    setOpenEditTypePhotoDialog(
+      editTypePhotoDialog.map((value, position) =>
+        position === index ? true : value
+      )
+    );
+  };
 
   return (
     <>
-      {isLoading || !typePhoto ? (
+      {isLoading || !typePhotos ? (
         <LoadingTableData
           headingAction={() => setOpenAddTypePhotoDialog(true)}
           headingTitle="Tipo de Foto"
@@ -93,7 +104,19 @@ export const ListTypePhoto = observer(() => {
                 title="Adicionar tipo de foto"
               />
               <Grid item display="flex" padding={2} justifyContent="flex-Start">
-                <Search label="Tipo de Foto" onTextChanged={handleSearch} />
+                <TextField
+                  fullWidth
+                  size="small"
+                  onChange={(e) => handleSearch(e.target.value)}
+                  label="Tipo de Foto"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <ManageSearch />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
               </Grid>
               <Divider />
               <Table>
@@ -107,48 +130,50 @@ export const ListTypePhoto = observer(() => {
                 </TableHead>
                 <TableBody>
                   {atualTable
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((typePhoto: TypePhoto, index: number) => (
-                    <TableRow
-                      key={typePhoto.flag}
-                      hover
-                      onClick={() => handleSelectPhoto(typePhoto)}
-                    >
-                      <TableCell>{typePhoto.name}</TableCell>
-                      <TableCell>{typePhoto.description}</TableCell>
-                      <TableCell>
-                        <IconButton
-                          onClick={() => handleOpenEditDialog(index)}
-                          color="info"
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((typePhoto: TypePhoto, index: number) => (
+                      <React.Fragment key={typePhoto.flag!}>
+                        <TableRow
+                          hover
+                          onClick={() => handleSelectPhoto(typePhoto)}
                         >
-                          <Edit />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell>
-                        <IconButton
-                          color="error"
-                          onClick={() => handleDeleteTypePhoto(typePhoto)}
-                        >
-                          <Delete />
-                        </IconButton>
-                      </TableCell>
-                      <EditTypeOfPhotoDialog
-                      state={editTypePhotoDialog}
-                      setState={setOpenEditTypePhotoDialog}
-                      typePhoto={typePhoto}
-                      index={index}
-                      title='Editar Tipo De Foto'
-                    />
-                    </TableRow>
-                  ))}
+                          <TableCell>{typePhoto.name}</TableCell>
+                          <TableCell>{typePhoto.description}</TableCell>
+                          <TableCell>
+                            <IconButton
+                              onClick={() => handleOpenEditDialog(index)}
+                              color="info"
+                            >
+                              <Edit />
+                            </IconButton>
+                          </TableCell>
+                          <TableCell>
+                            <IconButton
+                              color="error"
+                              onClick={() => handleDeleteTypePhoto(typePhoto)}
+                            >
+                              <Delete />
+                            </IconButton>
+                          </TableCell>
+                          <EditTypeOfPhotoDialog
+                            state={editTypePhotoDialog}
+                            setState={setOpenEditTypePhotoDialog}
+                            typePhoto={typePhoto}
+                            index={index}
+                            title="Editar Tipo De Foto"
+                          />
+                        </TableRow>
+                      </React.Fragment>
+                    ))}
                 </TableBody>
               </Table>
-              <TablePagination 
+              <TablePagination
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 page={page}
                 setPage={setPage}
-                data={atualTable} />
+                data={atualTable}
+              />
             </Heading>
           </Paper>
         </Grid>
@@ -156,3 +181,4 @@ export const ListTypePhoto = observer(() => {
     </>
   );
 });
+
