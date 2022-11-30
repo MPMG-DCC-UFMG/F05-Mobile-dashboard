@@ -1,5 +1,6 @@
 import { Dashboard, LinkedCamera, People } from "@material-ui/icons";
 import {
+  Build,
   Construction,
   ExpandLess,
   ExpandMore,
@@ -46,6 +47,7 @@ export function DrawerListItem() {
   const { collapseStore } = useStores();
   const [workConfig, setWorkConfig] = useState(collapseStore.workConfig);
   const [trena, setTrena] = useState(collapseStore.trena);
+  const [publicWork, setPublicWork] = useState(collapseStore.publicWork);
 
   const handleToggleWorkConfig = () => {
     setWorkConfig(!workConfig);
@@ -57,6 +59,11 @@ export function DrawerListItem() {
     collapseStore.toggleTrena();
   };
 
+  const handleTogglePublicWorks = () => {
+    setPublicWork(!publicWork);
+    collapseStore.togglePublicWork();
+  };
+
   return (
     <List>
       <MyListItem
@@ -64,6 +71,7 @@ export function DrawerListItem() {
         url="/dashboard"
         iconText="Tela Inicial"
       />
+
       <ListItemButton onClick={handleToggleWorkConfig}>
         <ListItemIcon>
           <Settings />
@@ -97,6 +105,27 @@ export function DrawerListItem() {
           iconText="Estado das Obras"
         />
       </Collapse>
+      <ListItemButton onClick={handleTogglePublicWorks}>
+        <ListItemIcon>
+          <Build />
+        </ListItemIcon>
+        <ListItemText primary="Obras Públicas" />
+        {publicWork ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+      <Collapse in={publicWork}>
+        <MyListItem
+          sx={{ pl: 4 }}
+          icon={<Construction />}
+          url="/publicWork"
+          iconText="Obras Públicas"
+        />
+        <MyListItem
+          sx={{ pl: 4 }}
+          icon={<Queue />}
+          url="/publicWork/queue"
+          iconText="Fila de Obras"
+        />
+      </Collapse>
 
       <ListItemButton onClick={handleToggleTrena}>
         <ListItemIcon>
@@ -125,11 +154,7 @@ export function DrawerListItem() {
           iconText="Fila de Envios"
         />
       </Collapse>
-      <MyListItem
-        icon={<Construction />}
-        url="/publicWork"
-        iconText="Obras Públicas"
-      />
+
       <MyListItem icon={<People />} url="/users" iconText="Usuários" />
       <MyListItem icon={<Logout />} url="/login" iconText="Sair" />
     </List>

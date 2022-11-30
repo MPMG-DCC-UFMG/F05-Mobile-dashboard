@@ -115,9 +115,17 @@ const getPublicWorkById = async (id: string) => {
   return res.body;
 };
 
+const getPublicWorksWithCollectsInQueue = async () => {
+  const call = Config.BASE_URL + `/publicworks/citizen/queue`;
+  const res = await TrenaAPI.network().get(call);
+
+  return res.body;
+};
+
 export const PublicWorkServiceQuery = {
   loadPublicWorks,
   getPublicWorkById,
+  getPublicWorksWithCollectsInQueue,
   deletePublicWork,
   addPublicWork,
   updatePublicWork,

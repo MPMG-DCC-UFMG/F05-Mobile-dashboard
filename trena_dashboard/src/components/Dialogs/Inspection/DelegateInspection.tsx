@@ -1,10 +1,4 @@
-import {
-  AlternateEmail,
-  Numbers,
-  Rtt,
-  TextFields,
-  TextIncrease,
-} from "@mui/icons-material";
+import { Numbers, Rtt, TextFields, TextIncrease } from "@mui/icons-material";
 import {
   Autocomplete,
   Button,
@@ -45,7 +39,7 @@ export function DelegateInspectionDialog({
     user_email: "",
     public_work_id: publicWork.id,
     description: "",
-    status: 0,
+    status: 1,
   });
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -109,7 +103,11 @@ export function DelegateInspectionDialog({
           )}
           getOptionLabel={(option) => option.email}
           options={users ? users : ([{}] as User[])}
-          onChange={(e, value) => setSelectedUser(value)}
+          onChange={(e, value) => {
+            value === null
+              ? setInspection({ ...inspection, user_email: "" })
+              : setInspection({ ...inspection, user_email: value.email });
+          }}
         />
       )}
       <InfoTextField
