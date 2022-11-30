@@ -61,7 +61,7 @@ export function QueueStepper({ publicWork }: QueueStepperProps) {
   const handleRefuseCollect = () => {
     collectsOfPublicWork?.map((collect) =>
       refuseCollect(
-        { ...collect, queue_status: 2 },
+        { ...collect, queue_status: 2, inspection_flag: null },
         {
           onSuccess: () => {
             setSuccess(true);
@@ -79,7 +79,7 @@ export function QueueStepper({ publicWork }: QueueStepperProps) {
   const handleAcceptCollects = () => {
     collectsOfPublicWork?.map((collect) =>
       acceptCollect(
-        { ...collect, queue_status: 1 },
+        { ...collect, queue_status: 1, inspection_flag: null },
         {
           onSuccess: () => {
             setSuccess(true);
