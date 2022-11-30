@@ -3,6 +3,7 @@ import { action, observable } from "mobx";
 export class CollapseStore {
   @observable workConfig = false;
   @observable trena = false;
+  @observable publicWork = false;
 
   @action
   toggleWorkConfiguration() {
@@ -15,8 +16,14 @@ export class CollapseStore {
   }
 
   @action
+  togglePublicWork() {
+    this.publicWork = !this.publicWork;
+  }
+
+  @action
   toggleAppBar() {
     this.workConfig = !this.workConfig;
     this.trena = !this.trena;
   }
 }
+

@@ -190,10 +190,21 @@ const saveData = (data: Blob, filename: string = "filename") => {
   tempLink.click();
 };
 
+const updateCollect = async (collect: Collect) => {
+  const call = Config.BASE_URL + "/collects/update";
+  const res = await TrenaAPI.network()
+    .type("application/json")
+    .put(call)
+    .send(collect);
+
+  return res.body;
+};
+
 export const CollectServiceQuery = {
   loadPublicWorkCollects,
   loadCollectsPaginated,
   loadAllCollects,
+  updateCollect,
   loadAllCitizenCollects,
   getMediaMetaDataByCollectId,
   getMediaByCollectFileName,

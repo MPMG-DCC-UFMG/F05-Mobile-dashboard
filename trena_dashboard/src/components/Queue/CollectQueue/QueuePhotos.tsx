@@ -10,12 +10,12 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useQueries, useQuery } from "react-query";
-import { Collect } from "../../core/models/Collect";
-import { Photo } from "../../core/models/Photo";
-import { TypePhoto } from "../../core/models/TypePhoto";
-import { CollectServiceQuery } from "../../core/network/services/CollectService";
-import { TypePhotoServiceQuery } from "../../core/network/services/TypePhotoService";
-import { convertEphocDate } from "../../utils/mapper";
+import { Collect } from "../../../core/models/Collect";
+import { Photo } from "../../../core/models/Photo";
+import { TypePhoto } from "../../../core/models/TypePhoto";
+import { CollectServiceQuery } from "../../../core/network/services/CollectService";
+import { TypePhotoServiceQuery } from "../../../core/network/services/TypePhotoService";
+import { convertEphocDate } from "../../../utils/mapper";
 
 interface QueueCardPhotoProps {
   photo: Photo;

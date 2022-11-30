@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   Grid,
   Step,
@@ -8,11 +9,12 @@ import {
   Stepper,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useQuery } from "react-query";
-import { Collect } from "../../core/models/Collect";
-import { PublicWork } from "../../core/models/PublicWork";
-import { CollectServiceQuery } from "../../core/network/services/CollectService";
-import { PublicWorkMapView } from "./PublicWorkMapView";
+import { useMutation, useQuery } from "react-query";
+import { Collect } from "../../../core/models/Collect";
+import { PublicWork } from "../../../core/models/PublicWork";
+import { CollectServiceQuery } from "../../../core/network/services/CollectService";
+import { WarningField } from "../../WarningField";
+import { PublicWorkMapView } from "../PublicWorkMapView";
 import { QueueCollects } from "./QueueCollects";
 import { QueueConfirm } from "./QueueConfirm";
 import { QueuePhotos } from "./QueuePhotos";
@@ -26,6 +28,8 @@ export function QueueStepper({ publicWork }: QueueStepperProps) {
   const [completed, setCompleted] = useState<{
     [k: number]: boolean;
   }>({});
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleNext = () => setActiveStep((prevStep) => prevStep + 1);
 
@@ -46,6 +50,49 @@ export function QueueStepper({ publicWork }: QueueStepperProps) {
     ["getCitizenCollectsOfPublicWork"],
     () => CollectServiceQuery.getQueueCollectsByPublicWorkId(publicWork.id)
   );
+
+  const { mutate: acceptCollect, isLoading: loadingAccept } = useMutation(
+    CollectServiceQuery.updateCollect
+  );
+  const { mutate: refuseCollect, isLoading: loadingRefuse } = useMutation(
+    CollectServiceQuery.updateCollect
+  );
+
+  const handleRefuseCollect = () => {
+    collectsOfPublicWork?.map((collect) =>
+      refuseCollect(
+        { ...collect, queue_status: 2 },
+        {
+          onSuccess: () => {
+            setSuccess(true);
+            setError(false);
+          },
+          onError: () => {
+            setError(true);
+            setSuccess(false);
+          },
+        }
+      )
+    );
+  };
+
+  const handleAcceptCollects = () => {
+    collectsOfPublicWork?.map((collect) =>
+      acceptCollect(
+        { ...collect, queue_status: 1 },
+        {
+          onSuccess: () => {
+            setSuccess(true);
+            setError(false);
+          },
+          onError: () => {
+            setError(true);
+            setSuccess(false);
+          },
+        }
+      )
+    );
+  };
 
   return (
     <Container style={{ width: "100%", height: "100%" }}>
@@ -89,14 +136,34 @@ export function QueueStepper({ publicWork }: QueueStepperProps) {
         >
           Anterior
         </Button>
+        {activeStep === 3 && (
+          <Button
+            onClick={handleRefuseCollect}
+            variant="contained"
+            color="error"
+            sx={{ mr: 1 }}
+          >
+            {loadingRefuse ? <CircularProgress /> : "Recusar"}
+          </Button>
+        )}
         <Button
           variant="contained"
           color={activeStep === 3 ? "success" : "primary"}
-          onClick={handleNext}
+          onClick={activeStep === 3 ? handleAcceptCollects : handleNext}
           sx={{ mr: 1 }}
+          disabled={success}
         >
-          {activeStep === 3 ? "Confirmar" : "Próximo"}
+          {activeStep === 3 && loadingAccept && <CircularProgress />}
+          {activeStep === 3 && !loadingAccept && "Confirmar"}
+          {activeStep !== 3 && "Próximo"}
         </Button>
+        {success && (
+          <WarningField
+            title="Obra Avaliada com sucesso!"
+            severity="success"
+            message={`A Obra ${publicWork.name} foi avaliada com sucesso!`}
+          />
+        )}
       </Box>
     </Container>
   );

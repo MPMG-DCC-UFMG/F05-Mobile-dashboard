@@ -1,20 +1,20 @@
 import React from "react";
 import { PublicWork } from "../../../core/models/PublicWork";
-import { QueueStepper } from "../../Queue/CollectQueue/QueueStepper";
+import { PublicQueueStepper } from "../../Queue/PublicWorkQueue/PublicQueueStepper";
 import { TableDialogContainer, TableDialogProps } from "../DialogContainer";
 
-interface EvaluateQueueItemDialogProps extends TableDialogProps {
+interface EvaluatePublicQueueItemDialogProps extends TableDialogProps {
   publicWork: PublicWork;
 }
 
-export function EvaluateQueueItemDialog({
+export function EvaluatePublicQueueDialog({
   publicWork,
   index,
   state,
   setState,
   title,
   fullScreen,
-}: EvaluateQueueItemDialogProps) {
+}: EvaluatePublicQueueItemDialogProps) {
   return (
     <TableDialogContainer
       state={state}
@@ -23,7 +23,7 @@ export function EvaluateQueueItemDialog({
       title={title}
       fullScreen={fullScreen}
     >
-      {publicWork && <QueueStepper publicWork={publicWork} />}
+      {publicWork && <PublicQueueStepper publicWork={publicWork} />}
     </TableDialogContainer>
   );
 }

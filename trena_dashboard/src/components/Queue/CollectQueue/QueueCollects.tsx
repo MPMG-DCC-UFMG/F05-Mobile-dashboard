@@ -8,11 +8,11 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useQuery } from "react-query";
-import { Collect } from "../../core/models/Collect";
-import { WorkStatus } from "../../core/models/WorkStatus";
-import { CollectServiceQuery } from "../../core/network/services/CollectService";
-import { WorkStatusServiceQuery } from "../../core/network/services/WorkStatusService";
-import { convertEphocDate } from "../../utils/mapper";
+import { Collect } from "../../../core/models/Collect";
+import { WorkStatus } from "../../../core/models/WorkStatus";
+import { CollectServiceQuery } from "../../../core/network/services/CollectService";
+import { WorkStatusServiceQuery } from "../../../core/network/services/WorkStatusService";
+import { convertEphocDate } from "../../../utils/mapper";
 
 interface QueueColectsProps {
   workStatusFlag: number;
