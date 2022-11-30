@@ -5,12 +5,19 @@ import {
   TextFields,
   TextIncrease,
 } from "@mui/icons-material";
-import { Button, CircularProgress } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  CircularProgress,
+  TextField,
+} from "@mui/material";
 import React, { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { CreateInspectionDTO } from "../../../core/models/dto/CreateInspectionDTO";
 import { PublicWork } from "../../../core/models/PublicWork";
+import { User } from "../../../core/models/User";
 import { InspectionServiceQuery } from "../../../core/network/services/InspectionService";
+import { SecurityServiceQuery } from "../../../core/network/services/SecurityService";
 import { InfoTextField } from "../../Inputs/InfoTextField";
 import { WarningField } from "../../WarningField";
 import { TableDialogContainer } from "../DialogContainer";
@@ -28,6 +35,10 @@ export function DelegateInspectionDialog({
   index,
   publicWork,
 }: DelegateInspectionProps) {
+  const { data: users } = useQuery<User[]>(["getUsers"], () =>
+    SecurityServiceQuery.loadUsersList()
+  );
+
   const [inspection, setInspection] = useState<CreateInspectionDTO>({
     inquiry_number: null,
     name: "",
@@ -38,6 +49,7 @@ export function DelegateInspectionDialog({
   });
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const { mutate, isLoading } = useMutation(
     InspectionServiceQuery.addInspection
@@ -87,15 +99,19 @@ export function DelegateInspectionDialog({
         onChange={(e) => setInspection({ ...inspection, name: e.target.value })}
         icon={<TextIncrease />}
       />
-      <InfoTextField
-        label="Email do Vistoriador responsável"
-        defaultValue={inspection.user_email}
-        onChange={(e) =>
-          setInspection({ ...inspection, user_email: e.target.value })
-        }
-        icon={<AlternateEmail />}
-        type="email"
-      />
+      {users && (
+        <Autocomplete
+          sx={{ mt: 2 }}
+          disablePortal
+          fullWidth
+          renderInput={(params) => (
+            <TextField {...params} label="Email do Vistoriador responsável" />
+          )}
+          getOptionLabel={(option) => option.email}
+          options={users ? users : ([{}] as User[])}
+          onChange={(e, value) => setSelectedUser(value)}
+        />
+      )}
       <InfoTextField
         label="Descrição"
         defaultValue={inspection.description}
