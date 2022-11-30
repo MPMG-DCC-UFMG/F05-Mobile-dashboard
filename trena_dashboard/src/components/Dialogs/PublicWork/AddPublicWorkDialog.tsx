@@ -146,7 +146,7 @@ export function AddPublicWorkDialog({
                 <TextField {...params} label="Tipo de Obra" />
               )}
               getOptionLabel={(option) => option.name}
-              options={typeWorks}
+              options={typeWorks ? typeWorks : ([{}] as TypeWork[])}
               onChange={(e, value) => setSelectedTypeWork(value)}
             />
           )}
@@ -210,7 +210,9 @@ export function AddPublicWorkDialog({
               />
               <InfoTextField
                 fullWidth
-                defaultValue={address.latitude.toString()}
+                defaultValue={
+                  address.latitude ? address.latitude.toString() : ""
+                }
                 icon={<Numbers />}
                 label="Latitude"
                 onChange={(e) =>
@@ -219,7 +221,9 @@ export function AddPublicWorkDialog({
               />
               <InfoTextField
                 fullWidth
-                defaultValue={address.longitude.toString()}
+                defaultValue={
+                  address.longitude ? address.longitude.toString() : ""
+                }
                 icon={<Numbers />}
                 label="Longitude"
                 onChange={(e) =>
