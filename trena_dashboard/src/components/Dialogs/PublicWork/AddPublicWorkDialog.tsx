@@ -25,7 +25,6 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useStores } from "../../../core/contexts/UseStores";
 import { TypeWork } from "../../../core/models/TypeWork";
 import { InfoTextField } from "../../Inputs/InfoTextField";
 import {
@@ -34,10 +33,12 @@ import {
 } from "../DialogContainer";
 
 import CSVReader from "react-csv-reader";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import uuid from "react-uuid";
 import * as XLSX from "xlsx";
+import { Address } from "../../../core/models/Address";
 import { PublicWorkServiceQuery } from "../../../core/network/services/PublicWorkService";
+import { TypeWorkServiceQuery } from "../../../core/network/services/TypeWorkService";
 import { WarningField } from "../../WarningField";
 
 export function AddPublicWorkDialog({
@@ -46,17 +47,13 @@ export function AddPublicWorkDialog({
   title,
   fullScreen,
 }: SingleDialogContainerProps) {
-  const { typeWorkStore } = useStores();
+  const { data: typeWorks } = useQuery<TypeWork[]>(["getTypeWorks"], () =>
+    TypeWorkServiceQuery.loadTypeWorks()
+  );
+  const [address, setAddress] = useState<Address>({} as Address);
+
   const [inputMode, setInputMode] = useState<string>("Manual");
   const [name, setName] = useState("");
-  const [city, setCity] = useState("");
-  const [cep, setCep] = useState("");
-  const [neighborhood, setNeighborhood] = useState("");
-  const [street, setStreet] = useState("");
-  const [number, setNumber] = useState("");
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0);
-  const [typeWorks] = useState(typeWorkStore.typeWorksList);
   const [selectedTypeWork, setSelectedTypeWork] = useState<TypeWork | null>(
     null
   );
@@ -76,16 +73,8 @@ export function AddPublicWorkDialog({
         type_work_flag: selectedTypeWork?.flag!,
         id: id,
         address: {
-          cep,
-          city,
-          latitude,
-          longitude,
-          neighborhood,
-          number,
-          state: "MG",
-          street,
+          ...address,
           id: addressId,
-          public_work_id: id,
         },
       },
       {
@@ -148,17 +137,20 @@ export function AddPublicWorkDialog({
             onChange={(e) => setName(e.target.value)}
             icon={<TextFields />}
           />
-          <Autocomplete
-            sx={{ mt: 2 }}
-            disablePortal
-            fullWidth
-            renderInput={(params) => (
-              <TextField {...params} label="Tipo de Obra" />
-            )}
-            getOptionLabel={(option) => option.name}
-            options={typeWorks}
-            onChange={(e, value) => setSelectedTypeWork(value)}
-          />
+          {typeWorks && (
+            <Autocomplete
+              sx={{ mt: 2 }}
+              disablePortal
+              fullWidth
+              renderInput={(params) => (
+                <TextField {...params} label="Tipo de Obra" />
+              )}
+              getOptionLabel={(option) => option.name}
+              options={typeWorks}
+              onChange={(e, value) => setSelectedTypeWork(value)}
+            />
+          )}
+
           <Accordion sx={{ width: "100%", mt: 2 }}>
             <AccordionSummary expandIcon={<ExpandMore />}>
               <Typography>Endereço</Typography>
@@ -168,15 +160,19 @@ export function AddPublicWorkDialog({
                 fullWidth
                 icon={<LocationCity />}
                 label="Cidade"
-                defaultValue={city}
-                onChange={(e) => setCity(e.target.value)}
+                defaultValue={address.city}
+                onChange={(e) =>
+                  setAddress({ ...address, city: e.target.value })
+                }
               />
               <InfoTextField
                 fullWidth
                 icon={<Public />}
                 label="CEP"
-                defaultValue={cep}
-                onChange={(e) => setCep(e.target.value)}
+                defaultValue={address.cep}
+                onChange={(e) =>
+                  setAddress({ ...address, cep: e.target.value })
+                }
               />
               <InfoTextField
                 fullWidth
@@ -187,38 +183,48 @@ export function AddPublicWorkDialog({
               />
               <InfoTextField
                 fullWidth
-                defaultValue={neighborhood}
+                defaultValue={address.neighborhood}
                 icon={<HolidayVillage />}
                 label="Bairro"
-                onChange={(e) => setNeighborhood(e.target.value)}
+                onChange={(e) =>
+                  setAddress({ ...address, neighborhood: e.target.value })
+                }
               />
               <InfoTextField
                 fullWidth
-                defaultValue={street}
+                defaultValue={address.street}
                 icon={<NearMe />}
                 label="Rua"
-                onChange={(e) => setStreet(e.target.value)}
+                onChange={(e) =>
+                  setAddress({ ...address, street: e.target.value })
+                }
               />
               <InfoTextField
                 fullWidth
-                defaultValue={number}
+                defaultValue={address.number}
                 icon={<Numbers />}
                 label="Logradouro"
-                onChange={(e) => setNumber(e.target.value)}
+                onChange={(e) =>
+                  setAddress({ ...address, number: e.target.value })
+                }
               />
               <InfoTextField
                 fullWidth
-                defaultValue={latitude.toString()}
+                defaultValue={address.latitude.toString()}
                 icon={<Numbers />}
                 label="Latitude"
-                onChange={(e) => setLatitude(Number(e.target.value))}
+                onChange={(e) =>
+                  setAddress({ ...address, latitude: Number(e.target.value) })
+                }
               />
               <InfoTextField
                 fullWidth
-                defaultValue={longitude.toString()}
+                defaultValue={address.longitude.toString()}
                 icon={<Numbers />}
                 label="Longitude"
-                onChange={(e) => setLongitude(Number(e.target.value))}
+                onChange={(e) =>
+                  setAddress({ ...address, longitude: Number(e.target.value) })
+                }
               />
             </AccordionDetails>
           </Accordion>
