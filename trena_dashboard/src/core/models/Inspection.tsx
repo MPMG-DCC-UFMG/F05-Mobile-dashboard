@@ -4,7 +4,6 @@ export interface Inspection {
   inquiry_number: number;
   description?: string;
   public_work_id?: string;
-  collect_id?: string;
   status?: number;
   user_email: string;
 }

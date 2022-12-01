@@ -52,7 +52,7 @@ export function PublicWorkInspectionsDialog({
     >
       {data?.map((inspection: Inspection) => (
         <InfoAccorion
-          key={inspection.collect_id}
+          key={inspection.flag}
           title={`Inspeção - ${inspection.name}`}
         >
           <InfoTextField
@@ -89,4 +89,3 @@ export function PublicWorkInspectionsDialog({
     </TableDialogContainer>
   );
 }
-
