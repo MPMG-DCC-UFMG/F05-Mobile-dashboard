@@ -3,7 +3,7 @@ import { Photo } from "./Photo";
 export interface Collect {
   id?: string;
   public_work_id: string;
-  inspection_flag: string | null;
+  inspection_flag?: string;
   queue_status: number;
   queue_status_date: number;
   date: number;
