@@ -45,7 +45,7 @@ export function PublicQueueStepper({ publicWork }: PublicQueueStepperProps) {
 
   const handleAcceptPublicWork = () => {
     accept(
-      { ...publicWork, queue_status: 1 },
+      { ...publicWork, queue_status: 1, queue_status_date: Date.now() },
       {
         onSuccess: () => {
           setSuccess(true);
@@ -60,7 +60,7 @@ export function PublicQueueStepper({ publicWork }: PublicQueueStepperProps) {
   };
 
   const handleRefusePublicWork = () => {
-    refuse({ ...publicWork, queue_status: 2 });
+    refuse({ ...publicWork, queue_status: 2, queue_status_date: Date.now() });
   };
 
   return (
