@@ -59,9 +59,15 @@ export function QueueStepper({ publicWork }: QueueStepperProps) {
   );
 
   const handleRefuseCollect = () => {
-    collectsOfPublicWork?.map((collect) =>
+    collectsOfPublicWork?.map((collect) => {
       refuseCollect(
-        { ...collect, queue_status: 2, inspection_flag: null },
+        {
+          ...collect,
+          queue_status: 2,
+          photos: [],
+          inspection_flag: "",
+          queue_status_date: Date.now(),
+        },
         {
           onSuccess: () => {
             setSuccess(true);
@@ -72,14 +78,20 @@ export function QueueStepper({ publicWork }: QueueStepperProps) {
             setSuccess(false);
           },
         }
-      )
-    );
+      );
+    });
   };
 
   const handleAcceptCollects = () => {
     collectsOfPublicWork?.map((collect) =>
       acceptCollect(
-        { ...collect, queue_status: 1, inspection_flag: null },
+        {
+          ...collect,
+          queue_status: 1,
+          photos: [],
+          inspection_flag: "",
+          queue_status_date: Date.now(),
+        },
         {
           onSuccess: () => {
             setSuccess(true);

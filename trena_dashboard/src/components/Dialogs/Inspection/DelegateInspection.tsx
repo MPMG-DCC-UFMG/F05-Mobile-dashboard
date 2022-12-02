@@ -39,7 +39,7 @@ export function DelegateInspectionDialog({
     user_email: "",
     public_work_id: publicWork.id,
     description: "",
-    status: 1,
+    status: 0,
   });
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
