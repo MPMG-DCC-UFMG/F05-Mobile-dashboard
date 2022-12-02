@@ -1,4 +1,4 @@
-import { Delete, Edit, Visibility } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import {
   Divider,
   Grid,
@@ -31,16 +31,19 @@ export const ListWorkStatus = observer(() => {
       onSuccess: (data) => {
         setOpenEditWorkStatusDialog(Array(data.length).fill(false));
         setAtualTable(workStatusStore.workStatusList);
-      }
+      },
     }
   );
-   const { workStatusStore} = useStores();
+  const { workStatusStore } = useStores();
   const [addWorkStatusDialog, setOpenAddWorkStatusDialog] = useState(false);
-  const [editWorkStatusDialog, setOpenEditWorkStatusDialog] = useState<boolean[]>([]);
-  const [atualTable, setAtualTable] = useState<WorkStatus[]>(workStatusStore.workStatusList);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [editWorkStatusDialog, setOpenEditWorkStatusDialog] = useState<
+    boolean[]
+  >([]);
+  const [atualTable, setAtualTable] = useState<WorkStatus[]>(
+    workStatusStore.workStatusList
+  );
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
- 
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.currentTarget.value;
@@ -55,10 +58,12 @@ export const ListWorkStatus = observer(() => {
   };
 
   const handleOpenEditDialog = (index: number) => {
-    setOpenEditWorkStatusDialog(editWorkStatusDialog.map((value, position) => 
-      (position === index ? true : value)
-    ))
-  }
+    setOpenEditWorkStatusDialog(
+      editWorkStatusDialog.map((value, position) =>
+        position === index ? true : value
+      )
+    );
+  };
 
   return (
     <>
@@ -106,46 +111,50 @@ export const ListWorkStatus = observer(() => {
                   {workStatus!
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((workStatus: WorkStatus, index: number) => (
-                    <TableRow hover key={workStatus.flag}>
-                      <TableCell align="center">{workStatus.name}</TableCell>
-                      {/* <TableCell align="center">
+                      <TableRow hover key={workStatus.flag}>
+                        <TableCell align="center">{workStatus.name}</TableCell>
+                        {/* <TableCell align="center">
                         <IconButton>
                           <Visibility />
                         </IconButton>
                       </TableCell> */}
-                      <TableCell align="center">
-                        {workStatus.description}
-                      </TableCell>
-                      <TableCell align="center">
-                        <IconButton color="info" onClick={()=> handleOpenEditDialog(index)}>
-                          <Edit />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell align="center">
-                        <IconButton
-                          onClick={() => handleDeleteWorkStatus(workStatus)}
-                          color="error"
-                        >
-                          <Delete />
-                        </IconButton>
-                      </TableCell>
-                      <EditWorkStatusDialog
-                        state={editWorkStatusDialog}
-                        setState={setOpenEditWorkStatusDialog}
-                        workStatus={workStatus}
-                        index={index}
-                        title='Editar Estado Da Obra'
-                      />  
-                    </TableRow>
-                  ))}
+                        <TableCell align="center">
+                          {workStatus.description}
+                        </TableCell>
+                        <TableCell align="center">
+                          <IconButton
+                            color="info"
+                            onClick={() => handleOpenEditDialog(index)}
+                          >
+                            <Edit />
+                          </IconButton>
+                        </TableCell>
+                        <TableCell align="center">
+                          <IconButton
+                            onClick={() => handleDeleteWorkStatus(workStatus)}
+                            color="error"
+                          >
+                            <Delete />
+                          </IconButton>
+                        </TableCell>
+                        <EditWorkStatusDialog
+                          state={editWorkStatusDialog}
+                          setState={setOpenEditWorkStatusDialog}
+                          workStatus={workStatus}
+                          index={index}
+                          title="Editar Estado Da Obra"
+                        />
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
-              <TablePagination 
+              <TablePagination
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 page={page}
                 setPage={setPage}
-                data={workStatus} />
+                data={workStatus}
+              />
             </Heading>
           </Paper>
         </Grid>
@@ -153,3 +162,4 @@ export const ListWorkStatus = observer(() => {
     </>
   );
 });
+

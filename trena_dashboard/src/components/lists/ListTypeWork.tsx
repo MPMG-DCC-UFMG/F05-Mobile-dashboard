@@ -1,4 +1,4 @@
-import { Delete, Edit, Visibility } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import {
   Divider,
   Grid,
@@ -26,7 +26,7 @@ import { TablePagination } from "../TablePagination";
 
 export const ListTypeWork = observer(() => {
   const { data: typeWorks, isLoading } = useQuery(
-    ["getTypeWork"],
+    ["getTypeWorks"],
     TypeWorkServiceQuery.loadTypeWorks,
     {
       onSuccess: (data) => {
@@ -45,7 +45,7 @@ export const ListTypeWork = observer(() => {
   const [atualTable, setAtualTable] = useState<TypeWork[]>(
     typeWorkStore.typeWorksList
   );
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -162,12 +162,13 @@ export const ListTypeWork = observer(() => {
                     ))}
                 </TableBody>
               </Table>
-              <TablePagination 
+              <TablePagination
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 page={page}
                 setPage={setPage}
-                data={atualTable} />
+                data={atualTable}
+              />
             </Heading>
           </Paper>
         </Grid>
@@ -175,4 +176,3 @@ export const ListTypeWork = observer(() => {
     </>
   );
 });
-

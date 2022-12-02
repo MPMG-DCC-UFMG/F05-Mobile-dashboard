@@ -34,7 +34,7 @@ export function ListInspection() {
   const { mutate } = useMutation(InspectionServiceQuery.getInspectionReport);
 
   const [openCollectsModal, setOpenCollectsModal] = useState<boolean[]>([]);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
   const handleOpenCollectsModal = (index: number) => {

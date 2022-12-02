@@ -37,7 +37,7 @@ export function ListQueue() {
     WorkStatusServiceQuery.loadWorkStatus()
   );
 
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
   const handleOpenEvaluateDialog = (index: number) => {

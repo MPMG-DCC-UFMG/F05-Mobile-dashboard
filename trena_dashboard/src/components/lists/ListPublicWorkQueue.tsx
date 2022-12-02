@@ -24,7 +24,7 @@ import { WarningField } from "../WarningField";
 export function ListPublicWorkQueue() {
   const [queue, setQueue] = useState<PublicWork[]>([]);
   const [openQueueDialog, setOpenQueueDialog] = useState<boolean[]>([]);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
   const { data: publicWorks, isLoading } = useQuery<PublicWork[]>(

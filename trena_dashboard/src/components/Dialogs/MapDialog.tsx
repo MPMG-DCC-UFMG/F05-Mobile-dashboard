@@ -5,13 +5,12 @@ import {
   NearMe,
   Numbers,
 } from "@mui/icons-material";
-import { Divider, Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import React from "react";
 import { useStores } from "../../core/contexts/UseStores";
 import { PublicWork } from "../../core/models/PublicWork";
 import { InfoTextField } from "../Inputs/InfoTextField";
 import { Map } from "../Map";
-import { PublicWorkMenu } from "../Menus/PublicWorkMenu";
 import { TableDialogContainer } from "./DialogContainer";
 
 interface MapDialogProps {
@@ -49,20 +48,18 @@ export function MapDialog({
       title={`Localização - ${publicWork.name}`}
       fullScreen={fullScreen}
     >
-      <Grid container justifyContent="space-between" alignItems="center">
+      <Box display="flex" justifyContent="space-between" alignItems="center">
         <InfoTextField
           disabled
           defaultValue={publicWork.address.city}
           icon={<LocationCity />}
           label="Cidade"
-          fullWidth
         />
         <InfoTextField
           disabled
           defaultValue={publicWork.address.cep}
           icon={<Public />}
           label="CEP"
-          fullWidth
         />
         <InfoTextField
           disabled
@@ -88,20 +85,13 @@ export function MapDialog({
           icon={<Numbers />}
           label="Logradouro"
         />
-      </Grid>
+      </Box>
 
       <Grid container style={{ width: "100%", height: "100%" }}>
         <Map
           latitude={publicWork.address.latitude}
           longitude={publicWork.address.longitude}
           zoom={15}
-        />
-        <Divider />
-        <PublicWorkMenu
-          collectCount={collectCount}
-          workStateIA={workStateIA?.name ? workStateIA.name : "--"}
-          workStateUser={workStateUser?.name ? workStateUser.name : "--"}
-          onDownloadClicked={collectCount > 0 ? handleDownloadClick : undefined}
         />
       </Grid>
     </TableDialogContainer>

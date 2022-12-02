@@ -74,7 +74,7 @@ const deletePublicWork = async (publicWorkId: string) => {
   const token = localStorage.getItem("TOKEN");
   const res = await TrenaAPI.network()
 
-    .post(call)
+    .delete(call)
     .type("application/json")
     .query({ public_work_id: publicWorkId, token: token });
 

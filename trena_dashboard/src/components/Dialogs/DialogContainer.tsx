@@ -75,7 +75,7 @@ export function TableDialogContainer({
 
   return (
     <Dialog
-      TransitionProps={{ unmountOnExit: true, mountOnEnter: true }}
+      TransitionProps={{ unmountOnExit: true, mountOnEnter: false }}
       open={state[index]}
       scroll="body"
       fullWidth

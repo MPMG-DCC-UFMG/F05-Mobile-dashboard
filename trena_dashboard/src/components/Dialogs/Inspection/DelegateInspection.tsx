@@ -6,14 +6,14 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { CreateInspectionDTO } from "../../../core/models/dto/CreateInspectionDTO";
 import { PublicWork } from "../../../core/models/PublicWork";
 import { User } from "../../../core/models/User";
 import { InspectionServiceQuery } from "../../../core/network/services/InspectionService";
 import { SecurityServiceQuery } from "../../../core/network/services/SecurityService";
 import { InfoTextField } from "../../Inputs/InfoTextField";
-import { WarningField } from "../../WarningField";
+import { Notify } from "../../Toast/Notify";
 import { TableDialogContainer } from "../DialogContainer";
 
 interface DelegateInspectionProps {
@@ -29,6 +29,8 @@ export function DelegateInspectionDialog({
   index,
   publicWork,
 }: DelegateInspectionProps) {
+  const queryClient = useQueryClient();
+
   const { data: users } = useQuery<User[]>(["getUsers"], () =>
     SecurityServiceQuery.loadUsersList()
   );
@@ -39,11 +41,11 @@ export function DelegateInspectionDialog({
     user_email: "",
     public_work_id: publicWork.id,
     description: "",
-    status: 1,
+    status: 0,
   });
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const handleCloseDialog = () => {
+    setState(state.map((s, pos) => (pos === index ? false : s)));
+  };
 
   const { mutate, isLoading } = useMutation(
     InspectionServiceQuery.addInspection
@@ -52,12 +54,24 @@ export function DelegateInspectionDialog({
   const handleAddInspection = () => {
     mutate(inspection, {
       onError: () => {
-        setError(true);
-        setSuccess(false);
+        Notify(
+          "Erro ao cadastrar vistoria. Verifique a integridade dos campos preenchidos",
+          "bottom-center",
+          "error"
+        );
       },
       onSuccess: () => {
-        setSuccess(true);
-        setError(false);
+        setInspection({
+          inquiry_number: null,
+          name: "",
+          user_email: "",
+          public_work_id: publicWork.id,
+          description: "",
+          status: 0,
+        });
+        Notify(`Vistoria delegada com sucesso!`, "bottom-left", "success");
+        queryClient.invalidateQueries("getMpInspections");
+        handleCloseDialog();
       },
     });
   };
@@ -121,27 +135,13 @@ export function DelegateInspectionDialog({
       />
 
       <Button
-        disabled={isLoading || success}
+        disabled={isLoading}
         variant="contained"
         color="success"
         onClick={handleAddInspection}
       >
         {isLoading ? <CircularProgress /> : "Salvar"}
       </Button>
-      {success && (
-        <WarningField
-          title="Vistoria cadastrada com sucesso!"
-          severity="success"
-          message={`A vistoria ${inspection.name}, de inquérito ${inspection.inquiry_number} foi delegada ao usuário ${inspection.user_email}`}
-        />
-      )}
-      {error && (
-        <WarningField
-          title="Erro ao cadastrar vistoria"
-          severity="error"
-          message="Erro ao cadastrar vistoria. Verifique a integridade dos campos preenchidos"
-        />
-      )}
     </TableDialogContainer>
   );
 }

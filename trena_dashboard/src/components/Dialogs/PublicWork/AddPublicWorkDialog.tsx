@@ -13,6 +13,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Autocomplete,
+  Box,
   Button,
   CircularProgress,
   FormControl,
@@ -33,20 +34,21 @@ import {
 } from "../DialogContainer";
 
 import CSVReader from "react-csv-reader";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import uuid from "react-uuid";
 import * as XLSX from "xlsx";
 import { Address } from "../../../core/models/Address";
 import { PublicWorkServiceQuery } from "../../../core/network/services/PublicWorkService";
 import { TypeWorkServiceQuery } from "../../../core/network/services/TypeWorkService";
+import { Notify } from "../../Toast/Notify";
 import { WarningField } from "../../WarningField";
 
 export function AddPublicWorkDialog({
   state,
   setState,
   title,
-  fullScreen,
 }: SingleDialogContainerProps) {
+  const queryClient = useQueryClient();
   const { data: typeWorks } = useQuery<TypeWork[]>(["getTypeWorks"], () =>
     TypeWorkServiceQuery.loadTypeWorks()
   );
@@ -80,8 +82,24 @@ export function AddPublicWorkDialog({
         },
       },
       {
-        onError: () => setErrorWarning(true),
-        onSuccess: () => setSuccessWarning(true),
+        onError: () => {
+          const toastPosition =
+            inputMode === "Manual" ? "bottom-left" : "bottom-center";
+          Notify(
+            "Erro ao cadastrar obra. Verifique a integridade dos campos!",
+            toastPosition,
+            "error"
+          );
+        },
+        onSuccess: () => {
+          setAddress({} as Address);
+          setName("");
+          setSelectedTypeWork(null);
+          setInputMode("Manual");
+          setState(false);
+          Notify("Obra cadastrada com sucesso!", "bottom-left", "success");
+          queryClient.invalidateQueries("getPublicWorks");
+        },
       }
     );
   };
@@ -124,7 +142,7 @@ export function AddPublicWorkDialog({
     >
       <FormControl>
         <FormLabel>Maneira de Cadastro</FormLabel>
-        <RadioGroup row onChange={handleChangeActive}>
+        <RadioGroup defaultValue="Manual" row onChange={handleChangeActive}>
           <FormControlLabel value="Manual" control={<Radio />} label="Manual" />
           <FormControlLabel value="CSV" control={<Radio />} label="CSV" />
           <FormControlLabel value="XLSX" control={<Radio />} label="XLSX" />
@@ -158,58 +176,64 @@ export function AddPublicWorkDialog({
               <Typography>Endereço</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <InfoTextField
-                fullWidth
-                icon={<LocationCity />}
-                label="Cidade"
-                defaultValue={address.city}
-                onChange={(e) =>
-                  setAddress({ ...address, city: e.target.value })
-                }
-              />
-              <InfoTextField
-                fullWidth
-                icon={<Public />}
-                label="CEP"
-                defaultValue={address.cep}
-                onChange={(e) =>
-                  setAddress({ ...address, cep: e.target.value })
-                }
-              />
-              <InfoTextField
-                fullWidth
-                disabled
-                value="MG"
-                icon={<LocationOn />}
-                label="UF"
-              />
-              <InfoTextField
-                fullWidth
-                defaultValue={address.neighborhood}
-                icon={<HolidayVillage />}
-                label="Bairro"
-                onChange={(e) =>
-                  setAddress({ ...address, neighborhood: e.target.value })
-                }
-              />
-              <InfoTextField
-                fullWidth
-                defaultValue={address.street}
-                icon={<NearMe />}
-                label="Rua"
-                onChange={(e) =>
-                  setAddress({ ...address, street: e.target.value })
-                }
-              />
-              <InfoTextField
-                fullWidth
-                defaultValue={address.number}
-                icon={<Numbers />}
-                label="Logradouro"
-                onChange={(e) =>
-                  setAddress({ ...address, number: e.target.value })
-                }
-              />
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <InfoTextField
+                  icon={<LocationCity />}
+                  label="Cidade"
+                  defaultValue={address.city}
+                  required
+                  onChange={(e) =>
+                    setAddress({ ...address, city: e.target.value })
+                  }
+                />
+                <InfoTextField
+                  icon={<Public />}
+                  label="CEP"
+                  required
+                  defaultValue={address.cep}
+                  onChange={(e) =>
+                    setAddress({ ...address, cep: e.target.value })
+                  }
+                />
+                <InfoTextField
+                  disabled
+                  value="MG"
+                  required
+                  icon={<LocationOn />}
+                  label="UF"
+                />
+                <InfoTextField
+                  defaultValue={address.neighborhood}
+                  icon={<HolidayVillage />}
+                  label="Bairro"
+                  required
+                  onChange={(e) =>
+                    setAddress({ ...address, neighborhood: e.target.value })
+                  }
+                />
+                <InfoTextField
+                  defaultValue={address.street}
+                  icon={<NearMe />}
+                  label="Rua"
+                  required
+                  onChange={(e) =>
+                    setAddress({ ...address, street: e.target.value })
+                  }
+                />
+                <InfoTextField
+                  defaultValue={address.number}
+                  icon={<Numbers />}
+                  label="Logradouro"
+                  onChange={(e) =>
+                    setAddress({ ...address, number: e.target.value })
+                  }
+                />
+              </Box>
+
               <InfoTextField
                 fullWidth
                 defaultValue={

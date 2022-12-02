@@ -12,6 +12,7 @@ interface InfoTextFieldProps {
   type?: string;
   multiline?: boolean;
   sx?: {};
+  required?: boolean;
 }
 
 export function InfoTextField({
@@ -25,12 +26,13 @@ export function InfoTextField({
   type,
   multiline,
   sx,
+  required,
 }: InfoTextFieldProps) {
   return (
     <TextField
       margin="normal"
       sx={sx}
-      required
+      required={required ? required : false}
       fullWidth={fullWidth}
       label={label}
       disabled={disabled}
