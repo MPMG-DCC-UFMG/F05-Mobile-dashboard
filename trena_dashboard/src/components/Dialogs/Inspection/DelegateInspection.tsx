@@ -42,6 +42,7 @@ export function DelegateInspectionDialog({
     public_work_id: publicWork.id,
     description: "",
     status: 0,
+    request_date: Date.now(),
   });
   const handleCloseDialog = () => {
     setState(state.map((s, pos) => (pos === index ? false : s)));
@@ -52,35 +53,39 @@ export function DelegateInspectionDialog({
   );
 
   const handleAddInspection = () => {
-    mutate(inspection, {
-      onError: () => {
-        Notify(
-          "Erro ao cadastrar vistoria. Verifique a integridade dos campos preenchidos",
-          "bottom-center",
-          "error"
-        );
-      },
-      onSuccess: () => {
-        setInspection({
-          inquiry_number: null,
-          name: "",
-          user_email: "",
-          public_work_id: publicWork.id,
-          description: "",
-          status: 0,
-        });
-        Notify(`Vistoria delegada com sucesso!`, "bottom-left", "success");
-        queryClient.invalidateQueries("getMpInspections");
-        handleCloseDialog();
-      },
-    });
+    mutate(
+      { ...inspection, request_date: Date.now() },
+      {
+        onError: () => {
+          Notify(
+            "Erro ao cadastrar vistoria. Verifique a integridade dos campos preenchidos",
+            "bottom-center",
+            "error"
+          );
+        },
+        onSuccess: () => {
+          setInspection({
+            inquiry_number: null,
+            name: "",
+            user_email: "",
+            public_work_id: publicWork.id,
+            description: "",
+            status: 0,
+            request_date: Date.now(),
+          });
+          Notify(`Vistoria delegada com sucesso!`, "bottom-left", "success");
+          queryClient.invalidateQueries("getMpInspections");
+          handleCloseDialog();
+        },
+      }
+    );
   };
 
   return (
     <TableDialogContainer
       state={state}
       setState={setState}
-      title="Delegar Inspeção"
+      title="Delegar Vistoria"
       index={index}
     >
       <InfoTextField

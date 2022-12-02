@@ -3,12 +3,14 @@ import {
   Divider,
   Grid,
   IconButton,
+  InputAdornment,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
+  TextField,
 } from "@mui/material";
 import { observer } from "mobx-react";
 import React, { useState } from "react";
@@ -18,19 +20,18 @@ import { WorkStatus } from "../../core/models/WorkStatus";
 import { WorkStatusServiceQuery } from "../../core/network/services/WorkStatusService";
 import { AddWorkStatusDialog } from "../Dialogs/StatusWork/AddWorkStatusDialog";
 import { EditWorkStatusDialog } from "../Dialogs/StatusWork/EditWorkStatusDialog";
-import { Search } from "../Form/Search";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListWorkStatus = observer(() => {
-  const { data: workStatus, isLoading } = useQuery(
+  const { data: workStatus, isLoading } = useQuery<WorkStatus[]>(
     ["getWorkStatus"],
     WorkStatusServiceQuery.loadWorkStatus,
     {
       onSuccess: (data) => {
         setOpenEditWorkStatusDialog(Array(data.length).fill(false));
-        setAtualTable(workStatusStore.workStatusList);
+        setAtualTable(data);
       },
     }
   );
@@ -95,7 +96,19 @@ export const ListWorkStatus = observer(() => {
                 title="Adicionar Estado De Obra"
               />
               <Grid item display="flex" padding={2} justifyContent="flex-Start">
-                <Search label="Estado da Obra" onTextChanged={handleSearch} />
+                <TextField
+                  fullWidth
+                  size="small"
+                  onChange={(e) => handleSearch(e.target.value)}
+                  label="Tipo de Obra"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <ManageSearch />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
               </Grid>
               <Divider />
               <Table>
@@ -108,7 +121,7 @@ export const ListWorkStatus = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {workStatus!
+                  {atualTable
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((workStatus: WorkStatus, index: number) => (
                       <TableRow hover key={workStatus.flag}>
@@ -153,7 +166,7 @@ export const ListWorkStatus = observer(() => {
                 setRowsPerPage={setRowsPerPage}
                 page={page}
                 setPage={setPage}
-                data={workStatus}
+                data={atualTable}
               />
             </Heading>
           </Paper>

@@ -103,6 +103,9 @@ export function ListCitizenCollects() {
                           <TableCell align="center">
                             <Tooltip title="Envios">
                               <IconButton
+                                color="secondary"
+                                style={{ backgroundColor: "#73ff00" }}
+                                size="small"
                                 onClick={() =>
                                   handleOpenDialog(
                                     openCollectSubmissionsDialog,
@@ -117,8 +120,12 @@ export function ListCitizenCollects() {
                           </TableCell>
                           <TableCell align="center">
                             <Tooltip title="Excluir">
-                              <IconButton>
-                                <Delete color="error" />
+                              <IconButton
+                                color="secondary"
+                                style={{ backgroundColor: "#73ff00" }}
+                                size="small"
+                              >
+                                <Delete />
                               </IconButton>
                             </Tooltip>
                           </TableCell>

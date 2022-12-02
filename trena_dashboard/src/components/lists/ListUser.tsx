@@ -21,7 +21,7 @@ import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListUser = observer(() => {
-  const { data: users, isLoading } = useQuery<User[]>(
+  const { data: users, isLoading } = useQuery(
     ["getUsers"],
     SecurityServiceQuery.loadUsersList,
     {
@@ -83,35 +83,33 @@ export const ListUser = observer(() => {
                   <TableRow>
                     <TableCell align="center">Email</TableCell>
                     <TableCell align="center">Função</TableCell>
-                    {/* <TableCell align="center">Detalhes</TableCell> */}
                     <TableCell align="center">Editar</TableCell>
                     <TableCell align="center">Remover</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {users
+                  {users!
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((user, index) => (
+                    .map((user: User, index: number) => (
                       <TableRow hover key={user.email}>
                         <TableCell align="center">{user.email}</TableCell>
                         <TableCell align="center">{user.role}</TableCell>
-                        {/* <TableCell align="center">
-                        <IconButton>
-                          <Visibility />
-                        </IconButton>
-                      </TableCell> */}
-                        <TableCell
-                          align="center"
-                          onClick={() => handleOpenEditDialog(index)}
-                        >
-                          <IconButton color="info">
+                        <TableCell align="center">
+                          <IconButton
+                            onClick={() => handleOpenEditDialog(index)}
+                            color="secondary"
+                            style={{ backgroundColor: "#73ff00" }}
+                            size="small"
+                          >
                             <Edit />
                           </IconButton>
                         </TableCell>
                         <TableCell align="center">
                           <IconButton
                             onClick={() => handleUserDeleted(user.email)}
-                            color="error"
+                            color="secondary"
+                            style={{ backgroundColor: "#73ff00" }}
+                            size="small"
                           >
                             <Delete />
                           </IconButton>

@@ -6,10 +6,12 @@ import {
   Divider,
   Grid,
   Link,
+  ThemeProvider,
   Typography,
 } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { theme } from "../../utils/theme";
 
 export type BreadCrumbSteps = {
   title: string;
@@ -41,12 +43,13 @@ export function Heading({
 
   return (
     <>
+    <ThemeProvider theme={theme}>
       <Container style={{ width: "100%", height: "100%" }}>
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid sx={{ pl: "40px", pt: "20px", pb: "20px" }} item>
             <Typography
+              color="secondary"
               fontSize="1.5rem"
-              style={{ color: "#0288d1" }}
               variant="h4"
             >
               {title}
@@ -71,7 +74,7 @@ export function Heading({
             <Grid item sx={{ pl: "40px", pt: "40px", pb: "20px" }}>
               <Button
                 onClick={handleAction}
-                color="info"
+                color="primary"
                 startIcon={<Add />}
                 variant="contained"
               >
@@ -97,6 +100,7 @@ export function Heading({
           </Grid>
         </Grid>
       </Container>
+      </ThemeProvider>
     </>
   );
 }

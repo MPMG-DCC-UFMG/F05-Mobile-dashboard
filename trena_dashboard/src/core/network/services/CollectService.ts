@@ -191,6 +191,7 @@ const saveData = (data: Blob, filename: string = "filename") => {
 };
 
 const updateCollect = async (collect: Collect) => {
+  console.log(collect);
   const call = Config.BASE_URL + "/collects/update";
   const res = await TrenaAPI.network()
     .type("application/json")

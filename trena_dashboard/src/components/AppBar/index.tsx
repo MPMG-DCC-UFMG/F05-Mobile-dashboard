@@ -1,6 +1,13 @@
 import { Logout } from "@mui/icons-material";
 import Menu from "@mui/icons-material/Menu";
-import { Avatar, styled, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Grid,
+  styled,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
@@ -11,6 +18,9 @@ import {
   LoggedUserResponse,
   SecurityServiceQuery,
 } from "../../core/network/services/SecurityService";
+import logo from "../../assets/logo-mpmg-alternativa.png";
+import background from "../../assets/gsi.png";
+import { theme } from "../../utils/theme";
 
 interface AppBarProps {
   open?: boolean;
@@ -29,7 +39,7 @@ const AppBarSetup = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  backgroundColor: "#0288d1 !important",
+  backgroundColor: "#73FF00 !important",
   color: "#ffff !important",
   ...(open && {
     marginLeft: 240,
@@ -61,18 +71,30 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
   };
 
   return (
-    <AppBarSetup color="primary" position="absolute" open={open}>
-      <Toolbar sx={{ pr: "24px" }}>
-        <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="open-drawer"
-          onClick={toggleDrawer}
-          sx={{ marginRight: "36px", ...(open && { display: "none" }) }}
-        >
-          <Menu />
-        </IconButton>
-        <Typography
+    <ThemeProvider theme={theme}>
+      <AppBarSetup color="primary" position="absolute" open={open}>
+        <Toolbar sx={{ pr: "24px" }}>
+          <Grid
+            container
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <Grid
+              item
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              gap="5px"
+            >
+              <IconButton
+                edge="start"
+                color="secondary"
+                aria-label="open-drawer"
+                onClick={toggleDrawer}
+                sx={{ ...(open && { display: "none" }) }}
+              >
+                <Menu />
+              </IconButton>
+              {/* <Typography
           component="h1"
           variant="h6"
           color="inherit"
@@ -80,16 +102,37 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
           sx={{ flexGrow: 1 }}
         >
           {"Dashboard - Trena"}
-        </Typography>
-        <Avatar
-          src={loggedUserData ? loggedUserData.picture : ""}
-          style={{ width: 25, height: 25, cursor: "pointer" }}
-          onClick={handleUser}
-        />
-        <IconButton onClick={handleLogout}>
-          <Logout htmlColor="#FFFFFF" />
-        </IconButton>
-      </Toolbar>
-    </AppBarSetup>
+        </Typography> */}
+              <Avatar
+                src={loggedUserData ? loggedUserData.picture : ""}
+                style={{ width: 25, height: 25, cursor: "pointer" }}
+                onClick={handleUser}
+              />
+              <IconButton color="secondary" onClick={handleLogout}>
+                <Logout/>
+              </IconButton>
+            </Grid>
+            <Grid item display="flex">
+              <Box
+                component="img"
+                sx={{
+                  height: 45,
+                  width: 130,
+                }}
+                src={logo}
+              />
+              <Box
+                component="img"
+                sx={{
+                  height: 40,
+                  width: 120,
+                }}
+                src={background}
+              />
+            </Grid>
+          </Grid>
+        </Toolbar>
+      </AppBarSetup>
+    </ThemeProvider>
   );
 }
