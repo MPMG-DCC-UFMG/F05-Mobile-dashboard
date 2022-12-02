@@ -5,4 +5,5 @@ export interface CreateInspectionDTO {
   public_work_id: string;
   description: string;
   status: number;
+  request_date: number;
 }

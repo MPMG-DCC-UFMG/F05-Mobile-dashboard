@@ -5,7 +5,7 @@ import {
   CircularProgress,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { CreateInspectionDTO } from "../../../core/models/dto/CreateInspectionDTO";
 import { PublicWork } from "../../../core/models/PublicWork";
@@ -29,8 +29,9 @@ export function DelegateInspectionDialog({
   index,
   publicWork,
 }: DelegateInspectionProps) {
-  const { data: users } = useQuery<User[]>(["getUsers"], () =>
-    SecurityServiceQuery.loadUsersList()
+  const { data: users } = useQuery<User[]>(
+    ["getUsers"],
+    async () => await SecurityServiceQuery.loadUsersList()
   );
 
   const [inspection, setInspection] = useState<CreateInspectionDTO>({
@@ -40,6 +41,7 @@ export function DelegateInspectionDialog({
     public_work_id: publicWork.id,
     description: "",
     status: 0,
+    request_date: Date.now(),
   });
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -50,16 +52,19 @@ export function DelegateInspectionDialog({
   );
 
   const handleAddInspection = () => {
-    mutate(inspection, {
-      onError: () => {
-        setError(true);
-        setSuccess(false);
-      },
-      onSuccess: () => {
-        setSuccess(true);
-        setError(false);
-      },
-    });
+    mutate(
+      { ...inspection, request_date: Date.now() },
+      {
+        onError: () => {
+          setError(true);
+          setSuccess(false);
+        },
+        onSuccess: () => {
+          setSuccess(true);
+          setError(false);
+        },
+      }
+    );
   };
 
   return (
