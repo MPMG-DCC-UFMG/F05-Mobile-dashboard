@@ -1,7 +1,7 @@
 import { Box, CssBaseline, Grid, Paper } from "@mui/material";
 import React from "react";
 
-import background from "../../assets/login-trena.png";
+import background from "../../assets/logo-mpmg-alternativa.png";
 import logo from "../../assets/logo512-no-bg.png";
 
 interface AsideLoginContainerProps {
@@ -40,8 +40,8 @@ export function AsideLoginContainer({ children }: AsideLoginContainerProps) {
           <Box
             component="img"
             sx={{
-              height: 192,
-              width: 192,
+              height: 200,
+              width: 200,
             }}
             src={logo}
           />

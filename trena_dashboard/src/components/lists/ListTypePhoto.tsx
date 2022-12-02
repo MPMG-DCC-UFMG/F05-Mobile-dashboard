@@ -142,14 +142,18 @@ export const ListTypePhoto = observer(() => {
                           <TableCell>
                             <IconButton
                               onClick={() => handleOpenEditDialog(index)}
-                              color="info"
+                              color="secondary"
+                              style={{ backgroundColor: "#73ff00" }}
+                              size="small"
                             >
                               <Edit />
                             </IconButton>
                           </TableCell>
                           <TableCell>
                             <IconButton
-                              color="error"
+                              color="secondary"
+                              style={{ backgroundColor: "#73ff00" }}
+                              size="small"
                               onClick={() => handleDeleteTypePhoto(typePhoto)}
                             >
                               <Delete />

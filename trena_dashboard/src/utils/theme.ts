@@ -4,13 +4,13 @@ export const theme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      light: "#ED0000",
-      main: "#ED0000",
-      dark: "#000000",
+      light: "#bbff91",
+      main: "#73FF00",
+      dark: "#42bb15",
     },
     secondary: {
       light: "rgb(112, 112, 112)",
-      main: "#ffff",
+      main: "#000000",
       dark: "rgb(53, 53, 53)",
     },
     error: {
@@ -34,6 +34,10 @@ export const theme = createTheme({
       dark: "#1b5e20",
     },
   },
+
+  typography: {
+    fontFamily: "GothamBold",
+  }
 });
 
 export const darkTheme = createTheme({

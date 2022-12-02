@@ -128,50 +128,65 @@ export const ListPublicWork = observer(() => {
                           <Tooltip title="Mapa">
                             <IconButton
                               onClick={() => handleOpenLocalizationModal(index)}
+                              color="secondary"
+                              style={{ backgroundColor: "#73ff00" }}
+                              size="small"
                             >
-                              <Map htmlColor="#76BA99" />
+                              <Map />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
                         <TableCell align="center">
                           <Tooltip title="Vistorias">
                             <IconButton
+                              color="secondary"
+                              style={{ backgroundColor: "#73ff00" }}
+                              size="small"
                               onClick={() => handleOpenInspectionsModal(index)}
                             >
-                              <LocalSee htmlColor="#03a9f4" />
+                              <LocalSee />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
                         <TableCell align="center">
                           <Tooltip title="Adicionar Vistoria">
                             <IconButton
+                              color="secondary"
+                              style={{ backgroundColor: "#73ff00" }}
+                              size="small"
                               onClick={() =>
                                 handleOpenAddInspectionModal(index)
                               }
                             >
-                              <AddAPhoto htmlColor="#03A9F4" />
+                              <AddAPhoto />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
                         <TableCell align="center">
                           <Tooltip title="Editar">
                             <IconButton
+                              color="secondary"
+                              style={{ backgroundColor: "#73ff00" }}
+                              size="small"
                               onClick={() =>
                                 handleOpenActionModal(index, "edit")
                               }
                             >
-                              <Edit htmlColor="#03a9f4" />
+                              <Edit />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
                         <TableCell align="center">
                           <Tooltip title="Deletar">
                             <IconButton
+                              color="secondary"
+                              style={{ backgroundColor: "#73ff00" }}
+                              size="small"
                               onClick={() =>
                                 handleOpenActionModal(index, "delete")
                               }
                             >
-                              <Delete color="error" />
+                              <Delete />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
