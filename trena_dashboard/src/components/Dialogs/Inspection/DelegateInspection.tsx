@@ -71,7 +71,7 @@ export function DelegateInspectionDialog({
     <TableDialogContainer
       state={state}
       setState={setState}
-      title="Delegar Inspeção"
+      title="Delegar Vistoria"
       index={index}
     >
       <InfoTextField
