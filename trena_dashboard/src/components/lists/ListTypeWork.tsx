@@ -143,16 +143,20 @@ export const ListTypeWork = observer(() => {
                           <TableCell align="center">{typeWork.name}</TableCell>
                           <TableCell align="center">
                             <IconButton
-                              color="info"
+                              color="secondary"
+                              style={{backgroundColor: "#73ff00"}}
+                              size="small"
                               onClick={() => handleOpenEditDialog(index)}
                             >
-                              <Edit />
+                              <Edit/>
                             </IconButton>
                           </TableCell>
                           <TableCell align="center">
                             <IconButton
+                            size="small"
                               onClick={() => handleDeleteTypeWork(typeWork)}
-                              color="error"
+                              color="secondary"
+                              style={{backgroundColor: "#73ff00"}}
                             >
                               <Delete />
                             </IconButton>
@@ -180,7 +184,7 @@ export const ListTypeWork = observer(() => {
                 setRowsPerPage={setRowsPerPage}
                 page={page}
                 setPage={setPage}
-                data={typeWorks}
+                data={atualTable}
               />
             </Heading>
           </Paper>

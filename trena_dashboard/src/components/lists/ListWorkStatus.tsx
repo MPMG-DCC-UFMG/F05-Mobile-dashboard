@@ -138,7 +138,9 @@ export const ListWorkStatus = observer(() => {
                           </TableCell>
                           <TableCell align="center">
                             <IconButton
-                              color="info"
+                              color="secondary"
+                              style={{ backgroundColor: "#73ff00" }}
+                              size="small"
                               onClick={() => handleOpenEditDialog(index)}
                             >
                               <Edit />
@@ -147,7 +149,9 @@ export const ListWorkStatus = observer(() => {
                           <TableCell align="center">
                             <IconButton
                               onClick={() => handleDeleteWorkStatus(workStatus)}
-                              color="error"
+                              color="secondary"
+                              style={{ backgroundColor: "#73ff00" }}
+                              size="small"
                             >
                               <Delete />
                             </IconButton>

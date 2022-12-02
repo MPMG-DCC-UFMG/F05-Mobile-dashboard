@@ -1,4 +1,8 @@
-import { Collections, PictureAsPdf } from "@mui/icons-material";
+import {
+  Collections,
+  PictureAsPdf,
+  PictureAsPdfOutlined,
+} from "@mui/icons-material";
 import {
   Grid,
   IconButton,
@@ -111,6 +115,9 @@ export function ListInspection() {
                           <TableCell align="center">
                             <Tooltip title="Coletas">
                               <IconButton
+                                color="secondary"
+                                style={{ backgroundColor: "#73ff00" }}
+                                size="small"
                                 onClick={() => handleOpenCollectsModal(index)}
                               >
                                 <Collections />
@@ -120,11 +127,14 @@ export function ListInspection() {
                           <TableCell align="center">
                             <Tooltip title="Gerar Relatório">
                               <IconButton
+                                color="secondary"
+                                style={{ backgroundColor: "#73ff00" }}
+                                size="small"
                                 onClick={() =>
                                   handleGenerateReport(inspection.flag!)
                                 }
                               >
-                                <PictureAsPdf htmlColor="#E00000" />
+                                <PictureAsPdfOutlined />
                               </IconButton>
                             </Tooltip>
                           </TableCell>

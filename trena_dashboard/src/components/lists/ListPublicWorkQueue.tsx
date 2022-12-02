@@ -110,6 +110,9 @@ export function ListPublicWorkQueue() {
                         <TableCell align="center">
                           <Tooltip title="Avaliar">
                             <IconButton
+                              color="secondary"
+                              style={{ backgroundColor: "#73ff00" }}
+                              size="small"
                               onClick={() => handleOpenQueueDialog(index)}
                             >
                               <Visibility />
@@ -118,15 +121,23 @@ export function ListPublicWorkQueue() {
                         </TableCell>
                         <TableCell align="center">
                           <Tooltip title="Aprovar">
-                            <IconButton>
-                              <Check color="success" />
+                            <IconButton
+                              color="secondary"
+                              style={{ backgroundColor: "#73ff00" }}
+                              size="small"
+                            >
+                              <Check />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
                         <TableCell align="center">
                           <Tooltip title="Recusar">
-                            <IconButton>
-                              <Close color="error" />
+                            <IconButton
+                              color="secondary"
+                              style={{ backgroundColor: "#73ff00" }}
+                              size="small"
+                            >
+                              <Close />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
