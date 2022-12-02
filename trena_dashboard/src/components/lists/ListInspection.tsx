@@ -1,8 +1,4 @@
-import {
-  Collections,
-  PictureAsPdf,
-  PictureAsPdfOutlined,
-} from "@mui/icons-material";
+import { Collections, PictureAsPdfOutlined } from "@mui/icons-material";
 import {
   Grid,
   IconButton,
@@ -23,6 +19,7 @@ import { InspectionCollectsDialog } from "../Dialogs/Inspection/InspectionCollec
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
+import { Notify } from "../Toast/Notify";
 
 export function ListInspection() {
   const { data: inspections, isLoading } = useQuery<Inspection[]>(
@@ -48,7 +45,15 @@ export function ListInspection() {
   };
 
   const handleGenerateReport = (flag: number) => {
-    mutate(flag);
+    mutate(flag, {
+      onError: () => {
+        Notify(
+          "Esta vistoria não possui fotos/videos para gerar um relatório!",
+          "bottom-left",
+          "warning"
+        );
+      },
+    });
   };
 
   return (
@@ -90,7 +95,7 @@ export function ListInspection() {
                     <TableCell align="center">Obra</TableCell>
                     <TableCell align="center">Vistoriador</TableCell>
                     <TableCell align="center">Status</TableCell>
-                    <TableCell align="center">Coletas</TableCell>
+                    <TableCell align="center">Mídias</TableCell>
                     <TableCell align="center">Relatório</TableCell>
                   </TableRow>
                 </TableHead>

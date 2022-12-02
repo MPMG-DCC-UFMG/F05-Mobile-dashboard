@@ -40,7 +40,7 @@ export function QueueCollects({
             <TableHead>
               <TableRow>
                 <TableCell align="center">Usuário Responsável</TableCell>
-                <TableCell align="center">Data de Coleta</TableCell>
+                <TableCell align="center">Data de Captura</TableCell>
                 <TableCell align="center">Data de Envio</TableCell>
                 <TableCell align="center">Estado da Obra</TableCell>
                 <TableCell align="center">Comentário</TableCell>

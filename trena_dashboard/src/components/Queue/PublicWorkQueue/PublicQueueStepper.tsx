@@ -9,24 +9,32 @@ import {
   Stepper,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { PublicWork } from "../../../core/models/PublicWork";
 import { PublicWorkServiceQuery } from "../../../core/network/services/PublicWorkService";
+import { Notify } from "../../Toast/Notify";
 import { PublicWorkMapView } from "../PublicWorkMapView";
 import { ConfirmPublicWork } from "./ConfirmPublicWork";
 import { PublicQueueType } from "./PublicQueueType";
 
 interface PublicQueueStepperProps {
   publicWork: PublicWork;
+  state: boolean[];
+  setState(state: boolean[]): void;
+  index: number;
 }
 
-export function PublicQueueStepper({ publicWork }: PublicQueueStepperProps) {
+export function PublicQueueStepper({
+  publicWork,
+  state,
+  setState,
+  index,
+}: PublicQueueStepperProps) {
+  const queryClient = useQueryClient();
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState<{
     [k: number]: boolean;
   }>({});
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
 
   const handleNext = () => setActiveStep((prevStep) => prevStep + 1);
 
@@ -48,12 +56,16 @@ export function PublicQueueStepper({ publicWork }: PublicQueueStepperProps) {
       { ...publicWork, queue_status: 1, queue_status_date: Date.now() },
       {
         onSuccess: () => {
-          setSuccess(true);
-          setError(false);
+          Notify("Obra Pública aceita com sucesso!", "bottom-left", "success");
+          setState(state.map((s, pos) => (pos === index ? false : s)));
+          queryClient.invalidateQueries("getPublicWorksQueue");
         },
         onError: () => {
-          setError(true);
-          setSuccess(false);
+          Notify(
+            "Erro ao aceitar Obra Pública. Verifique o Servidor",
+            "bottom-left",
+            "error"
+          );
         },
       }
     );
@@ -69,7 +81,7 @@ export function PublicQueueStepper({ publicWork }: PublicQueueStepperProps) {
         <Stepper activeStep={activeStep}>
           {steps.map((label, index) => (
             <Step key={label} completed={completed[index]}>
-              <StepButton onClick={() => handleStepChange(index)}>
+              <StepButton color="info" onClick={() => handleStepChange(index)}>
                 {label}
               </StepButton>
             </Step>
@@ -90,7 +102,7 @@ export function PublicQueueStepper({ publicWork }: PublicQueueStepperProps) {
         <Button
           disabled={activeStep === 0}
           variant="contained"
-          color="primary"
+          color="info"
           onClick={handleBack}
           sx={{ mr: 1 }}
         >
@@ -108,7 +120,7 @@ export function PublicQueueStepper({ publicWork }: PublicQueueStepperProps) {
         )}
         <Button
           variant="contained"
-          color={activeStep === 2 ? "success" : "primary"}
+          color={activeStep === 2 ? "success" : "info"}
           onClick={activeStep === 2 ? handleAcceptPublicWork : handleNext}
           sx={{ mr: 1 }}
         >

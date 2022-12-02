@@ -41,7 +41,6 @@ import { Address } from "../../../core/models/Address";
 import { PublicWorkServiceQuery } from "../../../core/network/services/PublicWorkService";
 import { TypeWorkServiceQuery } from "../../../core/network/services/TypeWorkService";
 import { Notify } from "../../Toast/Notify";
-import { WarningField } from "../../WarningField";
 
 export function AddPublicWorkDialog({
   state,
@@ -59,8 +58,6 @@ export function AddPublicWorkDialog({
   const [selectedTypeWork, setSelectedTypeWork] = useState<TypeWork | null>(
     null
   );
-  const [errorWarning, setErrorWarning] = useState(false);
-  const [successWaning, setSuccessWarning] = useState(false);
 
   const { mutate, isLoading } = useMutation(
     PublicWorkServiceQuery.addPublicWork
@@ -73,7 +70,7 @@ export function AddPublicWorkDialog({
       {
         name: name,
         type_work_flag: selectedTypeWork?.flag!,
-        queue_status: 0,
+        queue_status: 1,
         queue_status_date: new Date().getTime() / 1000,
         id: id,
         address: {
@@ -273,7 +270,7 @@ export function AddPublicWorkDialog({
 
       <Grid sx={{ mt: 2 }} item display="flex" justifyContent="flex-end">
         <Button
-          disabled={isLoading || successWaning}
+          disabled={isLoading}
           variant="contained"
           color="success"
           onClick={handleSubmitPublicWork}
@@ -281,20 +278,6 @@ export function AddPublicWorkDialog({
           {isLoading ? <CircularProgress /> : "Salvar"}
         </Button>
       </Grid>
-      {successWaning && (
-        <WarningField
-          title="Obra adicionada com sucesso!"
-          message={`A Obra ${name}, do tipo ${selectedTypeWork?.name} foi adicionada com sucesso!`}
-          severity="success"
-        />
-      )}
-      {errorWarning && (
-        <WarningField
-          title="Falha ao realizar o cadastro!"
-          message={`Verifique a integridade dos campos!`}
-          severity="error"
-        />
-      )}
     </SingleDialogContainer>
   );
 }

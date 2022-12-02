@@ -110,6 +110,7 @@ export function HandlePublicWorkDialog({
               "error"
             );
             setState(state.map((s, pos) => (pos === index ? false : s)));
+            queryClient.invalidateQueries("getPublicWorks");
           },
           onSuccess: () => {
             Notify("Obra deletada com sucesso!", "bottom-left", "success");

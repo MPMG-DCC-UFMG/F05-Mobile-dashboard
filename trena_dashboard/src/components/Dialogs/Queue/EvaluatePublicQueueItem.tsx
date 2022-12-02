@@ -23,7 +23,14 @@ export function EvaluatePublicQueueDialog({
       title={title}
       fullScreen={fullScreen}
     >
-      {publicWork && <PublicQueueStepper publicWork={publicWork} />}
+      {publicWork && (
+        <PublicQueueStepper
+          state={state}
+          setState={setState}
+          index={index}
+          publicWork={publicWork}
+        />
+      )}
     </TableDialogContainer>
   );
 }
