@@ -40,7 +40,7 @@ export const ListTypePhoto = observer(() => {
   const [editTypePhotoDialog, setOpenEditTypePhotoDialog] = useState<boolean[]>(
     []
   );
-  const [atualTable, setAtualTable] = useState<TypePhoto[]>([]);
+  const [atualTable, setAtualTable] = useState<TypePhoto[]>(typePhotos!);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
 

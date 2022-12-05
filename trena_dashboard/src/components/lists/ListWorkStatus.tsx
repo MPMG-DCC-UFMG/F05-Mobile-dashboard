@@ -42,7 +42,7 @@ export const ListWorkStatus = observer(() => {
   >([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  const [atualTable, setAtualTable] = useState<WorkStatus[]>([]);
+  const [atualTable, setAtualTable] = useState<WorkStatus[]>(workStatus!);
 
   const handleSearch = (value?: string) => {
     if (value) {

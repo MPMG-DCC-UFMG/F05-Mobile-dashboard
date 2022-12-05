@@ -43,7 +43,7 @@ export const ListTypeWork = observer(() => {
     []
   );
   const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean[]>([]);
-  const [atualTable, setAtualTable] = useState<TypeWork[]>([]);
+  const [atualTable, setAtualTable] = useState<TypeWork[]>(typeWorks!);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
 
@@ -83,7 +83,7 @@ export const ListTypeWork = observer(() => {
 
   return (
     <>
-      {isLoading || !typeWorks ? (
+      {isLoading || !atualTable ? (
         <LoadingTableData
           headingAction={() => setOpenAddTypeWorkDialog(true)}
           headingTitle="Tipos de Obras"
