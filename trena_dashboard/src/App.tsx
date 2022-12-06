@@ -1,9 +1,11 @@
 import React from "react";
+import "react-toastify/dist/ReactToastify.css";
 import "./styles/App.css";
 import "./styles/trena.css";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { ToastContainer } from "react-toastify";
 import { AppRoutes } from "./routes/routes";
 
 const queryClient = new QueryClient({
@@ -24,9 +26,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AppRoutes />
       <ReactQueryDevtools />
+      <ToastContainer />
     </QueryClientProvider>
   );
 }
 
 export default App;
-

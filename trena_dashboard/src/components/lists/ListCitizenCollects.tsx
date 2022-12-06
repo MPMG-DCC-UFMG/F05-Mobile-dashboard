@@ -32,7 +32,7 @@ export function ListCitizenCollects() {
       },
     }
   );
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
   const handleOpenDialog = (

@@ -32,7 +32,7 @@ export const ListUser = observer(() => {
   );
   const [addUserDialog, setOpenAddUserDialog] = useState(false);
   const [editUserDialog, setOpenEditUserDialog] = useState<boolean[]>([]);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
   const { mutate } = useMutation(SecurityServiceQuery.deleteUser);

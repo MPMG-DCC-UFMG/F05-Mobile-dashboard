@@ -43,64 +43,61 @@ export function Heading({
 
   return (
     <>
-    <ThemeProvider theme={theme}>
-      <Container style={{ width: "100%", height: "100%" }}>
-        <Grid container justifyContent="space-between" alignItems="center">
-          <Grid sx={{ pl: "40px", pt: "20px", pb: "20px" }} item>
-            <Typography
-              color="secondary"
-              fontSize="1.5rem"
-              variant="h4"
-            >
-              {title}
-            </Typography>
-            <Breadcrumbs separator={<NavigateNext />}>
-              {steps.map((step, index) => (
-                <Link
-                  sx={{ cursor: "pointer" }}
-                  aria-current
-                  color="inherit"
-                  key={index}
-                  underline="hover"
-                  onClick={() => handleLinkBreadcrumbs(step)}
-                >
-                  {step.title}
-                </Link>
-              ))}
-            </Breadcrumbs>
-          </Grid>
-
-          {buttonTitle && (
-            <Grid item sx={{ pl: "40px", pt: "40px", pb: "20px" }}>
-              <Button
-                onClick={handleAction}
-                color="primary"
-                startIcon={<Add />}
-                variant="contained"
-              >
-                {buttonTitle}
-              </Button>
+      <ThemeProvider theme={theme}>
+        <Container style={{ width: "100%", height: "100%" }}>
+          <Grid container justifyContent="space-between" alignItems="center">
+            <Grid sx={{ pl: "40px", pt: "20px", pb: "20px" }} item>
+              <Typography color="secondary" fontSize="1.5rem" variant="h4">
+                {title}
+              </Typography>
+              <Breadcrumbs separator={<NavigateNext />}>
+                {steps.map((step, index) => (
+                  <Link
+                    sx={{ cursor: "pointer" }}
+                    aria-current
+                    color="inherit"
+                    key={index}
+                    underline="hover"
+                    onClick={() => handleLinkBreadcrumbs(step)}
+                  >
+                    {step.title}
+                  </Link>
+                ))}
+              </Breadcrumbs>
             </Grid>
-          )}
-        </Grid>
-        <Divider />
-        <Grid
-          sx={{ pt: "20px" }}
-          spacing={6}
-          container
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Grid
-            item
-            style={{ width: "100%", height: "100%" }}
-            sx={{ pl: "24px", pt: "24px" }}
-          >
-            {children}
+
+            {buttonTitle && (
+              <Grid item sx={{ pl: "40px", pt: "40px", pb: "20px" }}>
+                <Button
+                  onClick={handleAction}
+                  color="info"
+                  startIcon={<Add />}
+                  variant="contained"
+                >
+                  {buttonTitle}
+                </Button>
+              </Grid>
+            )}
           </Grid>
-        </Grid>
-      </Container>
+          <Divider />
+          <Grid
+            sx={{ pt: "20px" }}
+            spacing={6}
+            container
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Grid
+              item
+              style={{ width: "100%", height: "100%" }}
+              sx={{ pl: "24px", pt: "24px" }}
+            >
+              {children}
+            </Grid>
+          </Grid>
+        </Container>
       </ThemeProvider>
     </>
   );
 }
+

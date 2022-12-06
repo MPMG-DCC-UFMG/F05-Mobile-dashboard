@@ -9,11 +9,11 @@ import {
   Stepper,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Collect } from "../../../core/models/Collect";
 import { PublicWork } from "../../../core/models/PublicWork";
 import { CollectServiceQuery } from "../../../core/network/services/CollectService";
-import { WarningField } from "../../WarningField";
+import { Notify } from "../../Toast/Notify";
 import { PublicWorkMapView } from "../PublicWorkMapView";
 import { QueueCollects } from "./QueueCollects";
 import { QueueConfirm } from "./QueueConfirm";
@@ -21,15 +21,22 @@ import { QueuePhotos } from "./QueuePhotos";
 
 interface QueueStepperProps {
   publicWork: PublicWork;
+  state: boolean[];
+  setState(state: boolean[]): void;
+  index: number;
 }
 
-export function QueueStepper({ publicWork }: QueueStepperProps) {
+export function QueueStepper({
+  publicWork,
+  state,
+  setState,
+  index,
+}: QueueStepperProps) {
+  const queryClient = useQueryClient();
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState<{
     [k: number]: boolean;
   }>({});
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(false);
 
   const handleNext = () => setActiveStep((prevStep) => prevStep + 1);
 
@@ -59,7 +66,7 @@ export function QueueStepper({ publicWork }: QueueStepperProps) {
   );
 
   const handleRefuseCollect = () => {
-    collectsOfPublicWork?.map((collect) => {
+    collectsOfPublicWork?.forEach((collect) => {
       refuseCollect(
         {
           ...collect,
@@ -70,12 +77,21 @@ export function QueueStepper({ publicWork }: QueueStepperProps) {
         },
         {
           onSuccess: () => {
-            setSuccess(true);
-            setError(false);
+            Notify(
+              "Vistoria Cidadã recusada com sucesso!",
+              "bottom-left",
+              "success"
+            );
+            queryClient.invalidateQueries("queueCollects");
+            setState(state.map((s, pos) => (pos === index ? false : s)));
           },
           onError: () => {
-            setError(true);
-            setSuccess(false);
+            Notify(
+              "Erro ao recusar Vistoria Cidadã. Verifique o Servidor",
+              "bottom-left",
+              "success"
+            );
+            setState(state.map((s, pos) => (pos === index ? false : s)));
           },
         }
       );
@@ -83,7 +99,7 @@ export function QueueStepper({ publicWork }: QueueStepperProps) {
   };
 
   const handleAcceptCollects = () => {
-    collectsOfPublicWork?.map((collect) =>
+    collectsOfPublicWork?.forEach((collect) =>
       acceptCollect(
         {
           ...collect,
@@ -94,12 +110,21 @@ export function QueueStepper({ publicWork }: QueueStepperProps) {
         },
         {
           onSuccess: () => {
-            setSuccess(true);
-            setError(false);
+            Notify(
+              "Vistoria Cidadã aprovada com sucesso!",
+              "bottom-left",
+              "success"
+            );
+            setState(state.map((s, pos) => (pos === index ? false : s)));
+            queryClient.invalidateQueries("queueCollects");
           },
           onError: () => {
-            setError(true);
-            setSuccess(false);
+            Notify(
+              "Erro ao aceitar Vistoria Cidadã. Verifique o Servidor",
+              "bottom-left",
+              "error"
+            );
+            setState(state.map((s, pos) => (pos === index ? false : s)));
           },
         }
       )
@@ -142,7 +167,7 @@ export function QueueStepper({ publicWork }: QueueStepperProps) {
         <Button
           disabled={activeStep === 0}
           variant="contained"
-          color="primary"
+          color="info"
           onClick={handleBack}
           sx={{ mr: 1 }}
         >
@@ -155,27 +180,19 @@ export function QueueStepper({ publicWork }: QueueStepperProps) {
             color="error"
             sx={{ mr: 1 }}
           >
-            {loadingRefuse ? <CircularProgress /> : "Recusar"}
+            {loadingRefuse ? <CircularProgress size={25} /> : "Recusar"}
           </Button>
         )}
         <Button
           variant="contained"
-          color={activeStep === 3 ? "success" : "primary"}
+          color={activeStep === 3 ? "success" : "info"}
           onClick={activeStep === 3 ? handleAcceptCollects : handleNext}
           sx={{ mr: 1 }}
-          disabled={success}
         >
-          {activeStep === 3 && loadingAccept && <CircularProgress />}
+          {activeStep === 3 && loadingAccept && <CircularProgress size={25} />}
           {activeStep === 3 && !loadingAccept && "Confirmar"}
           {activeStep !== 3 && "Próximo"}
         </Button>
-        {success && (
-          <WarningField
-            title="Obra Avaliada com sucesso!"
-            severity="success"
-            message={`A Obra ${publicWork.name} foi avaliada com sucesso!`}
-          />
-        )}
       </Box>
     </Container>
   );

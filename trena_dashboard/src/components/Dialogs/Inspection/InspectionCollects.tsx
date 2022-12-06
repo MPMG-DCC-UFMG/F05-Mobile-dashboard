@@ -15,6 +15,7 @@ import { collectStatusMapping, convertEphocDate } from "../../../utils/mapper";
 import { InfoAccorion } from "../../Accordion";
 import { InfoTextField } from "../../Inputs/InfoTextField";
 import { MediaSwiper } from "../../Swiper";
+import { WarningField } from "../../WarningField";
 import { TableDialogContainer, TableDialogProps } from "../DialogContainer";
 
 interface InspectionCollectsDialogProps extends TableDialogProps {
@@ -42,7 +43,7 @@ export function InspectionCollectsDialog({
       title={title}
       index={index}
     >
-      {collects ? (
+      {collects && collects.length > 0 ? (
         collects.map((collect) => (
           <InfoAccorion
             key={collect.id}
@@ -93,7 +94,11 @@ export function InspectionCollectsDialog({
           </InfoAccorion>
         ))
       ) : (
-        <p>Essa vistoria ainda não possui coletas</p>
+        <WarningField
+          title="Ausência de Mídias"
+          message="Esta Vistoria ainda não possui nenhuma Foto/Vídeo"
+          severity="warning"
+        />
       )}
     </TableDialogContainer>
   );

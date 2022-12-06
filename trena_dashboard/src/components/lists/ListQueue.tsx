@@ -20,6 +20,7 @@ import { EvaluateQueueItemDialog } from "../Dialogs/Queue/EvaluateQueueItem";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
+import { WarningField } from "../WarningField";
 
 export function ListQueue() {
   const [openEvaluateCollect, setOpenEvaluateCollect] = useState<boolean[]>([]);
@@ -37,7 +38,7 @@ export function ListQueue() {
     WorkStatusServiceQuery.loadWorkStatus()
   );
 
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
   const handleOpenEvaluateDialog = (index: number) => {
@@ -62,7 +63,7 @@ export function ListQueue() {
             },
           ]}
         />
-      ) : (
+      ) : queue.length > 0 ? (
         <Grid style={{ width: "100%", marginTop: 14 }} item>
           <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
             <Heading
@@ -135,7 +136,7 @@ export function ListQueue() {
                           index={index}
                           state={openEvaluateCollect}
                           setState={setOpenEvaluateCollect}
-                          title={`Avaliação de Coleta`}
+                          title={`Avaliação de Vistoria Cidadã`}
                           fullScreen
                         />
                       </React.Fragment>
@@ -152,6 +153,12 @@ export function ListQueue() {
             </Heading>
           </Paper>
         </Grid>
+      ) : (
+        <WarningField
+          title="Não há nenhuma Vistoria Cidadã para ser avaliada"
+          message="Todas Vistorias constam em suas respectivas sessões."
+          severity="warning"
+        />
       )}
     </>
   );

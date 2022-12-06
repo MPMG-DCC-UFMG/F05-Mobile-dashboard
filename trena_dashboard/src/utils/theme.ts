@@ -2,7 +2,6 @@ import { createTheme } from "@mui/material/styles";
 
 export const theme = createTheme({
   palette: {
-    mode: "light",
     primary: {
       light: "#bbff91",
       main: "#73FF00",
@@ -36,12 +35,6 @@ export const theme = createTheme({
   },
 
   typography: {
-    fontFamily: "GothamBold",
-  }
-});
-
-export const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
+    fontFamily: "Roboto",
   },
 });
