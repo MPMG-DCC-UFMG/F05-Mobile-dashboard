@@ -1,14 +1,16 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, ManageSearch } from "@mui/icons-material";
 import {
   Divider,
   Grid,
   IconButton,
+  InputAdornment,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
+  TextField,
 } from "@mui/material";
 import { observer } from "mobx-react";
 import React, { useState } from "react";
@@ -23,7 +25,7 @@ import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListTypePhoto = observer(() => {
-  const { data: typePhoto, isLoading } = useQuery(
+  const { data: typePhotos, isLoading } = useQuery(
     ["getTypePhoto"],
     TypePhotoService.loadTypePhotos,
     {
@@ -39,7 +41,7 @@ export const ListTypePhoto = observer(() => {
     []
   );
   const [atualTable, setAtualTable] = useState<TypePhoto[]>([]);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
   const handleSearch = (value?: string) => {
@@ -183,4 +185,3 @@ export const ListTypePhoto = observer(() => {
     </>
   );
 });
-

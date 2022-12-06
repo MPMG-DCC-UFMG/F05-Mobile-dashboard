@@ -13,11 +13,10 @@ export function DashboardContentContainer({
       style={{
         width: "100%",
         height: "100%",
-        marginTop: "60px",
-        paddingLeft: "40px",
       }}
     >
       <Grid
+        sx={{ mt: "40px" }}
         container
         spacing={3}
         justifyContent="space-between"

@@ -1,4 +1,4 @@
-import { Box, Container, CssBaseline, Grid } from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 import React, { useState } from "react";
 import { useStores } from "../../core/contexts/UseStores";
 import { AppBar } from "../AppBar";
@@ -17,8 +17,7 @@ export function DashboardContainer({ children }: DashboardContainerProps) {
   };
 
   return (
-    <Box display="flex">
-      <CssBaseline />
+    <Box sx={{ display: "flex" }}>
       <AppBar open={open} toggleDrawer={toggleDrawer} />
       <Drawer open={open} toggleDrawer={toggleDrawer} />
       <Box
@@ -27,10 +26,13 @@ export function DashboardContainer({ children }: DashboardContainerProps) {
           flexGrow: 1,
           height: "100vh",
           overflow: "auto",
-          backgroundColor: (theme) => theme.palette.grey[100],
+          backgroundColor: (theme) =>
+            theme.palette.mode === "dark"
+              ? theme.palette.grey[700]
+              : theme.palette.grey[100],
         }}
       >
-        <Container maxWidth="lg" sx={{ mt: 10, mb: 6 }}>
+        <Container maxWidth="lg" sx={{ mt: 6, mb: 6 }}>
           <Grid container spacing={3}>
             {children}
           </Grid>

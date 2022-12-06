@@ -4,9 +4,13 @@ import React from "react";
 import { useQuery } from "react-query";
 import { Inspection } from "../../../core/models/Inspection";
 import { InspectionServiceQuery } from "../../../core/network/services/InspectionService";
-import { inspectionsStatusMapping } from "../../../utils/mapper";
+import {
+  convertEphocDate,
+  inspectionsStatusMapping,
+} from "../../../utils/mapper";
 import { InfoAccorion } from "../../Accordion";
 import { InfoTextField } from "../../Inputs/InfoTextField";
+import { WarningField } from "../../WarningField";
 import { TableDialogContainer } from "../DialogContainer";
 
 interface PublicWorkInspectionsDialogProps {
@@ -24,11 +28,9 @@ export function PublicWorkInspectionsDialog({
   index,
   publicWorkId,
 }: PublicWorkInspectionsDialogProps) {
-  const query = InspectionServiceQuery.getPublicWorkInspections;
-
-  const { data, isLoading, isIdle } = useQuery(
-    ["workInspections", publicWorkId],
-    () => query(publicWorkId)
+  const { data, isLoading } = useQuery<Inspection[]>(
+    ["getPublicWorkInspections", publicWorkId],
+    () => InspectionServiceQuery.getPublicWorkInspections(publicWorkId)
   );
 
   if (isLoading) {
@@ -47,45 +49,58 @@ export function PublicWorkInspectionsDialog({
       state={state}
       setState={setState}
       index={index}
-      title={title}
-      fullScreen={true}
+      title={data && data.length > 0 ? title : "Ausência de Dados"}
+      fullScreen={data && data.length > 0}
     >
-      {data?.map((inspection: Inspection) => (
-        <InfoAccorion
-          key={inspection.flag}
-          title={`Inspeção - ${inspection.name}`}
-        >
-          <InfoTextField
-            disabled
-            fullWidth
-            icon={<Flag />}
-            label="Flag"
-            defaultValue={inspection.flag?.toString()}
-          />
-          <InfoTextField
-            disabled
-            fullWidth
-            icon={<QueryStats />}
-            label="Status"
-            defaultValue={inspectionsStatusMapping(inspection.status!)}
-          />
-          <InfoTextField
-            disabled
-            fullWidth
-            icon={<Email />}
-            label="Email usuário"
-            defaultValue={inspection.user_email}
-          />
-          <InfoTextField
-            disabled
-            fullWidth
-            icon={<TextFields />}
-            label="Descrição"
-            defaultValue={inspection.description}
-            type="text"
-          />
-        </InfoAccorion>
-      ))}
+      {data ? (
+        data.map((inspection: Inspection) => (
+          <InfoAccorion
+            key={inspection.flag}
+            title={`${inspection.name} - ${convertEphocDate(
+              inspection.request_date
+            )}`}
+          >
+            <InfoTextField
+              disabled
+              fullWidth
+              icon={<Flag />}
+              label="Flag"
+              defaultValue={
+                // inspection.flag?.toString()
+                inspection.request_date.toString()
+              }
+            />
+            <InfoTextField
+              disabled
+              fullWidth
+              icon={<QueryStats />}
+              label="Status"
+              defaultValue={inspectionsStatusMapping(inspection.status!)}
+            />
+            <InfoTextField
+              disabled
+              fullWidth
+              icon={<Email />}
+              label="Email usuário"
+              defaultValue={inspection.user_email}
+            />
+            <InfoTextField
+              disabled
+              fullWidth
+              icon={<TextFields />}
+              label="Descrição"
+              defaultValue={inspection.description}
+              type="text"
+            />
+          </InfoAccorion>
+        ))
+      ) : (
+        <WarningField
+          title="Ausência de Vistorias"
+          message="Esta Obra ainda não possui nenhuma vistoria vinculada."
+          severity="warning"
+        />
+      )}
     </TableDialogContainer>
   );
 }

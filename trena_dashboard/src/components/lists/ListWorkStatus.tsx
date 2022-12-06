@@ -1,4 +1,4 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, ManageSearch } from "@mui/icons-material";
 import {
   Divider,
   Grid,
@@ -15,7 +15,6 @@ import {
 import { observer } from "mobx-react";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { useStores } from "../../core/contexts/UseStores";
 import { WorkStatus } from "../../core/models/WorkStatus";
 import { WorkStatusServiceQuery } from "../../core/network/services/WorkStatusService";
 import { AddWorkStatusDialog } from "../Dialogs/StatusWork/AddWorkStatusDialog";
@@ -35,28 +34,27 @@ export const ListWorkStatus = observer(() => {
       },
     }
   );
-  const { workStatusStore } = useStores();
   const [addWorkStatusDialog, setOpenAddWorkStatusDialog] = useState(false);
   const [editWorkStatusDialog, setOpenEditWorkStatusDialog] = useState<
     boolean[]
   >([]);
-  const [atualTable, setAtualTable] = useState<WorkStatus[]>(
-    workStatusStore.workStatusList
-  );
+  const [atualTable, setAtualTable] = useState<WorkStatus[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const query = event.currentTarget.value;
-    workStatusStore.search(query);
-    setAtualTable(workStatusStore.workStatusList);
-  };
-
-  const handleDeleteWorkStatus = (workStatus: WorkStatus) => {
-    if (workStatus.flag) {
-      workStatusStore.deleteWorkStatus(workStatus.flag);
+  const handleSearch = (value?: string) => {
+    if (value) {
+      setAtualTable(
+        workStatus!.filter((workstatus) =>
+          workstatus.name.toLocaleUpperCase().includes(value.toUpperCase())
+        )
+      );
+    } else {
+      setAtualTable(workStatus!);
     }
   };
+
+  const handleDeleteWorkStatus = (workStatus: WorkStatus) => {};
 
   const handleOpenEditDialog = (index: number) => {
     setOpenEditWorkStatusDialog(
@@ -175,4 +173,3 @@ export const ListWorkStatus = observer(() => {
     </>
   );
 });
-

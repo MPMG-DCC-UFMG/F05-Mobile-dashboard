@@ -1,7 +1,8 @@
 import { createTheme } from "@mui/material/styles";
 
-export const theme = createTheme({
+export const trenaTheme = createTheme({
   palette: {
+    mode: "light",
     primary: {
       light: "#bbff91",
       main: "#73FF00",

@@ -1,6 +1,12 @@
-import { Dialog, DialogTitle, useTheme } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
-import { DialogContent, Divider, Grid, IconButton } from "@mui/material";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Grid,
+  IconButton,
+} from "@mui/material";
 import React from "react";
 
 interface BasicDialogProps {
@@ -21,8 +27,6 @@ export function SingleDialogContainer({
   title,
   fullScreen,
 }: SingleDialogContainerProps) {
-  const theme = useTheme();
-
   return (
     <Dialog
       TransitionProps={{ unmountOnExit: true, mountOnEnter: true }}
@@ -32,7 +36,7 @@ export function SingleDialogContainer({
       fullScreen={fullScreen}
       onClose={() => setState(false)}
     >
-      <DialogTitle color={theme.palette.grey[400]}>
+      <DialogTitle>
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid item>{title}</Grid>
           <Grid item>
@@ -68,8 +72,6 @@ export function TableDialogContainer({
   title,
   fullScreen,
 }: TableDialogProps) {
-  const theme = useTheme();
-
   const handleCloseDialog = (index: number) =>
     setState(state.map((s, pos) => (pos === index ? false : s)));
 
@@ -82,7 +84,7 @@ export function TableDialogContainer({
       fullScreen={fullScreen}
       onClose={handleCloseDialog}
     >
-      <DialogTitle color={theme.palette.grey[400]}>
+      <DialogTitle>
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid item>{title}</Grid>
           <Grid item>

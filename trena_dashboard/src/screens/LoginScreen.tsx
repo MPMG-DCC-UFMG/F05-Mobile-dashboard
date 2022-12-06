@@ -1,11 +1,10 @@
-import { Button, TextField, ThemeProvider } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { AsideLoginContainer } from "../components/Containers/AsideLoginContainer";
 import { WarningField } from "../components/WarningField";
 import { SecurityServiceQuery } from "../core/network/services/SecurityService";
-import { theme } from "../utils/theme";
 
 type LoginUser = {
   username: string;
@@ -49,7 +48,6 @@ export function LoginScreen() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
     <AsideLoginContainer>
       <TextField
         margin="normal"
@@ -92,6 +90,5 @@ export function LoginScreen() {
         )}
       </>
     </AsideLoginContainer>
-    </ThemeProvider>
   );
 }

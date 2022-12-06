@@ -3,6 +3,8 @@ import { useQuery } from "react-query";
 import { Collect } from "../../../core/models/Collect";
 import { PublicWork } from "../../../core/models/PublicWork";
 import { PublicWorkServiceQuery } from "../../../core/network/services/PublicWorkService";
+import { convertEphocDate } from "../../../utils/mapper";
+import { InfoAccorion } from "../../Accordion";
 import { PublicWorkMapView } from "../../Queue/PublicWorkMapView";
 import { RawSwiper } from "../../Swiper";
 import { TableDialogContainer, TableDialogProps } from "../DialogContainer";
@@ -28,14 +30,18 @@ export function CollectSubmissionDialog({
     <TableDialogContainer
       state={state}
       setState={setState}
-      title={title}
+      title={`${publicWork?.name} - ${convertEphocDate(collect.date)}`}
       index={index}
       fullScreen={fullScreen}
     >
       {publicWork && (
         <>
-          <PublicWorkMapView publicWork={publicWork} />
-          <RawSwiper collect={collect} />
+          <InfoAccorion title="Localização">
+            <PublicWorkMapView publicWork={publicWork} />
+          </InfoAccorion>
+          <InfoAccorion title="Medias">
+            <RawSwiper collect={collect} />
+          </InfoAccorion>
         </>
       )}
     </TableDialogContainer>
