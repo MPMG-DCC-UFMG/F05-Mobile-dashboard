@@ -142,7 +142,7 @@ export const ListTypeWork = observer(() => {
                           <TableCell align="center">{typeWork.name}</TableCell>
                           <TableCell align="center">
                             <IconButton
-                              color="info"
+                              color="warning"
                               size="small"
                               onClick={() => handleOpenEditDialog(index)}
                             >
@@ -190,4 +190,3 @@ export const ListTypeWork = observer(() => {
     </>
   );
 });
-

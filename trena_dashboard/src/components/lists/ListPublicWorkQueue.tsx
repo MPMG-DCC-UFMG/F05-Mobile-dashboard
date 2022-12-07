@@ -122,20 +122,14 @@ export function ListPublicWorkQueue() {
                               </TableCell>
                               <TableCell align="center">
                                 <Tooltip title="Aprovar">
-                                  <IconButton
-                                   color="info"
-                                    size="small"
-                                  >
+                                  <IconButton color="success" size="small">
                                     <Check />
                                   </IconButton>
                                 </Tooltip>
                               </TableCell>
                               <TableCell align="center">
                                 <Tooltip title="Recusar">
-                                  <IconButton
-                                    color="info"
-                                    size="small"
-                                  >
+                                  <IconButton color="error" size="small">
                                     <Close />
                                   </IconButton>
                                 </Tooltip>

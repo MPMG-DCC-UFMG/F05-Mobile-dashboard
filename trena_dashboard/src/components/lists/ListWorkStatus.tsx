@@ -129,7 +129,7 @@ export const ListWorkStatus = observer(() => {
                         </TableCell>
                         <TableCell align="center">
                           <IconButton
-                            color="info"
+                            color="warning"
                             onClick={() => handleOpenEditDialog(index)}
                           >
                             <Edit />

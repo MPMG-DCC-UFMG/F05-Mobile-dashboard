@@ -142,7 +142,7 @@ export const ListTypePhoto = observer(() => {
                           <TableCell>
                             <IconButton
                               onClick={() => handleOpenEditDialog(index)}
-                              color="info"
+                              color="warning"
                               size="small"
                             >
                               <Edit />
