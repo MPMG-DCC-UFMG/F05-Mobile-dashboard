@@ -28,7 +28,11 @@ import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListPublicWork = observer(() => {
-  const { data: publicWorks, isLoading } = useQuery(
+  const {
+    data: publicWorks,
+    isLoading,
+    isFetched,
+  } = useQuery<PublicWork[]>(
     ["getPublicWorks"],
     PublicWorkServiceQuery.loadPublicWorks,
     {
@@ -92,151 +96,162 @@ export const ListPublicWork = observer(() => {
           ]}
         />
       ) : (
-        <Grid style={{ width: "100%", marginTop: 14 }} item>
-          <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-            <Heading
-              buttonTitle="Adicionar Obra Pública"
-              title="Obras Públicas"
-              steps={[
-                { title: "Dashboard", url: "/" },
-                { title: "Obras Públicas", url: "/" },
-              ]}
-              handleAction={() => setOpenAddPublicWorkDialog(true)}
-            >
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Nome</TableCell>
-                    <TableCell align="center">Endereço</TableCell>
-                    <TableCell align="center">Localização</TableCell>
-                    <TableCell align="center">Vistorias</TableCell>
-                    <TableCell align="center">Nova Vistoria</TableCell>
-                    <TableCell align="center">Editar</TableCell>
-                    <TableCell align="center">Deletar</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {publicWorks!
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((publicWork: PublicWork, index: number) => (
-                      <TableRow key={publicWork.id}>
-                        <TableCell align="center">{publicWork.name}</TableCell>
-                        <TableCell align="center">
-                          {addressFormatter(publicWork.address)}
-                        </TableCell>
-                        <TableCell align="center">
-                          <Tooltip title="Mapa">
-                            <IconButton
-                              onClick={() => handleOpenLocalizationModal(index)}
-                              size="small"
-                            >
-                              <Map htmlColor="#4caf50" />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Tooltip title="Vistorias">
-                            <IconButton
-                              color="info"
-                              size="small"
-                              onClick={() => handleOpenInspectionsModal(index)}
-                            >
-                              <LocalSee />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Tooltip title="Adicionar Vistoria">
-                            <IconButton
-                              color="info"
-                              size="small"
-                              onClick={() =>
-                                handleOpenAddInspectionModal(index)
-                              }
-                            >
-                              <PendingActions />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Tooltip title="Editar">
-                            <IconButton
-                              color="warning"
-                              size="small"
-                              onClick={() =>
-                                handleOpenActionModal(index, "edit")
-                              }
-                            >
-                              <Edit />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Tooltip title="Deletar">
-                            <IconButton
-                              color="error"
-                              size="small"
-                              onClick={() =>
-                                handleOpenActionModal(index, "delete")
-                              }
-                            >
-                              <Delete />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                        <MapDialog
-                          state={openLocalizationModal}
-                          setState={setOpenLocalizationModal}
-                          publicWork={publicWork}
-                          index={index}
-                          fullScreen
-                        />
-                        <PublicWorkInspectionsDialog
-                          state={openInspectionsModal}
-                          setState={setOpenInspectionsModal}
-                          publicWorkId={publicWork.id}
-                          index={index}
-                          title={`Vistorias: ${publicWork.name}`}
-                        />
-                        <HandlePublicWorkDialog
-                          state={openActionDialog}
-                          setState={setOpenActionDialog}
-                          index={index}
-                          mode={actionMode}
-                          publicWork={publicWork}
-                          title={
-                            actionMode === "edit"
-                              ? "Editar Obra Pública"
-                              : "Deletar Obra Pública"
-                          }
-                          fullScreen
-                        />
-                        <DelegateInspectionDialog
-                          index={index}
-                          publicWork={publicWork}
-                          state={openAddInspectionModal}
-                          setState={setOpenAddInspectionModal}
-                        />
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-              <TablePagination
-                rowsPerPage={rowsPerPage}
-                setRowsPerPage={setRowsPerPage}
-                page={page}
-                setPage={setPage}
-                data={publicWorks!}
-              />
-              <AddPublicWorkDialog
-                state={openAddPublicWorkDialog}
-                setState={setOpenAddPublicWorkDialog}
-                title="Nova Obra Pública"
-                fullScreen={true}
-              />
-            </Heading>
-          </Paper>
-        </Grid>
+        isFetched && (
+          <Grid style={{ width: "100%", marginTop: 14 }} item>
+            <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+              <Heading
+                buttonTitle="Adicionar Obra Pública"
+                title="Obras Públicas"
+                steps={[
+                  { title: "Dashboard", url: "/" },
+                  { title: "Obras Públicas", url: "/" },
+                ]}
+                handleAction={() => setOpenAddPublicWorkDialog(true)}
+              >
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">Nome</TableCell>
+                      <TableCell align="center">Endereço</TableCell>
+                      <TableCell align="center">Localização</TableCell>
+                      <TableCell align="center">Vistorias</TableCell>
+                      <TableCell align="center">Nova Vistoria</TableCell>
+                      <TableCell align="center">Editar</TableCell>
+                      <TableCell align="center">Deletar</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {publicWorks
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((publicWork, index: number) => (
+                        <TableRow key={publicWork.id}>
+                          <TableCell align="center">
+                            {publicWork.name}
+                          </TableCell>
+                          <TableCell align="center">
+                            {addressFormatter(publicWork.address)}
+                          </TableCell>
+                          <TableCell align="center">
+                            <Tooltip title="Mapa">
+                              <IconButton
+                                onClick={() =>
+                                  handleOpenLocalizationModal(index)
+                                }
+                                size="small"
+                              >
+                                <Map htmlColor="#4caf50" />
+                              </IconButton>
+                            </Tooltip>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Tooltip title="Vistorias">
+                              <IconButton
+                                color="info"
+                                size="small"
+                                onClick={() =>
+                                  handleOpenInspectionsModal(index)
+                                }
+                              >
+                                <LocalSee />
+                              </IconButton>
+                            </Tooltip>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Tooltip title="Adicionar Vistoria">
+                              <IconButton
+                                color="info"
+                                size="small"
+                                onClick={() =>
+                                  handleOpenAddInspectionModal(index)
+                                }
+                              >
+                                <PendingActions />
+                              </IconButton>
+                            </Tooltip>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Tooltip title="Editar">
+                              <IconButton
+                                color="warning"
+                                size="small"
+                                onClick={() =>
+                                  handleOpenActionModal(index, "edit")
+                                }
+                              >
+                                <Edit />
+                              </IconButton>
+                            </Tooltip>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Tooltip title="Deletar">
+                              <IconButton
+                                color="error"
+                                size="small"
+                                onClick={() =>
+                                  handleOpenActionModal(index, "delete")
+                                }
+                              >
+                                <Delete />
+                              </IconButton>
+                            </Tooltip>
+                          </TableCell>
+                          <MapDialog
+                            state={openLocalizationModal}
+                            setState={setOpenLocalizationModal}
+                            publicWork={publicWork}
+                            index={index}
+                            fullScreen
+                          />
+                          <PublicWorkInspectionsDialog
+                            state={openInspectionsModal}
+                            setState={setOpenInspectionsModal}
+                            publicWorkId={publicWork.id}
+                            index={index}
+                            title={`Vistorias: ${publicWork.name}`}
+                          />
+                          <HandlePublicWorkDialog
+                            state={openActionDialog}
+                            setState={setOpenActionDialog}
+                            index={index}
+                            mode={actionMode}
+                            publicWork={publicWork}
+                            title={
+                              actionMode === "edit"
+                                ? "Editar Obra Pública"
+                                : "Deletar Obra Pública"
+                            }
+                            fullScreen
+                          />
+                          <DelegateInspectionDialog
+                            index={index}
+                            publicWork={publicWork}
+                            state={openAddInspectionModal}
+                            setState={setOpenAddInspectionModal}
+                          />
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+                <TablePagination
+                  rowsPerPage={rowsPerPage}
+                  setRowsPerPage={setRowsPerPage}
+                  page={page}
+                  setPage={setPage}
+                  data={publicWorks!}
+                />
+                <AddPublicWorkDialog
+                  state={openAddPublicWorkDialog}
+                  setState={setOpenAddPublicWorkDialog}
+                  title="Nova Obra Pública"
+                  fullScreen={true}
+                />
+              </Heading>
+            </Paper>
+          </Grid>
+        )
       )}
     </>
   );

@@ -15,6 +15,14 @@ export default class TrenaAPI {
 
   private _userToken: string = "";
 
+  private getUserToken() {
+    if (this._userToken === "") {
+      return localStorage.getItem("TOKEN");
+    } else {
+      return this._userToken;
+    }
+  }
+
   public setUserToken(token: string) {
     this._userToken = token;
   }
@@ -22,7 +30,8 @@ export default class TrenaAPI {
   public static network = () => {
     return request.agent().set({
       "X-TRENA-KEY": Config.API_KEY,
-      token: TrenaAPI.getInstance()._userToken,
+      token: TrenaAPI.getInstance().getUserToken(),
     });
   };
 }
+

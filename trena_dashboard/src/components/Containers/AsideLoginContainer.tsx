@@ -1,7 +1,7 @@
 import { Box, Grid, Paper } from "@mui/material";
 import React from "react";
+import background from "../../assets/login-trena.png";
 import logo from "../../assets/logo512-no-bg.png";
-import background from "../../assets/mpmg-gsi.png"
 interface AsideLoginContainerProps {
   children?: JSX.Element | JSX.Element[];
 }
@@ -15,11 +15,11 @@ export function AsideLoginContainer({ children }: AsideLoginContainerProps) {
         sm={4}
         md={7}
         sx={{
-          // backgroundImage: `url(${background})`,
+          backgroundImage: `url(${background})`,
           backgroundRepeat: "no-repeat",
           backgroundColor: (t) =>
             t.palette.mode === "light"
-              ? t.palette.grey[200]
+              ? t.palette.grey[500]
               : t.palette.grey[900],
           backgroundPosition: "center",
         }}

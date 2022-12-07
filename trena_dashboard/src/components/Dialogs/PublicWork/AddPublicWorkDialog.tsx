@@ -71,7 +71,7 @@ export function AddPublicWorkDialog({
         name: name,
         type_work_flag: selectedTypeWork?.flag!,
         queue_status: 1,
-        queue_status_date: new Date().getTime() / 1000,
+        queue_status_date: new Date().getTime(),
         id: id,
         address: {
           ...address,
