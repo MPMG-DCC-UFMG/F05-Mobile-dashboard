@@ -131,7 +131,7 @@ export function ListInspection() {
                           <TableCell align="center">
                             <Tooltip title="Gerar Relatório">
                               <IconButton
-                                color="info"
+                                color="error"
                                 size="small"
                                 onClick={() =>
                                   handleGenerateReport(inspection.flag!)

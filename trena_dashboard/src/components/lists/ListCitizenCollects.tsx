@@ -81,7 +81,7 @@ export function ListCitizenCollects() {
                     <TableCell align="center">Usuário Responsável</TableCell>
                     <TableCell align="center">Data</TableCell>
                     <TableCell align="center">Status da Coleta</TableCell>
-                    <TableCell align="center">Envios</TableCell>
+                    <TableCell align="center">Mídias</TableCell>
                     <TableCell align="center">Excluir</TableCell>
                   </TableRow>
                 </TableHead>
@@ -119,10 +119,7 @@ export function ListCitizenCollects() {
                           </TableCell>
                           <TableCell align="center">
                             <Tooltip title="Excluir">
-                              <IconButton
-                                color="info"
-                                size="small"
-                              >
+                              <IconButton color="error" size="small">
                                 <Delete />
                               </IconButton>
                             </Tooltip>

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React, { useState } from "react";
 
-import { AddAPhoto, Edit } from "@material-ui/icons";
+import { Edit } from "@material-ui/icons";
 import { Delete, LocalSee, Map, PendingActions } from "@mui/icons-material";
 import {
   Grid,
@@ -128,10 +128,9 @@ export const ListPublicWork = observer(() => {
                           <Tooltip title="Mapa">
                             <IconButton
                               onClick={() => handleOpenLocalizationModal(index)}
-                              color="info"
                               size="small"
                             >
-                              <Map />
+                              <Map htmlColor="#4caf50" />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
@@ -149,7 +148,7 @@ export const ListPublicWork = observer(() => {
                         <TableCell align="center">
                           <Tooltip title="Adicionar Vistoria">
                             <IconButton
-                             color="info"
+                              color="info"
                               size="small"
                               onClick={() =>
                                 handleOpenAddInspectionModal(index)
@@ -162,7 +161,7 @@ export const ListPublicWork = observer(() => {
                         <TableCell align="center">
                           <Tooltip title="Editar">
                             <IconButton
-                             color="info"
+                              color="warning"
                               size="small"
                               onClick={() =>
                                 handleOpenActionModal(index, "edit")
@@ -175,7 +174,7 @@ export const ListPublicWork = observer(() => {
                         <TableCell align="center">
                           <Tooltip title="Deletar">
                             <IconButton
-                              color="info"
+                              color="error"
                               size="small"
                               onClick={() =>
                                 handleOpenActionModal(index, "delete")

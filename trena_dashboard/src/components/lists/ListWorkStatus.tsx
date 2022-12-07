@@ -138,7 +138,7 @@ export const ListWorkStatus = observer(() => {
                         <TableCell align="center">
                           <IconButton
                             onClick={() => handleDeleteWorkStatus(workStatus)}
-                            color="info"
+                            color="error"
                           >
                             <Delete />
                           </IconButton>

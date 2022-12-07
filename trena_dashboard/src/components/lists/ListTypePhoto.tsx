@@ -150,7 +150,7 @@ export const ListTypePhoto = observer(() => {
                           </TableCell>
                           <TableCell>
                             <IconButton
-                              color="info"
+                              color="error"
                               size="small"
                               onClick={() => handleDeleteTypePhoto(typePhoto)}
                             >
