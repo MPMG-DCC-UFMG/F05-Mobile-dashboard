@@ -11,6 +11,7 @@ import {
 import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Collect } from "../../../core/models/Collect";
+import { Photo } from "../../../core/models/Photo";
 import { PublicWork } from "../../../core/models/PublicWork";
 import { CollectServiceQuery } from "../../../core/network/services/CollectService";
 import { Notify } from "../../Toast/Notify";
@@ -37,19 +38,14 @@ export function QueueStepper({
   const [completed, setCompleted] = useState<{
     [k: number]: boolean;
   }>({});
+  const [acceptedPhotos, setAcceptedPhotos] = useState<Photo[]>([]);
+  const [rejectedPhotos, setRejectedPhotos] = useState<Photo[]>([]);
 
   const handleNext = () => setActiveStep((prevStep) => prevStep + 1);
 
   const handleBack = () => setActiveStep((prevStep) => prevStep - 1);
 
   const handleStepChange = (step: number) => setActiveStep(step);
-
-  const handleComplete = () => {
-    const newCompleted = completed;
-    newCompleted[activeStep] = true;
-    setCompleted(newCompleted);
-    handleNext();
-  };
 
   const steps = ["Obra Pública", "Envios", "Fotos", "Confirmar"];
 
@@ -65,14 +61,17 @@ export function QueueStepper({
     CollectServiceQuery.updateCollect
   );
 
+  const { mutate: deletePhoto } = useMutation(CollectServiceQuery.deletePhoto);
+
   const handleRefuseCollect = () => {
+    rejectedPhotos.forEach((photo) => deletePhoto(photo.id));
+
     collectsOfPublicWork?.forEach((collect) => {
       refuseCollect(
         {
           ...collect,
           queue_status: 2,
-          photos: [],
-          inspection_flag: "",
+          photos: acceptedPhotos,
           queue_status_date: Date.now(),
         },
         {
@@ -82,7 +81,7 @@ export function QueueStepper({
               "bottom-left",
               "success"
             );
-            queryClient.invalidateQueries("queueCollects");
+            queryClient.invalidateQueries("PublicWorksWithCollectsInQueue");
             setState(state.map((s, pos) => (pos === index ? false : s)));
           },
           onError: () => {
@@ -99,13 +98,14 @@ export function QueueStepper({
   };
 
   const handleAcceptCollects = () => {
+    rejectedPhotos.forEach((photo) => deletePhoto(photo.id));
+
     collectsOfPublicWork?.forEach((collect) =>
       acceptCollect(
         {
           ...collect,
           queue_status: 1,
-          photos: [],
-          inspection_flag: "",
+          photos: acceptedPhotos,
           queue_status_date: Date.now(),
         },
         {
@@ -116,7 +116,7 @@ export function QueueStepper({
               "success"
             );
             setState(state.map((s, pos) => (pos === index ? false : s)));
-            queryClient.invalidateQueries("queueCollects");
+            queryClient.invalidateQueries("PublicWorksWithCollectsInQueue");
           },
           onError: () => {
             Notify(
@@ -154,7 +154,13 @@ export function QueueStepper({
           />
         )}
         {activeStep === 2 && collectsOfPublicWork && (
-          <QueuePhotos collectsOfPublicWork={collectsOfPublicWork} />
+          <QueuePhotos
+            rejectedPhotos={rejectedPhotos}
+            setRejectedPhotos={setRejectedPhotos}
+            acceptedPhotos={acceptedPhotos}
+            setAcceptedPhotos={setAcceptedPhotos}
+            collectsOfPublicWork={collectsOfPublicWork}
+          />
         )}
         {activeStep === 3 && <QueueConfirm />}
       </Grid>

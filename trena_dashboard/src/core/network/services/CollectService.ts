@@ -191,12 +191,21 @@ const saveData = (data: Blob, filename: string = "filename") => {
 };
 
 const updateCollect = async (collect: Collect) => {
-  console.log(collect);
   const call = Config.BASE_URL + "/collects/update";
   const res = await TrenaAPI.network()
     .type("application/json")
     .put(call)
     .send(collect);
+
+  return res.body;
+};
+
+const deletePhoto = async (photo_id: string) => {
+  const call = Config.BASE_URL + "/photos/delete";
+  const res = await TrenaAPI.network()
+    .type("application/json")
+    .delete(call)
+    .query({ photo_id });
 
   return res.body;
 };
@@ -215,4 +224,5 @@ export const CollectServiceQuery = {
   retrievePhotos,
   downloadJSONReport,
   saveData,
+  deletePhoto,
 };

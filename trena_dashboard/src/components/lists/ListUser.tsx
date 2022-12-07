@@ -97,7 +97,7 @@ export const ListUser = observer(() => {
                         <TableCell align="center">
                           <IconButton
                             onClick={() => handleOpenEditDialog(index)}
-                            color="info"
+                            color="warning"
                             size="small"
                           >
                             <Edit />
@@ -106,7 +106,7 @@ export const ListUser = observer(() => {
                         <TableCell align="center">
                           <IconButton
                             onClick={() => handleUserDeleted(user.email)}
-                            color="info"
+                            color="error"
                             size="small"
                           >
                             <Delete />

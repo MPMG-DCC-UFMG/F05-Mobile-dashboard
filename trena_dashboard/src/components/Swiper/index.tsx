@@ -33,7 +33,7 @@ export function RawSwiper({ collect }: RawSwiperProps) {
       slidesPerView={1}
       className="mySwiper"
     >
-      {photos ? (
+      {photos && photos.length > 0 ? (
         photos.map((photo, index) => (
           <SwiperSlide key={photo.id}>
             <PhotoCard photo={photo} photoNumber={index + 1} key={photo.id} />

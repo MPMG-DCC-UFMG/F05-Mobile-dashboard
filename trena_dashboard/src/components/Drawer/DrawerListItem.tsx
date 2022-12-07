@@ -33,7 +33,15 @@ interface MyListItemProps {
 
 function MyListItem({ icon, url, iconText, sx }: MyListItemProps) {
   const navigate = useNavigate();
-  const handleNavigate = () => navigate(url);
+  const handleNavigate = () => {
+    if (iconText === "Sair") {
+      localStorage.removeItem("TOKEN");
+      navigate(url);
+      return;
+    }
+
+    navigate(url);
+  };
 
   return (
     <ListItemButton sx={sx} onClick={handleNavigate}>
@@ -44,6 +52,7 @@ function MyListItem({ icon, url, iconText, sx }: MyListItemProps) {
 }
 
 export function DrawerListItem() {
+  const navigate = useNavigate();
   const { collapseStore } = useStores();
   const [workConfig, setWorkConfig] = useState(collapseStore.workConfig);
   const [trena, setTrena] = useState(collapseStore.trena);
@@ -62,6 +71,11 @@ export function DrawerListItem() {
   const handleTogglePublicWorks = () => {
     setPublicWork(!publicWork);
     collapseStore.togglePublicWork();
+  };
+
+  const logout = () => {
+    localStorage.removeItem("TOKEN");
+    navigate("/");
   };
 
   return (

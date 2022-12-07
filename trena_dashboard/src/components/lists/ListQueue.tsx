@@ -25,7 +25,7 @@ import { WarningField } from "../WarningField";
 export function ListQueue() {
   const [openEvaluateCollect, setOpenEvaluateCollect] = useState<boolean[]>([]);
   const { data: queue, isLoading } = useQuery<PublicWork[]>(
-    ["queueCollects"],
+    ["PublicWorksWithCollectsInQueue"],
     () => PublicWorkServiceQuery.getPublicWorksWithCollectsInQueue(),
     {
       onSuccess(data) {
@@ -63,7 +63,7 @@ export function ListQueue() {
             },
           ]}
         />
-      ) : queue.length > 0 ? (
+      ) : queue && queue.length > 0 ? (
         <Grid style={{ width: "100%", marginTop: 14 }} item>
           <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
             <Heading
