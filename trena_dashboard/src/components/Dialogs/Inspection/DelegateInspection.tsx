@@ -75,6 +75,10 @@ export function DelegateInspectionDialog({
           });
           Notify(`Vistoria delegada com sucesso!`, "bottom-left", "success");
           queryClient.invalidateQueries("getMpInspections");
+          queryClient.invalidateQueries([
+            "getPublicWorkInspections",
+            publicWork.id,
+          ]);
           handleCloseDialog();
         },
       }

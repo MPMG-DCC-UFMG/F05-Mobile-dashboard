@@ -81,7 +81,7 @@ export function ListCitizenCollects() {
                     <TableCell align="center">Usuário Responsável</TableCell>
                     <TableCell align="center">Data</TableCell>
                     <TableCell align="center">Status da Coleta</TableCell>
-                    <TableCell align="center">Envios</TableCell>
+                    <TableCell align="center">Mídias</TableCell>
                     <TableCell align="center">Excluir</TableCell>
                   </TableRow>
                 </TableHead>
@@ -103,8 +103,7 @@ export function ListCitizenCollects() {
                           <TableCell align="center">
                             <Tooltip title="Envios">
                               <IconButton
-                                color="secondary"
-                                style={{ backgroundColor: "#73ff00" }}
+                                color="info"
                                 size="small"
                                 onClick={() =>
                                   handleOpenDialog(
@@ -120,11 +119,7 @@ export function ListCitizenCollects() {
                           </TableCell>
                           <TableCell align="center">
                             <Tooltip title="Excluir">
-                              <IconButton
-                                color="secondary"
-                                style={{ backgroundColor: "#73ff00" }}
-                                size="small"
-                              >
+                              <IconButton color="error" size="small">
                                 <Delete />
                               </IconButton>
                             </Tooltip>

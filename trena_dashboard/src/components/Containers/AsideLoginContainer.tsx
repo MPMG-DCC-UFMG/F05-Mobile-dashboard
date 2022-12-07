@@ -1,9 +1,7 @@
-import { Box, CssBaseline, Grid, Paper } from "@mui/material";
+import { Box, Grid, Paper } from "@mui/material";
 import React from "react";
-
-import background from "../../assets/logo-mpmg-alternativa.png";
 import logo from "../../assets/logo512-no-bg.png";
-
+import background from "../../assets/mpmg-gsi.png"
 interface AsideLoginContainerProps {
   children?: JSX.Element | JSX.Element[];
 }
@@ -11,18 +9,17 @@ interface AsideLoginContainerProps {
 export function AsideLoginContainer({ children }: AsideLoginContainerProps) {
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
-      <CssBaseline />
       <Grid
         item
         xs={false}
         sm={4}
         md={7}
         sx={{
-          backgroundImage: `url(${background})`,
+          // backgroundImage: `url(${background})`,
           backgroundRepeat: "no-repeat",
           backgroundColor: (t) =>
             t.palette.mode === "light"
-              ? t.palette.grey[50]
+              ? t.palette.grey[200]
               : t.palette.grey[900],
           backgroundPosition: "center",
         }}

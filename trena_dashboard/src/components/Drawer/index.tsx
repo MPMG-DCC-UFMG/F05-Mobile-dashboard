@@ -59,3 +59,4 @@ export function Drawer({ open, toggleDrawer }: DrawerProps) {
     </DrawerSetup>
   );
 }
+

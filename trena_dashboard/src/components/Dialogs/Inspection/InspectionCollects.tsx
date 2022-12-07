@@ -35,15 +35,17 @@ export function InspectionCollectsDialog({
     () => InspectionServiceQuery.getInspectionCollects(inspectionId)
   );
 
+  const hasCollects = collects && collects.length > 0;
+
   return (
     <TableDialogContainer
-      fullScreen={fullScreen}
+      fullScreen={hasCollects}
       state={state}
       setState={setState}
-      title={title}
+      title={hasCollects ? title : "Ausência de Dados"}
       index={index}
     >
-      {collects && collects.length > 0 ? (
+      {hasCollects ? (
         collects.map((collect) => (
           <InfoAccorion
             key={collect.id}

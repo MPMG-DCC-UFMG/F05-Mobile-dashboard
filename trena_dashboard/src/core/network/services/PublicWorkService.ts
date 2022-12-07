@@ -69,6 +69,13 @@ const loadPublicWorks = async () => {
   return res.body;
 };
 
+const loadPublicWorkQueue = async () => {
+  const call = Config.BASE_URL + "/publicworks/queue";
+  const res = await TrenaAPI.network().get(call);
+
+  return res.body;
+};
+
 const deletePublicWork = async (publicWorkId: string) => {
   const call = Config.BASE_URL + "/publicworks/delete";
   const token = localStorage.getItem("TOKEN");
@@ -124,6 +131,7 @@ const getPublicWorksWithCollectsInQueue = async () => {
 
 export const PublicWorkServiceQuery = {
   loadPublicWorks,
+  loadPublicWorkQueue,
   getPublicWorkById,
   getPublicWorksWithCollectsInQueue,
   deletePublicWork,

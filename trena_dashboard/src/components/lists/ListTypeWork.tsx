@@ -18,7 +18,6 @@ import { useQuery } from "react-query";
 import { useStores } from "../../core/contexts/UseStores";
 import { TypeWork } from "../../core/models/TypeWork";
 import { TypeWorkServiceQuery } from "../../core/network/services/TypeWorkService";
-import { ConfirmActionDialog } from "../Dialogs/ConfirmActionDialog";
 import { AddTypeOfWorkDialog } from "../Dialogs/TypeOfWork/AddTypeOfWorkDialog";
 import { EditTypeOfWorkDialog } from "../Dialogs/TypeOfWork/EditTypeOfWorkDialog";
 import { Heading } from "../Heading";
@@ -143,20 +142,18 @@ export const ListTypeWork = observer(() => {
                           <TableCell align="center">{typeWork.name}</TableCell>
                           <TableCell align="center">
                             <IconButton
-                              color="secondary"
-                              style={{backgroundColor: "#73ff00"}}
+                              color="warning"
                               size="small"
                               onClick={() => handleOpenEditDialog(index)}
                             >
-                              <Edit/>
+                              <Edit />
                             </IconButton>
                           </TableCell>
                           <TableCell align="center">
                             <IconButton
-                            size="small"
+                              size="small"
                               onClick={() => handleDeleteTypeWork(typeWork)}
-                              color="secondary"
-                              style={{backgroundColor: "#73ff00"}}
+                              color="error"
                             >
                               <Delete />
                             </IconButton>
@@ -168,12 +165,12 @@ export const ListTypeWork = observer(() => {
                             index={index}
                             title="Editar Tipo de Obra"
                           />
-                          <ConfirmActionDialog
+                          {/* <ConfirmActionDialog
                             message="Confirmar Exclusão"
                             action={() => handleDeleteTypeWork(typeWork)}
                             state={openDeleteDialog}
                             setState={() => setOpenDeleteDialog}
-                          />
+                          /> */}
                         </TableRow>
                       </React.Fragment>
                     ))}

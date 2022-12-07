@@ -120,8 +120,7 @@ export function ListInspection() {
                           <TableCell align="center">
                             <Tooltip title="Coletas">
                               <IconButton
-                                color="secondary"
-                                style={{ backgroundColor: "#73ff00" }}
+                                color="info"
                                 size="small"
                                 onClick={() => handleOpenCollectsModal(index)}
                               >
@@ -132,8 +131,7 @@ export function ListInspection() {
                           <TableCell align="center">
                             <Tooltip title="Gerar Relatório">
                               <IconButton
-                                color="secondary"
-                                style={{ backgroundColor: "#73ff00" }}
+                                color="error"
                                 size="small"
                                 onClick={() =>
                                   handleGenerateReport(inspection.flag!)

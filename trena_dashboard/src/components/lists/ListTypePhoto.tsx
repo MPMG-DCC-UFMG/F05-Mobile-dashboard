@@ -1,16 +1,16 @@
-import { Edit, Delete, ManageSearch } from "@mui/icons-material";
+import { Delete, Edit, ManageSearch } from "@mui/icons-material";
 import {
   Divider,
   Grid,
+  IconButton,
+  InputAdornment,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  IconButton,
   TextField,
-  InputAdornment,
 } from "@mui/material";
 import { observer } from "mobx-react";
 import React, { useState } from "react";
@@ -41,7 +41,7 @@ export const ListTypePhoto = observer(() => {
     []
   );
   const [atualTable, setAtualTable] = useState<TypePhoto[]>(typePhotos!);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
   const handleSearch = (value?: string) => {
@@ -142,8 +142,7 @@ export const ListTypePhoto = observer(() => {
                           <TableCell>
                             <IconButton
                               onClick={() => handleOpenEditDialog(index)}
-                              color="secondary"
-                              style={{ backgroundColor: "#73ff00" }}
+                              color="warning"
                               size="small"
                             >
                               <Edit />
@@ -151,8 +150,7 @@ export const ListTypePhoto = observer(() => {
                           </TableCell>
                           <TableCell>
                             <IconButton
-                              color="secondary"
-                              style={{ backgroundColor: "#73ff00" }}
+                              color="error"
                               size="small"
                               onClick={() => handleDeleteTypePhoto(typePhoto)}
                             >
@@ -185,4 +183,3 @@ export const ListTypePhoto = observer(() => {
     </>
   );
 });
-

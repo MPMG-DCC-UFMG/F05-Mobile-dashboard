@@ -6,4 +6,5 @@ export interface Inspection {
   public_work_id?: string;
   status?: number;
   user_email: string;
+  request_date: number;
 }
