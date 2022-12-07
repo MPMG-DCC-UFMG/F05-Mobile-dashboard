@@ -43,8 +43,8 @@ export const ListTypeWork = observer(() => {
     []
   );
   const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean[]>([]);
-  const [atualTable, setAtualTable] = useState<TypeWork[]>([]);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [atualTable, setAtualTable] = useState<TypeWork[]>(typeWorks!);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
 
   const handleSearch = (value?: string) => {
@@ -83,7 +83,7 @@ export const ListTypeWork = observer(() => {
 
   return (
     <>
-      {isLoading || !typeWorks ? (
+      {isLoading || !atualTable ? (
         <LoadingTableData
           headingAction={() => setOpenAddTypeWorkDialog(true)}
           headingTitle="Tipos de Obras"
@@ -143,20 +143,18 @@ export const ListTypeWork = observer(() => {
                           <TableCell align="center">{typeWork.name}</TableCell>
                           <TableCell align="center">
                             <IconButton
-                              color="secondary"
-                              style={{ backgroundColor: "#73ff00" }}
+                              color="info"
                               size="small"
                               onClick={() => handleOpenEditDialog(index)}
                             >
-                              <Edit />
+                              <Edit/>
                             </IconButton>
                           </TableCell>
                           <TableCell align="center">
                             <IconButton
-                              size="small"
+                            size="small"
                               onClick={() => handleDeleteTypeWork(typeWork)}
-                              color="secondary"
-                              style={{ backgroundColor: "#73ff00" }}
+                              color="info"
                             >
                               <Delete />
                             </IconButton>
@@ -168,12 +166,12 @@ export const ListTypeWork = observer(() => {
                             index={index}
                             title="Editar Tipo de Obra"
                           />
-                          <ConfirmActionDialog
+                          {/* <ConfirmActionDialog
                             message="Confirmar Exclusão"
                             action={() => handleDeleteTypeWork(typeWork)}
                             state={openDeleteDialog}
                             setState={() => setOpenDeleteDialog}
-                          />
+                          /> */}
                         </TableRow>
                       </React.Fragment>
                     ))}

@@ -40,11 +40,10 @@ export function Heading({
   };
 
   return (
-    <>
       <Container style={{ width: "100%", height: "100%" }}>
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid sx={{ pl: "40px", pt: "20px", pb: "20px" }} item>
-            <Typography color="secondary" fontSize="1.5rem" variant="h4">
+            <Typography fontSize="1.5rem" variant="h4">
               {title}
             </Typography>
             <Breadcrumbs separator={<NavigateNext />}>
@@ -67,7 +66,7 @@ export function Heading({
             <Grid item sx={{ pl: "40px", pt: "40px", pb: "20px" }}>
               <Button
                 onClick={handleAction}
-                color="info"
+                color="primary"
                 startIcon={<Add />}
                 variant="contained"
               >
@@ -93,6 +92,5 @@ export function Heading({
           </Grid>
         </Grid>
       </Container>
-    </>
   );
 }

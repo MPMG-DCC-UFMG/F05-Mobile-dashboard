@@ -97,8 +97,7 @@ export const ListUser = observer(() => {
                         <TableCell align="center">
                           <IconButton
                             onClick={() => handleOpenEditDialog(index)}
-                            color="secondary"
-                            style={{ backgroundColor: "#73ff00" }}
+                            color="info"
                             size="small"
                           >
                             <Edit />
@@ -107,8 +106,7 @@ export const ListUser = observer(() => {
                         <TableCell align="center">
                           <IconButton
                             onClick={() => handleUserDeleted(user.email)}
-                            color="secondary"
-                            style={{ backgroundColor: "#73ff00" }}
+                            color="info"
                             size="small"
                           >
                             <Delete />

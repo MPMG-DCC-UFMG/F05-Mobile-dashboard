@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import React, { useState } from "react";
 
 import { AddAPhoto, Edit } from "@material-ui/icons";
-import { Delete, LocalSee, Map } from "@mui/icons-material";
+import { Delete, LocalSee, Map, PendingActions } from "@mui/icons-material";
 import {
   Grid,
   IconButton,
@@ -128,8 +128,7 @@ export const ListPublicWork = observer(() => {
                           <Tooltip title="Mapa">
                             <IconButton
                               onClick={() => handleOpenLocalizationModal(index)}
-                              color="secondary"
-                              style={{ backgroundColor: "#73ff00" }}
+                              color="info"
                               size="small"
                             >
                               <Map />
@@ -139,8 +138,7 @@ export const ListPublicWork = observer(() => {
                         <TableCell align="center">
                           <Tooltip title="Vistorias">
                             <IconButton
-                              color="secondary"
-                              style={{ backgroundColor: "#73ff00" }}
+                              color="info"
                               size="small"
                               onClick={() => handleOpenInspectionsModal(index)}
                             >
@@ -151,22 +149,20 @@ export const ListPublicWork = observer(() => {
                         <TableCell align="center">
                           <Tooltip title="Adicionar Vistoria">
                             <IconButton
-                              color="secondary"
-                              style={{ backgroundColor: "#73ff00" }}
+                             color="info"
                               size="small"
                               onClick={() =>
                                 handleOpenAddInspectionModal(index)
                               }
                             >
-                              <AddAPhoto />
+                              <PendingActions />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
                         <TableCell align="center">
                           <Tooltip title="Editar">
                             <IconButton
-                              color="secondary"
-                              style={{ backgroundColor: "#73ff00" }}
+                             color="info"
                               size="small"
                               onClick={() =>
                                 handleOpenActionModal(index, "edit")
@@ -179,8 +175,7 @@ export const ListPublicWork = observer(() => {
                         <TableCell align="center">
                           <Tooltip title="Deletar">
                             <IconButton
-                              color="secondary"
-                              style={{ backgroundColor: "#73ff00" }}
+                              color="info"
                               size="small"
                               onClick={() =>
                                 handleOpenActionModal(index, "delete")

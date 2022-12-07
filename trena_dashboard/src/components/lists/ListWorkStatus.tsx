@@ -38,7 +38,7 @@ export const ListWorkStatus = observer(() => {
   const [editWorkStatusDialog, setOpenEditWorkStatusDialog] = useState<
     boolean[]
   >([]);
-  const [atualTable, setAtualTable] = useState<WorkStatus[]>([]);
+  const [atualTable, setAtualTable] = useState<WorkStatus[]>(workStatus!);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
@@ -124,11 +124,6 @@ export const ListWorkStatus = observer(() => {
                     .map((workStatus: WorkStatus, index: number) => (
                       <TableRow hover key={workStatus.flag}>
                         <TableCell align="center">{workStatus.name}</TableCell>
-                        {/* <TableCell align="center">
-                        <IconButton>
-                          <Visibility />
-                        </IconButton>
-                      </TableCell> */}
                         <TableCell align="center">
                           {workStatus.description}
                         </TableCell>
@@ -143,7 +138,7 @@ export const ListWorkStatus = observer(() => {
                         <TableCell align="center">
                           <IconButton
                             onClick={() => handleDeleteWorkStatus(workStatus)}
-                            color="error"
+                            color="info"
                           >
                             <Delete />
                           </IconButton>

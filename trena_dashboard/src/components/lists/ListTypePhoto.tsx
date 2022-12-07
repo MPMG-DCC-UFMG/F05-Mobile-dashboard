@@ -40,7 +40,7 @@ export const ListTypePhoto = observer(() => {
   const [editTypePhotoDialog, setOpenEditTypePhotoDialog] = useState<boolean[]>(
     []
   );
-  const [atualTable, setAtualTable] = useState<TypePhoto[]>([]);
+  const [atualTable, setAtualTable] = useState<TypePhoto[]>(typePhotos!);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
@@ -142,8 +142,7 @@ export const ListTypePhoto = observer(() => {
                           <TableCell>
                             <IconButton
                               onClick={() => handleOpenEditDialog(index)}
-                              color="secondary"
-                              style={{ backgroundColor: "#73ff00" }}
+                              color="info"
                               size="small"
                             >
                               <Edit />
@@ -151,8 +150,7 @@ export const ListTypePhoto = observer(() => {
                           </TableCell>
                           <TableCell>
                             <IconButton
-                              color="secondary"
-                              style={{ backgroundColor: "#73ff00" }}
+                              color="info"
                               size="small"
                               onClick={() => handleDeleteTypePhoto(typePhoto)}
                             >

@@ -1,14 +1,15 @@
-import { Logout } from "@mui/icons-material";
+import { Brightness4, Logout } from "@mui/icons-material";
 import Menu from "@mui/icons-material/Menu";
-import { Avatar, Box, Grid, styled } from "@mui/material";
+import { Avatar, Box, Grid, styled, ThemeProvider } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
-import React from "react";
+import React, { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import background from "../../assets/gsi.png";
 import logo from "../../assets/logo-mpmg-alternativa.png";
+import { ThemeContext } from "../../core/contexts/ThemeContext";
 import {
   LoggedUserResponse,
   SecurityServiceQuery,
@@ -31,7 +32,6 @@ const AppBarSetup = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  backgroundColor: "#73FF00",
   color: "#ffff ",
   ...(open && {
     marginLeft: 240,
@@ -54,6 +54,8 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
     }
   );
 
+  const { theme, setTheme } = useContext(ThemeContext);
+
   const handleLogout = () => {
     navigate("/login");
   };
@@ -63,66 +65,67 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
   };
 
   return (
-    <AppBarSetup color="primary" position="absolute" open={open}>
-      <Toolbar sx={{ pr: "24px" }}>
-        <Grid
-          container
-          style={{ display: "flex", justifyContent: "space-between" }}
-        >
+      <AppBarSetup color="primary" position="absolute" open={open}>
+        <Toolbar sx={{ pr: "24px" }}>
           <Grid
-            item
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            gap="5px"
+            container
+            style={{ display: "flex", justifyContent: "space-between" }}
           >
-            <IconButton
-              edge="start"
-              color="secondary"
-              aria-label="open-drawer"
-              onClick={toggleDrawer}
-              sx={{ ...(open && { display: "none" }) }}
+            <Grid
+              item
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              gap="5px"
             >
-              <Menu />
-            </IconButton>
-            {/* <Typography
-          component="h1"
-          variant="h6"
-          color="inherit"
-          noWrap
-          sx={{ flexGrow: 1 }}
-        >
-          {"Dashboard - Trena"}
-        </Typography> */}
-            <Avatar
-              src={loggedUserData ? loggedUserData.picture : ""}
-              style={{ width: 25, height: 25, cursor: "pointer" }}
-              onClick={handleUser}
-            />
-            <IconButton color="secondary" onClick={handleLogout}>
-              <Logout />
-            </IconButton>
+              <IconButton
+                edge="start"
+                color="secondary"
+                aria-label="open-drawer"
+                onClick={toggleDrawer}
+                sx={{ ...(open && { display: "none" }) }}
+              >
+                <Menu />
+              </IconButton>
+              <Avatar
+                src={loggedUserData ? loggedUserData.picture : ""}
+                style={{ width: 25, height: 25, cursor: "pointer" }}
+                onClick={handleUser}
+              />
+              {/* <IconButton
+                color="secondary"
+                onClick={() =>
+                  setTheme(
+                    theme === "defaultTheme" ? "trenTheme" : "defaultTheme"
+                  )
+                }
+              >
+                <Brightness4 />
+              </IconButton> */}
+              <IconButton color="secondary" onClick={handleLogout}>
+                <Logout />
+              </IconButton>
+            </Grid>
+            <Grid item display="flex">
+              <Box
+                component="img"
+                sx={{
+                  height: 45,
+                  width: 135,
+                }}
+                src={logo}
+              />
+              <Box
+                component="img"
+                sx={{
+                  height: 40,
+                  width: 120,
+                }}
+                src={background}
+              />
+            </Grid>
           </Grid>
-          <Grid item display="flex">
-            <Box
-              component="img"
-              sx={{
-                height: 45,
-                width: 130,
-              }}
-              src={logo}
-            />
-            <Box
-              component="img"
-              sx={{
-                height: 40,
-                width: 120,
-              }}
-              src={background}
-            />
-          </Grid>
-        </Grid>
-      </Toolbar>
-    </AppBarSetup>
+        </Toolbar>
+      </AppBarSetup>
   );
 }
