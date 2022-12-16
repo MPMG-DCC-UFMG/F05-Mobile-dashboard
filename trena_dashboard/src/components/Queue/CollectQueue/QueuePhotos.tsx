@@ -8,7 +8,7 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQueries, useQuery } from "react-query";
 import { Collect } from "../../../core/models/Collect";
 import { Photo } from "../../../core/models/Photo";
@@ -20,10 +20,22 @@ import { convertEphocDate } from "../../../utils/mapper";
 interface QueueCardPhotoProps {
   photo: Photo;
   date: number;
+  acceptedPhotos: Photo[];
+  setAcceptedPhotos: (photos: Photo[]) => void;
+  rejectedPhotos: Photo[];
+  setRejectedPhotos: (photos: Photo[]) => void;
 }
 
-function QueueCardPhoto({ photo, date }: QueueCardPhotoProps) {
+function QueueCardPhoto({
+  photo,
+  date,
+  acceptedPhotos,
+  setAcceptedPhotos,
+  rejectedPhotos,
+  setRejectedPhotos,
+}: QueueCardPhotoProps) {
   const [, filename] = photo.filepath.split("/");
+  const [isAccepted, setIsAccepted] = useState(true);
 
   const { data: image } = useQuery(["getImage", photo.id], () =>
     CollectServiceQuery.getMediaByCollectFileName(filename)
@@ -36,6 +48,23 @@ function QueueCardPhoto({ photo, date }: QueueCardPhotoProps) {
   const photoType =
     photoTypes && photoTypes.find((type) => type.flag! === Number(photo.type));
 
+  const handleRejectPhoto = () => {
+    const newRejectedPhotos = new Set([...rejectedPhotos, photo]);
+    setRejectedPhotos(Array.from(newRejectedPhotos));
+    setIsAccepted(false);
+  };
+
+  const handleAcceptPhoto = () => {
+    const newAcceptedPhotos = new Set([...rejectedPhotos, photo]);
+    setAcceptedPhotos(Array.from(newAcceptedPhotos));
+    setIsAccepted(true);
+  };
+
+  useEffect(() => {
+    setAcceptedPhotos([...acceptedPhotos, photo]);
+    setIsAccepted(true);
+  }, []);
+
   return (
     <Card sx={{ maxWidth: 345, mt: 2, mb: 2 }}>
       <CardHeader title={photoType ? photoType.name : "Sem tipo definido"} />
@@ -44,13 +73,23 @@ function QueueCardPhoto({ photo, date }: QueueCardPhotoProps) {
         {photo.comment ? photo.comment : "Foto sem comentários."}
       </Typography>
       <Typography variant="body2" color="text.secondary">
-        {`Author - ${convertEphocDate(date)}`}
+        {`${convertEphocDate(date)}`}
       </Typography>
       <CardActions>
-        <Button color="success" variant="contained">
+        <Button
+          disabled={isAccepted}
+          onClick={handleAcceptPhoto}
+          color="success"
+          variant="contained"
+        >
           Aceitar
         </Button>
-        <Button color="error" variant="contained">
+        <Button
+          disabled={!isAccepted}
+          onClick={handleRejectPhoto}
+          color="error"
+          variant="contained"
+        >
           Recusar
         </Button>
       </CardActions>
@@ -60,9 +99,19 @@ function QueueCardPhoto({ photo, date }: QueueCardPhotoProps) {
 
 interface QueuePhotosProps {
   collectsOfPublicWork: Collect[];
+  acceptedPhotos: Photo[];
+  setAcceptedPhotos: (photos: Photo[]) => void;
+  rejectedPhotos: Photo[];
+  setRejectedPhotos: (photos: Photo[]) => void;
 }
 
-export function QueuePhotos({ collectsOfPublicWork }: QueuePhotosProps) {
+export function QueuePhotos({
+  collectsOfPublicWork,
+  acceptedPhotos,
+  setAcceptedPhotos,
+  rejectedPhotos,
+  setRejectedPhotos,
+}: QueuePhotosProps) {
   const collectsMetadata = useQueries(
     collectsOfPublicWork.map((collect) => ({
       queryKey: ["getCollectMetadata", collect.id!],
@@ -79,7 +128,15 @@ export function QueuePhotos({ collectsOfPublicWork }: QueuePhotosProps) {
           {collectsMetadata.map((collect) =>
             collect.data
               ? collect.data.map((photo) => (
-                  <QueueCardPhoto date={photo.timestamp} photo={photo} />
+                  <QueueCardPhoto
+                    key={photo.id}
+                    rejectedPhotos={rejectedPhotos}
+                    setRejectedPhotos={setRejectedPhotos}
+                    acceptedPhotos={acceptedPhotos}
+                    setAcceptedPhotos={setAcceptedPhotos}
+                    date={photo.timestamp}
+                    photo={photo}
+                  />
                 ))
               : null
           )}

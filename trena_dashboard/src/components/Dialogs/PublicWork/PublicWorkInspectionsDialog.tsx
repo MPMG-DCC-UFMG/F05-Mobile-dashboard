@@ -28,21 +28,21 @@ export function PublicWorkInspectionsDialog({
   index,
   publicWorkId,
 }: PublicWorkInspectionsDialogProps) {
-  const { data, isLoading } = useQuery<Inspection[]>(
+  const { data } = useQuery<Inspection[]>(
     ["getPublicWorkInspections", publicWorkId],
     () => InspectionServiceQuery.getPublicWorkInspections(publicWorkId)
   );
 
-  if (isLoading) {
-    <TableDialogContainer
-      state={state}
-      setState={setState}
-      index={index}
-      title={title}
-    >
-      <h1>Loading...</h1>
-    </TableDialogContainer>;
-  }
+  // const hasInspections = data && data.length > 0;
+
+  // const inspectionsCollects = useQueries(
+  //   data!.map((inspection) => ({
+  //     queryKey: ["getInspectionMedia", inspection.flag!],
+  //     queryFn: () =>
+  //       InspectionServiceQuery.getInspectionCollects(inspection.flag!),
+  //     enabled: hasInspections,
+  //   }))
+  // );
 
   return (
     <TableDialogContainer
@@ -56,19 +56,16 @@ export function PublicWorkInspectionsDialog({
         data.map((inspection: Inspection) => (
           <InfoAccorion
             key={inspection.flag}
-            title={`${inspection.name} - ${convertEphocDate(
-              inspection.request_date
-            )}`}
+            title={`${inspection.name} - ${
+              inspection.flag ? "Vistoria Técnica" : "Vistoria Cidadã"
+            } - ${convertEphocDate(inspection.request_date)}`}
           >
             <InfoTextField
               disabled
               fullWidth
               icon={<Flag />}
-              label="Flag"
-              defaultValue={
-                // inspection.flag?.toString()
-                inspection.request_date.toString()
-              }
+              label="Data de Inspeção"
+              defaultValue={convertEphocDate(inspection.request_date)}
             />
             <InfoTextField
               disabled

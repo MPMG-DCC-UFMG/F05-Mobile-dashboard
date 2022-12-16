@@ -80,8 +80,9 @@ export function ListCitizenCollects() {
                   <TableRow>
                     <TableCell align="center">Usuário Responsável</TableCell>
                     <TableCell align="center">Data</TableCell>
-                    <TableCell align="center">Status da Coleta</TableCell>
-                    <TableCell align="center">Envios</TableCell>
+                    <TableCell align="left">Status da Coleta</TableCell>
+                    <TableCell align="left">Comentário Geral</TableCell>
+                    <TableCell align="center">Mídias</TableCell>
                     <TableCell align="center">Excluir</TableCell>
                   </TableRow>
                 </TableHead>
@@ -97,9 +98,10 @@ export function ListCitizenCollects() {
                           <TableCell align="center">
                             {convertEphocDate(collect.date)}
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="left">
                             {collectStatusMapping(collect.queue_status)}
                           </TableCell>
+                          <TableCell align="left">{collect.comments}</TableCell>
                           <TableCell align="center">
                             <Tooltip title="Envios">
                               <IconButton
@@ -119,10 +121,7 @@ export function ListCitizenCollects() {
                           </TableCell>
                           <TableCell align="center">
                             <Tooltip title="Excluir">
-                              <IconButton
-                                color="info"
-                                size="small"
-                              >
+                              <IconButton color="error" size="small">
                                 <Delete />
                               </IconButton>
                             </Tooltip>

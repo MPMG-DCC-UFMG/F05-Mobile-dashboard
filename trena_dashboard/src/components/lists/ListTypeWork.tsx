@@ -18,7 +18,6 @@ import { useQuery } from "react-query";
 import { useStores } from "../../core/contexts/UseStores";
 import { TypeWork } from "../../core/models/TypeWork";
 import { TypeWorkServiceQuery } from "../../core/network/services/TypeWorkService";
-import { ConfirmActionDialog } from "../Dialogs/ConfirmActionDialog";
 import { AddTypeOfWorkDialog } from "../Dialogs/TypeOfWork/AddTypeOfWorkDialog";
 import { EditTypeOfWorkDialog } from "../Dialogs/TypeOfWork/EditTypeOfWorkDialog";
 import { Heading } from "../Heading";
@@ -143,18 +142,18 @@ export const ListTypeWork = observer(() => {
                           <TableCell align="center">{typeWork.name}</TableCell>
                           <TableCell align="center">
                             <IconButton
-                              color="info"
+                              color="warning"
                               size="small"
                               onClick={() => handleOpenEditDialog(index)}
                             >
-                              <Edit/>
+                              <Edit />
                             </IconButton>
                           </TableCell>
                           <TableCell align="center">
                             <IconButton
-                            size="small"
+                              size="small"
                               onClick={() => handleDeleteTypeWork(typeWork)}
-                              color="info"
+                              color="error"
                             >
                               <Delete />
                             </IconButton>

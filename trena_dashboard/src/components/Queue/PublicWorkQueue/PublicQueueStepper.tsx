@@ -72,7 +72,20 @@ export function PublicQueueStepper({
   };
 
   const handleRefusePublicWork = () => {
-    refuse({ ...publicWork, queue_status: 2, queue_status_date: Date.now() });
+    refuse(
+      { ...publicWork, queue_status: 2, queue_status_date: Date.now() },
+      {
+        onSuccess: () => {
+          Notify(
+            "Obra Pública recusada com sucesso!",
+            "bottom-left",
+            "success"
+          );
+          setState(state.map((s, pos) => (pos === index ? false : s)));
+          queryClient.invalidateQueries("getPublicWorksQueue");
+        },
+      }
+    );
   };
 
   return (

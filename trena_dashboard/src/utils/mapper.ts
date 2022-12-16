@@ -29,10 +29,10 @@ export function collectStatusMapping(status: number) {
 }
 
 export function convertEphocDate(seconds: number) {
-  const date = new Date(0);
-  date.setUTCMilliseconds(seconds);
-  const day = date.getDay() < 10 ? "0" + date.getDay() : date.getDay();
-  const month = date.getMonth() < 10 ? "0" + date.getMonth() : date.getMonth();
+  const date = new Date(seconds);
+  const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  const month =
+    date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
   const year = date.getFullYear();
 
   return `${day}/${month}/${year}`;
