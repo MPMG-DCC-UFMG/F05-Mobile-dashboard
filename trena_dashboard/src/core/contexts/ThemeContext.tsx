@@ -1,16 +1,18 @@
-import React, {createContext, useState} from 'react'
+import { Theme } from '@mui/material';
+import React, {createContext, ReactNode, useState} from 'react'
+import { defaultTheme } from '../../utils/theme';
 
 type ThemeContextProviderProps = {
-    children: React.ReactNode
+    children: ReactNode;
 };
 
 type ThemeContextType = {
-    theme: string;
-    setTheme: (theme: string) => void;
+    theme: Theme;
+    setTheme: (newTheme: Theme) => void;
 };
 
 const initialValue ={
-  theme: 'defaultTheme',
+  theme: defaultTheme,
   setTheme: () => {},
 }
 
@@ -19,10 +21,6 @@ export const ThemeContext = createContext<ThemeContextType>(initialValue);
 export const ThemeContextProvider = ({children} : ThemeContextProviderProps) =>{
 
     const [theme, setTheme] = useState(initialValue.theme);
-
-    const change = ()=>{
-        setTheme(theme ==='defaultTheme' ? 'trenaTheme' : 'defaultTheme')
-    }
 
     return(
         <ThemeContext.Provider value={{theme, setTheme}}>
