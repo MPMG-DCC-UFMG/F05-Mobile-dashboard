@@ -66,8 +66,10 @@ export function UserSettingScreen() {
                   <Button
                     style={{ height: 30, width: 150 }}
                     variant="contained"
+                    component="label"
                   >
                     Editar Foto
+                  <input type='file' accept="image/*" hidden/>  
                   </Button>
                 </Grid>
                 <Grid
@@ -126,19 +128,20 @@ export function UserSettingScreen() {
                   <Button
                     onClick={handleOpenSignatureDialog}
                     style={{ height: 30, width: 230 }}
+                    component="label"
                   >
                     Anexar Assinatura Digital
+                    <input type="file" hidden/>
                   </Button>
                 </Grid>
-                <DigitalSignature
+                {/* <DigitalSignature
                   title="Anexar Assinatura Digital"
                   state={openSignatureDialog}
                   setState={setOpenSignatureDialog}
-                />
+                /> */}
                 <EditUserEmailDialog
                   state={openEditEmailDialog}
                   setState={setOpenEditEmailDialog}
-                  user="tuliomarco9704@hotmail.com"
                   title="Editar Email"
                 />
                 <EditUserPasswordDialog
