@@ -27,9 +27,6 @@ export class InspectionStore extends BaseStore {
       const inspections = await InspectionService.getPublicWorkInspections(
         publicWorkId
       );
-      runInAction(() => {
-        this.inspectionList = inspections;
-      });
     });
   }
 
@@ -82,3 +79,4 @@ export class InspectionStore extends BaseStore {
     });
   }
 }
+
