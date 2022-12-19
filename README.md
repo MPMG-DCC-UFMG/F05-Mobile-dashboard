@@ -9,9 +9,8 @@ This project it's using React as framework and Typescript as main language
 The list of all the third party libraries used are:
 
 * [MobX](https://mobx.js.org/): a battle tested library that makes state management simple and scalable
-* [Bulma](https://bulma.io/): a free, open source CSS framework based on Flexbox.
+* [Material-UI](https://mui.com/): a comprehensive suite of UI tools library.
 * [SuperAgent](https://visionmedia.github.io/superagent/): light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve
-* [Fontawesome](https://fontawesome.com/): the web's most popular icon set and toolkit.
 * [Leaflet](https://leafletjs.com/index.html): leading open-source JavaScript library for mobile-friendly interactive maps.
  
 ### 1.2. Services
@@ -25,9 +24,12 @@ Services used to provide features into this project:
 There is a file called .env in the root folder. That file holds the global environment default values used trough the application:
 
 ```bash
-REACT_APP_ENVIRONMENT=development
-REACT_APP_BASE_URL=http://0.0.0.0:8000
-REACT_APP_SENTRY_DNS=<SENTRY_DNS>
+VITE_REACT_APP_ENVIRONMENT=development
+VITE_REACT_APP_BASE_URL=http://0.0.0.0:8000
+VITE_REACT_APP_SENTRY_DNS=<SENTRY_KEY>
+VITE_REACT_APP_API_KEY=<API_KEY>
+VITE_ADMIN_USERNAME=<ADMIN_USERNAME>
+VITE_ADMIN_PASSWORD=<ADMIN_PASSWORD>
 ```
 
 ## 3. Build
