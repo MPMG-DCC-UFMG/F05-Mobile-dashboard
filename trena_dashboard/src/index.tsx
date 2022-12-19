@@ -1,6 +1,6 @@
 import * as Sentry from "@sentry/react";
 import React from "react";
-import ReactDOM from "react-dom/client";
+import * as ReactDOM from "react-dom";
 import App from "./App";
 import Config from "./config/Config";
 import * as serviceWorker from "./serviceWorker";
@@ -13,10 +13,11 @@ declare global {
 
 Sentry.init({ dsn: Config.SENTRY_DNS, environment: Config.ENVIRONMENT });
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+ReactDOM.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 
 serviceWorker.unregister();
