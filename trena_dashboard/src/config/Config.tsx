@@ -1,7 +1,6 @@
 export default class Config {
-  static ENVIRONMENT?: string = "development";
-  static BASE_URL?: string = "http://0.0.0.0:8000";
-  static SENTRY_DNS?: string =
-    "https://a291e13dfab840cf9e4b434fb043f07b@o384391.ingest.sentry.io/5313435";
-  static API_KEY?: string = "0a944fb8-2bbc-4f03-a81a-bf84899cd4f2";
+  static ENVIRONMENT?: string = import.meta.env.VITE_REACT_APP_ENVIRONMENT;
+  static BASE_URL?: string = import.meta.env.VITE_REACT_APP_BASE_URL;
+  static SENTRY_DNS?: string = import.meta.env.VITE_REACT_APP_SENTRY_DNS;
+  static API_KEY?: string = import.meta.env.VITE_REACT_APP_API_KEY;
 }
