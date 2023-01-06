@@ -1,5 +1,13 @@
-import { Avatar, Button, Grid, Paper, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { Circle } from "@mui/icons-material";
+import {
+  Avatar,
+  Button,
+  Grid,
+  IconButton,
+  Paper,
+  Typography,
+} from "@mui/material";
+import React, { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { DashboardContentContainer } from "../components/Containers/ContentContainer";
 import { DashboardContainer } from "../components/Containers/DashboardContainer";
@@ -7,12 +15,20 @@ import { DigitalSignature } from "../components/Dialogs/Users/DigitalSignature";
 import { EditUserEmailDialog } from "../components/Dialogs/Users/UserSettings/EditUserEmail";
 import { EditUserPasswordDialog } from "../components/Dialogs/Users/UserSettings/EditUserPassword";
 import { Heading } from "../components/Heading";
+import { ThemeContext } from "../core/contexts/ThemeContext";
 import {
   LoggedUserResponse,
   SecurityServiceQuery,
 } from "../core/network/services/SecurityService";
+import {
+  darkDefaultTheme,
+  darkTrenaTheme,
+  defaultTheme,
+  trenaTheme,
+} from "../utils/theme";
 
 export function UserSettingScreen() {
+
   const { data: userData } = useQuery<LoggedUserResponse>(
     ["getLoggedUserData"],
     () => SecurityServiceQuery.getLoggedUser()
@@ -32,6 +48,15 @@ export function UserSettingScreen() {
 
   const handleEditPassword = () => {
     setOpenEditPasswordDialog(true);
+  };
+
+  const { setTheme, isDark } = useContext(ThemeContext);
+
+  const divStyle = {
+    marginTop: 20,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
   };
 
   return (
@@ -69,18 +94,10 @@ export function UserSettingScreen() {
                     component="label"
                   >
                     Editar Foto
-                  <input type='file' accept="image/*" hidden/>  
+                    <input type="file" accept="image/*" hidden />
                   </Button>
                 </Grid>
-                <Grid
-                  item
-                  style={{
-                    marginTop: 20,
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
+                <Grid item style={divStyle}>
                   <Grid item style={{ flexDirection: "column" }}>
                     <Typography>EMAIL:</Typography>
                     <Typography>
@@ -95,15 +112,7 @@ export function UserSettingScreen() {
                     Editar Email
                   </Button>
                 </Grid>
-                <Grid
-                  item
-                  style={{
-                    marginTop: 20,
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
+                <Grid item style={divStyle}>
                   <Grid item style={{ flexDirection: "column" }}>
                     <Typography>SENHA:</Typography>
                     <Typography>***********</Typography>
@@ -116,6 +125,37 @@ export function UserSettingScreen() {
                     Editar Senha
                   </Button>
                 </Grid>
+
+                <Grid item style={divStyle}>
+                  <Grid item style={{ flexDirection: "column" }}>
+                    <Typography>TEMAS:</Typography>
+                  </Grid>
+                  <Grid item>
+                    <IconButton
+                      onClick={() =>
+                        setTheme(
+                          isDark === false ? defaultTheme : darkDefaultTheme
+                        )
+                      }
+                      style={{
+                        color: "#1976d2",
+                      }}
+                    >
+                      <Circle />
+                    </IconButton>
+                    <IconButton
+                      onClick={() =>
+                        setTheme(isDark === false ? trenaTheme : darkTrenaTheme)
+                      }
+                      style={{
+                        color: "#88ef87",
+                      }}
+                    >
+                      <Circle />
+                    </IconButton>
+                  </Grid>
+                </Grid>
+
                 <Grid
                   item
                   style={{
@@ -131,14 +171,9 @@ export function UserSettingScreen() {
                     component="label"
                   >
                     Anexar Assinatura Digital
-                    <input type="file" hidden/>
+                    <input type="file" hidden />
                   </Button>
                 </Grid>
-                {/* <DigitalSignature
-                  title="Anexar Assinatura Digital"
-                  state={openSignatureDialog}
-                  setState={setOpenSignatureDialog}
-                /> */}
                 <EditUserEmailDialog
                   state={openEditEmailDialog}
                   setState={setOpenEditEmailDialog}

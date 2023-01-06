@@ -19,7 +19,8 @@ ReactDOM.render(
     <ThemeContextProvider>
       <App />
     </ThemeContextProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 
 serviceWorker.unregister();

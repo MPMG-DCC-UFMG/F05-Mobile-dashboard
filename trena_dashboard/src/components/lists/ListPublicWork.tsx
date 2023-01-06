@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Edit } from "@material-ui/icons";
 import { Delete, LocalSee, Map, PendingActions } from "@mui/icons-material";
 import {
+  Autocomplete,
   Grid,
   IconButton,
   Paper,
@@ -12,6 +13,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  TextField,
   Tooltip,
 } from "@mui/material";
 import { useQuery } from "react-query";
@@ -26,6 +28,8 @@ import { PublicWorkInspectionsDialog } from "../Dialogs/PublicWork/PublicWorkIns
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
+import { TypeWorkService } from "../../core/network/services/TypeWorkService";
+import { TypeWork } from "../../core/models/TypeWork";
 
 export const ListPublicWork = observer(() => {
   const {
@@ -41,9 +45,16 @@ export const ListPublicWork = observer(() => {
         setOpenLocalizationModal(Array(data.length).fill(false));
         setOpenActionDialog(Array(data.length).fill(false));
         setOpenAddInspectionModal(Array(data.length).fill(false));
+        setAtualTable(data);
       },
     }
   );
+
+  const { data: typeWork } = useQuery<TypeWork[]>(
+    ["getTypeWork"],
+    TypeWorkService.loadTypeWorks
+  );
+  const [atualTable, setAtualTable] = useState<PublicWork[]>(publicWorks!);
   const [openActionDialog, setOpenActionDialog] = useState<boolean[]>([]);
   const [openAddPublicWorkDialog, setOpenAddPublicWorkDialog] = useState(false);
   const [openLocalizationModal, setOpenLocalizationModal] = useState<boolean[]>(
@@ -83,6 +94,24 @@ export const ListPublicWork = observer(() => {
   const addressFormatter = (adress: Address) =>
     `${adress.street}, ${adress.number} - ${adress.city}`;
 
+  const filterOptions = ['Escola', 'Creche'];
+
+  const [filter, setFilter] = useState<number>(0);
+
+  const handleSearch = (name: string) => {
+    const aux = typeWork?.find((value) => value.name.toLowerCase() === name.toLowerCase())
+    if (name !==  "") {
+      setAtualTable(
+        publicWorks!.filter((item) =>
+          item.type_work_flag === aux?.flag
+        )
+      );
+    } else {
+      setAtualTable(publicWorks!);
+    }
+  };
+
+
   return (
     <>
       {isLoading || !publicWorks ? (
@@ -108,10 +137,28 @@ export const ListPublicWork = observer(() => {
                 ]}
                 handleAction={() => setOpenAddPublicWorkDialog(true)}
               >
+                <Grid sx={{justifyContent:'flex-end',
+                    display: 'flex'}}>
+                <Autocomplete
+                  sx={{ 
+                    width: 200,            
+                  }}
+                  disablePortal
+                  renderInput={(params) => (
+                    <TextField {...params} label="Filtrar por tipo de obra" />
+                  )}
+                  options={filterOptions}
+                  onChange={(e, value) => value === null
+                    ? handleSearch("")
+                    : handleSearch(value)
+                  }
+                />
+                </Grid>
                 <Table>
                   <TableHead>
                     <TableRow>
                       <TableCell align="center">Nome</TableCell>
+                      <TableCell align="center">Tipo de Obra</TableCell>
                       <TableCell align="center">Endereço</TableCell>
                       <TableCell align="center">Localização</TableCell>
                       <TableCell align="center">Vistorias</TableCell>
@@ -121,7 +168,7 @@ export const ListPublicWork = observer(() => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {publicWorks
+                    {atualTable
                       .slice(
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage
@@ -130,6 +177,13 @@ export const ListPublicWork = observer(() => {
                         <TableRow key={publicWork.id}>
                           <TableCell align="center">
                             {publicWork.name}
+                          </TableCell>
+                          <TableCell align="center">
+                            {typeWork?.map((value) =>
+                              value.flag === publicWork.type_work_flag
+                                ? value.name
+                                : ""
+                            )}
                           </TableCell>
                           <TableCell align="center">
                             {addressFormatter(publicWork.address)}
@@ -240,7 +294,7 @@ export const ListPublicWork = observer(() => {
                   setRowsPerPage={setRowsPerPage}
                   page={page}
                   setPage={setPage}
-                  data={publicWorks!}
+                  data={atualTable}
                 />
                 <AddPublicWorkDialog
                   state={openAddPublicWorkDialog}

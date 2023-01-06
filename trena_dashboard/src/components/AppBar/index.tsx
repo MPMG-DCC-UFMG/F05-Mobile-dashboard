@@ -1,4 +1,4 @@
-import { Logout } from "@mui/icons-material";
+import { Brightness4, Logout } from "@mui/icons-material";
 import Menu from "@mui/icons-material/Menu";
 import { Avatar, Box, Grid, styled } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
@@ -8,7 +8,8 @@ import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import background from "../../assets/gsi.png";
-import logo from "../../assets/logo-mpmg-alternativa.png";
+import dark_mpmg from "../../assets/logo-mpmg-alternativa.png";
+import light_mpmg from "../../assets/mpmg.png";
 import { ThemeContext } from "../../core/contexts/ThemeContext";
 import {
   LoggedUserResponse,
@@ -54,7 +55,7 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
     }
   );
 
-  const { theme, setTheme } = useContext(ThemeContext);
+  const { toggleTheme, isDark} = useContext(ThemeContext);
 
   const handleLogout = () => {
     localStorage.removeItem("TOKEN");
@@ -93,16 +94,12 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
               style={{ width: 25, height: 25, cursor: "pointer" }}
               onClick={handleUser}
             />
-            {/* <IconButton
-                color="secondary"
-                onClick={() =>
-                  setTheme(
-                    theme === "defaultTheme" ? "trenTheme" : "defaultTheme"
-                  )
-                }
-              >
-                <Brightness4 />
-              </IconButton> */}
+            <IconButton
+              color="secondary"
+              onClick={toggleTheme}
+            >
+              <Brightness4 />
+            </IconButton>
             <IconButton color="secondary" onClick={handleLogout}>
               <Logout />
             </IconButton>
@@ -114,7 +111,7 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
                 height: 45,
                 width: 135,
               }}
-              src={logo}
+              src={isDark === true ? light_mpmg : dark_mpmg}
             />
             <Box
               component="img"
