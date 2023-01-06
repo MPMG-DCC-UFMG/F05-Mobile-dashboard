@@ -45,7 +45,14 @@ export class InspectionService {
 }
 
 const loadInspections = async () => {
-  const call = Config.BASE_URL + "/inspections/";
+  const role = localStorage.getItem("ROLE")!;
+  const isUserAdmin = role === "ADMIN" || role === "interno"!;
+  let call = Config.BASE_URL + "/inspections/";
+
+  if (!isUserAdmin) {
+    call += "/public";
+  }
+
   const res = await TrenaAPI.network().get(call);
   return res.body;
 };

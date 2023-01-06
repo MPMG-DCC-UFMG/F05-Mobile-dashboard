@@ -4,12 +4,11 @@ import { Avatar, Box, Grid, styled } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
-import React, { useContext } from "react";
+import React from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import background from "../../assets/gsi.png";
 import logo from "../../assets/logo-mpmg-alternativa.png";
-import { ThemeContext } from "../../core/contexts/ThemeContext";
 import {
   LoggedUserResponse,
   SecurityServiceQuery,
@@ -54,10 +53,9 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
     }
   );
 
-  const { theme, setTheme } = useContext(ThemeContext);
-
   const handleLogout = () => {
     localStorage.removeItem("TOKEN");
+    localStorage.removeItem("ROLE");
     navigate("/login");
   };
 
