@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import "./styles/App.css";
 import "./styles/trena.css";
@@ -8,9 +8,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { ToastContainer } from "react-toastify";
 import { AppRoutes } from "./routes/routes";
-
 import { ThemeContext, ThemeContextProvider } from "./core/contexts/ThemeContext";
-import { defaultTheme, trenaTheme } from "./utils/theme";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,18 +25,16 @@ const queryClient = new QueryClient({
 
 function App() {
 
-  const {theme } = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeContextProvider>
-          <ThemeProvider theme={defaultTheme}>
+          <ThemeProvider theme={theme}>
             <CssBaseline />
             <AppRoutes />
             <ReactQueryDevtools />
             <ToastContainer />
           </ThemeProvider>
-      </ThemeContextProvider>
     </QueryClientProvider>
   );
 }

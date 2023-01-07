@@ -1,4 +1,5 @@
-import { Typography, Button, Grid } from "@mui/material";
+import { Upload } from "@mui/icons-material";
+import { Typography, Button, Grid, IconButton } from "@mui/material";
 import React from "react";
 import {
   SingleDialogContainer,
@@ -12,15 +13,14 @@ export function DigitalSignature({
 }: SingleDialogContainerProps) {
   return (
     <SingleDialogContainer title={title} state={state} setState={setState}>
-      <Grid 
-        display='flex'
-        justifyContent="space-evenly"
-        alignItems="center"
-      >  
-        <Typography>Escolha o arquivo</Typography>
-        <Button 
-          style={{height: 30}}
-          variant="contained">Pesquisar Arquivo</Button>
+      <Grid style={{display: "flex", justifyContent: "flex-end"}}>
+        <IconButton component="label">
+          <Upload />
+          <input type='file' accept="image/jpg" hidden/>
+        </IconButton>    
+      </Grid> 
+      <Grid style={{display: "flex", justifyContent: "flex-start"}}>
+        <Typography>Arraste aqui:</Typography>
       </Grid>
     </SingleDialogContainer>
   );

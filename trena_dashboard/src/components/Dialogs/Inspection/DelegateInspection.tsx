@@ -85,6 +85,11 @@ export function DelegateInspectionDialog({
     );
   };
 
+  const visibilityOptions = [
+    'Sigilosa',
+    'Pública',
+  ]
+
   return (
     <TableDialogContainer
       state={state}
@@ -133,6 +138,15 @@ export function DelegateInspectionDialog({
           }}
         />
       )}
+      <Autocomplete
+        sx={{ mt: 2 }}
+        disablePortal
+        fullWidth
+        renderInput={(params) => (
+          <TextField {...params} label="Visibilidade da vistoria" />
+        )}
+        options={visibilityOptions}
+      />
       <InfoTextField
         label="Descrição"
         defaultValue={inspection.description}
