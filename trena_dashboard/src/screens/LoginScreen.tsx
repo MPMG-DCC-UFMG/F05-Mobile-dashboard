@@ -14,8 +14,8 @@ type LoginUser = {
 export function LoginScreen() {
   const navigate = useNavigate();
   const [user, setUser] = useState<LoginUser>({
-    username: "",
-    password: "",
+    username: import.meta.env.VITE_ADMIN_USERNAME || "",
+    password: import.meta.env.VITE_ADMIN_PASSWORD || "",
   });
   const [error, setError] = useState({
     hasError: false,
@@ -28,7 +28,7 @@ export function LoginScreen() {
     {
       enabled: false,
       onSuccess: () => navigate("/dashboard"),
-      onError(err) {
+      onError() {
         setError({
           hasError: true,
           message:

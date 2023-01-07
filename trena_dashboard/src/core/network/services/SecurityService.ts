@@ -108,6 +108,7 @@ const login = async (email: string, password: string) => {
   const accessToken = res.body["access_token"];
   const role = res.body["role"];
   localStorage.setItem("TOKEN", accessToken);
+  localStorage.setItem("ROLE", role);
 
   if (role === "ADMIN" || role === "interno") {
     TrenaAPI.getInstance().setUserToken(accessToken);
