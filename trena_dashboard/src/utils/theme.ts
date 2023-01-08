@@ -1,8 +1,18 @@
 import { createTheme } from "@mui/material/styles";
 
-export const darkTheme = createTheme({
+export const darkDefaultTheme = createTheme({
   palette:{
-    mode:"dark"
+    mode:"dark",
+    primary: {
+      light: "#1976d2",
+      main: "#1976d2",
+      dark: "#1565c0",
+    },
+    secondary: {
+      light: "#1976d2",
+      main: "#1976d2",
+      dark: "#1565c0",
+    },
   }
 });
 
@@ -16,7 +26,7 @@ export const defaultTheme = createTheme({
     },
     secondary: {
       light: "rgb(112, 112, 112)",
-      main: "#fff",
+      main: "#ffffff",
       dark: "rgb(53, 53, 53)",
     },
     error: {
@@ -84,5 +94,21 @@ export const trenaTheme = createTheme({
   typography: {
     fontFamily: "Roboto",
   },
+});
+
+export const darkTrenaTheme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: {
+      light: "##c8ffc3",
+      main: "#88ef87",
+      dark: "#46af4c",
+    },
+    secondary: {
+      light: "rgb(112, 112, 112)",
+      main: "#88ef87",
+      dark: "rgb(53, 53, 53)",
+    },
+  }
 });
 

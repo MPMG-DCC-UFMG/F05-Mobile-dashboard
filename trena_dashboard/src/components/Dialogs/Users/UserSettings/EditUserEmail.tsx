@@ -1,26 +1,34 @@
 import { Button, Grid, TextField } from "@mui/material";
 import React, { useState } from "react";
+import { useQuery } from "react-query";
 import { User } from "../../../../core/models/User";
+import { LoggedUserResponse, SecurityServiceQuery } from "../../../../core/network/services/SecurityService";
 import { SingleDialogContainer } from "../../DialogContainer";
 
 interface EditUserEmailDialog {
   state: boolean;
   setState(state: boolean): void;
-  user: string;
   title: string;
 }
 
 export function EditUserEmailDialog({
   state,
   setState,
-  user,
   title,
 }: EditUserEmailDialog) {
+  
   const [email, setEmail] = useState<string>("");
-
+  const { data: userData } = useQuery<LoggedUserResponse>(
+    ["getLoggedUserData"],
+    () => SecurityServiceQuery.getLoggedUser()
+  );
   const handleCloseDialog = () => {
     setState(false);
   };
+
+  const handleEditUser = () =>{
+    handleCloseDialog();
+}
 
 //   const handleEditUser = (user: User) => {
 //     user.email = email;
@@ -34,7 +42,7 @@ export function EditUserEmailDialog({
           onChange={(event) => setEmail(event.currentTarget.value)}
           required
           label="Email do Usuário"
-          defaultValue={user}
+          defaultValue={userData?.email}
           fullWidth
         />
         <Grid
@@ -55,6 +63,7 @@ export function EditUserEmailDialog({
             <Button
               color="success"
               variant="contained"
+              onClick={()=> handleEditUser()}
             >
               Salvar
             </Button>
