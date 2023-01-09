@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { CreateUserDTO } from "../../../core/models/dto/CreateUserDTO";
+import { CreateUserDTO } from "../../../core/models/dto/user/CreateUserDTO";
 import { SecurityServiceQuery } from "../../../core/network/services/SecurityService";
 import { Notify } from "../../Toast/Notify";
 import {

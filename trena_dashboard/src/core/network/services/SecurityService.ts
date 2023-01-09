@@ -1,5 +1,6 @@
 import Config from "../../../config/Config";
-import { CreateUserDTO } from "../../models/dto/CreateUserDTO";
+import { LoginUser } from "../../../screens/LoginScreen";
+import { CreateUserDTO } from "../../models/dto/user/CreateUserDTO";
 import { User } from "../../models/User";
 import { MPResponse } from "../models/Response";
 import TrenaAPI from "../TrenaAPI";
@@ -81,8 +82,10 @@ export class SecurityService {
   }
 }
 
-const login = async (email: string, password: string) => {
+const login = async (user: LoginUser) => {
   const call = Config.BASE_URL + "/security/users/login";
+  const { username, password } = user;
+
   const res = await TrenaAPI.network()
     .post(call)
     .set({
@@ -91,7 +94,7 @@ const login = async (email: string, password: string) => {
     })
     .send({
       grant_type: "",
-      username: email,
+      username: username,
       password: password,
       scope: "",
       client_id: "",
@@ -113,7 +116,7 @@ const login = async (email: string, password: string) => {
 
   if (role === "ADMIN" || role === "interno") {
     TrenaAPI.getInstance().setUserToken(accessToken);
-    return { email: email, token: accessToken, role: role };
+    return { email: username, token: accessToken, role: role };
   } else {
     throw new Error("Usuário não possui acesso ao painel");
   }

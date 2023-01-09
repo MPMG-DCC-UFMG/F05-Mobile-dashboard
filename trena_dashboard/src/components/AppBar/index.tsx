@@ -5,7 +5,7 @@ import MuiAppBar from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import React, { useContext } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import background from "../../assets/gsi.png";
 import dark_mpmg from "../../assets/logo-mpmg-alternativa.png";
@@ -48,6 +48,7 @@ const AppBarSetup = styled(MuiAppBar, {
 
 export function AppBar({ open, toggleDrawer }: AppBarProps) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { userStore } = useContext(rootContext);
 
   const { data: loggedUserData } = useQuery<LoggedUserResponse>(
@@ -65,6 +66,7 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
     localStorage.removeItem("TOKEN");
     localStorage.removeItem("ROLE");
     userStore.updateLoggedUser({} as LoggedUser);
+    queryClient.invalidateQueries();
     navigate("/login");
   };
 

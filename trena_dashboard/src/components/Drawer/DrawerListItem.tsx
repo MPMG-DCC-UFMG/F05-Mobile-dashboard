@@ -29,6 +29,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import React, { useContext, useState } from "react";
+import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { rootContext } from "../../core/contexts/RootContext";
 import { useStores } from "../../core/contexts/UseStores";
@@ -44,12 +45,14 @@ interface MyListItemProps {
 function MyListItem({ icon, url, iconText, sx }: MyListItemProps) {
   const navigate = useNavigate();
   const { userStore } = useContext(rootContext);
+  const queryClient = useQueryClient();
 
   const handleNavigate = () => {
     if (iconText === "Sair") {
       localStorage.removeItem("TOKEN");
       localStorage.removeItem("ROLE");
       userStore.updateLoggedUser({} as LoggedUser);
+      queryClient.invalidateQueries();
       navigate(url);
       return;
     }

@@ -15,6 +15,7 @@ import { useQuery } from "react-query";
 import { rootContext } from "../../core/contexts/RootContext";
 import { CallServiceQuery } from "../../core/network/services/CallService";
 import { convertEphocDate } from "../../utils/mapper";
+import { OpenMessagesDialog } from "../Dialogs/Call/OpenMessagesDialog";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
@@ -23,10 +24,23 @@ export function ListCalls() {
   const { userStore } = useContext(rootContext);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
+  const [openMessages, setOpenMessages] = useState<boolean[]>([]);
 
-  const { data: calls, isLoading } = useQuery(["getUserCalls"], () =>
-    CallServiceQuery.getLoggedUserCalls(userStore.loggedUser.email)
+  const { data: calls, isLoading } = useQuery(
+    ["getUserCalls"],
+    () => CallServiceQuery.getLoggedUserCalls(userStore.loggedUser.email),
+    {
+      onSuccess(data) {
+        setOpenMessages(Array(data.length).fill(false));
+      },
+    }
   );
+
+  const handleOpenMessages = (index: number) => {
+    setOpenMessages(
+      openMessages.map((s, position) => (position === index ? true : s))
+    );
+  };
 
   const isUserAdmin = userStore.loggedUser.role === "ADMIN";
 
@@ -70,7 +84,7 @@ export function ListCalls() {
                     <TableCell align="left">
                       {isUserAdmin ? "Enviado Para" : "Recebido de"}
                     </TableCell>
-                    <TableCell align="left">Mensagens</TableCell>
+                    <TableCell align="center">Mensagens</TableCell>
                     <TableCell align="center">Excluir</TableCell>
                   </TableRow>
                 </TableHead>
@@ -87,9 +101,13 @@ export function ListCalls() {
                           <TableCell align="left">
                             {isUserAdmin ? call.user_email : call.admin_email}
                           </TableCell>
-                          <TableCell align="left">
+                          <TableCell align="center">
                             <Tooltip title="Abrir mensagens">
-                              <IconButton color="info" size="small">
+                              <IconButton
+                                onClick={() => handleOpenMessages(index)}
+                                color="info"
+                                size="small"
+                              >
                                 <Mail />
                               </IconButton>
                             </Tooltip>
@@ -102,14 +120,12 @@ export function ListCalls() {
                             </Tooltip>
                           </TableCell>
                         </TableRow>
-                        {/* <CollectSubmissionDialog
-                          collect={collect}
+                        <OpenMessagesDialog
+                          state={openMessages}
+                          setState={setOpenMessages}
+                          call={call}
                           index={index}
-                          state={openCollectSubmissionsDialog}
-                          setState={setOpenCollectSubmissionsDialog}
-                          fullScreen
-                          title={`Envios - ${collect.id!}`}
-                        /> */}
+                        />
                       </React.Fragment>
                     ))}
                 </TableBody>

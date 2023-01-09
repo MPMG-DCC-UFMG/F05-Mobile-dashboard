@@ -1,13 +1,13 @@
-import { Button, TextField } from "@mui/material";
+import { Button, CircularProgress, TextField } from "@mui/material";
 import React, { useContext, useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { AsideLoginContainer } from "../components/Containers/AsideLoginContainer";
 import { WarningField } from "../components/WarningField";
 import { rootContext } from "../core/contexts/RootContext";
 import { SecurityServiceQuery } from "../core/network/services/SecurityService";
 
-type LoginUser = {
+export type LoginUser = {
   username: string;
   password: string;
 };
@@ -15,20 +15,22 @@ type LoginUser = {
 export function LoginScreen() {
   const navigate = useNavigate();
   const { userStore } = useContext(rootContext);
+  const defaultUsername = import.meta.env.VITE_ADMIN_USERNAME;
+  const defaultPassword = import.meta.env.VITE_ADMIN_PASSWORD;
+
   const [user, setUser] = useState<LoginUser>({
-    username: import.meta.env.VITE_ADMIN_USERNAME || "",
-    password: import.meta.env.VITE_ADMIN_PASSWORD || "",
+    username: defaultUsername || "",
+    password: defaultPassword || "",
   });
   const [error, setError] = useState({
     hasError: false,
     message: "",
   });
 
-  const { refetch } = useQuery(
-    "login",
-    () => SecurityServiceQuery.login(user.username, user.password),
-    {
-      enabled: false,
+  const { mutate, isLoading } = useMutation(SecurityServiceQuery.login);
+
+  const handleLogin = () => {
+    mutate(user, {
       onSuccess: (data) => {
         userStore.updateLoggedUser({
           email: data.email,
@@ -37,23 +39,14 @@ export function LoginScreen() {
         });
         navigate("/dashboard");
       },
-      onError() {
+      onError: () => {
         setError({
           hasError: true,
           message:
             "Este usuário não possui acesso ao Painel ou as credenciais estão incorretas",
         });
       },
-    }
-  );
-
-  const onLoginClicked = async () => {
-    refetch();
-  };
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onLoginClicked();
+    });
   };
 
   return (
@@ -66,7 +59,7 @@ export function LoginScreen() {
         label="Email"
         type="email"
         autoFocus
-        defaultValue={user.username}
+        value={user.username}
         onChange={(e) => setUser({ ...user, username: e.target.value })}
       />
       <TextField
@@ -78,16 +71,16 @@ export function LoginScreen() {
         label="Senha"
         id="password"
         autoComplete="current-password"
-        defaultValue={user.password}
+        value={user.password}
         onChange={(e) => setUser({ ...user, password: e.target.value })}
       />
       <Button
         fullWidth
-        onClick={onSubmit}
+        onClick={handleLogin}
         variant="contained"
         sx={{ mt: 3, mb: 2 }}
       >
-        Entrar
+        {isLoading ? <CircularProgress size={20} color="inherit" /> : "Entrar"}
       </Button>
       <>
         {error.hasError && (

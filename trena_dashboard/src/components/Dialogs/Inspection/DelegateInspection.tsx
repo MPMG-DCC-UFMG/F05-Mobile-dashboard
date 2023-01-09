@@ -85,10 +85,7 @@ export function DelegateInspectionDialog({
     );
   };
 
-  const visibilityOptions = [
-    'Sigilosa',
-    'Pública',
-  ]
+  const visibilityOptions = ["Sigilosa", "Pública"];
 
   return (
     <TableDialogContainer
@@ -146,6 +143,7 @@ export function DelegateInspectionDialog({
           <TextField {...params} label="Visibilidade da vistoria" />
         )}
         options={visibilityOptions}
+        defaultValue={visibilityOptions[1]}
       />
       <InfoTextField
         label="Descrição"
