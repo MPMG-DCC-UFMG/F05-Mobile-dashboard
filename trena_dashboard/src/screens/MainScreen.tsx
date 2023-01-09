@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import React from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { DashboardContainer } from "../components/Containers/DashboardContainer";
 import { useStores } from "../core/contexts/UseStores";
 import { CollectScreen } from "./CollectScreen";
@@ -14,14 +14,10 @@ import { UserManagementScreen } from "./UserManagementScreen";
 import { WorkStatusScreen } from "./WorkStatusScreen";
 
 export const MainScreen = observer(() => {
-  const { userStore, workStatusStore, typePhotoStore } = useStores();
+  const { workStatusStore, typePhotoStore } = useStores();
 
   workStatusStore.loadWorkStatus();
   typePhotoStore.loadTypePhotoList();
-
-  if (userStore.loggedUser === undefined) {
-    return <Navigate to="/login" />;
-  }
 
   return (
     <DashboardContainer>
@@ -45,3 +41,4 @@ export const MainScreen = observer(() => {
     </DashboardContainer>
   );
 });
+
