@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { CallScreen } from "../screens/CallScreen";
 import { CollectScreen } from "../screens/CollectScreen";
 import { Home } from "../screens/Home";
 import { InspectionScreen } from "../screens/InspectionScreen";
@@ -30,6 +31,7 @@ export function AppRoutes() {
         <Route path="/collect" element={<CollectScreen />} />
         <Route path="/inspections" element={<InspectionScreen />} />
         <Route path="/userSettings" element={<UserSettingScreen />} />
+        <Route path="/calls" element={<CallScreen />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,9 +1,10 @@
 import { Button, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { AsideLoginContainer } from "../components/Containers/AsideLoginContainer";
 import { WarningField } from "../components/WarningField";
+import { rootContext } from "../core/contexts/RootContext";
 import { SecurityServiceQuery } from "../core/network/services/SecurityService";
 
 type LoginUser = {
@@ -13,6 +14,7 @@ type LoginUser = {
 
 export function LoginScreen() {
   const navigate = useNavigate();
+  const { userStore } = useContext(rootContext);
   const [user, setUser] = useState<LoginUser>({
     username: import.meta.env.VITE_ADMIN_USERNAME || "",
     password: import.meta.env.VITE_ADMIN_PASSWORD || "",
@@ -27,7 +29,14 @@ export function LoginScreen() {
     () => SecurityServiceQuery.login(user.username, user.password),
     {
       enabled: false,
-      onSuccess: () => navigate("/dashboard"),
+      onSuccess: (data) => {
+        userStore.updateLoggedUser({
+          email: data.email,
+          role: data.role,
+          name: "",
+        });
+        navigate("/dashboard");
+      },
       onError() {
         setError({
           hasError: true,

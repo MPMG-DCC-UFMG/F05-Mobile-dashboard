@@ -10,11 +10,13 @@ import { useNavigate } from "react-router-dom";
 import background from "../../assets/gsi.png";
 import dark_mpmg from "../../assets/logo-mpmg-alternativa.png";
 import light_mpmg from "../../assets/mpmg.png";
+import { rootContext } from "../../core/contexts/RootContext";
 import { ThemeContext } from "../../core/contexts/ThemeContext";
 import {
   LoggedUserResponse,
   SecurityServiceQuery,
 } from "../../core/network/services/SecurityService";
+import { LoggedUser } from "../../core/stores/UserStore";
 
 interface AppBarProps {
   open?: boolean;
@@ -46,6 +48,8 @@ const AppBarSetup = styled(MuiAppBar, {
 
 export function AppBar({ open, toggleDrawer }: AppBarProps) {
   const navigate = useNavigate();
+  const { userStore } = useContext(rootContext);
+
   const { data: loggedUserData } = useQuery<LoggedUserResponse>(
     ["appBarIcon"],
     () => SecurityServiceQuery.getLoggedUser(),
@@ -60,6 +64,7 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
   const handleLogout = () => {
     localStorage.removeItem("TOKEN");
     localStorage.removeItem("ROLE");
+    userStore.updateLoggedUser({} as LoggedUser);
     navigate("/login");
   };
 

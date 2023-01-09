@@ -1,5 +1,12 @@
-import { Dashboard, LinkedCamera, People } from "@material-ui/icons";
 import {
+  Chat,
+  Dashboard,
+  History,
+  LinkedCamera,
+  People,
+} from "@material-ui/icons";
+import {
+  Announcement,
   Build,
   Construction,
   ExpandLess,
@@ -7,6 +14,7 @@ import {
   Folder,
   LocalSee,
   Logout,
+  MarkChatUnread,
   Queue,
   Security,
   Settings,
@@ -20,9 +28,11 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { rootContext } from "../../core/contexts/RootContext";
 import { useStores } from "../../core/contexts/UseStores";
+import { LoggedUser } from "../../core/stores/UserStore";
 
 interface MyListItemProps {
   icon: JSX.Element;
@@ -33,9 +43,13 @@ interface MyListItemProps {
 
 function MyListItem({ icon, url, iconText, sx }: MyListItemProps) {
   const navigate = useNavigate();
+  const { userStore } = useContext(rootContext);
+
   const handleNavigate = () => {
     if (iconText === "Sair") {
       localStorage.removeItem("TOKEN");
+      localStorage.removeItem("ROLE");
+      userStore.updateLoggedUser({} as LoggedUser);
       navigate(url);
       return;
     }
@@ -52,11 +66,11 @@ function MyListItem({ icon, url, iconText, sx }: MyListItemProps) {
 }
 
 export function DrawerListItem() {
-  const navigate = useNavigate();
   const { collapseStore } = useStores();
   const [workConfig, setWorkConfig] = useState(collapseStore.workConfig);
   const [trena, setTrena] = useState(collapseStore.trena);
   const [publicWork, setPublicWork] = useState(collapseStore.publicWork);
+  const [chat, setChat] = useState(collapseStore.chat);
 
   const handleToggleWorkConfig = () => {
     setWorkConfig(!workConfig);
@@ -73,9 +87,9 @@ export function DrawerListItem() {
     collapseStore.togglePublicWork();
   };
 
-  const logout = () => {
-    localStorage.removeItem("TOKEN");
-    navigate("/");
+  const handleToggleChat = () => {
+    setChat(!chat);
+    collapseStore.toggleChat();
   };
 
   return (
@@ -168,8 +182,36 @@ export function DrawerListItem() {
           iconText="Fila de Envios"
         />
       </Collapse>
-
       <MyListItem icon={<People />} url="/users" iconText="Usuários" />
+
+      <ListItemButton onClick={handleToggleChat}>
+        <ListItemIcon>
+          <Chat />
+        </ListItemIcon>
+        <ListItemText primary="Chamados" />
+        {chat ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+      <Collapse in={chat} unmountOnExit>
+        <MyListItem
+          sx={{ pl: 4 }}
+          icon={<MarkChatUnread />}
+          url="/calls"
+          iconText="Meus Chamados"
+        />
+        <MyListItem
+          sx={{ pl: 4 }}
+          icon={<Announcement />}
+          url="/calls/new"
+          iconText="Novo Chamado"
+        />
+        <MyListItem
+          sx={{ pl: 4 }}
+          icon={<History />}
+          url="/calls/history"
+          iconText="Histórico"
+        />
+      </Collapse>
+
       <MyListItem icon={<Logout />} url="/login" iconText="Sair" />
     </List>
   );

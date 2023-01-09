@@ -4,6 +4,7 @@ export class CollapseStore {
   @observable workConfig = false;
   @observable trena = false;
   @observable publicWork = false;
+  @observable chat = false;
 
   @action
   toggleWorkConfiguration() {
@@ -25,5 +26,9 @@ export class CollapseStore {
     this.workConfig = !this.workConfig;
     this.trena = !this.trena;
   }
-}
 
+  @action
+  toggleChat() {
+    this.chat = !this.chat;
+  }
+}
