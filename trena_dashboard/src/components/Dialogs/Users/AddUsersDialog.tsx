@@ -1,79 +1,94 @@
 import {
-    Button,
-    Grid,
-    TextField,
-  } from "@mui/material";
-  import React, { useState } from "react";
-  import { useStores } from "../../../core/contexts/UseStores";
-import { User } from "../../../core/models/User";
-  import {
-    SingleDialogContainer,
-    SingleDialogContainerProps,
-  } from "../DialogContainer";
-  
-  export function AddUsersDialog({
-    state,
-    setState,
-    title,
-  }: SingleDialogContainerProps) {
-    const { userStore} = useStores();
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [role, setRole] = useState<string>("");
-   
-    const handleAddUsers = () => {
-      const user: User = { email: email, token: password, role: role};
-      userStore.createUser(user.email, user.token);
-      setState(false);
-    };
-  
-    const handleCloseDialog = () => {
-      setState(false);
-    }
-  
-    return (
-      <SingleDialogContainer state={state} setState={setState} title={title}>
-        <TextField
-          onChange={(event) => setEmail(event.currentTarget.value)}
-          required
-          label="Email do Usuário"
-          fullWidth
-        />
-        <TextField
-          sx={{mt:2}}
-          onChange={(event) => setPassword(event.currentTarget.value)}
-          required
-          label="Senha do Usuário"
-          fullWidth
-        />
-        <TextField
-          sx={{mt:2}}
-          onChange={(event) => setRole(event.currentTarget.value)}
-          required
-          label="Nível do Usuário"
-          fullWidth
-        />
-        <Grid
-          container
-          spacing={2}
-          sx={{ display: "flex", justifyContent: "flex-end", mt:2}}
-        >
-          <Grid item display="flex">
-            <Button 
-             onClick={handleCloseDialog}
-             color="error" variant="contained">
-              Cancelar
-            </Button>
-          </Grid>
-          <Grid item display="flex">
-            <Button 
-              onClick={handleAddUsers}
-              color="success" variant="contained">
-              Confirmar
-            </Button>
-          </Grid>
+  Button,
+  CircularProgress,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React, { useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
+import { CreateUserDTO } from "../../../core/models/dto/CreateUserDTO";
+import { SecurityServiceQuery } from "../../../core/network/services/SecurityService";
+import { Notify } from "../../Toast/Notify";
+import {
+  SingleDialogContainer,
+  SingleDialogContainerProps,
+} from "../DialogContainer";
+
+export function AddUsersDialog({
+  state,
+  setState,
+  title,
+}: SingleDialogContainerProps) {
+  const queryClient = useQueryClient();
+  const [user, setUser] = useState<CreateUserDTO>({} as CreateUserDTO);
+  const { mutate, isLoading } = useMutation(SecurityServiceQuery.createUser);
+
+  const handleAddUser = () => {
+    mutate(user, {
+      onSuccess: () => {
+        Notify("Usuário criado com sucesso!", "bottom-left", "success");
+        queryClient.invalidateQueries("getUsers");
+      },
+      onError: () => {
+        Notify(`Erro ao cadastrar o usuário!}`, "bottom-left", "error");
+      },
+    });
+    setState(false);
+  };
+
+  const handleCloseDialog = () => {
+    setState(false);
+  };
+
+  return (
+    <SingleDialogContainer state={state} setState={setState} title={title}>
+      <TextField
+        onChange={(e) => setUser({ ...user, name: e.target.value })}
+        required
+        label="Nome do Usuário"
+        fullWidth
+      />
+      <TextField
+        sx={{ mt: 2 }}
+        onChange={(e) => setUser({ ...user, email: e.target.value })}
+        required
+        label="Email do Usuário"
+        fullWidth
+      />
+      <TextField
+        type="password"
+        sx={{ mt: 2 }}
+        onChange={(e) => setUser({ ...user, password: e.target.value })}
+        required
+        label="Senha do Usuário"
+        fullWidth
+      />
+      <Grid
+        container
+        spacing={2}
+        sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}
+      >
+        <Grid item display="flex">
+          <Button onClick={handleCloseDialog} color="error" variant="contained">
+            Cancelar
+          </Button>
         </Grid>
-      </SingleDialogContainer>
-    );
-  }
-  
+        <Grid item display="flex">
+          <Button
+            disabled={isLoading}
+            onClick={handleAddUser}
+            color="success"
+            variant="contained"
+          >
+            {isLoading ? (
+              <CircularProgress size={12} />
+            ) : (
+              <Typography>Confirmar</Typography>
+            )}
+          </Button>
+        </Grid>
+      </Grid>
+    </SingleDialogContainer>
+  );
+}

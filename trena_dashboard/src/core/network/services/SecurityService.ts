@@ -1,4 +1,5 @@
 import Config from "../../../config/Config";
+import { CreateUserDTO } from "../../models/dto/CreateUserDTO";
 import { User } from "../../models/User";
 import { MPResponse } from "../models/Response";
 import TrenaAPI from "../TrenaAPI";
@@ -118,11 +119,13 @@ const login = async (email: string, password: string) => {
   }
 };
 
-const createUser = async (email: string, password: string) => {
+const createUser = async (user: CreateUserDTO) => {
   const call = Config.BASE_URL + "/security/users/create";
+  const { name, password, email } = user;
+
   const res = await TrenaAPI.network()
     .post(call)
-    .send({ email: email, authentication: password, full_name: "" });
+    .send({ email, authentication: password, full_name: name });
 
   return res.body;
 };
