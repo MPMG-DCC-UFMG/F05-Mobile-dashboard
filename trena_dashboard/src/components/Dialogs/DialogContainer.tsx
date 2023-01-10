@@ -62,6 +62,7 @@ export interface TableDialogProps extends BasicDialogProps {
   state: boolean[];
   setState(state: boolean[]): void;
   index: number;
+  scroll?: "body" | "paper";
 }
 
 export function TableDialogContainer({
@@ -71,6 +72,7 @@ export function TableDialogContainer({
   children,
   title,
   fullScreen,
+  scroll = "body",
 }: TableDialogProps) {
   const handleCloseDialog = (index: number) =>
     setState(state.map((s, pos) => (pos === index ? false : s)));
@@ -79,7 +81,7 @@ export function TableDialogContainer({
     <Dialog
       TransitionProps={{ unmountOnExit: true, mountOnEnter: false }}
       open={state[index]}
-      scroll="body"
+      scroll={scroll}
       fullWidth
       fullScreen={fullScreen}
       onClose={handleCloseDialog}
