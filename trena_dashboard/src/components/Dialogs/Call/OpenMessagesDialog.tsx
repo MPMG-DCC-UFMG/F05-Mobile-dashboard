@@ -18,6 +18,7 @@ interface OpenMessagesDialogProps {
   state: boolean[];
   setState(state: boolean[]): void;
   index: number;
+  open?: boolean;
   call: Call;
 }
 
@@ -25,6 +26,7 @@ export function OpenMessagesDialog({
   state,
   setState,
   index,
+  open = true,
   call,
 }: OpenMessagesDialogProps) {
   const { userStore } = useContext(rootContext);
@@ -91,21 +93,23 @@ export function OpenMessagesDialog({
           />
         ))}
 
-      <TextField
-        label="Escreva sua mensagem"
-        value={message.text}
-        sx={{ mt: 2 }}
-        onChange={(e) => setMessage({ ...message, text: e.target.value })}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton disabled={sending} onClick={handleSendMessage}>
-                {sending ? <CircularProgress /> : <Send color="info" />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
+      {open && (
+        <TextField
+          label="Escreva sua mensagem"
+          value={message.text}
+          sx={{ mt: 2 }}
+          onChange={(e) => setMessage({ ...message, text: e.target.value })}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton disabled={sending} onClick={handleSendMessage}>
+                  {sending ? <CircularProgress /> : <Send color="info" />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      )}
     </TableDialogContainer>
   );
 }

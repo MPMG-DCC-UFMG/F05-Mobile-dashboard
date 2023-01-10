@@ -1,4 +1,4 @@
-import { Block, Mail } from "@mui/icons-material";
+import { Delete, Mail } from "@mui/icons-material";
 import {
   Grid,
   IconButton,
@@ -18,10 +18,9 @@ import { convertEphocDate } from "../../utils/mapper";
 import { OpenMessagesDialog } from "../Dialogs/Call/OpenMessagesDialog";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
-import { TablePagination } from "../TablePagination";
 import { Notify } from "../Toast/Notify";
 
-export function ListCalls() {
+export function ListCallsHistory() {
   const { userStore } = useContext(rootContext);
   const queryClient = useQueryClient();
 
@@ -30,8 +29,9 @@ export function ListCalls() {
   const [openMessages, setOpenMessages] = useState<boolean[]>([]);
 
   const { data: calls, isLoading } = useQuery(
-    ["getUserCalls", userStore.loggedUser.email],
-    () => CallServiceQuery.getLoggedUserCalls(userStore.loggedUser.email),
+    ["getUserCallsHistory", userStore.loggedUser.email],
+    () =>
+      CallServiceQuery.getLoggedUserCallsHistory(userStore.loggedUser.email),
     {
       onSuccess(data) {
         setOpenMessages(Array(data.length).fill(false));
@@ -39,28 +39,24 @@ export function ListCalls() {
     }
   );
 
-  const { mutate: closeCall } = useMutation(CallServiceQuery.closeCall);
+  const { mutate: deleteCall } = useMutation(CallServiceQuery.deleteCall);
+
+  const handleDeleteCall = (callId: string) => {
+    deleteCall(callId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries([
+          "getUserCallsHistory",
+          userStore.loggedUser.email,
+        ]);
+        Notify("Chamado excluído com sucesso!", "bottom-left", "success");
+      },
+    });
+  };
 
   const handleOpenMessages = (index: number) => {
     setOpenMessages(
       openMessages.map((s, position) => (position === index ? true : s))
     );
-  };
-
-  const handleCloseCall = (callId: string) => {
-    closeCall(callId, {
-      onSuccess: () => {
-        queryClient.invalidateQueries([
-          "getUserCalls",
-          userStore.loggedUser.email,
-        ]);
-        Notify(
-          "Chamado fechado com sucesso! Pode acessá-lo em Chamados/Histórico",
-          "bottom-left",
-          "success"
-        );
-      },
-    });
   };
 
   const isUserAdmin = userStore.loggedUser.role === "ADMIN";
@@ -69,15 +65,15 @@ export function ListCalls() {
     <>
       {isLoading || !calls ? (
         <LoadingTableData
-          headingTitle="Meus Chamados"
+          headingTitle="Histórico de Chamados"
           headingSteps={[
             {
               title: "Dashboard",
               url: "/",
             },
             {
-              title: "Meus Chamados",
-              url: "/calls",
+              title: "Histórico de Chamados",
+              url: "/calls/history",
             },
           ]}
         />
@@ -85,14 +81,14 @@ export function ListCalls() {
         <Grid style={{ width: "100%", marginTop: 14 }} item>
           <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
             <Heading
-              title="Meus Chamados"
+              title="Histórico de Chamados"
               steps={[
                 {
                   title: "Dashboard",
                   url: "/",
                 },
                 {
-                  title: "Meus Chamados",
+                  title: "Histórico de Chamados",
                   url: "/calls",
                 },
               ]}
@@ -101,12 +97,13 @@ export function ListCalls() {
                 <TableHead>
                   <TableRow>
                     <TableCell align="center">Título</TableCell>
-                    <TableCell align="center">Aberto Em</TableCell>
+                    <TableCell align="center">Aberto em</TableCell>
+                    <TableCell align="center">Fehado em</TableCell>
                     <TableCell align="left">
                       {isUserAdmin ? "Enviado Para" : "Recebido de"}
                     </TableCell>
                     <TableCell align="center">Mensagens</TableCell>
-                    <TableCell align="center">Fechar</TableCell>
+                    <TableCell align="center">Excluir</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -118,6 +115,9 @@ export function ListCalls() {
                           <TableCell align="center">{call.title}</TableCell>
                           <TableCell align="center">
                             {convertEphocDate(call.created_at)}
+                          </TableCell>
+                          <TableCell align="center">
+                            {convertEphocDate(call.closed_at)}
                           </TableCell>
                           <TableCell align="left">
                             {isUserAdmin ? call.user_email : call.admin_email}
@@ -136,11 +136,11 @@ export function ListCalls() {
                           <TableCell align="center">
                             <Tooltip title="Fechar Chamado">
                               <IconButton
-                                onClick={() => handleCloseCall(call.id)}
-                                color="warning"
+                                onClick={() => handleDeleteCall(call.id)}
+                                color="error"
                                 size="small"
                               >
-                                <Block />
+                                <Delete />
                               </IconButton>
                             </Tooltip>
                           </TableCell>
@@ -150,18 +150,12 @@ export function ListCalls() {
                           setState={setOpenMessages}
                           call={call}
                           index={index}
+                          open={false}
                         />
                       </React.Fragment>
                     ))}
                 </TableBody>
               </Table>
-              <TablePagination
-                data={calls}
-                rowsPerPage={rowsPerPage}
-                setRowsPerPage={setRowsPerPage}
-                page={page}
-                setPage={setPage}
-              />
             </Heading>
           </Paper>
         </Grid>
