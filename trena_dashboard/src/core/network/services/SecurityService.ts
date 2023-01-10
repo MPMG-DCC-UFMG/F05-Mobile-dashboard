@@ -1,6 +1,7 @@
 import Config from "../../../config/Config";
 import { LoginUser } from "../../../screens/LoginScreen";
 import { CreateUserDTO } from "../../models/dto/user/CreateUserDTO";
+import { UserSafeDataDTO } from "../../models/dto/user/UserSafeDataDTO";
 import { User } from "../../models/User";
 import { MPResponse } from "../models/Response";
 import TrenaAPI from "../TrenaAPI";
@@ -162,10 +163,20 @@ const getLoggedUser = async (): Promise<LoggedUserResponse> => {
   return res.body;
 };
 
+const getUserSafeData = async (
+  user_email: string
+): Promise<UserSafeDataDTO> => {
+  const call = `${Config.BASE_URL}/security/users/${user_email}`;
+  const res = await TrenaAPI.network().get(call);
+
+  return res.body;
+};
+
 export const SecurityServiceQuery = {
   login,
   loadUsersList,
   getLoggedUser,
+  getUserSafeData,
   createUser,
   deleteUser,
 };

@@ -3,7 +3,7 @@ import { SendMessageDTO } from "../../models/dto/SendMessageDTO";
 import { Message } from "../../models/Message";
 import TrenaAPI from "../TrenaAPI";
 
-const baseUrl = Config.BASE_URL + "/message";
+const baseUrl = Config.BASE_URL + "/message/";
 
 const getMessagesFromCall = async (callId: string): Promise<Message[]> => {
   const url = baseUrl;
@@ -29,7 +29,7 @@ const deleteMessage = async (messageId: string): Promise<Message> => {
 };
 
 const markMessageAsReaded = async (messageId: string): Promise<Message> => {
-  const url = baseUrl + "/read";
+  const url = baseUrl + "read";
   const res = await TrenaAPI.network()
     .post(url)
     .query({ message_id: messageId });
