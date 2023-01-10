@@ -106,7 +106,9 @@ export function ListCalls() {
                       {isUserAdmin ? "Enviado Para" : "Recebido de"}
                     </TableCell>
                     <TableCell align="center">Mensagens</TableCell>
-                    <TableCell align="center">Fechar</TableCell>
+                    {isUserAdmin && (
+                      <TableCell align="center">Fechar</TableCell>
+                    )}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -133,17 +135,19 @@ export function ListCalls() {
                               </IconButton>
                             </Tooltip>
                           </TableCell>
-                          <TableCell align="center">
-                            <Tooltip title="Fechar Chamado">
-                              <IconButton
-                                onClick={() => handleCloseCall(call.id)}
-                                color="warning"
-                                size="small"
-                              >
-                                <Block />
-                              </IconButton>
-                            </Tooltip>
-                          </TableCell>
+                          {isUserAdmin && (
+                            <TableCell align="center">
+                              <Tooltip title="Fechar Chamado">
+                                <IconButton
+                                  onClick={() => handleCloseCall(call.id)}
+                                  color="warning"
+                                  size="small"
+                                >
+                                  <Block />
+                                </IconButton>
+                              </Tooltip>
+                            </TableCell>
+                          )}
                         </TableRow>
                         <OpenMessagesDialog
                           state={openMessages}

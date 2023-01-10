@@ -172,9 +172,17 @@ const getUserSafeData = async (
   return res.body;
 };
 
+const loadUserListSafe = async (): Promise<UserSafeDataDTO[]> => {
+  const call = `${Config.BASE_URL}/security/users/all`;
+  const res = await TrenaAPI.network().get(call);
+
+  return res.body;
+};
+
 export const SecurityServiceQuery = {
   login,
   loadUsersList,
+  loadUserListSafe,
   getLoggedUser,
   getUserSafeData,
   createUser,

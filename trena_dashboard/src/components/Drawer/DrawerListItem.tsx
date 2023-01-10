@@ -34,6 +34,7 @@ import { useNavigate } from "react-router-dom";
 import { rootContext } from "../../core/contexts/RootContext";
 import { useStores } from "../../core/contexts/UseStores";
 import { LoggedUser } from "../../core/stores/UserStore";
+import { OpenCallDialog } from "../Dialogs/Call/OpenCallDialog";
 
 interface MyListItemProps {
   icon: JSX.Element;
@@ -69,11 +70,13 @@ function MyListItem({ icon, url, iconText, sx }: MyListItemProps) {
 }
 
 export function DrawerListItem() {
+  const { userStore } = useContext(rootContext);
   const { collapseStore } = useStores();
   const [workConfig, setWorkConfig] = useState(collapseStore.workConfig);
   const [trena, setTrena] = useState(collapseStore.trena);
   const [publicWork, setPublicWork] = useState(collapseStore.publicWork);
   const [chat, setChat] = useState(collapseStore.chat);
+  const [openCall, setOpenCall] = useState(false);
 
   const handleToggleWorkConfig = () => {
     setWorkConfig(!workConfig);
@@ -94,6 +97,8 @@ export function DrawerListItem() {
     setChat(!chat);
     collapseStore.toggleChat();
   };
+
+  const handleOpenNewCall = () => setOpenCall(true);
 
   return (
     <List>
@@ -201,12 +206,15 @@ export function DrawerListItem() {
           url="/calls"
           iconText="Meus Chamados"
         />
-        <MyListItem
-          sx={{ pl: 4 }}
-          icon={<Announcement />}
-          url="/calls/new"
-          iconText="Novo Chamado"
-        />
+        {userStore.loggedUser.role === "ADMIN" && (
+          <ListItemButton sx={{ pl: 4 }} onClick={handleOpenNewCall}>
+            <ListItemIcon>
+              <Announcement />
+            </ListItemIcon>
+            <ListItemText primary="Novo Chamado" />
+          </ListItemButton>
+        )}
+
         <MyListItem
           sx={{ pl: 4 }}
           icon={<History />}
@@ -216,6 +224,7 @@ export function DrawerListItem() {
       </Collapse>
 
       <MyListItem icon={<Logout />} url="/login" iconText="Sair" />
+      <OpenCallDialog state={openCall} setState={setOpenCall} />
     </List>
   );
 }
