@@ -27,7 +27,7 @@ export function ListCalls() {
   const [openMessages, setOpenMessages] = useState<boolean[]>([]);
 
   const { data: calls, isLoading } = useQuery(
-    ["getUserCalls"],
+    ["getUserCalls", userStore.loggedUser.email],
     () => CallServiceQuery.getLoggedUserCalls(userStore.loggedUser.email),
     {
       onSuccess(data) {

@@ -1,10 +1,7 @@
-import { Avatar, Grid, Typography } from "@mui/material";
+import { Avatar, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
 import { useQuery } from "react-query";
-import {
-  LoggedUserResponse,
-  SecurityServiceQuery,
-} from "../../../core/network/services/SecurityService";
+import { SecurityServiceQuery } from "../../../core/network/services/SecurityService";
 import { convertEphocDate } from "../../../utils/mapper";
 
 interface ChatCardProps {
@@ -20,10 +17,13 @@ export function ChatCard({
   timestamp,
   side,
 }: ChatCardProps) {
-  const { data: ownerMetadata } = useQuery<LoggedUserResponse>(
+  const { data: ownerMetadata } = useQuery(
     ["getUserChatMetadata", messageOwner],
-    () => SecurityServiceQuery.getLoggedUser()
+    () => SecurityServiceQuery.getUserSafeData(messageOwner)
   );
+
+  const backgroundColorBasedOnUser = side === "right" ? "blue" : "#F5F5F5";
+  const textColorBasedOnUser = side === "right" ? "white" : "blue";
 
   return (
     <>
@@ -33,15 +33,22 @@ export function ChatCard({
         justifyContent={side === "right" ? "flex-end" : "flex-start"}
       >
         {side === "left" && (
-          <Grid item>
+          <Grid sx={{ mt: 2 }} item>
             <Avatar src={ownerMetadata?.picture} />
           </Grid>
         )}
-        <Grid item>
-          <Typography align="left" color={side === "right" ? "blue" : "gray"}>
-            {text}
-          </Typography>
-          {convertEphocDate(timestamp)}
+        <Grid width="50%" height="50%" item sx={{ mt: 2 }}>
+          <Paper
+            sx={{
+              background: backgroundColorBasedOnUser,
+            }}
+            elevation={3}
+          >
+            <Typography align={side} color={textColorBasedOnUser}>
+              {side === "left" ? ownerMetadata?.full_name + ": " + text : text}
+            </Typography>
+            {convertEphocDate(timestamp)}
+          </Paper>
         </Grid>
       </Grid>
     </>

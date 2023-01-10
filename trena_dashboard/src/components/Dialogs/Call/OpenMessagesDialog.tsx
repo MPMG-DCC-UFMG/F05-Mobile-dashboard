@@ -5,8 +5,9 @@ import {
   InputAdornment,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { rootContext } from "../../../core/contexts/RootContext";
 import { Call } from "../../../core/models/Call";
 import { SendMessageDTO } from "../../../core/models/dto/SendMessageDTO";
 import { MessageServiceQuery } from "../../../core/network/services/MessagesService";
@@ -26,14 +27,18 @@ export function OpenMessagesDialog({
   index,
   call,
 }: OpenMessagesDialogProps) {
+  const { userStore } = useContext(rootContext);
+  const queryClient = useQueryClient();
+  const messageSender = userStore.loggedUser.email;
+  const messageReceiver =
+    call.user_email === messageSender ? call.admin_email : call.user_email;
+
   const [message, setMessage] = useState<SendMessageDTO>({
     call_id: call.id,
-    receiver_email: call.user_email,
-    sender_email: call.admin_email,
+    receiver_email: messageReceiver,
+    sender_email: messageSender,
     text: "",
   });
-
-  const queryClient = useQueryClient();
 
   const {
     data: messages,
@@ -68,6 +73,7 @@ export function OpenMessagesDialog({
       state={state}
       setState={setState}
       title={call.title}
+      scroll="paper"
     >
       {messages &&
         !isLoading &&
@@ -75,7 +81,11 @@ export function OpenMessagesDialog({
           <ChatCard
             key={message.id}
             messageOwner={message.sender_email}
-            side={message.sender_email === call.admin_email ? "right" : "left"}
+            side={
+              message.sender_email === userStore.loggedUser.email
+                ? "right"
+                : "left"
+            }
             text={message.text}
             timestamp={message.timestamp}
           />
@@ -84,6 +94,7 @@ export function OpenMessagesDialog({
       <TextField
         label="Escreva sua mensagem"
         value={message.text}
+        sx={{ mt: 2 }}
         onChange={(e) => setMessage({ ...message, text: e.target.value })}
         InputProps={{
           endAdornment: (
