@@ -1,4 +1,8 @@
-import { Collections, PictureAsPdfOutlined } from "@mui/icons-material";
+import {
+  Article,
+  Collections,
+  PictureAsPdfOutlined,
+} from "@mui/icons-material";
 import {
   Grid,
   IconButton,
@@ -37,6 +41,9 @@ export function ListInspection() {
   );
 
   const { mutate } = useMutation(InspectionServiceQuery.getInspectionReport);
+  const { mutate: getDocx } = useMutation(
+    InspectionServiceQuery.getInspectionDocx
+  );
 
   const [openCollectsModal, setOpenCollectsModal] = useState<boolean[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -53,6 +60,18 @@ export function ListInspection() {
       onError: () => {
         Notify(
           "Esta vistoria não possui Fotos ou Vídeos para gerar um relatório!",
+          "bottom-left",
+          "warning"
+        );
+      },
+    });
+  };
+
+  const handleGenerateDoc = (flag: number) => {
+    getDocx(flag, {
+      onError: () => {
+        Notify(
+          "Esta vistoria ainda não possui nenhum conteúdo para gerar um relatório!",
           "bottom-left",
           "warning"
         );
@@ -103,6 +122,7 @@ export function ListInspection() {
                       <TableCell align="center">Status</TableCell>
                       <TableCell align="center">Mídias</TableCell>
                       <TableCell align="center">Relatório</TableCell>
+                      <TableCell align="center">Editável</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -150,6 +170,19 @@ export function ListInspection() {
                                   }
                                 >
                                   <PictureAsPdfOutlined />
+                                </IconButton>
+                              </Tooltip>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Tooltip title="Obter Docx">
+                                <IconButton
+                                  color="info"
+                                  size="small"
+                                  onClick={() =>
+                                    handleGenerateDoc(inspection.flag!)
+                                  }
+                                >
+                                  <Article />
                                 </IconButton>
                               </Tooltip>
                             </TableCell>

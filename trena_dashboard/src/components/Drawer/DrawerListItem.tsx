@@ -1,12 +1,11 @@
 import {
-  Chat,
   Dashboard,
   History,
   LinkedCamera,
+  Notifications,
   People,
 } from "@material-ui/icons";
 import {
-  Announcement,
   Build,
   Construction,
   ExpandLess,
@@ -14,7 +13,8 @@ import {
   Folder,
   LocalSee,
   Logout,
-  MarkChatUnread,
+  MarkEmailUnread,
+  NotificationAdd,
   Queue,
   Security,
   Settings,
@@ -189,39 +189,38 @@ export function DrawerListItem() {
           url="/queue"
           iconText="Fila de Envios"
         />
+        <ListItemButton sx={{ pl: 4 }} onClick={handleToggleChat}>
+          <ListItemIcon>
+            <Notifications />
+          </ListItemIcon>
+          <ListItemText primary="Notificações" />
+          {chat ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse in={chat} unmountOnExit>
+          <MyListItem
+            sx={{ pl: 6 }}
+            icon={<MarkEmailUnread />}
+            url="/calls"
+            iconText="Mensagens"
+          />
+          {userStore.loggedUser.role === "ADMIN" && (
+            <ListItemButton sx={{ pl: 6 }} onClick={handleOpenNewCall}>
+              <ListItemIcon>
+                <NotificationAdd />
+              </ListItemIcon>
+              <ListItemText primary="Notificar" />
+            </ListItemButton>
+          )}
+
+          <MyListItem
+            sx={{ pl: 6 }}
+            icon={<History />}
+            url="/calls/history"
+            iconText="Histórico"
+          />
+        </Collapse>
       </Collapse>
       <MyListItem icon={<People />} url="/users" iconText="Usuários" />
-
-      <ListItemButton onClick={handleToggleChat}>
-        <ListItemIcon>
-          <Chat />
-        </ListItemIcon>
-        <ListItemText primary="Chamados" />
-        {chat ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={chat} unmountOnExit>
-        <MyListItem
-          sx={{ pl: 4 }}
-          icon={<MarkChatUnread />}
-          url="/calls"
-          iconText="Meus Chamados"
-        />
-        {userStore.loggedUser.role === "ADMIN" && (
-          <ListItemButton sx={{ pl: 4 }} onClick={handleOpenNewCall}>
-            <ListItemIcon>
-              <Announcement />
-            </ListItemIcon>
-            <ListItemText primary="Novo Chamado" />
-          </ListItemButton>
-        )}
-
-        <MyListItem
-          sx={{ pl: 4 }}
-          icon={<History />}
-          url="/calls/history"
-          iconText="Histórico"
-        />
-      </Collapse>
 
       <MyListItem icon={<Logout />} url="/login" iconText="Sair" />
       <OpenCallDialog state={openCall} setState={setOpenCall} />

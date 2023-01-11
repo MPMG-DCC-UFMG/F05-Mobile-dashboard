@@ -106,6 +106,18 @@ const getInspectionReport = async (inspectionFlag: number) => {
   anchor.remove();
 };
 
+const getInspectionDocx = async (inspectionFlag: number) => {
+  const call = `${Config.BASE_URL}/inspections/reportDocx/${inspectionFlag}`;
+  const res = await TrenaAPI.network().get(call).responseType("blob");
+
+  const url = window.URL.createObjectURL(res.body);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = `relatorio-automatico-vistoria-editavel-${inspectionFlag}.docx`;
+  anchor.click();
+  anchor.remove();
+};
+
 export const InspectionServiceQuery = {
   loadInspections,
   countMpInspections,
@@ -114,4 +126,5 @@ export const InspectionServiceQuery = {
   addInspection,
   updateInspection,
   getInspectionReport,
+  getInspectionDocx,
 };

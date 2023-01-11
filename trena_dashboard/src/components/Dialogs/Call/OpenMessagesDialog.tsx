@@ -99,6 +99,7 @@ export function OpenMessagesDialog({
           value={message.text}
           sx={{ mt: 2 }}
           onChange={(e) => setMessage({ ...message, text: e.target.value })}
+          multiline
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
