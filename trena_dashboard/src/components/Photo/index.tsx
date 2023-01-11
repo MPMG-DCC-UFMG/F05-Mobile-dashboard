@@ -1,8 +1,7 @@
 import { Card, CardContent, CardMedia, Link, Typography } from "@mui/material";
 import React from "react";
-import { useQuery } from "react-query";
 import { Photo as PhotoModel } from "../../core/models/Photo";
-import { CollectServiceQuery } from "../../core/network/services/CollectService";
+import { useGetMediaByFilepath } from "../../core/network/queries/collect/queries";
 import { convertLatLngToDMS } from "../../utils/mapper";
 
 interface PhotoCardProps {
@@ -11,11 +10,9 @@ interface PhotoCardProps {
 }
 
 export function PhotoCard({ photo, photoNumber }: PhotoCardProps) {
-  const [, filename] = photo.filepath.split("/");
+  const [, filepath] = photo.filepath.split("/");
 
-  const { data: image } = useQuery(["getImage", photo.id], () =>
-    CollectServiceQuery.getMediaByCollectFileName(filename)
-  );
+  const { data: image } = useGetMediaByFilepath(filepath);
 
   return (
     <Card sx={{ width: 500, mt: 4, mb: 4 }}>

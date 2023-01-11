@@ -1,6 +1,8 @@
+import { QueryFunctionContext } from "react-query";
 import Config from "../../../config/Config";
 import { LoginUser } from "../../../screens/LoginScreen";
 import { CreateUserDTO } from "../../models/dto/user/CreateUserDTO";
+import { ReadUserDTO } from "../../models/dto/user/ReadUserDTO";
 import { UserSafeDataDTO } from "../../models/dto/user/UserSafeDataDTO";
 import { User } from "../../models/User";
 import { MPResponse } from "../models/Response";
@@ -83,7 +85,7 @@ export class SecurityService {
   }
 }
 
-const login = async (user: LoginUser) => {
+async function login(user: LoginUser): Promise<User> {
   const call = Config.BASE_URL + "/security/users/login";
   const { username, password } = user;
 
@@ -121,9 +123,9 @@ const login = async (user: LoginUser) => {
   } else {
     throw new Error("Usuário não possui acesso ao painel");
   }
-};
+}
 
-const createUser = async (user: CreateUserDTO) => {
+async function createUser(user: CreateUserDTO): Promise<void> {
   const call = Config.BASE_URL + "/security/users/create";
   const { name, password, email } = user;
 
@@ -132,17 +134,17 @@ const createUser = async (user: CreateUserDTO) => {
     .send({ email, authentication: password, full_name: name });
 
   return res.body;
-};
+}
 
-const loadUsersList = async () => {
+async function loadUserList(): Promise<ReadUserDTO> {
   const call = Config.BASE_URL + "/security/users";
 
   const res = await TrenaAPI.network().get(call);
 
   return res.body;
-};
+}
 
-const deleteUser = async (email: string) => {
+async function deleteUser(email: string) {
   const call = Config.BASE_URL + "/security/users/delete";
   const res = await TrenaAPI.network()
     .post(call)
@@ -150,9 +152,9 @@ const deleteUser = async (email: string) => {
     .query({ email: email });
 
   return res.body;
-};
+}
 
-const getLoggedUser = async (): Promise<LoggedUserResponse> => {
+async function getLoggedUser(): Promise<LoggedUserResponse> {
   const call = Config.BASE_URL + "/security/users/me";
   const token = localStorage.getItem("TOKEN");
   const res = await TrenaAPI.network()
@@ -161,30 +163,30 @@ const getLoggedUser = async (): Promise<LoggedUserResponse> => {
     .query({ token: token });
 
   return res.body;
-};
+}
 
-const getUserSafeData = async (
-  user_email: string
-): Promise<UserSafeDataDTO> => {
-  const call = `${Config.BASE_URL}/security/users/${user_email}`;
+async function getUserPublicData(ctx: QueryFunctionContext) {
+  const [, userEmail] = ctx.queryKey;
+
+  const call = `${Config.BASE_URL}/security/users/${userEmail}`;
   const res = await TrenaAPI.network().get(call);
 
   return res.body;
-};
+}
 
-const loadUserListSafe = async (): Promise<UserSafeDataDTO[]> => {
-  const call = `${Config.BASE_URL}/security/users/all`;
+async function loadPublicUserList(): Promise<UserSafeDataDTO[]> {
+  const call = `${Config.BASE_URL}/security/users/public`;
   const res = await TrenaAPI.network().get(call);
 
   return res.body;
-};
+}
 
 export const SecurityServiceQuery = {
   login,
-  loadUsersList,
-  loadUserListSafe,
+  loadPublicUserList,
+  loadUserList,
   getLoggedUser,
-  getUserSafeData,
+  getUserPublicData,
   createUser,
   deleteUser,
 };

@@ -1,50 +1,11 @@
+import { QueryFunctionContext } from "react-query";
 import Config from "../../../config/Config";
+import { Collect } from "../../models/Collect";
 import { CreateInspectionDTO } from "../../models/dto/CreateInspectionDTO";
 import { Inspection } from "../../models/Inspection";
 import TrenaAPI from "../TrenaAPI";
 
-export class InspectionService {
-  static async loadInspections(): Promise<Inspection[]> {
-    const call = Config.BASE_URL + "/inspections/";
-    return TrenaAPI.network()
-      .get(call)
-      .then((res) => {
-        let inspections: Inspection[] = res.body;
-        return inspections;
-      });
-  }
-
-  static async getPublicWorkInspections(publicWorkId: string) {
-    const call = Config.BASE_URL + "/inspections/publicwork/" + publicWorkId;
-    return TrenaAPI.network().get(call).type("application/json");
-  }
-
-  static async addInspection(inspection: Inspection) {
-    const call = Config.BASE_URL + "/inspections/add";
-    TrenaAPI.network()
-      .post(call)
-      .type("application/json")
-      .send(inspection)
-      .then()
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  static async updateInspection(inspection: Inspection) {
-    const call = Config.BASE_URL + "/inspections/update";
-    TrenaAPI.network()
-      .put(call)
-      .type("application/json")
-      .send(inspection)
-      .then()
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-}
-
-const loadInspections = async () => {
+async function loadInspections(): Promise<Inspection[]> {
   const role = localStorage.getItem("ROLE")!;
   const isUserAdmin = role === "ADMIN" || role === "interno"!;
   let call = Config.BASE_URL + "/inspections/";
@@ -55,46 +16,55 @@ const loadInspections = async () => {
 
   const res = await TrenaAPI.network().get(call);
   return res.body;
-};
+}
 
-const countMpInspections = async () => {
+async function countMpInspections(): Promise<number> {
   const call = Config.BASE_URL + "/inspections/count";
   const res = await TrenaAPI.network().get(call);
   return res.body;
-};
+}
 
-const getPublicWorkInspections = async (publicWorkId: string) => {
+async function getPublicWorkInspections(
+  ctx: QueryFunctionContext
+): Promise<Inspection[]> {
+  const [, publicWorkId] = ctx.queryKey;
+
   const call = Config.BASE_URL + "/inspections/publicwork/" + publicWorkId;
   const res = await TrenaAPI.network().get(call).type("application/json");
   return res.body;
-};
+}
 
-const addInspection = async (inspection: CreateInspectionDTO) => {
+async function addInspection(
+  inspection: CreateInspectionDTO
+): Promise<Inspection> {
   const call = Config.BASE_URL + "/inspections/add";
   const res = await TrenaAPI.network()
     .post(call)
     .type("application/json")
     .send(inspection);
   return res.body;
-};
+}
 
-const updateInspection = async (inspection: Inspection) => {
+async function updateInspection(inspection: Inspection): Promise<Inspection> {
   const call = Config.BASE_URL + "/inspections/update";
   const res = await TrenaAPI.network()
     .put(call)
     .type("application/json")
     .send(inspection);
   return res.body;
-};
+}
 
-const getInspectionCollects = async (inspection_flag: number) => {
-  const call = Config.BASE_URL + `/inspections/collect/${inspection_flag}`;
+async function getInspectionCollects(
+  ctx: QueryFunctionContext
+): Promise<Collect[]> {
+  const [, inspectionFlag] = ctx.queryKey;
+  const call = Config.BASE_URL + `/inspections/collect/${inspectionFlag}`;
   const res = await TrenaAPI.network().get(call);
 
   return res.body;
-};
+}
 
-const getInspectionReport = async (inspectionFlag: number) => {
+async function getInspectionReport(inspectionFlag: number): Promise<void> {
   const call = Config.BASE_URL + `/inspections/report/${inspectionFlag}`;
   const res = await TrenaAPI.network().get(call).responseType("blob");
 
@@ -104,9 +74,9 @@ const getInspectionReport = async (inspectionFlag: number) => {
   anchor.download = `relatorio-automatico-vistoria${inspectionFlag}`;
   anchor.click();
   anchor.remove();
-};
+}
 
-const getInspectionDocx = async (inspectionFlag: number) => {
+async function getInspectionDocx(inspectionFlag: number): Promise<void> {
   const call = `${Config.BASE_URL}/inspections/reportDocx/${inspectionFlag}`;
   const res = await TrenaAPI.network().get(call).responseType("blob");
 
@@ -116,7 +86,7 @@ const getInspectionDocx = async (inspectionFlag: number) => {
   anchor.download = `relatorio-automatico-vistoria-editavel-${inspectionFlag}.docx`;
   anchor.click();
   anchor.remove();
-};
+}
 
 export const InspectionServiceQuery = {
   loadInspections,

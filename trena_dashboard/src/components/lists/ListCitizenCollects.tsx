@@ -10,10 +10,11 @@ import {
   TableRow,
   Tooltip,
 } from "@mui/material";
-import React, { useState } from "react";
-import { useQuery } from "react-query";
-import { Collect } from "../../core/models/Collect";
-import { CollectServiceQuery } from "../../core/network/services/CollectService";
+import React, { useCallback, useState } from "react";
+import { useDeleteCollect } from "../../core/network/queries/collect/mutations";
+import { useLoadCitizenCollects } from "../../core/network/queries/collect/queries";
+import { useCollectStore } from "../../core/store/collect";
+import { useTableStore } from "../../core/store/table";
 import { collectStatusMapping, convertEphocDate } from "../../utils/mapper";
 import { CollectSubmissionDialog } from "../Dialogs/Collect/CollectSubmission";
 import { Heading } from "../Heading";
@@ -21,26 +22,21 @@ import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export function ListCitizenCollects() {
-  const [openCollectSubmissionsDialog, setOpenCollectSubmissionsDialog] =
-    useState<boolean[]>([]);
-  const { data: collects, isLoading } = useQuery<Collect[]>(
-    ["citizenCollects"],
-    () => CollectServiceQuery.loadAllCitizenCollects(),
-    {
-      onSuccess(data) {
-        setOpenCollectSubmissionsDialog(Array(data.length).fill(false));
-      },
-    }
-  );
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const { collectsDialog, setCollectsDialog } = useCollectStore();
+  const { rowsPerPage, setRowsPerPage } = useTableStore();
   const [page, setPage] = useState(0);
 
-  const handleOpenDialog = (
-    state: boolean[],
-    setState: Function,
-    index: number
-  ) => {
-    setState(state.map((s, position) => (position === index ? true : s)));
+  const { data: collects, isLoading } = useLoadCitizenCollects();
+  const { mutate } = useDeleteCollect();
+
+  const handleOpenDialog = useCallback((index: number) => {
+    setCollectsDialog(
+      collectsDialog.map((s, position) => (position === index ? true : s))
+    );
+  }, []);
+
+  const handleDeleteCollect = (collectId: string) => {
+    mutate(collectId);
   };
 
   return (
@@ -107,13 +103,7 @@ export function ListCitizenCollects() {
                               <IconButton
                                 color="info"
                                 size="small"
-                                onClick={() =>
-                                  handleOpenDialog(
-                                    openCollectSubmissionsDialog,
-                                    setOpenCollectSubmissionsDialog,
-                                    index
-                                  )
-                                }
+                                onClick={() => handleOpenDialog(index)}
                               >
                                 <Collections />
                               </IconButton>
@@ -121,7 +111,11 @@ export function ListCitizenCollects() {
                           </TableCell>
                           <TableCell align="center">
                             <Tooltip title="Excluir">
-                              <IconButton color="error" size="small">
+                              <IconButton
+                                onClick={() => handleDeleteCollect(collect.id!)}
+                                color="error"
+                                size="small"
+                              >
                                 <Delete />
                               </IconButton>
                             </Tooltip>
@@ -130,8 +124,8 @@ export function ListCitizenCollects() {
                         <CollectSubmissionDialog
                           collect={collect}
                           index={index}
-                          state={openCollectSubmissionsDialog}
-                          setState={setOpenCollectSubmissionsDialog}
+                          state={collectsDialog}
+                          setState={setCollectsDialog}
                           fullScreen
                           title={`Envios - ${collect.id!}`}
                         />

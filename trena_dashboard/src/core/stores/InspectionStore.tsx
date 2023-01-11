@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { action, observable, runInAction } from "mobx";
 import { Inspection } from "../models/Inspection";
-import { InspectionService } from "../network/services/InspectionService";
+import { InspectionServiceQuery } from "../network/services/InspectionService";
 import { BaseStore } from "./BaseStore";
 
 export class InspectionStore extends BaseStore {
@@ -13,7 +13,7 @@ export class InspectionStore extends BaseStore {
   @action
   async loadInspections() {
     this.baseCall(async () => {
-      const inspections = await InspectionService.loadInspections();
+      const inspections = await InspectionServiceQuery.loadInspections();
       runInAction(() => {
         this.inspectionsFullList = inspections;
         this.search("");
@@ -24,8 +24,8 @@ export class InspectionStore extends BaseStore {
   @action
   async getInspectionsByPublicWorkId(publicWorkId: string) {
     this.baseCall(async () => {
-      const inspections = await InspectionService.getPublicWorkInspections(
-        publicWorkId
+      const inspections = await InspectionServiceQuery.getPublicWorkInspections(
+        ["a"]
       );
     });
   }
@@ -33,7 +33,7 @@ export class InspectionStore extends BaseStore {
   @action
   async loadInspectionsByWorkId(public_work_id: string) {
     this.baseCall(async () => {
-      const inspections = await InspectionService.loadInspections();
+      const inspections = await InspectionServiceQuery.loadInspections();
       runInAction(() => {
         this.inspectionsFullList = inspections.filter((item) => {
           return item.public_work_id === public_work_id;
@@ -62,7 +62,7 @@ export class InspectionStore extends BaseStore {
   @action
   async addInspection(inspection: Inspection) {
     this.baseCall(async () => {
-      await InspectionService.addInspection(inspection);
+      await InspectionServiceQuery.addInspection(inspection);
       runInAction(() => {
         this.loadInspections();
       });
@@ -72,11 +72,10 @@ export class InspectionStore extends BaseStore {
   @action
   async updateInspection(inspection: Inspection) {
     this.baseCall(async () => {
-      await InspectionService.updateInspection(inspection);
+      await InspectionServiceQuery.updateInspection(inspection);
       runInAction(() => {
         this.loadInspections();
       });
     });
   }
 }
-

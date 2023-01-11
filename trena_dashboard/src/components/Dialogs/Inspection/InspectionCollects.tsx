@@ -3,13 +3,11 @@ import { CalendarMonth, TextFields, Troubleshoot } from "@mui/icons-material";
 import { Box } from "@mui/material";
 
 import React from "react";
-import { useQuery } from "react-query";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Collect } from "../../../core/models/Collect";
-import { InspectionServiceQuery } from "../../../core/network/services/InspectionService";
+import { useGetInspectionCollects } from "../../../core/network/queries/inspection/queries";
 
 import { collectStatusMapping, convertEphocDate } from "../../../utils/mapper";
 import { InfoAccorion } from "../../Accordion";
@@ -26,14 +24,10 @@ export function InspectionCollectsDialog({
   state,
   setState,
   title,
-  fullScreen,
   index,
   inspectionId,
 }: InspectionCollectsDialogProps) {
-  const { data: collects } = useQuery<Collect[]>(
-    ["getInspectionCollects", inspectionId],
-    () => InspectionServiceQuery.getInspectionCollects(inspectionId)
-  );
+  const { data: collects } = useGetInspectionCollects(inspectionId);
 
   const hasCollects = collects && collects.length > 0;
 

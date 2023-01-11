@@ -1,10 +1,13 @@
 import { Box } from "@mui/material";
 import React from "react";
-import { useQueries, useQuery } from "react-query";
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Collect } from "../../core/models/Collect";
-import { CollectServiceQuery } from "../../core/network/services/CollectService";
+import { Photo } from "../../core/models/Photo";
+import {
+  useGetCollectMetadata,
+  useGetMediaMetadata,
+} from "../../core/network/queries/collect/queries";
 import { PhotoCard } from "../Photo";
 import { WarningField } from "../WarningField";
 
@@ -19,9 +22,7 @@ interface RawSwiperProps {
 }
 
 export function RawSwiper({ collect }: RawSwiperProps) {
-  const { data: photos } = useQuery(["getCollectMedia", collect.id!], () =>
-    CollectServiceQuery.getMediaMetaDataByCollectId(collect.id!)
-  );
+  const { data: photos } = useGetMediaMetadata(collect.id!);
 
   return (
     <Swiper
@@ -51,14 +52,7 @@ export function RawSwiper({ collect }: RawSwiperProps) {
 }
 
 export function MediaSwiper({ collects }: MediaSwiperProps) {
-  const collectsMetadata = useQueries(
-    collects.map((collect) => ({
-      queryKey: ["getCollectMetadata", collect.id!],
-      queryFn: () =>
-        CollectServiceQuery.getMediaMetaDataByCollectId(collect.id!),
-      enabled: collects.length > 0,
-    }))
-  );
+  const collectsMetadata = useGetCollectMetadata(collects);
 
   return (
     <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -73,7 +67,7 @@ export function MediaSwiper({ collects }: MediaSwiperProps) {
       >
         {collectsMetadata.map((collect, index) =>
           collect.data ? (
-            collect.data.map((photo, photoIndex) => (
+            collect.data.map((photo: Photo, photoIndex: number) => (
               <SwiperSlide key={index}>
                 <PhotoCard
                   key={photo.id}

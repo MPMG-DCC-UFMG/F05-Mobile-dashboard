@@ -1,11 +1,7 @@
 import { Button, CircularProgress, TextField } from "@mui/material";
-import React, { useContext, useState } from "react";
-import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { AsideLoginContainer } from "../components/Containers/AsideLoginContainer";
-import { WarningField } from "../components/WarningField";
-import { rootContext } from "../core/contexts/RootContext";
-import { SecurityServiceQuery } from "../core/network/services/SecurityService";
+import { useLogin } from "../core/network/queries/auth/mutations";
 
 export type LoginUser = {
   username: string;
@@ -13,40 +9,18 @@ export type LoginUser = {
 };
 
 export function LoginScreen() {
-  const navigate = useNavigate();
-  const { userStore } = useContext(rootContext);
   const defaultUsername = import.meta.env.VITE_ADMIN_USERNAME;
   const defaultPassword = import.meta.env.VITE_ADMIN_PASSWORD;
+
+  const { mutate, isLoading } = useLogin();
 
   const [user, setUser] = useState<LoginUser>({
     username: defaultUsername || "",
     password: defaultPassword || "",
   });
-  const [error, setError] = useState({
-    hasError: false,
-    message: "",
-  });
-
-  const { mutate, isLoading } = useMutation(SecurityServiceQuery.login);
 
   const handleLogin = () => {
-    mutate(user, {
-      onSuccess: (data) => {
-        userStore.updateLoggedUser({
-          email: data.email,
-          role: data.role,
-          name: "",
-        });
-        navigate("/dashboard");
-      },
-      onError: () => {
-        setError({
-          hasError: true,
-          message:
-            "Este usuário não possui acesso ao Painel ou as credenciais estão incorretas",
-        });
-      },
-    });
+    mutate(user);
   };
 
   return (
@@ -82,15 +56,6 @@ export function LoginScreen() {
       >
         {isLoading ? <CircularProgress size={20} color="inherit" /> : "Entrar"}
       </Button>
-      <>
-        {error.hasError && (
-          <WarningField
-            title="Falha ao verificar credenciais"
-            severity="error"
-            message={error.message}
-          />
-        )}
-      </>
     </AsideLoginContainer>
   );
 }

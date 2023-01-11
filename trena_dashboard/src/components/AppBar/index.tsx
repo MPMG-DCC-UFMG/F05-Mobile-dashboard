@@ -5,18 +5,15 @@ import MuiAppBar from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import React, { useContext } from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import background from "../../assets/gsi.png";
 import dark_mpmg from "../../assets/logo-mpmg-alternativa.png";
 import light_mpmg from "../../assets/mpmg.png";
-import { rootContext } from "../../core/contexts/RootContext";
 import { ThemeContext } from "../../core/contexts/ThemeContext";
-import {
-  LoggedUserResponse,
-  SecurityServiceQuery,
-} from "../../core/network/services/SecurityService";
-import { LoggedUser } from "../../core/stores/UserStore";
+import { ReadUserDTO } from "../../core/models/dto/user/ReadUserDTO";
+import { useGetLoggedUser } from "../../core/network/queries/auth/queries";
+import { useUserStore } from "../../core/store/user";
 
 interface AppBarProps {
   open?: boolean;
@@ -49,25 +46,19 @@ const AppBarSetup = styled(MuiAppBar, {
 export function AppBar({ open, toggleDrawer }: AppBarProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { userStore } = useContext(rootContext);
+  const { setUser } = useUserStore();
 
-  const { data: loggedUserData } = useQuery<LoggedUserResponse>(
-    ["appBarIcon"],
-    () => SecurityServiceQuery.getLoggedUser(),
-    {
-      staleTime: 12000,
-      cacheTime: 12000,
-    }
-  );
+  useGetLoggedUser();
+  const loggedUser = useUserStore((state) => state.user);
 
   const { toggleTheme, isDark } = useContext(ThemeContext);
 
   const handleLogout = () => {
     localStorage.removeItem("TOKEN");
     localStorage.removeItem("ROLE");
-    userStore.updateLoggedUser({} as LoggedUser);
+    setUser({} as ReadUserDTO);
     queryClient.invalidateQueries();
-    navigate("/login");
+    navigate("/");
   };
 
   const handleUser = () => {
@@ -98,7 +89,7 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
               <Menu />
             </IconButton>
             <Avatar
-              src={loggedUserData ? loggedUserData.picture : ""}
+              src={loggedUser ? loggedUser.picture : ""}
               style={{ width: 25, height: 25, cursor: "pointer" }}
               onClick={handleUser}
             />

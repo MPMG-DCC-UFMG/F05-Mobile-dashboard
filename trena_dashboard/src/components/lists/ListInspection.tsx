@@ -14,70 +14,42 @@ import {
   TableRow,
   Tooltip,
 } from "@mui/material";
-import React, { useState } from "react";
-import { useMutation, useQuery } from "react-query";
-import { Inspection } from "../../core/models/Inspection";
-import { InspectionServiceQuery } from "../../core/network/services/InspectionService";
+import React, { useCallback, useState } from "react";
+import {
+  useDownloadDocx,
+  useDownloadPdf,
+} from "../../core/network/queries/inspection/mutations";
+import { useLoadInspections } from "../../core/network/queries/inspection/queries";
+import { useInspectionStore } from "../../core/store/inspection";
+import { useTableStore } from "../../core/store/table";
 import { convertEphocDate, inspectionsStatusMapping } from "../../utils/mapper";
 import { InspectionCollectsDialog } from "../Dialogs/Inspection/InspectionCollects";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
-import { Notify } from "../Toast/Notify";
 
 export function ListInspection() {
-  const {
-    data: inspections,
-    isLoading,
-    isFetched,
-  } = useQuery<Inspection[]>(
-    "getMpInspections",
-    InspectionServiceQuery.loadInspections,
-    {
-      onSuccess: (data) => {
-        setOpenCollectsModal(Array(data.length).fill(false));
-      },
-    }
-  );
-
-  const { mutate } = useMutation(InspectionServiceQuery.getInspectionReport);
-  const { mutate: getDocx } = useMutation(
-    InspectionServiceQuery.getInspectionDocx
-  );
-
-  const [openCollectsModal, setOpenCollectsModal] = useState<boolean[]>([]);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const { data: inspections, isLoading, isFetched } = useLoadInspections();
+  const { collectModal, setCollectModal } = useInspectionStore();
   const [page, setPage] = useState(0);
+  const { rowsPerPage, setRowsPerPage } = useTableStore();
 
-  const handleOpenCollectsModal = (index: number) => {
-    setOpenCollectsModal(
-      openCollectsModal.map((value, pos) => (index === pos ? true : value))
+  const { mutate: downloadPdf } = useDownloadPdf();
+  const { mutate: downloadDocx } = useDownloadDocx();
+
+  const handleOpenCollectsModal = useCallback((index: number) => {
+    setCollectModal(
+      collectModal.map((value, pos) => (index === pos ? true : value))
     );
-  };
+  }, []);
 
-  const handleGenerateReport = (flag: number) => {
-    mutate(flag, {
-      onError: () => {
-        Notify(
-          "Esta vistoria não possui Fotos ou Vídeos para gerar um relatório!",
-          "bottom-left",
-          "warning"
-        );
-      },
-    });
-  };
+  const handleGenerateReport = useCallback((flag: number) => {
+    downloadPdf(flag);
+  }, []);
 
-  const handleGenerateDoc = (flag: number) => {
-    getDocx(flag, {
-      onError: () => {
-        Notify(
-          "Esta vistoria ainda não possui nenhum conteúdo para gerar um relatório!",
-          "bottom-left",
-          "warning"
-        );
-      },
-    });
-  };
+  const handleGenerateDoc = useCallback((flag: number) => {
+    downloadDocx(flag);
+  }, []);
 
   return (
     <>
@@ -190,8 +162,8 @@ export function ListInspection() {
                           <InspectionCollectsDialog
                             index={index}
                             inspectionId={inspection.flag!}
-                            state={openCollectsModal}
-                            setState={setOpenCollectsModal}
+                            state={collectModal}
+                            setState={setCollectModal}
                             fullScreen
                             title={`${
                               inspection.description

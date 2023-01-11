@@ -17,7 +17,6 @@ export function CollectSubmissionDialog({
   collect,
   state,
   setState,
-  title,
   index,
   fullScreen,
 }: CollectSubmissionDialogProps) {

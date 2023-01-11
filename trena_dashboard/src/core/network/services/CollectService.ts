@@ -1,3 +1,4 @@
+import { QueryFunctionContext } from "react-query";
 import Config from "../../../config/Config";
 import { Collect } from "../../models/Collect";
 import { Photo } from "../../models/Photo";
@@ -82,46 +83,53 @@ export class CollectService {
   };
 }
 
-const loadPublicWorkCollects = async (publicWorkId: string) => {
+async function loadPublicWorkCollects(
+  ctx: QueryFunctionContext
+): Promise<Collect[]> {
+  const [, publicWorkId] = ctx.queryKey;
   const call = Config.BASE_URL + "/collects/publicWork";
   const res = await TrenaAPI.network()
     .get(call)
     .query({ public_work_id: publicWorkId });
 
   return res.body;
-};
+}
 
-const loadAllCollects = async () => {
+async function loadAllCollects(): Promise<Collect[]> {
   const call = Config.BASE_URL + "/collects/";
   const res = await TrenaAPI.network().get(call);
 
   return res.body;
-};
+}
 
-const loadAllCitizenCollects = async () => {
+async function loadAllCitizenCollects(): Promise<Collect[]> {
   const call = Config.BASE_URL + "/collects/citizen";
   const res = await TrenaAPI.network().get(call);
 
   return res.body;
-};
+}
 
-const loadCollectsPaginated = async (page: number) => {
+async function loadCollectsPaginated(
+  ctx: QueryFunctionContext
+): Promise<Collect[]> {
+  const [, page] = ctx.queryKey;
   const call = Config.BASE_URL + "/collects/paginated";
   const res = await TrenaAPI.network()
     .get(call)
     .query({ page: page, per_page: 20 });
 
   return res.body;
-};
+}
 
-const collectMonthCount = async () => {
+async function collectMonthCount(): Promise<number> {
   const call = Config.BASE_URL + "/collects/month/count";
   const res = await TrenaAPI.network().get(call);
 
   return res.body;
-};
+}
 
-const retrievePhotos = async (publicWorkId: string) => {
+async function retrievePhotos(ctx: QueryFunctionContext): Promise<string[]> {
+  const [, publicWorkId] = ctx.queryKey;
   const call = Config.BASE_URL + "/collects/report/json";
   const res = await TrenaAPI.network()
     .get(call)
@@ -130,9 +138,10 @@ const retrievePhotos = async (publicWorkId: string) => {
   const collects: Collect[] = res.body;
   const photos = collects.map((collect) => collect.photos[0].filepath);
   return photos;
-};
+}
 
-const downloadJSONReport = async (publicWorkId: string) => {
+async function downloadJSONReport(ctx: QueryFunctionContext): Promise<void> {
+  const [, publicWorkId] = ctx.queryKey;
   const call = Config.BASE_URL + "/collects/report/json/file";
   const res = await TrenaAPI.network()
     .get(call)
@@ -140,10 +149,20 @@ const downloadJSONReport = async (publicWorkId: string) => {
     .query({ public_work_id: publicWorkId });
 
   const data: Blob = res.body;
-  return saveData(data, publicWorkId);
-};
+  return saveData(data, publicWorkId as string);
+}
 
-const getMediaMetaDataByCollectId = async (
+async function getMediaMetaDataByCollectId(
+  ctx: QueryFunctionContext
+): Promise<Photo[]> {
+  const [, collectId] = ctx.queryKey;
+  const call = Config.BASE_URL + `/photos/collect/${collectId}`;
+  const res = await TrenaAPI.network().get(call);
+
+  return res.body;
+}
+
+const getMediaMetaDataByCollectIdFixed = async (
   collectId: string
 ): Promise<Photo[]> => {
   const call = Config.BASE_URL + `/photos/collect/${collectId}`;
@@ -152,7 +171,10 @@ const getMediaMetaDataByCollectId = async (
   return res.body;
 };
 
-const getMediaByCollectFileName = async (filepath: string) => {
+async function getMediaByCollectFileName(
+  ctx: QueryFunctionContext
+): Promise<string> {
+  const [, filepath] = ctx.queryKey;
   const call = Config.BASE_URL + `/images/${filepath}`;
   const res = await TrenaAPI.network().get(call).responseType("arraybuffer");
 
@@ -164,33 +186,36 @@ const getMediaByCollectFileName = async (filepath: string) => {
   );
 
   return base64;
-};
+}
 
-const getQueueCollects = async () => {
+async function getQueueCollects(): Promise<Collect[]> {
   const call = Config.BASE_URL + "/collects/citizen/queue";
   const res = await TrenaAPI.network().get(call);
 
   return res.body;
-};
+}
 
-const getQueueCollectsByPublicWorkId = async (publicWorkId: string) => {
+async function getQueueCollectsByPublicWorkId(
+  ctx: QueryFunctionContext
+): Promise<Collect[]> {
+  const [, publicWorkId] = ctx.queryKey;
   const call = Config.BASE_URL + "/collects/publicwork/citizen";
   const res = await TrenaAPI.network()
     .query({ public_work_id: publicWorkId })
     .get(call);
 
   return res.body;
-};
+}
 
-const saveData = (data: Blob, filename: string = "filename") => {
+function saveData(data: Blob, filename: string = "filename"): void {
   const csvURL = window.URL.createObjectURL(data);
   let tempLink = document.createElement("a");
   tempLink.href = csvURL;
   tempLink.setAttribute("download", filename + ".json");
   tempLink.click();
-};
+}
 
-const updateCollect = async (collect: Collect) => {
+async function updateCollect(collect: Collect): Promise<Collect> {
   const call = Config.BASE_URL + "/collects/update";
   const res = await TrenaAPI.network()
     .type("application/json")
@@ -198,9 +223,9 @@ const updateCollect = async (collect: Collect) => {
     .send(collect);
 
   return res.body;
-};
+}
 
-const deletePhoto = async (photo_id: string) => {
+async function deletePhoto(photo_id: string): Promise<Photo> {
   const call = Config.BASE_URL + "/photos/delete";
   const res = await TrenaAPI.network()
     .type("application/json")
@@ -208,7 +233,16 @@ const deletePhoto = async (photo_id: string) => {
     .query({ photo_id });
 
   return res.body;
-};
+}
+
+async function deleteCollect(collectId: string): Promise<Collect> {
+  const call = `${Config.BASE_URL}/collects/delete`;
+  const res = await TrenaAPI.network()
+    .delete(call)
+    .query({ collect_id: collectId });
+
+  return res.body;
+}
 
 export const CollectServiceQuery = {
   loadPublicWorkCollects,
@@ -219,10 +253,12 @@ export const CollectServiceQuery = {
   getMediaMetaDataByCollectId,
   getMediaByCollectFileName,
   getQueueCollectsByPublicWorkId,
+  getMediaMetaDataByCollectIdFixed,
   getQueueCollects,
   collectMonthCount,
   retrievePhotos,
   downloadJSONReport,
   saveData,
   deletePhoto,
+  deleteCollect,
 };

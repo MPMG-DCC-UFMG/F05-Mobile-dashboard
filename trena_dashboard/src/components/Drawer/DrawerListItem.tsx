@@ -33,6 +33,7 @@ import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { rootContext } from "../../core/contexts/RootContext";
 import { useStores } from "../../core/contexts/UseStores";
+import { useMenuStore } from "../../core/store/menu";
 import { LoggedUser } from "../../core/stores/UserStore";
 import { OpenCallDialog } from "../Dialogs/Call/OpenCallDialog";
 
@@ -72,31 +73,8 @@ function MyListItem({ icon, url, iconText, sx }: MyListItemProps) {
 export function DrawerListItem() {
   const { userStore } = useContext(rootContext);
   const { collapseStore } = useStores();
-  const [workConfig, setWorkConfig] = useState(collapseStore.workConfig);
-  const [trena, setTrena] = useState(collapseStore.trena);
-  const [publicWork, setPublicWork] = useState(collapseStore.publicWork);
-  const [chat, setChat] = useState(collapseStore.chat);
+  const menuState = useMenuStore();
   const [openCall, setOpenCall] = useState(false);
-
-  const handleToggleWorkConfig = () => {
-    setWorkConfig(!workConfig);
-    collapseStore.toggleWorkConfiguration();
-  };
-
-  const handleToggleTrena = () => {
-    setTrena(!trena);
-    collapseStore.toggleTrena();
-  };
-
-  const handleTogglePublicWorks = () => {
-    setPublicWork(!publicWork);
-    collapseStore.togglePublicWork();
-  };
-
-  const handleToggleChat = () => {
-    setChat(!chat);
-    collapseStore.toggleChat();
-  };
 
   const handleOpenNewCall = () => setOpenCall(true);
 
@@ -108,7 +86,7 @@ export function DrawerListItem() {
         iconText="Tela Inicial"
       />
 
-      <ListItemButton onClick={handleToggleWorkConfig}>
+      <ListItemButton onClick={menuState.togglePublicWorks}>
         <ListItemIcon>
           <Settings />
         </ListItemIcon>
@@ -119,9 +97,9 @@ export function DrawerListItem() {
             style: { whiteSpace: "normal" },
           }}
         />
-        {workConfig ? <ExpandLess /> : <ExpandMore />}
+        {menuState.workConfig ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={workConfig} unmountOnExit>
+      <Collapse in={menuState.workConfig} unmountOnExit>
         <MyListItem
           sx={{ pl: 4 }}
           icon={<EngineeringIcon />}
@@ -141,14 +119,14 @@ export function DrawerListItem() {
           iconText="Estado das Obras"
         />
       </Collapse>
-      <ListItemButton onClick={handleTogglePublicWorks}>
+      <ListItemButton onClick={menuState.togglePublicWorks}>
         <ListItemIcon>
           <Build />
         </ListItemIcon>
         <ListItemText primary="Obras Públicas" />
-        {publicWork ? <ExpandLess /> : <ExpandMore />}
+        {menuState.publicWorks ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={publicWork}>
+      <Collapse in={menuState.publicWorks}>
         <MyListItem
           sx={{ pl: 4 }}
           icon={<Construction />}
@@ -163,14 +141,14 @@ export function DrawerListItem() {
         />
       </Collapse>
 
-      <ListItemButton onClick={handleToggleTrena}>
+      <ListItemButton onClick={menuState.toggleInspections}>
         <ListItemIcon>
           <Folder />
         </ListItemIcon>
         <ListItemText primary="Vistorias" />
-        {trena ? <ExpandLess /> : <ExpandMore />}
+        {menuState.inspections ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={trena} unmountOnExit>
+      <Collapse in={menuState.inspections} unmountOnExit>
         <MyListItem
           sx={{ pl: 4 }}
           icon={<Security />}
@@ -189,14 +167,14 @@ export function DrawerListItem() {
           url="/queue"
           iconText="Fila de Envios"
         />
-        <ListItemButton sx={{ pl: 4 }} onClick={handleToggleChat}>
+        <ListItemButton sx={{ pl: 4 }} onClick={menuState.toggleNotifications}>
           <ListItemIcon>
             <Notifications />
           </ListItemIcon>
           <ListItemText primary="Notificações" />
-          {chat ? <ExpandLess /> : <ExpandMore />}
+          {menuState.notifications ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
-        <Collapse in={chat} unmountOnExit>
+        <Collapse in={menuState.notifications} unmountOnExit>
           <MyListItem
             sx={{ pl: 6 }}
             icon={<MarkEmailUnread />}
