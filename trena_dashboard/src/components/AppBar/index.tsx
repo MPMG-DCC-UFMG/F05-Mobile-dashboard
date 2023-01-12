@@ -14,6 +14,7 @@ import { ThemeContext } from "../../core/contexts/ThemeContext";
 import { ReadUserDTO } from "../../core/models/dto/user/ReadUserDTO";
 import { useGetLoggedUser } from "../../core/network/queries/auth/queries";
 import { useUserStore } from "../../core/store/user";
+import useInterval from "../../hooks/useInterval";
 
 interface AppBarProps {
   open?: boolean;
@@ -64,6 +65,12 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
   const handleUser = () => {
     navigate("/userSettings");
   };
+
+  const authTokenExpire = 30 * 60 * 1000; // 30 minutes
+
+  useInterval(() => {
+    useGetLoggedUser();
+  }, authTokenExpire);
 
   return (
     <AppBarSetup color="primary" position="absolute" open={open}>
