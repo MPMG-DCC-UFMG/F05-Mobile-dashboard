@@ -49,7 +49,7 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
   const queryClient = useQueryClient();
   const { setUser } = useUserStore();
 
-  useGetLoggedUser();
+  const { refetch } = useGetLoggedUser();
   const loggedUser = useUserStore((state) => state.user);
 
   const { toggleTheme, isDark } = useContext(ThemeContext);
@@ -69,7 +69,7 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
   const authTokenExpire = 30 * 60 * 1000; // 30 minutes
 
   useInterval(() => {
-    useGetLoggedUser();
+    refetch();
   }, authTokenExpire);
 
   return (

@@ -22,7 +22,7 @@ export function useGetLoggedUser() {
         role: data.role,
       });
     },
-    staleTime: Infinity,
+    staleTime: 30 * 60 * 1000, // 30 minutes
   });
 }
 
