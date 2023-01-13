@@ -1,9 +1,9 @@
-export function areFieldsChecked(fields: any[]) {
-  const check = fields.map(
-    (field) => field !== "" && field !== null && field !== undefined
-  );
+export function areFieldsChecked(fields: never[]) {
+	const check = fields.map(
+		(field) => field !== "" && field !== null && field !== undefined
+	);
 
-  if (check.includes(false)) return false;
+	if (check.includes(false)) return false;
 
-  return true;
+	return true;
 }

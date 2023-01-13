@@ -10,39 +10,39 @@ import { RawSwiper } from "../../Swiper";
 import { TableDialogContainer, TableDialogProps } from "../DialogContainer";
 
 interface CollectSubmissionDialogProps extends TableDialogProps {
-  collect: Collect;
+	collect: Collect;
 }
 
 export function CollectSubmissionDialog({
-  collect,
-  state,
-  setState,
-  index,
-  fullScreen,
+	collect,
+	state,
+	setState,
+	index,
+	fullScreen,
 }: CollectSubmissionDialogProps) {
-  const { data: publicWork } = useQuery<PublicWork>(
-    ["getCollectPublicWork", collect.id!],
-    () => PublicWorkServiceQuery.getPublicWorkById(collect.public_work_id)
-  );
+	const { data: publicWork } = useQuery<PublicWork>(
+		["getCollectPublicWork", collect.id],
+		() => PublicWorkServiceQuery.getPublicWorkById(collect.public_work_id)
+	);
 
-  return (
-    <TableDialogContainer
-      state={state}
-      setState={setState}
-      title={`${publicWork?.name} - ${convertEphocDate(collect.date)}`}
-      index={index}
-      fullScreen={fullScreen}
-    >
-      {publicWork && (
-        <>
-          <InfoAccorion title="Localização">
-            <PublicWorkMapView publicWork={publicWork} />
-          </InfoAccorion>
-          <InfoAccorion title="Medias">
-            <RawSwiper collect={collect} />
-          </InfoAccorion>
-        </>
-      )}
-    </TableDialogContainer>
-  );
+	return (
+		<TableDialogContainer
+			state={state}
+			setState={setState}
+			title={`${publicWork?.name} - ${convertEphocDate(collect.date)}`}
+			index={index}
+			fullScreen={fullScreen}
+		>
+			{publicWork && (
+				<>
+					<InfoAccorion title="Localização">
+						<PublicWorkMapView publicWork={publicWork} />
+					</InfoAccorion>
+					<InfoAccorion title="Medias">
+						<RawSwiper collect={collect} />
+					</InfoAccorion>
+				</>
+			)}
+		</TableDialogContainer>
+	);
 }

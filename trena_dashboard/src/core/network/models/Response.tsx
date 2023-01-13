@@ -1,6 +1,6 @@
-import {ErrorResponse} from "./ErrorResponse";
+import { ErrorResponse } from "./ErrorResponse";
 
-export interface MPResponse{
-    success: boolean
-    error?: ErrorResponse
+export interface MPResponse {
+	success: boolean;
+	error?: ErrorResponse;
 }

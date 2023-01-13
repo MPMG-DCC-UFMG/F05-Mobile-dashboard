@@ -10,37 +10,37 @@ interface TablePaginationProps {
 }
 
 export function TablePagination({
-  data,
-  rowsPerPage,
-  setRowsPerPage,
-  page,
-  setPage,
+	data,
+	rowsPerPage,
+	setRowsPerPage,
+	page,
+	setPage,
 }: TablePaginationProps) {
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
-    page: number
-  ) => {
-    setPage(page);
-  };
+	const handleChangePage = (
+		event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
+		page: number
+	) => {
+		setPage(page);
+	};
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value));
-    setPage(0);
-  };
+	const handleChangeRowsPerPage = (
+		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		setRowsPerPage(parseInt(event.target.value));
+		setPage(0);
+	};
 
-  return (
-    <MuiTablePagination
-      component="div"
-      sx={{ justifyContent: "flex-end" }}
-      count={data.length}
-      page={page}
-      labelRowsPerPage="Dados por página"
-      rowsPerPage={rowsPerPage}
-      rowsPerPageOptions={[10, 15, 20]}
-      onPageChange={handleChangePage}
-      onRowsPerPageChange={handleChangeRowsPerPage}
-    />
-  );
+	return (
+		<MuiTablePagination
+			component="div"
+			sx={{ justifyContent: "flex-end" }}
+			count={data.length}
+			page={page}
+			labelRowsPerPage="Dados por página"
+			rowsPerPage={rowsPerPage}
+			rowsPerPageOptions={[10, 15, 20]}
+			onPageChange={handleChangePage}
+			onRowsPerPageChange={handleChangeRowsPerPage}
+		/>
+	);
 }

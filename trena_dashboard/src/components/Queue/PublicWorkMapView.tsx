@@ -11,27 +11,27 @@ interface PublicWorkMapViewProps {
 }
 
 export function PublicWorkMapView({ publicWork }: PublicWorkMapViewProps) {
-  return (
-    <Grid container justifyContent="space-between" alignItems="center">
-      <InfoTextField
-        disabled
-        defaultValue={publicWork.name}
-        icon={<Construction />}
-        label="Obra Pública"
-        sx={{ width: "49%" }}
-      />
-      <InfoTextField
-        disabled
-        defaultValue={addressFormatter(publicWork.address)}
-        icon={<Map />}
-        label="Endereço"
-        sx={{ width: "49%" }}
-      />
-      <MapComponent
-        latitude={publicWork.address.latitude}
-        longitude={publicWork.address.longitude}
-        zoom={15}
-      />
-    </Grid>
-  );
+	return (
+		<Grid container justifyContent="space-between" alignItems="center">
+			<InfoTextField
+				disabled
+				defaultValue={publicWork.name}
+				icon={<Construction />}
+				label="Obra Pública"
+				sx={{ width: "49%" }}
+			/>
+			<InfoTextField
+				disabled
+				defaultValue={addressFormatter(publicWork.address)}
+				icon={<Map />}
+				label="Endereço"
+				sx={{ width: "49%" }}
+			/>
+			<MapComponent
+				latitude={publicWork.address.latitude}
+				longitude={publicWork.address.longitude}
+				zoom={15}
+			/>
+		</Grid>
+	);
 }

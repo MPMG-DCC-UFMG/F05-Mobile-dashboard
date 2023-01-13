@@ -12,15 +12,15 @@ import { ViewStore } from "../stores/ViewStore";
 import { WorkStatusStore } from "../stores/WorkStatusStore";
 
 export const rootContext = React.createContext({
-  typeWorkStore: new TypeWorkStore(),
-  publicWorkStore: new PublicWorkStore(),
-  viewStore: new ViewStore(),
-  typePhotoStore: new TypePhotoStore(),
-  statisticsStore: new StatisticsStore(),
-  workStatusStore: new WorkStatusStore(),
-  queueStore: new QueueStore(),
-  collectStore: new CollectStore(),
-  inspectionStore: new InspectionStore(),
-  collapseStore: new CollapseStore(),
-  userStore: new UserStore(),
+	typeWorkStore: new TypeWorkStore(),
+	publicWorkStore: new PublicWorkStore(),
+	viewStore: new ViewStore(),
+	typePhotoStore: new TypePhotoStore(),
+	statisticsStore: new StatisticsStore(),
+	workStatusStore: new WorkStatusStore(),
+	queueStore: new QueueStore(),
+	collectStore: new CollectStore(),
+	inspectionStore: new InspectionStore(),
+	collapseStore: new CollapseStore(),
+	userStore: new UserStore(),
 });

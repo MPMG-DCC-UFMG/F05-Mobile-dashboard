@@ -6,24 +6,24 @@ interface DashboardContentContainerProps {
 }
 
 export function DashboardContentContainer({
-  children,
+	children,
 }: DashboardContentContainerProps) {
-  return (
-    <Container
-      style={{
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <Grid
-        sx={{ mt: "40px" }}
-        container
-        spacing={3}
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        {children}
-      </Grid>
-    </Container>
-  );
+	return (
+		<Container
+			style={{
+				width: "100%",
+				height: "100%",
+			}}
+		>
+			<Grid
+				sx={{ mt: "40px" }}
+				container
+				spacing={3}
+				justifyContent="space-between"
+				alignItems="center"
+			>
+				{children}
+			</Grid>
+		</Container>
+	);
 }

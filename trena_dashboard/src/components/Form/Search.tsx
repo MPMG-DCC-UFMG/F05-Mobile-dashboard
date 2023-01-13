@@ -8,19 +8,19 @@ interface SearchProps {
 }
 
 export function Search({ onTextChanged, label }: SearchProps) {
-  return (
-    <TextField
-      fullWidth
-      size="small"
-      onChange={onTextChanged}
-      label={label}
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position="start">
-            <ManageSearch />
-          </InputAdornment>
-        ),
-      }}
-    />
-  );
+	return (
+		<TextField
+			fullWidth
+			size="small"
+			onChange={onTextChanged}
+			label={label}
+			InputProps={{
+				startAdornment: (
+					<InputAdornment position="start">
+						<ManageSearch />
+					</InputAdornment>
+				),
+			}}
+		/>
+	);
 }

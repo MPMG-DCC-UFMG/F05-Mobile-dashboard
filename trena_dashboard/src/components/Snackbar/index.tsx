@@ -9,27 +9,27 @@ interface MySnackbarProps {
 }
 
 export function MySnackbar({
-  open,
-  message,
-  severity,
-  setOpen,
+	open,
+	message,
+	severity,
+	setOpen,
 }: MySnackbarProps) {
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
+	const handleClose = (
+		event?: React.SyntheticEvent | Event,
+		reason?: string
+	) => {
+		if (reason === "clickaway") {
+			return;
+		}
 
-    setOpen(false);
-  };
+		setOpen(false);
+	};
 
-  return (
-    <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
-      <Alert onClose={handleClose} severity={severity} sx={{ width: "100%" }}>
-        {message}
-      </Alert>
-    </Snackbar>
-  );
+	return (
+		<Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+			<Alert onClose={handleClose} severity={severity} sx={{ width: "100%" }}>
+				{message}
+			</Alert>
+		</Snackbar>
+	);
 }

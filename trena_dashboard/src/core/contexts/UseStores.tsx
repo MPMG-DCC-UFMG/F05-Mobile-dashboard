@@ -1,5 +1,5 @@
 import React from "react";
 
-import {rootContext} from "./RootContext";
+import { rootContext } from "./RootContext";
 
-export const useStores =() => React.useContext(rootContext)
+export const useStores = () => React.useContext(rootContext);

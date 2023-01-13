@@ -9,15 +9,15 @@ interface MapProps {
 }
 
 export function Map({ latitude, longitude, zoom }: MapProps) {
-  const latLng: LatLngTuple = [latitude, longitude];
+	const latLng: LatLngTuple = [latitude, longitude];
 
-  return (
-    <LeafletMap id="mapId" center={latLng} zoom={zoom}>
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <Marker position={latLng} draggable={false} />
-    </LeafletMap>
-  );
+	return (
+		<LeafletMap id="mapId" center={latLng} zoom={zoom}>
+			<TileLayer
+				url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+				attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+			/>
+			<Marker position={latLng} draggable={false} />
+		</LeafletMap>
+	);
 }

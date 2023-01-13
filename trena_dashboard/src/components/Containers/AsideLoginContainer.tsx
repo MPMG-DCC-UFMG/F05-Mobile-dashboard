@@ -7,46 +7,46 @@ interface AsideLoginContainerProps {
 }
 
 export function AsideLoginContainer({ children }: AsideLoginContainerProps) {
-  return (
-    <Grid container component="main" sx={{ height: "100vh" }}>
-      <Grid
-        item
-        xs={false}
-        sm={4}
-        md={7}
-        sx={{
-          backgroundImage: `url(${background})`,
-          backgroundRepeat: "no-repeat",
-          backgroundColor: (t) =>
-            t.palette.mode === "light"
-              ? t.palette.grey[500]
-              : t.palette.grey[900],
-          backgroundPosition: "center",
-        }}
-      />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <Box
-          sx={{
-            my: 8,
-            mx: 4,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Box
-            component="img"
-            sx={{
-              height: 200,
-              width: 200,
-            }}
-            src={logo}
-          />
-          <Box component="form" noValidate sx={{ mt: 1 }}>
-            {children}
-          </Box>
-        </Box>
-      </Grid>
-    </Grid>
-  );
+	return (
+		<Grid container component="main" sx={{ height: "100vh" }}>
+			<Grid
+				item
+				xs={false}
+				sm={4}
+				md={7}
+				sx={{
+					backgroundImage: `url(${background})`,
+					backgroundRepeat: "no-repeat",
+					backgroundColor: (t) =>
+						t.palette.mode === "light"
+							? t.palette.grey[500]
+							: t.palette.grey[900],
+					backgroundPosition: "center",
+				}}
+			/>
+			<Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+				<Box
+					sx={{
+						my: 8,
+						mx: 4,
+						display: "flex",
+						flexDirection: "column",
+						alignItems: "center",
+					}}
+				>
+					<Box
+						component="img"
+						sx={{
+							height: 200,
+							width: 200,
+						}}
+						src={logo}
+					/>
+					<Box component="form" noValidate sx={{ mt: 1 }}>
+						{children}
+					</Box>
+				</Box>
+			</Grid>
+		</Grid>
+	);
 }

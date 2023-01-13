@@ -10,25 +10,25 @@ interface LoadingTableDataProps {
 }
 
 export function LoadingTableData({
-  headingButtonTitle,
-  headingTitle,
-  headingSteps,
-  headingAction,
+	headingButtonTitle,
+	headingTitle,
+	headingSteps,
+	headingAction,
 }: LoadingTableDataProps) {
-  return (
-    <Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
-      <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-        <Heading
-          buttonTitle={headingButtonTitle}
-          title={headingTitle}
-          steps={headingSteps}
-          handleAction={headingAction}
-        >
-          <Box width="100%">
-            <LinearProgress />
-          </Box>
-        </Heading>
-      </Paper>
-    </Grid>
-  );
+	return (
+		<Grid style={{ width: "100%", marginTop: 14 }} item xs={12}>
+			<Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+				<Heading
+					buttonTitle={headingButtonTitle}
+					title={headingTitle}
+					steps={headingSteps}
+					handleAction={headingAction}
+				>
+					<Box width="100%">
+						<LinearProgress />
+					</Box>
+				</Heading>
+			</Paper>
+		</Grid>
+	);
 }

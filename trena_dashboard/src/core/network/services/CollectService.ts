@@ -2,263 +2,184 @@ import { QueryFunctionContext } from "react-query";
 import Config from "../../../config/Config";
 import { Collect } from "../../models/Collect";
 import { Photo } from "../../models/Photo";
-import { PaginatedResponse } from "../models/PaginatedResponse";
 import TrenaAPI from "../TrenaAPI";
 
-export class CollectService {
-  static async loadPublicWorkCollects(
-    publicWorkId: string
-  ): Promise<Collect[]> {
-    const call = Config.BASE_URL + "/collects/publicWork";
-    return TrenaAPI.network()
-      .get(call)
-      .query({ public_work_id: publicWorkId })
-      .then((res) => {
-        let listCollects: Collect[] = res.body;
-
-        return listCollects;
-      });
-  }
-
-  static async loadCollectsPaginated(
-    page: number
-  ): Promise<PaginatedResponse<Collect>> {
-    const call = Config.BASE_URL + "/collects/paginated";
-    return TrenaAPI.network()
-      .get(call)
-      .query({ page: page, per_page: 20 })
-      .then((res) => {
-        let listCollects: PaginatedResponse<Collect> = res.body;
-
-        return listCollects;
-      });
-  }
-
-  static async collectMonthCount(): Promise<number> {
-    const call = Config.BASE_URL + "/collects/month/count";
-    return TrenaAPI.network()
-      .get(call)
-      .then((res) => {
-        let collectCount: number = res.body;
-
-        return collectCount;
-      });
-  }
-
-  static async retrievePhotos(publicWorkId: string): Promise<string[]> {
-    const call = Config.BASE_URL + "/collects/report/json";
-    return TrenaAPI.network()
-      .get(call)
-      .query({ public_work_id: publicWorkId })
-      .then((res) => {
-        var photos: string[] = [];
-        var collects = res.body;
-        for (let index = 0; index < collects.length; index++) {
-          const collect = collects[index];
-          photos.push(collect.photos[0].filepath);
-        }
-
-        return photos;
-      });
-  }
-
-  static async downloadJSONReport(publicWorkId: string) {
-    const call = Config.BASE_URL + "/collects/report/json/file";
-    TrenaAPI.network()
-      .get(call)
-      .responseType("blob")
-      .query({ public_work_id: publicWorkId })
-      .then((res) => {
-        const data: Blob = res.body;
-        this.saveData(data, publicWorkId);
-      });
-  }
-
-  private static saveData = (data: Blob, filename: string = "filename") => {
-    const csvURL = window.URL.createObjectURL(data);
-    let tempLink = document.createElement("a");
-    tempLink.href = csvURL;
-    tempLink.setAttribute("download", filename + ".json");
-    tempLink.click();
-  };
-}
-
 async function loadPublicWorkCollects(
-  ctx: QueryFunctionContext
+	ctx: QueryFunctionContext
 ): Promise<Collect[]> {
-  const [, publicWorkId] = ctx.queryKey;
-  const call = Config.BASE_URL + "/collects/publicWork";
-  const res = await TrenaAPI.network()
-    .get(call)
-    .query({ public_work_id: publicWorkId });
+	const [, publicWorkId] = ctx.queryKey;
+	const call = Config.BASE_URL + "/collects/publicWork";
+	const res = await TrenaAPI.network()
+		.get(call)
+		.query({ public_work_id: publicWorkId });
 
-  return res.body;
+	return res.body;
 }
 
 async function loadAllCollects(): Promise<Collect[]> {
-  const call = Config.BASE_URL + "/collects/";
-  const res = await TrenaAPI.network().get(call);
+	const call = Config.BASE_URL + "/collects/";
+	const res = await TrenaAPI.network().get(call);
 
-  return res.body;
+	return res.body;
 }
 
 async function loadAllCitizenCollects(): Promise<Collect[]> {
-  const call = Config.BASE_URL + "/collects/citizen";
-  const res = await TrenaAPI.network().get(call);
+	const call = Config.BASE_URL + "/collects/citizen";
+	const res = await TrenaAPI.network().get(call);
 
-  return res.body;
+	return res.body;
 }
 
 async function loadCollectsPaginated(
-  ctx: QueryFunctionContext
+	ctx: QueryFunctionContext
 ): Promise<Collect[]> {
-  const [, page] = ctx.queryKey;
-  const call = Config.BASE_URL + "/collects/paginated";
-  const res = await TrenaAPI.network()
-    .get(call)
-    .query({ page: page, per_page: 20 });
+	const [, page] = ctx.queryKey;
+	const call = Config.BASE_URL + "/collects/paginated";
+	const res = await TrenaAPI.network()
+		.get(call)
+		.query({ page: page, per_page: 20 });
 
-  return res.body;
+	return res.body;
 }
 
 async function collectMonthCount(): Promise<number> {
-  const call = Config.BASE_URL + "/collects/month/count";
-  const res = await TrenaAPI.network().get(call);
+	const call = Config.BASE_URL + "/collects/month/count";
+	const res = await TrenaAPI.network().get(call);
 
-  return res.body;
+	return res.body;
 }
 
 async function retrievePhotos(ctx: QueryFunctionContext): Promise<string[]> {
-  const [, publicWorkId] = ctx.queryKey;
-  const call = Config.BASE_URL + "/collects/report/json";
-  const res = await TrenaAPI.network()
-    .get(call)
-    .query({ public_work_id: publicWorkId });
+	const [, publicWorkId] = ctx.queryKey;
+	const call = Config.BASE_URL + "/collects/report/json";
+	const res = await TrenaAPI.network()
+		.get(call)
+		.query({ public_work_id: publicWorkId });
 
-  const collects: Collect[] = res.body;
-  const photos = collects.map((collect) => collect.photos[0].filepath);
-  return photos;
+	const collects: Collect[] = res.body;
+	const photos = collects.map((collect) => collect.photos[0].filepath);
+	return photos;
 }
 
 async function downloadJSONReport(ctx: QueryFunctionContext): Promise<void> {
-  const [, publicWorkId] = ctx.queryKey;
-  const call = Config.BASE_URL + "/collects/report/json/file";
-  const res = await TrenaAPI.network()
-    .get(call)
-    .responseType("blob")
-    .query({ public_work_id: publicWorkId });
+	const [, publicWorkId] = ctx.queryKey;
+	const call = Config.BASE_URL + "/collects/report/json/file";
+	const res = await TrenaAPI.network()
+		.get(call)
+		.responseType("blob")
+		.query({ public_work_id: publicWorkId });
 
-  const data: Blob = res.body;
-  return saveData(data, publicWorkId as string);
+	const data: Blob = res.body;
+	return saveData(data, publicWorkId as string);
 }
 
 async function getMediaMetaDataByCollectId(
-  ctx: QueryFunctionContext
+	ctx: QueryFunctionContext
 ): Promise<Photo[]> {
-  const [, collectId] = ctx.queryKey;
-  const call = Config.BASE_URL + `/photos/collect/${collectId}`;
-  const res = await TrenaAPI.network().get(call);
+	const [, collectId] = ctx.queryKey;
+	const call = Config.BASE_URL + `/photos/collect/${collectId}`;
+	const res = await TrenaAPI.network().get(call);
 
-  return res.body;
+	return res.body;
 }
 
 const getMediaMetaDataByCollectIdFixed = async (
-  collectId: string
+	collectId: string
 ): Promise<Photo[]> => {
-  const call = Config.BASE_URL + `/photos/collect/${collectId}`;
-  const res = await TrenaAPI.network().get(call);
+	const call = Config.BASE_URL + `/photos/collect/${collectId}`;
+	const res = await TrenaAPI.network().get(call);
 
-  return res.body;
+	return res.body;
 };
 
 async function getMediaByCollectFileName(
-  ctx: QueryFunctionContext
+	ctx: QueryFunctionContext
 ): Promise<string> {
-  const [, filepath] = ctx.queryKey;
-  const call = Config.BASE_URL + `/images/${filepath}`;
-  const res = await TrenaAPI.network().get(call).responseType("arraybuffer");
+	const [, filepath] = ctx.queryKey;
+	const call = Config.BASE_URL + `/images/${filepath}`;
+	const res = await TrenaAPI.network().get(call).responseType("arraybuffer");
 
-  const base64 = btoa(
-    new Uint8Array(res.body).reduce(
-      (data, byte) => data + String.fromCharCode(byte),
-      ""
-    )
-  );
+	const base64 = btoa(
+		new Uint8Array(res.body).reduce(
+			(data, byte) => data + String.fromCharCode(byte),
+			""
+		)
+	);
 
-  return base64;
+	return base64;
 }
 
 async function getQueueCollects(): Promise<Collect[]> {
-  const call = Config.BASE_URL + "/collects/citizen/queue";
-  const res = await TrenaAPI.network().get(call);
+	const call = Config.BASE_URL + "/collects/citizen/queue";
+	const res = await TrenaAPI.network().get(call);
 
-  return res.body;
+	return res.body;
 }
 
 async function getQueueCollectsByPublicWorkId(
-  ctx: QueryFunctionContext
+	ctx: QueryFunctionContext
 ): Promise<Collect[]> {
-  const [, publicWorkId] = ctx.queryKey;
-  const call = Config.BASE_URL + "/collects/publicwork/citizen";
-  const res = await TrenaAPI.network()
-    .query({ public_work_id: publicWorkId })
-    .get(call);
+	const [, publicWorkId] = ctx.queryKey;
+	const call = Config.BASE_URL + "/collects/publicwork/citizen";
+	const res = await TrenaAPI.network()
+		.query({ public_work_id: publicWorkId })
+		.get(call);
 
-  return res.body;
+	return res.body;
 }
 
-function saveData(data: Blob, filename: string = "filename"): void {
-  const csvURL = window.URL.createObjectURL(data);
-  let tempLink = document.createElement("a");
-  tempLink.href = csvURL;
-  tempLink.setAttribute("download", filename + ".json");
-  tempLink.click();
+function saveData(data: Blob, filename = "filename"): void {
+	const csvURL = window.URL.createObjectURL(data);
+	const tempLink = document.createElement("a");
+	tempLink.href = csvURL;
+	tempLink.setAttribute("download", filename + ".json");
+	tempLink.click();
 }
 
 async function updateCollect(collect: Collect): Promise<Collect> {
-  const call = Config.BASE_URL + "/collects/update";
-  const res = await TrenaAPI.network()
-    .type("application/json")
-    .put(call)
-    .send(collect);
+	const call = Config.BASE_URL + "/collects/update";
+	const res = await TrenaAPI.network()
+		.type("application/json")
+		.put(call)
+		.send(collect);
 
-  return res.body;
+	return res.body;
 }
 
 async function deletePhoto(photo_id: string): Promise<Photo> {
-  const call = Config.BASE_URL + "/photos/delete";
-  const res = await TrenaAPI.network()
-    .type("application/json")
-    .delete(call)
-    .query({ photo_id });
+	const call = Config.BASE_URL + "/photos/delete";
+	const res = await TrenaAPI.network()
+		.type("application/json")
+		.delete(call)
+		.query({ photo_id });
 
-  return res.body;
+	return res.body;
 }
 
 async function deleteCollect(collectId: string): Promise<Collect> {
-  const call = `${Config.BASE_URL}/collects/delete`;
-  const res = await TrenaAPI.network()
-    .delete(call)
-    .query({ collect_id: collectId });
+	const call = `${Config.BASE_URL}/collects/delete`;
+	const res = await TrenaAPI.network()
+		.delete(call)
+		.query({ collect_id: collectId });
 
-  return res.body;
+	return res.body;
 }
 
 export const CollectServiceQuery = {
-  loadPublicWorkCollects,
-  loadCollectsPaginated,
-  loadAllCollects,
-  updateCollect,
-  loadAllCitizenCollects,
-  getMediaMetaDataByCollectId,
-  getMediaByCollectFileName,
-  getQueueCollectsByPublicWorkId,
-  getMediaMetaDataByCollectIdFixed,
-  getQueueCollects,
-  collectMonthCount,
-  retrievePhotos,
-  downloadJSONReport,
-  saveData,
-  deletePhoto,
-  deleteCollect,
+	loadPublicWorkCollects,
+	loadCollectsPaginated,
+	loadAllCollects,
+	updateCollect,
+	loadAllCitizenCollects,
+	getMediaMetaDataByCollectId,
+	getMediaByCollectFileName,
+	getQueueCollectsByPublicWorkId,
+	getMediaMetaDataByCollectIdFixed,
+	getQueueCollects,
+	collectMonthCount,
+	retrievePhotos,
+	downloadJSONReport,
+	saveData,
+	deletePhoto,
+	deleteCollect,
 };

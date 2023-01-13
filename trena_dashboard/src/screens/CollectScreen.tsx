@@ -3,12 +3,12 @@ import { DashboardContentContainer } from "../components/Containers/ContentConta
 import { DashboardContainer } from "../components/Containers/DashboardContainer";
 import { ListCitizenCollects } from "../components/lists/ListCitizenCollects";
 
-export function CollectScreen() {
-  return (
-    <DashboardContainer>
-      <DashboardContentContainer>
-        <ListCitizenCollects />
-      </DashboardContentContainer>
-    </DashboardContainer>
-  );
+export function CollectScreen () {
+	return (
+		<DashboardContainer>
+			<DashboardContentContainer>
+				<ListCitizenCollects />
+			</DashboardContentContainer>
+		</DashboardContainer>
+	);
 }

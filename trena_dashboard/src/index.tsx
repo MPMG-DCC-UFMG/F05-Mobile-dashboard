@@ -7,20 +7,20 @@ import { ThemeContextProvider } from "./core/contexts/ThemeContext";
 import * as serviceWorker from "./serviceWorker";
 
 declare global {
-  interface Window {
-    _env_: any;
-  }
+	interface Window {
+		_env_: unknown;
+	}
 }
 
 Sentry.init({ dsn: Config.SENTRY_DNS, environment: Config.ENVIRONMENT });
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ThemeContextProvider>
-      <App />
-    </ThemeContextProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
+	<React.StrictMode>
+		<ThemeContextProvider>
+			<App />
+		</ThemeContextProvider>
+	</React.StrictMode>,
+	document.getElementById("root")
 );
 
 serviceWorker.unregister();

@@ -14,26 +14,26 @@ import { UserManagementScreen } from "../screens/UserManagementScreen";
 import { UserSettingScreen } from "../screens/UserSettingsScreen";
 import { WorkStatusScreen } from "../screens/WorkStatusScreen";
 
-export function AppRoutes() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LoginScreen />} />
-        <Route path="/login" element={<LoginScreen />} />
-        <Route path="/dashboard" element={<Home />} />
-        <Route path="/typeOfWork" element={<TypeOfWorkScreen />} />
-        <Route path="/typePhoto" element={<TypePhotoScreen />} />
-        <Route path="/publicWork" element={<PublicWorkScreen />} />
-        <Route path="/publicWork/queue" element={<PublicWorkQueueScreen />} />
-        <Route path="/workStatus" element={<WorkStatusScreen />} />
-        <Route path="/users" element={<UserManagementScreen />} />
-        <Route path="/queue" element={<QueueScreen />} />
-        <Route path="/collect" element={<CollectScreen />} />
-        <Route path="/inspections" element={<InspectionScreen />} />
-        <Route path="/userSettings" element={<UserSettingScreen />} />
-        <Route path="/calls" element={<CallScreen />} />
-        <Route path="/calls/history" element={<CallHistoryScreen />} />
-      </Routes>
-    </BrowserRouter>
-  );
+export function AppRoutes () {
+	return (
+		<BrowserRouter>
+			<Routes>
+				<Route path="/" element={<LoginScreen />} />
+				<Route path="/login" element={<LoginScreen />} />
+				<Route path="/dashboard" element={<Home />} />
+				<Route path="/typeOfWork" element={<TypeOfWorkScreen />} />
+				<Route path="/typePhoto" element={<TypePhotoScreen />} />
+				<Route path="/publicWork" element={<PublicWorkScreen />} />
+				<Route path="/publicWork/queue" element={<PublicWorkQueueScreen />} />
+				<Route path="/workStatus" element={<WorkStatusScreen />} />
+				<Route path="/users" element={<UserManagementScreen />} />
+				<Route path="/queue" element={<QueueScreen />} />
+				<Route path="/collect" element={<CollectScreen />} />
+				<Route path="/inspections" element={<InspectionScreen />} />
+				<Route path="/userSettings" element={<UserSettingScreen />} />
+				<Route path="/calls" element={<CallScreen />} />
+				<Route path="/calls/history" element={<CallHistoryScreen />} />
+			</Routes>
+		</BrowserRouter>
+	);
 }

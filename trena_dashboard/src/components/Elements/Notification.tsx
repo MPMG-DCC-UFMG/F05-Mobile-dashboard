@@ -6,10 +6,10 @@ interface NotificationProps {
 
 export const MPNotification: React.FC<NotificationProps> = (props) => {
 
-    const {message} = props
-    return (
-        <div className="notification is-danger is-light">
-            {message}
-        </div>
-    )
-}
+	const {message} = props;
+	return (
+		<div className="notification is-danger is-light">
+			{message}
+		</div>
+	);
+};

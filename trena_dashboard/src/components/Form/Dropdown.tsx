@@ -14,45 +14,45 @@ export interface DropdownOptions {
 }
 
 export const Dropdown: React.FC<DropdownProps> = (props) => {
-  const { inputLabel, optionsList, inputKey, inputDefaultValue } = props;
-  const defaultValue = optionsList.find(
-    (element) => element.key === inputDefaultValue
-  );
-  const [selectedValue, setSelectedValue] = useState(defaultValue);
+	const { inputLabel, optionsList, inputKey, inputDefaultValue } = props;
+	const defaultValue = optionsList.find(
+		(element) => element.key === inputDefaultValue
+	);
+	const [selectedValue, setSelectedValue] = useState(defaultValue);
 
-  useEffect(() => {
-    setSelectedValue({
-      key: defaultValue?.key ?? optionsList[0].key,
-      value: defaultValue?.value ?? optionsList[0].value,
-    });
-  }, [defaultValue, optionsList]);
+	useEffect(() => {
+		setSelectedValue({
+			key: defaultValue?.key ?? optionsList[0].key,
+			value: defaultValue?.value ?? optionsList[0].value,
+		});
+	}, [defaultValue, optionsList]);
 
-  const handleOnValueChanged = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const elementFlag = optionsList.find(
-      (element) => element.value === event.currentTarget.value
-    );
-    if (elementFlag) {
-      setSelectedValue(elementFlag);
-      if (props.onValueChanged) {
-        props.onValueChanged(elementFlag.key, inputKey);
-      }
-    }
-  };
+	const handleOnValueChanged = (
+		event: React.ChangeEvent<HTMLSelectElement>
+	) => {
+		const elementFlag = optionsList.find(
+			(element) => element.value === event.currentTarget.value
+		);
+		if (elementFlag) {
+			setSelectedValue(elementFlag);
+			if (props.onValueChanged) {
+				props.onValueChanged(elementFlag.key, inputKey);
+			}
+		}
+	};
 
-  return (
-    <div className="field is-fullwidth">
-      <label className="label">{inputLabel}</label>
-      <div className="control is-expanded">
-        <div className="select">
-          <select onChange={handleOnValueChanged} value={selectedValue?.value}>
-            {optionsList.map((options) => {
-              return <option key={options.key}>{options.value}</option>;
-            })}
-          </select>
-        </div>
-      </div>
-    </div>
-  );
+	return (
+		<div className="field is-fullwidth">
+			<label className="label">{inputLabel}</label>
+			<div className="control is-expanded">
+				<div className="select">
+					<select onChange={handleOnValueChanged} value={selectedValue?.value}>
+						{optionsList.map((options) => {
+							return <option key={options.key}>{options.value}</option>;
+						})}
+					</select>
+				</div>
+			</div>
+		</div>
+	);
 };

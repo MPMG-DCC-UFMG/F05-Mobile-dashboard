@@ -3,12 +3,12 @@ import { DashboardContentContainer } from "../components/Containers/ContentConta
 import { DashboardContainer } from "../components/Containers/DashboardContainer";
 import { ListWorkStatus } from "../components/lists/ListWorkStatus";
 
-export const WorkStatusScreen: React.FC<any> = (props) => {
-  return (
-    <DashboardContainer>
-      <DashboardContentContainer>
-        <ListWorkStatus />
-      </DashboardContentContainer>
-    </DashboardContainer>
-  );
-};
+export function WorkStatusScreen() {
+	return (
+		<DashboardContainer>
+			<DashboardContentContainer>
+				<ListWorkStatus />
+			</DashboardContentContainer>
+		</DashboardContainer>
+	);
+}
