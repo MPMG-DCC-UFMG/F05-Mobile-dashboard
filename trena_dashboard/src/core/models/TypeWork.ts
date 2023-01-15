@@ -1,5 +1,5 @@
 export type TypeWork = {
-	flag?: number;
+	flag: number;
 	name: string;
 	status_list: number[];
 };

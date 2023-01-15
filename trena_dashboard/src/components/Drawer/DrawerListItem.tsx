@@ -84,7 +84,7 @@ export function DrawerListItem() {
 				iconText="Tela Inicial"
 			/>
 
-			<ListItemButton onClick={menuState.togglePublicWorks}>
+			<ListItemButton onClick={menuState.toggleWorkConfig}>
 				<ListItemIcon>
 					<Settings />
 				</ListItemIcon>

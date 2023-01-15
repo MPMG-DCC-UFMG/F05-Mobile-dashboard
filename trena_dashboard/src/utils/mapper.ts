@@ -58,3 +58,16 @@ export function convertLatLngToDMS(lat: number, lng: number) {
 
 	return `${finalLat}, ${finalLng}`;
 }
+
+export function formatCpf(cpf: string) {
+	cpf = cpf.replace(/[^\d]/g, "");
+
+	return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+}
+
+export function formatCep(cep: string) {
+	return cep
+		.replace(/\D/g, "")
+		.replace(/(\d{5})(\d)/, "$1-$2")
+		.replace(/(-\d{3})\d+?$/, "$1");
+}

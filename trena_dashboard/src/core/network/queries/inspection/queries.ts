@@ -4,12 +4,14 @@ import { InspectionServiceQuery } from "../../services/InspectionService";
 
 export function useLoadInspections() {
 	const setCollectModal = useInspectionStore((state) => state.setCollectModal);
+	const setInspections = useInspectionStore((state) => state.setInspections);
 
 	return useQuery(
 		["getMpInspections"],
 		InspectionServiceQuery.loadInspections,
 		{
 			onSuccess(data) {
+				setInspections(data);
 				setCollectModal(Array(data.length).fill(false));
 			},
 		}

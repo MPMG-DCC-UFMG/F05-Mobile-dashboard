@@ -1,21 +1,22 @@
+import { QueryFunctionContext } from "react-query";
 import Config from "../../../config/Config";
 import { PublicWork } from "../../models/PublicWork";
 import TrenaAPI from "../TrenaAPI";
 
-const loadPublicWorks = async () => {
+async function loadPublicWorks(): Promise<PublicWork[]> {
 	const call = Config.BASE_URL + "/publicworks/";
 	const res = await TrenaAPI.network().get(call);
 	return res.body;
-};
+}
 
-const loadPublicWorkQueue = async () => {
+async function loadPublicWorkQueue(): Promise<PublicWork[]> {
 	const call = Config.BASE_URL + "/publicworks/queue";
 	const res = await TrenaAPI.network().get(call);
 
 	return res.body;
-};
+}
 
-const deletePublicWork = async (publicWorkId: string) => {
+async function deletePublicWork(publicWorkId: string): Promise<PublicWork> {
 	const call = Config.BASE_URL + "/publicworks/delete";
 	const token = localStorage.getItem("TOKEN");
 	const res = await TrenaAPI.network()
@@ -25,9 +26,9 @@ const deletePublicWork = async (publicWorkId: string) => {
 		.query({ public_work_id: publicWorkId, token: token });
 
 	return res.body;
-};
+}
 
-const addPublicWork = async (publicWork: PublicWork) => {
+async function addPublicWork(publicWork: PublicWork): Promise<PublicWork> {
 	const call = Config.BASE_URL + "/publicworks/add";
 	const res = await TrenaAPI.network()
 		.post(call)
@@ -35,9 +36,9 @@ const addPublicWork = async (publicWork: PublicWork) => {
 		.send(publicWork);
 
 	return res.body;
-};
+}
 
-const updatePublicWork = async (publicWork: PublicWork) => {
+async function updatePublicWork(publicWork: PublicWork): Promise<PublicWork> {
 	const call = Config.BASE_URL + "/publicworks/update";
 	const res = await TrenaAPI.network()
 		.put(call)
@@ -45,28 +46,31 @@ const updatePublicWork = async (publicWork: PublicWork) => {
 		.send(publicWork);
 
 	return res.body;
-};
+}
 
-const countPublicWork = async () => {
+async function countPublicWork(): Promise<number> {
 	const call = Config.BASE_URL + "/publicworks/count";
 	const res = await TrenaAPI.network().get(call);
 
 	return res.body;
-};
+}
 
-const getPublicWorkById = async (id: string) => {
+async function getPublicWorkById(
+	ctx: QueryFunctionContext
+): Promise<PublicWork> {
+	const [, id] = ctx.queryKey;
 	const call = Config.BASE_URL + `/publicworks/${id}`;
 	const res = await TrenaAPI.network().get(call);
 
 	return res.body;
-};
+}
 
-const getPublicWorksWithCollectsInQueue = async () => {
+async function getPublicWorksWithCollectsInQueue(): Promise<PublicWork[]> {
 	const call = Config.BASE_URL + "/publicworks/citizen/queue";
 	const res = await TrenaAPI.network().get(call);
 
 	return res.body;
-};
+}
 
 export const PublicWorkServiceQuery = {
 	loadPublicWorks,

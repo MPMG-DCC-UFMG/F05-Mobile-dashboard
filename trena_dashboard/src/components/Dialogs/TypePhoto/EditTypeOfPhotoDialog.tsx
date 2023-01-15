@@ -1,89 +1,91 @@
-import {
-    Button,
-    Grid,
-    TextField,
-  } from "@mui/material";
-  import React, { useState } from "react";
-  import { useStores } from "../../../core/contexts/UseStores";
-  import { TypePhoto } from "../../../core/models/TypePhoto";
+import { Button, Grid, TextField } from "@mui/material";
+import React, { useCallback, useState } from "react";
+import { UpdateTypePhotoDTO } from "../../../core/models/dto/typePhotos/UpdateTypePhotoDTO";
+import { TypePhoto } from "../../../core/models/TypePhoto";
+import { useUpdateTypePhoto } from "../../../core/network/queries/typePhotos/mutations";
+import { closeDialog } from "../../../utils/dialogHandler";
 import { TableDialogContainer } from "../DialogContainer";
 
-  interface EditTypeOfPhotoDialog{
-    state: boolean[];
-    setState(state: boolean[]): void;
-    typePhoto: TypePhoto;
-    index: number;
-    title: string;
-  }
-  
-  export function EditTypeOfPhotoDialog({
-    state,
-    setState,
-    typePhoto,
-    index,
-    title,
-  }: EditTypeOfPhotoDialog) {
-    
-    const {typePhotoStore } = useStores();
-    const [name, setName] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
-    
-    const handleCloseDialog = (index: number) =>{
-      setState(state.map((value, position) => position === index ? false : value))
-    }
+interface EditTypeOfPhotoDialog {
+	state: boolean[];
+	setState(state: boolean[]): void;
+	typePhoto: TypePhoto;
+	index: number;
+	title: string;
+}
 
-    const handleEditTypePhoto = (typePhoto: TypePhoto) =>{
-        typePhoto.name = name;
-        typePhoto.description = description;
-        typePhotoStore.updateTypePhoto(typePhoto);
-        handleCloseDialog(index);
-    }
-  
-    return (
-      <TableDialogContainer
-        state={state}
-        setState={setState}
-        index={index}
-        title={title}
-      >
-        <Grid container justifyContent="space-between" alignItems="center">
-        <TextField
-          onChange={(event) => setName(event.currentTarget.value)}
-          required
-          label='Tipo Da Foto'
-          defaultValue={typePhoto.name}
-          fullWidth
-        />
-         <TextField
-          onChange={(event) => setDescription(event.currentTarget.value)}
-          required
-          label='Descrição Da Foto'
-          defaultValue={typePhoto.description}
-          fullWidth
-          sx={{mt:2}}
-        />
-         <Grid
-          container
-          spacing={2}
-          sx={{ display: "flex", justifyContent: "flex-end", mt:2 }}
-        >
-          <Grid item display="flex">
-            <Button 
-             onClick={() => handleCloseDialog(index)}
-             color="error" variant="contained">
-              Cancelar
-            </Button>
-          </Grid>
-          <Grid item display="flex">
-            <Button 
-              onClick={()=> handleEditTypePhoto(typePhoto)}
-              color="success" variant="contained">
-              Salvar
-            </Button>
-          </Grid>
-        </Grid> 
-        </Grid>
-        </TableDialogContainer>
-    );
-  }
-  
+export function EditTypeOfPhotoDialog({
+	state,
+	setState,
+	typePhoto,
+	index,
+	title,
+}: EditTypeOfPhotoDialog) {
+	const [updateTypePhoto, setUpdateTypePhoto] = useState(
+		{} as UpdateTypePhotoDTO
+	);
+	const { mutate } = useUpdateTypePhoto();
+
+	const handleEditTypePhoto = useCallback(() => {
+		mutate(updateTypePhoto);
+		closeDialog(state, setState, index);
+	}, []);
+
+	return (
+		<TableDialogContainer
+			state={state}
+			setState={setState}
+			index={index}
+			title={title}
+		>
+			<Grid container justifyContent="space-between" alignItems="center">
+				<TextField
+					onChange={(e) =>
+						setUpdateTypePhoto({ ...updateTypePhoto, name: e.target.value })
+					}
+					required
+					label="Tipo Da Foto"
+					defaultValue={typePhoto.name}
+					fullWidth
+				/>
+				<TextField
+					onChange={(e) =>
+						setUpdateTypePhoto({
+							...updateTypePhoto,
+							description: e.target.value,
+						})
+					}
+					required
+					label="Descrição Da Foto"
+					defaultValue={typePhoto.description}
+					fullWidth
+					sx={{ mt: 2 }}
+				/>
+				<Grid
+					container
+					spacing={2}
+					sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}
+				>
+					<Grid item display="flex">
+						<Button
+							onClick={() => closeDialog(state, setState, index)}
+							color="error"
+							variant="contained"
+						>
+							Cancelar
+						</Button>
+					</Grid>
+					<Grid item display="flex">
+						<Button
+							onClick={() => handleEditTypePhoto()}
+							color="success"
+							variant="contained"
+						>
+							Salvar
+						</Button>
+					</Grid>
+				</Grid>
+			</Grid>
+		</TableDialogContainer>
+	);
+}

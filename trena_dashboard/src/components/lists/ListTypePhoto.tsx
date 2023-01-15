@@ -12,66 +12,44 @@ import {
 	TableRow,
 	TextField,
 } from "@mui/material";
-import { observer } from "mobx-react";
 import React, { useState } from "react";
-import { useQuery } from "react-query";
-import { useStores } from "../../core/contexts/UseStores";
 import { TypePhoto } from "../../core/models/TypePhoto";
-import { TypePhotoServiceQuery } from "../../core/network/services/TypePhotoService";
+import { useDeleteTypePhoto } from "../../core/network/queries/typePhotos/mutations";
+import { useLoadTypePhotos } from "../../core/network/queries/typePhotos/queries";
+import { useTableStore } from "../../core/store/table";
+import { useTypePhotoStore } from "../../core/store/typePhoto";
+import { openDialog } from "../../utils/dialogHandler";
 import { AddTypeOfPhotoDialog } from "../Dialogs/TypePhoto/AddTypeOfPhotoDialog";
 import { EditTypeOfPhotoDialog } from "../Dialogs/TypePhoto/EditTypeOfPhotoDialog";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
-export const ListTypePhoto = observer(() => {
-	const { data: typePhotos, isLoading } = useQuery(
-		["getTypePhoto"],
-		TypePhotoServiceQuery.loadTypePhotos,
-		{
-			onSuccess: (data) => {
-				setOpenEditTypePhotoDialog(Array(data.length).fill(false));
-				setAtualTable(data);
-			},
-		}
-	);
-	const { typePhotoStore } = useStores();
+export function ListTypePhoto() {
+	const { data: originalData, isLoading } = useLoadTypePhotos();
+	const { typePhotos, setTypePhotos, editDialog, setEditDialog } =
+		useTypePhotoStore();
+
+	const { rowsPerPage, setRowsPerPage } = useTableStore();
+
+	const { mutate } = useDeleteTypePhoto();
+
 	const [addTypePhotoDialog, setOpenAddTypePhotoDialog] = useState(false);
-	const [editTypePhotoDialog, setOpenEditTypePhotoDialog] = useState<boolean[]>(
-		[]
-	);
-	const [atualTable, setAtualTable] = useState<TypePhoto[]>(typePhotos!);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [page, setPage] = useState(0);
 
 	const handleSearch = (value?: string) => {
 		if (value) {
-			setAtualTable(
-				typePhotos!.filter((item) =>
-					item.name.toUpperCase().includes(value.toUpperCase())
-				)
+			const filteredTypePhoto = typePhotos.filter((item) =>
+				item.name.toUpperCase().includes(value.toUpperCase())
 			);
+			setTypePhotos(filteredTypePhoto);
 		} else {
-			setAtualTable(typePhotos!);
+			setTypePhotos(originalData ? originalData : []);
 		}
 	};
 
-	const handleSelectPhoto = (typePhoto: TypePhoto) => {
-		typePhotoStore.selectTypePhoto(typePhoto);
-	};
-
-	const handleDeleteTypePhoto = (typePhoto: TypePhoto) => {
-		if (typePhoto.flag) {
-			typePhotoStore.deleteTypeOfPhoto(typePhoto.flag);
-		}
-	};
-
-	const handleOpenEditDialog = (index: number) => {
-		setOpenEditTypePhotoDialog(
-			editTypePhotoDialog.map((value, position) =>
-				position === index ? true : value
-			)
-		);
+	const handleDeleteTypePhoto = (flag: number) => {
+		mutate(flag);
 	};
 
 	return (
@@ -129,19 +107,18 @@ export const ListTypePhoto = observer(() => {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{atualTable
+									{typePhotos
 										.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 										.map((typePhoto: TypePhoto, index: number) => (
-											<React.Fragment key={typePhoto.flag!}>
-												<TableRow
-													hover
-													onClick={() => handleSelectPhoto(typePhoto)}
-												>
+											<React.Fragment key={typePhoto.flag}>
+												<TableRow hover>
 													<TableCell>{typePhoto.name}</TableCell>
 													<TableCell>{typePhoto.description}</TableCell>
 													<TableCell>
 														<IconButton
-															onClick={() => handleOpenEditDialog(index)}
+															onClick={() =>
+																openDialog(editDialog, setEditDialog, index)
+															}
 															color="warning"
 															size="small"
 														>
@@ -152,14 +129,16 @@ export const ListTypePhoto = observer(() => {
 														<IconButton
 															color="error"
 															size="small"
-															onClick={() => handleDeleteTypePhoto(typePhoto)}
+															onClick={() =>
+																handleDeleteTypePhoto(typePhoto.flag)
+															}
 														>
 															<Delete />
 														</IconButton>
 													</TableCell>
 													<EditTypeOfPhotoDialog
-														state={editTypePhotoDialog}
-														setState={setOpenEditTypePhotoDialog}
+														state={editDialog}
+														setState={setEditDialog}
 														typePhoto={typePhoto}
 														index={index}
 														title="Editar Tipo De Foto"
@@ -174,7 +153,7 @@ export const ListTypePhoto = observer(() => {
 								setRowsPerPage={setRowsPerPage}
 								page={page}
 								setPage={setPage}
-								data={atualTable}
+								data={typePhotos}
 							/>
 						</Heading>
 					</Paper>
@@ -182,4 +161,4 @@ export const ListTypePhoto = observer(() => {
 			)}
 		</>
 	);
-});
+}

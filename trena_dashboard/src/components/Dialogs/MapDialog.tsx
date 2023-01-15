@@ -7,18 +7,18 @@ import {
 } from "@mui/icons-material";
 import { Box, Grid } from "@mui/material";
 import React from "react";
-import { useStores } from "../../core/contexts/UseStores";
 import { PublicWork } from "../../core/models/PublicWork";
+import { formatCep } from "../../utils/mapper";
 import { InfoTextField } from "../Inputs/InfoTextField";
 import { Map } from "../Map";
 import { TableDialogContainer } from "./DialogContainer";
 
 interface MapDialogProps {
-  state: boolean[];
-  setState(state: boolean[]): void;
-  publicWork: PublicWork;
-  index: number;
-  fullScreen?: boolean;
+	state: boolean[];
+	setState(state: boolean[]): void;
+	publicWork: PublicWork;
+	index: number;
+	fullScreen?: boolean;
 }
 
 export function MapDialog({
@@ -28,18 +28,6 @@ export function MapDialog({
 	index,
 	fullScreen,
 }: MapDialogProps) {
-	const { publicWorkStore, workStatusStore } = useStores();
-	publicWorkStore.loadPublicWorkCollects(publicWork.id);
-	const collectCount = publicWorkStore.collectsOfPublicWork.length;
-	const workStateUser = workStatusStore.getWorkStatusByFlag(
-		publicWork.type_work_flag
-	);
-	const workStateIA = publicWork.rnn_status
-		? workStatusStore.getWorkStatusByFlag(publicWork?.rnn_status)
-		: null;
-
-	const handleDownloadClick = () => console.log("Download");
-
 	return (
 		<TableDialogContainer
 			state={state}
@@ -57,7 +45,7 @@ export function MapDialog({
 				/>
 				<InfoTextField
 					disabled
-					defaultValue={publicWork.address.cep}
+					defaultValue={formatCep(publicWork.address.cep)}
 					icon={<Public />}
 					label="CEP"
 				/>

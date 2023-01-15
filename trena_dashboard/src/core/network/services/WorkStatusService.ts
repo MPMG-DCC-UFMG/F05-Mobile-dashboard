@@ -1,22 +1,26 @@
+import { QueryFunctionContext } from "react-query";
 import Config from "../../../config/Config";
 import { WorkStatus } from "../../models/WorkStatus";
 import TrenaAPI from "../TrenaAPI";
 
-const loadWorkStatus = async () => {
+async function loadWorkStatus(): Promise<WorkStatus[]> {
 	const call = Config.BASE_URL + "/workstatus/";
 	const res = await TrenaAPI.network().get(call);
 
 	return res.body;
-};
+}
 
-const loadWorkStatusById = async (id: number) => {
+async function loadWorkStatusById(
+	ctx: QueryFunctionContext
+): Promise<WorkStatus> {
+	const [, id] = ctx.queryKey;
 	const call = Config.BASE_URL + "/workstatus/id";
 	const res = await TrenaAPI.network().query({ work_status_id: id }).get(call);
 
 	return res.body;
-};
+}
 
-const deleteWorkStatus = async (workStatusFlag: number) => {
+async function deleteWorkStatus(workStatusFlag: number): Promise<WorkStatus> {
 	const call = Config.BASE_URL + "/workstatus/delete";
 	const res = await TrenaAPI.network()
 		.post(call)
@@ -24,9 +28,9 @@ const deleteWorkStatus = async (workStatusFlag: number) => {
 		.query({ work_status_id: workStatusFlag });
 
 	return res.body;
-};
+}
 
-const addWorkStatus = async (workStatus: WorkStatus) => {
+async function addWorkStatus(workStatus: WorkStatus): Promise<WorkStatus> {
 	const call = Config.BASE_URL + "/workstatus/add";
 	const res = await TrenaAPI.network()
 		.post(call)
@@ -34,9 +38,9 @@ const addWorkStatus = async (workStatus: WorkStatus) => {
 		.send(workStatus);
 
 	return res.body;
-};
+}
 
-const updateWorkStatus = async (workStatus: WorkStatus) => {
+async function updateWorkStatus(workStatus: WorkStatus): Promise<WorkStatus> {
 	const call = Config.BASE_URL + "/workstatus/update";
 	const res = await TrenaAPI.network()
 		.put(call)
@@ -44,7 +48,7 @@ const updateWorkStatus = async (workStatus: WorkStatus) => {
 		.send(workStatus);
 
 	return res.body;
-};
+}
 
 export const WorkStatusServiceQuery = {
 	loadWorkStatus,

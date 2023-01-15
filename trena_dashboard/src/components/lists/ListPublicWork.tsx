@@ -1,4 +1,3 @@
-import { observer } from "mobx-react";
 import React, { useState } from "react";
 
 import { Edit } from "@material-ui/icons";
@@ -18,10 +17,12 @@ import {
 } from "@mui/material";
 import { useQuery } from "react-query";
 import { Address } from "../../core/models/Address";
-import { PublicWork } from "../../core/models/PublicWork";
 import { TypeWork } from "../../core/models/TypeWork";
-import { PublicWorkServiceQuery } from "../../core/network/services/PublicWorkService";
+import { useLoadPublicWorks } from "../../core/network/queries/publicWork/queries";
 import { TypeWorkServiceQuery } from "../../core/network/services/TypeWorkService";
+import { usePublicWorkStore } from "../../core/store/publicWork";
+import { useTableStore } from "../../core/store/table";
+import { openDialog } from "../../utils/dialogHandler";
 import { DelegateInspectionDialog } from "../Dialogs/Inspection/DelegateInspection";
 import { MapDialog } from "../Dialogs/MapDialog";
 import { AddPublicWorkDialog } from "../Dialogs/PublicWork/AddPublicWorkDialog";
@@ -31,64 +32,40 @@ import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
-export const ListPublicWork = observer(() => {
+export function ListPublicWork() {
 	const {
-		data: publicWorks,
+		data: originalPublicWorks,
 		isLoading,
 		isFetched,
-	} = useQuery<PublicWork[]>(
-		["getPublicWorks"],
-		PublicWorkServiceQuery.loadPublicWorks,
-		{
-			onSuccess: (data) => {
-				setOpenInspectionsModal(Array(data.length).fill(false));
-				setOpenLocalizationModal(Array(data.length).fill(false));
-				setOpenActionDialog(Array(data.length).fill(false));
-				setOpenAddInspectionModal(Array(data.length).fill(false));
-				setAtualTable(data);
-			},
-		}
-	);
+	} = useLoadPublicWorks();
+	const { rowsPerPage, setRowsPerPage } = useTableStore();
+	const [page, setPage] = useState(0);
+
+	const {
+		publicWorks,
+		setPublicWorks,
+		actionDialog,
+		setActionDialog,
+		localizationDialog,
+		setLocalizationDialog,
+		inspectionsDialog,
+		setInspectionsDialog,
+		addInspection,
+		setAddInspection,
+	} = usePublicWorkStore();
+
+	const [openAddPublicWorkDialog, setOpenAddPublicWorkDialog] = useState(false);
 
 	const { data: typeWork } = useQuery<TypeWork[]>(
 		["getTypeWork"],
 		TypeWorkServiceQuery.loadTypeWorks
 	);
-	const [atualTable, setAtualTable] = useState<PublicWork[]>(publicWorks!);
-	const [openActionDialog, setOpenActionDialog] = useState<boolean[]>([]);
-	const [openAddPublicWorkDialog, setOpenAddPublicWorkDialog] = useState(false);
-	const [openLocalizationModal, setOpenLocalizationModal] = useState<boolean[]>(
-		[]
-	);
-	const [openInspectionsModal, setOpenInspectionsModal] = useState<boolean[]>(
-		[]
-	);
-	const [openAddInspectionModal, setOpenAddInspectionModal] = useState<
-		boolean[]
-	>([]);
+
 	const [actionMode, setActionMode] = useState<"edit" | "delete">("edit");
-	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [page, setPage] = useState(0);
-
-	const handleOpenLocalizationModal = (index: number) =>
-		setOpenLocalizationModal(
-			openInspectionsModal.map((value, pos) => (index === pos ? true : value))
-		);
-	const handleOpenInspectionsModal = (index: number) =>
-		setOpenInspectionsModal(
-			openInspectionsModal.map((value, pos) => (index === pos ? true : value))
-		);
-
-	const handleOpenAddInspectionModal = (index: number) =>
-		setOpenAddInspectionModal(
-			openAddInspectionModal.map((value, pos) => (index === pos ? true : value))
-		);
 
 	const handleOpenActionModal = (index: number, mode: "edit" | "delete") => {
 		setActionMode(mode);
-		setOpenActionDialog(
-			openActionDialog.map((value, pos) => (index === pos ? true : value))
-		);
+		openDialog(actionDialog, setActionDialog, index);
 	};
 
 	const addressFormatter = (adress: Address) =>
@@ -96,18 +73,17 @@ export const ListPublicWork = observer(() => {
 
 	const filterOptions = ["Escola", "Creche"];
 
-	const [filter, setFilter] = useState<number>(0);
-
 	const handleSearch = (name: string) => {
-		const aux = typeWork?.find(
+		const typeworkFilter = typeWork?.find(
 			(value) => value.name.toLowerCase() === name.toLowerCase()
 		);
 		if (name !== "") {
-			setAtualTable(
-				publicWorks!.filter((item) => item.type_work_flag === aux?.flag)
+			const filteredPublicWorks = publicWorks.filter(
+				(item) => item.type_work_flag === typeworkFilter?.flag
 			);
+			setPublicWorks(filteredPublicWorks);
 		} else {
-			setAtualTable(publicWorks!);
+			setPublicWorks(originalPublicWorks ? originalPublicWorks : publicWorks);
 		}
 	};
 
@@ -165,7 +141,7 @@ export const ListPublicWork = observer(() => {
 										</TableRow>
 									</TableHead>
 									<TableBody>
-										{atualTable
+										{publicWorks
 											.slice(
 												page * rowsPerPage,
 												page * rowsPerPage + rowsPerPage
@@ -189,7 +165,11 @@ export const ListPublicWork = observer(() => {
 														<Tooltip title="Mapa">
 															<IconButton
 																onClick={() =>
-																	handleOpenLocalizationModal(index)
+																	openDialog(
+																		localizationDialog,
+																		setLocalizationDialog,
+																		index
+																	)
 																}
 																size="small"
 															>
@@ -203,7 +183,11 @@ export const ListPublicWork = observer(() => {
 																color="info"
 																size="small"
 																onClick={() =>
-																	handleOpenInspectionsModal(index)
+																	openDialog(
+																		inspectionsDialog,
+																		setInspectionsDialog,
+																		index
+																	)
 																}
 															>
 																<LocalSee />
@@ -216,7 +200,11 @@ export const ListPublicWork = observer(() => {
 																color="info"
 																size="small"
 																onClick={() =>
-																	handleOpenAddInspectionModal(index)
+																	openDialog(
+																		addInspection,
+																		setAddInspection,
+																		index
+																	)
 																}
 															>
 																<PendingActions />
@@ -250,22 +238,22 @@ export const ListPublicWork = observer(() => {
 														</Tooltip>
 													</TableCell>
 													<MapDialog
-														state={openLocalizationModal}
-														setState={setOpenLocalizationModal}
+														state={localizationDialog}
+														setState={setLocalizationDialog}
 														publicWork={publicWork}
 														index={index}
 														fullScreen
 													/>
 													<PublicWorkInspectionsDialog
-														state={openInspectionsModal}
-														setState={setOpenInspectionsModal}
+														state={inspectionsDialog}
+														setState={setInspectionsDialog}
 														publicWorkId={publicWork.id}
 														index={index}
 														title={`Vistorias: ${publicWork.name}`}
 													/>
 													<HandlePublicWorkDialog
-														state={openActionDialog}
-														setState={setOpenActionDialog}
+														state={actionDialog}
+														setState={setActionDialog}
 														index={index}
 														mode={actionMode}
 														publicWork={publicWork}
@@ -279,8 +267,8 @@ export const ListPublicWork = observer(() => {
 													<DelegateInspectionDialog
 														index={index}
 														publicWork={publicWork}
-														state={openAddInspectionModal}
-														setState={setOpenAddInspectionModal}
+														state={addInspection}
+														setState={setAddInspection}
 													/>
 												</TableRow>
 											))}
@@ -291,7 +279,7 @@ export const ListPublicWork = observer(() => {
 									setRowsPerPage={setRowsPerPage}
 									page={page}
 									setPage={setPage}
-									data={atualTable}
+									data={publicWorks}
 								/>
 								<AddPublicWorkDialog
 									state={openAddPublicWorkDialog}
@@ -306,4 +294,4 @@ export const ListPublicWork = observer(() => {
 			)}
 		</>
 	);
-});
+}

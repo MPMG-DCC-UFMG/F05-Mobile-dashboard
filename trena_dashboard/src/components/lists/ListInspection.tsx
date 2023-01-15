@@ -22,6 +22,7 @@ import {
 import { useLoadInspections } from "../../core/network/queries/inspection/queries";
 import { useInspectionStore } from "../../core/store/inspection";
 import { useTableStore } from "../../core/store/table";
+import { openDialog } from "../../utils/dialogHandler";
 import { convertEphocDate, inspectionsStatusMapping } from "../../utils/mapper";
 import { InspectionCollectsDialog } from "../Dialogs/Inspection/InspectionCollects";
 import { Heading } from "../Heading";
@@ -29,19 +30,13 @@ import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export function ListInspection() {
-	const { data: inspections, isLoading, isFetched } = useLoadInspections();
-	const { collectModal, setCollectModal } = useInspectionStore();
+	const { isLoading, isFetched } = useLoadInspections();
+	const { inspections, collectModal, setCollectModal } = useInspectionStore();
 	const [page, setPage] = useState(0);
 	const { rowsPerPage, setRowsPerPage } = useTableStore();
 
 	const { mutate: downloadPdf } = useDownloadPdf();
 	const { mutate: downloadDocx } = useDownloadDocx();
-
-	const handleOpenCollectsModal = useCallback((index: number) => {
-		setCollectModal(
-			collectModal.map((value, pos) => (index === pos ? true : value))
-		);
-	}, []);
 
 	const handleGenerateReport = useCallback((flag: number) => {
 		downloadPdf(flag);
@@ -119,14 +114,20 @@ export function ListInspection() {
 															{convertEphocDate(inspection.request_date)}
 														</TableCell>
 														<TableCell align="center">
-															{inspectionsStatusMapping(inspection.status!)}
+															{inspectionsStatusMapping(inspection.status)}
 														</TableCell>
 														<TableCell align="center">
 															<Tooltip title="Coletas">
 																<IconButton
 																	color="info"
 																	size="small"
-																	onClick={() => handleOpenCollectsModal(index)}
+																	onClick={() =>
+																		openDialog(
+																			collectModal,
+																			setCollectModal,
+																			index
+																		)
+																	}
 																>
 																	<Collections />
 																</IconButton>
@@ -138,7 +139,7 @@ export function ListInspection() {
 																	color="error"
 																	size="small"
 																	onClick={() =>
-																		handleGenerateReport(inspection.flag!)
+																		handleGenerateReport(inspection.flag)
 																	}
 																>
 																	<PictureAsPdfOutlined />
@@ -151,7 +152,7 @@ export function ListInspection() {
 																	color="info"
 																	size="small"
 																	onClick={() =>
-																		handleGenerateDoc(inspection.flag!)
+																		handleGenerateDoc(inspection.flag)
 																	}
 																>
 																	<Article />
@@ -161,7 +162,7 @@ export function ListInspection() {
 													</TableRow>
 													<InspectionCollectsDialog
 														index={index}
-														inspectionId={inspection.flag!}
+														inspectionId={inspection.flag}
 														state={collectModal}
 														setState={setCollectModal}
 														fullScreen
@@ -180,7 +181,7 @@ export function ListInspection() {
 									setRowsPerPage={setRowsPerPage}
 									page={page}
 									setPage={setPage}
-									data={inspections!}
+									data={inspections}
 								/>
 							</Heading>
 						</Paper>
