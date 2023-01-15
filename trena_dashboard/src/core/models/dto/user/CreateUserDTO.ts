@@ -1,5 +1,7 @@
 export interface CreateUserDTO {
 	name: string;
 	email: string;
-	password: string;
+	authentication: string;
+	full_name: string;
+	role?: string;
 }

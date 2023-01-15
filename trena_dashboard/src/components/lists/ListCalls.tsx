@@ -10,10 +10,11 @@ import {
 	TableRow,
 	Tooltip,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { rootContext } from "../../core/contexts/RootContext";
 import { CallServiceQuery } from "../../core/network/services/CallService";
+import { useTableStore } from "../../core/store/table";
+import { useUserStore } from "../../core/store/user";
 import { convertEphocDate } from "../../utils/mapper";
 import { OpenMessagesDialog } from "../Dialogs/Call/OpenMessagesDialog";
 import { Heading } from "../Heading";
@@ -22,16 +23,16 @@ import { TablePagination } from "../TablePagination";
 import { Notify } from "../Toast/Notify";
 
 export function ListCalls() {
-	const { userStore } = useContext(rootContext);
+	const user = useUserStore((state) => state.user);
+	const { rowsPerPage, setRowsPerPage } = useTableStore();
 	const queryClient = useQueryClient();
 
-	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [page, setPage] = useState(0);
 	const [openMessages, setOpenMessages] = useState<boolean[]>([]);
 
 	const { data: calls, isLoading } = useQuery(
-		["getUserCalls", userStore.loggedUser.email],
-		() => CallServiceQuery.getLoggedUserCalls(userStore.loggedUser.email),
+		["getUserCalls", user.email],
+		() => CallServiceQuery.getLoggedUserCalls(user.email),
 		{
 			onSuccess(data) {
 				setOpenMessages(Array(data.length).fill(false));
@@ -50,10 +51,7 @@ export function ListCalls() {
 	const handleCloseCall = (callId: string) => {
 		closeCall(callId, {
 			onSuccess: () => {
-				queryClient.invalidateQueries([
-					"getUserCalls",
-					userStore.loggedUser.email,
-				]);
+				queryClient.invalidateQueries(["getUserCalls", user.email]);
 				Notify(
 					"Chamado fechado com sucesso! Pode acessá-lo em Chamados/Histórico",
 					"bottom-left",
@@ -63,7 +61,7 @@ export function ListCalls() {
 		});
 	};
 
-	const isUserAdmin = userStore.loggedUser.role === "ADMIN";
+	const isUserAdmin = user.role === "ADMIN";
 
 	return (
 		<>

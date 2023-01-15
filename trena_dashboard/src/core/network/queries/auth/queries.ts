@@ -3,11 +3,23 @@ import { useUserStore } from "../../../store/user";
 import { SecurityServiceQuery } from "../../services/SecurityService";
 
 export function useLoadUsersList() {
-	return useQuery(["getUsers"], SecurityServiceQuery.loadUserList);
+	const setAllUsers = useUserStore((state) => state.setAllUsers);
+
+	return useQuery(["getUsers"], SecurityServiceQuery.loadUserList, {
+		onSuccess: (data) => {
+			setAllUsers(data);
+		},
+	});
 }
 
 export function useLoadPublicUsersList() {
-	return useQuery(["getPublicUsers"], SecurityServiceQuery.loadPublicUserList);
+	const setAllUsers = useUserStore((state) => state.setAllUsers);
+
+	return useQuery(["getPublicUsers"], SecurityServiceQuery.loadPublicUserList, {
+		onSuccess: (data) => {
+			setAllUsers(data);
+		},
+	});
 }
 
 export function useGetLoggedUser() {

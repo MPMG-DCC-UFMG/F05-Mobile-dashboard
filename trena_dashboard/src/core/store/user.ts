@@ -5,6 +5,8 @@ import { ReadUserDTO } from "../models/dto/user/ReadUserDTO";
 type UserStore = {
 	user: ReadUserDTO;
 	setUser: (user: ReadUserDTO) => void;
+	allUsers: ReadUserDTO[];
+	setAllUsers: (users: ReadUserDTO[]) => void;
 };
 
 export const useUserStore = create(
@@ -14,6 +16,12 @@ export const useUserStore = create(
 			setUser: (loggedUser: ReadUserDTO) => {
 				set(() => ({
 					user: loggedUser,
+				}));
+			},
+			allUsers: [],
+			setAllUsers: (newUsers: ReadUserDTO[]) => {
+				set(() => ({
+					allUsers: newUsers,
 				}));
 			},
 		}),

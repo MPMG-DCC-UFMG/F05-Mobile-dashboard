@@ -21,7 +21,7 @@ import { Address } from "../../core/models/Address";
 import { PublicWork } from "../../core/models/PublicWork";
 import { TypeWork } from "../../core/models/TypeWork";
 import { PublicWorkServiceQuery } from "../../core/network/services/PublicWorkService";
-import { TypeWorkService } from "../../core/network/services/TypeWorkService";
+import { TypeWorkServiceQuery } from "../../core/network/services/TypeWorkService";
 import { DelegateInspectionDialog } from "../Dialogs/Inspection/DelegateInspection";
 import { MapDialog } from "../Dialogs/MapDialog";
 import { AddPublicWorkDialog } from "../Dialogs/PublicWork/AddPublicWorkDialog";
@@ -52,7 +52,7 @@ export const ListPublicWork = observer(() => {
 
 	const { data: typeWork } = useQuery<TypeWork[]>(
 		["getTypeWork"],
-		TypeWorkService.loadTypeWorks
+		TypeWorkServiceQuery.loadTypeWorks
 	);
 	const [atualTable, setAtualTable] = useState<PublicWork[]>(publicWorks!);
 	const [openActionDialog, setOpenActionDialog] = useState<boolean[]>([]);

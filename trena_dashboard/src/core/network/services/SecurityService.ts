@@ -3,7 +3,6 @@ import Config from "../../../config/Config";
 import { LoginUser } from "../../../screens/LoginScreen";
 import { CreateUserDTO } from "../../models/dto/user/CreateUserDTO";
 import { ReadUserDTO } from "../../models/dto/user/ReadUserDTO";
-import { UserSafeDataDTO } from "../../models/dto/user/UserSafeDataDTO";
 import { User } from "../../models/User";
 import TrenaAPI from "../TrenaAPI";
 
@@ -57,16 +56,16 @@ async function login(user: LoginUser): Promise<User> {
 
 async function createUser(user: CreateUserDTO): Promise<void> {
 	const call = Config.BASE_URL + "/security/users/create";
-	const { name, password, email } = user;
+	const { name, authentication, email } = user;
 
 	const res = await TrenaAPI.network()
 		.post(call)
-		.send({ email, authentication: password, full_name: name });
+		.send({ email, authentication, full_name: name });
 
 	return res.body;
 }
 
-async function loadUserList(): Promise<ReadUserDTO> {
+async function loadUserList(): Promise<ReadUserDTO[]> {
 	const call = Config.BASE_URL + "/security/users";
 
 	const res = await TrenaAPI.network().get(call);
@@ -104,7 +103,7 @@ async function getUserPublicData(ctx: QueryFunctionContext) {
 	return res.body;
 }
 
-async function loadPublicUserList(): Promise<UserSafeDataDTO[]> {
+async function loadPublicUserList(): Promise<ReadUserDTO[]> {
 	const call = `${Config.BASE_URL}/security/users/public`;
 	const res = await TrenaAPI.network().get(call);
 

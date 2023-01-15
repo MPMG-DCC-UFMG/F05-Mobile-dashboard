@@ -17,7 +17,7 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useStores } from "../../core/contexts/UseStores";
 import { TypePhoto } from "../../core/models/TypePhoto";
-import { TypePhotoService } from "../../core/network/services/TypePhotoService";
+import { TypePhotoServiceQuery } from "../../core/network/services/TypePhotoService";
 import { AddTypeOfPhotoDialog } from "../Dialogs/TypePhoto/AddTypeOfPhotoDialog";
 import { EditTypeOfPhotoDialog } from "../Dialogs/TypePhoto/EditTypeOfPhotoDialog";
 import { Heading } from "../Heading";
@@ -27,7 +27,7 @@ import { TablePagination } from "../TablePagination";
 export const ListTypePhoto = observer(() => {
 	const { data: typePhotos, isLoading } = useQuery(
 		["getTypePhoto"],
-		TypePhotoService.loadTypePhotos,
+		TypePhotoServiceQuery.loadTypePhotos,
 		{
 			onSuccess: (data) => {
 				setOpenEditTypePhotoDialog(Array(data.length).fill(false));
@@ -47,9 +47,9 @@ export const ListTypePhoto = observer(() => {
 	const handleSearch = (value?: string) => {
 		if (value) {
 			setAtualTable(
-        typePhotos!.filter((item) =>
-        	item.name.toUpperCase().includes(value.toUpperCase())
-        )
+				typePhotos!.filter((item) =>
+					item.name.toUpperCase().includes(value.toUpperCase())
+				)
 			);
 		} else {
 			setAtualTable(typePhotos!);

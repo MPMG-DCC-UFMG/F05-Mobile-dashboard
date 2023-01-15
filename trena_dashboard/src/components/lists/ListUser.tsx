@@ -11,9 +11,12 @@ import {
 } from "@mui/material";
 import { observer } from "mobx-react";
 import React, { useState } from "react";
-import { useMutation, useQuery } from "react-query";
-import { User } from "../../core/models/User";
+import { useMutation } from "react-query";
+import { ReadUserDTO } from "../../core/models/dto/user/ReadUserDTO";
+import { useLoadUsersList } from "../../core/network/queries/auth/queries";
 import { SecurityServiceQuery } from "../../core/network/services/SecurityService";
+import { useTableStore } from "../../core/store/table";
+import { useUserStore } from "../../core/store/user";
 import { AddUsersDialog } from "../Dialogs/Users/AddUsersDialog";
 import { EditUserDialog } from "../Dialogs/Users/EditUserDialog";
 import { Heading } from "../Heading";
@@ -21,18 +24,14 @@ import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export const ListUser = observer(() => {
-	const { data: users, isLoading } = useQuery(
-		["getUsers"],
-		SecurityServiceQuery.loadUsersList,
-		{
-			onSuccess: (data) => {
-				setOpenEditUserDialog(Array(data.length).fill(false));
-			},
-		}
-	);
+	const { isLoading } = useLoadUsersList();
+	const users = useUserStore((state) => state.allUsers);
+	const { rowsPerPage, setRowsPerPage } = useTableStore();
+
 	const [addUserDialog, setOpenAddUserDialog] = useState(false);
-	const [editUserDialog, setOpenEditUserDialog] = useState<boolean[]>([]);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
+	const [editUserDialog, setOpenEditUserDialog] = useState<boolean[]>(
+		Array(users.length).fill(false)
+	);
 	const [page, setPage] = useState(0);
 
 	const { mutate } = useMutation(SecurityServiceQuery.deleteUser);
@@ -88,9 +87,9 @@ export const ListUser = observer(() => {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{users!
+									{users
 										.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-										.map((user: User, index: number) => (
+										.map((user: ReadUserDTO, index: number) => (
 											<TableRow hover key={user.email}>
 												<TableCell align="center">{user.email}</TableCell>
 												<TableCell align="center">{user.role}</TableCell>

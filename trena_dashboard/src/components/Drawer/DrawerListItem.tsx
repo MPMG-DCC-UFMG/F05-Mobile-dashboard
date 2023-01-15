@@ -28,12 +28,12 @@ import {
 	ListItemIcon,
 	ListItemText,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { rootContext } from "../../core/contexts/RootContext";
-import { LoggedUser } from "../../core/models/dto/user/LoggedUser";
+import { ReadUserDTO } from "../../core/models/dto/user/ReadUserDTO";
 import { useMenuStore } from "../../core/store/menu";
+import { useUserStore } from "../../core/store/user";
 import { OpenCallDialog } from "../Dialogs/Call/OpenCallDialog";
 
 interface MyListItemProps {
@@ -45,14 +45,14 @@ interface MyListItemProps {
 
 function MyListItem({ icon, url, iconText, sx }: MyListItemProps) {
 	const navigate = useNavigate();
-	const { userStore } = useContext(rootContext);
+	const setUser = useUserStore((state) => state.setUser);
 	const queryClient = useQueryClient();
 
 	const handleNavigate = () => {
 		if (iconText === "Sair") {
 			localStorage.removeItem("TOKEN");
 			localStorage.removeItem("ROLE");
-			userStore.updateLoggedUser({} as LoggedUser);
+			setUser({} as ReadUserDTO);
 			queryClient.invalidateQueries();
 			navigate(url);
 			return;
@@ -70,7 +70,7 @@ function MyListItem({ icon, url, iconText, sx }: MyListItemProps) {
 }
 
 export function DrawerListItem() {
-	const { userStore } = useContext(rootContext);
+	const user = useUserStore((state) => state.user);
 	const menuState = useMenuStore();
 	const [openCall, setOpenCall] = useState(false);
 
@@ -179,7 +179,7 @@ export function DrawerListItem() {
 						url="/calls"
 						iconText="Mensagens"
 					/>
-					{userStore.loggedUser.role === "ADMIN" && (
+					{user.role === "ADMIN" && (
 						<ListItemButton sx={{ pl: 6 }} onClick={handleOpenNewCall}>
 							<ListItemIcon>
 								<NotificationAdd />
