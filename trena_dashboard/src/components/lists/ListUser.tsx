@@ -9,7 +9,6 @@ import {
 	TableHead,
 	TableRow,
 } from "@mui/material";
-import { observer } from "mobx-react";
 import React, { useState } from "react";
 import { useMutation } from "react-query";
 import { ReadUserDTO } from "../../core/models/dto/user/ReadUserDTO";
@@ -23,7 +22,7 @@ import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
-export const ListUser = observer(() => {
+export function ListUser() {
 	const { isLoading } = useLoadUsersList();
 	const users = useUserStore((state) => state.allUsers);
 	const { rowsPerPage, setRowsPerPage } = useTableStore();
@@ -135,4 +134,4 @@ export const ListUser = observer(() => {
 			)}
 		</>
 	);
-});
+}

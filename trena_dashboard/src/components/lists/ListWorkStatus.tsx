@@ -12,7 +12,6 @@ import {
 	TableRow,
 	TextField,
 } from "@mui/material";
-import { observer } from "mobx-react";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { WorkStatus } from "../../core/models/WorkStatus";
@@ -23,7 +22,7 @@ import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
-export const ListWorkStatus = observer(() => {
+export function ListWorkStatus() {
 	const { data: workStatus, isLoading } = useQuery<WorkStatus[]>(
 		["getWorkStatus"],
 		WorkStatusServiceQuery.loadWorkStatus,
@@ -36,8 +35,8 @@ export const ListWorkStatus = observer(() => {
 	);
 	const [addWorkStatusDialog, setOpenAddWorkStatusDialog] = useState(false);
 	const [editWorkStatusDialog, setOpenEditWorkStatusDialog] = useState<
-    boolean[]
-  >([]);
+		boolean[]
+	>([]);
 	const [atualTable, setAtualTable] = useState<WorkStatus[]>(workStatus!);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [page, setPage] = useState(0);
@@ -45,9 +44,9 @@ export const ListWorkStatus = observer(() => {
 	const handleSearch = (value?: string) => {
 		if (value) {
 			setAtualTable(
-        workStatus!.filter((workstatus) =>
-        	workstatus.name.toLocaleUpperCase().includes(value.toUpperCase())
-        )
+				workStatus!.filter((workstatus) =>
+					workstatus.name.toLocaleUpperCase().includes(value.toUpperCase())
+				)
 			);
 		} else {
 			setAtualTable(workStatus!);
@@ -167,4 +166,4 @@ export const ListWorkStatus = observer(() => {
 			)}
 		</>
 	);
-});
+}

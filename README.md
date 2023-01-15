@@ -8,10 +8,12 @@ This project it's using React as framework and Typescript as main language
 
 The list of all the third party libraries used are:
 
-* [MobX](https://mobx.js.org/): a battle tested library that makes state management simple and scalable
-* [Material-UI](https://mui.com/): a comprehensive suite of UI tools library.
-* [SuperAgent](https://visionmedia.github.io/superagent/): light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve
-* [Leaflet](https://leafletjs.com/index.html): leading open-source JavaScript library for mobile-friendly interactive maps.
+* [Zustand](https://github.com/pmndrs/zustand): A small, fast and scalable bearbones state-management solution using simplified flux principles.
+* [Material-UI](https://mui.com/): A comprehensive suite of UI tools library.
+* [SuperAgent](https://visionmedia.github.io/superagent/): Light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve
+* [Leaflet](https://leafletjs.com/index.html): Leading open-source JavaScript library for mobile-friendly interactive maps.
+* [React-Query](https://react-query-v3.tanstack.com/): Fetching, caching, synchronizing and updating server state in React applications tool
+* [React-Router-DOM](https://reactrouter.com/en/main): Client side routing library
  
 ### 1.2. Services
 
