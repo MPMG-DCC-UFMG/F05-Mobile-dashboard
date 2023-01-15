@@ -25,7 +25,10 @@ export function AddTypeOfWorkDialog({
 }: SingleDialogContainerProps) {
 	const typePhotos = useTypePhotoStore((state) => state.typePhotos);
 	const { mutate } = useAddTypeWork();
-	const [createTypeWork, setCreateTypeWork] = useState({} as CreateTypeWorkDTO);
+	const [createTypeWork, setCreateTypeWork] = useState<CreateTypeWorkDTO>({
+		name: "",
+		status_list: [],
+	});
 
 	const handleAddTypeOfWork = () => {
 		mutate(createTypeWork);

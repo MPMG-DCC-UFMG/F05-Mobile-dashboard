@@ -1,6 +1,7 @@
 import {
 	Button,
 	Checkbox,
+	CircularProgress,
 	Grid,
 	Table,
 	TableCell,
@@ -9,9 +10,10 @@ import {
 	TextField,
 } from "@mui/material";
 import React, { useCallback, useState } from "react";
-import { UpdateTypePhotoDTO } from "../../../core/models/dto/typePhotos/UpdateTypePhotoDTO";
+import { UpdateTypeWorkDTO } from "../../../core/models/dto/typeWork/UpdateTypeWorkDTO";
 import { TypeWork } from "../../../core/models/TypeWork";
 import { useLoadTypePhotos } from "../../../core/network/queries/typePhotos/queries";
+import { useUpdateTypeWork } from "../../../core/network/queries/typeWork/mutations";
 import { useTypePhotoStore } from "../../../core/store/typePhoto";
 import { closeDialog } from "../../../utils/dialogHandler";
 import { TableDialogContainer } from "../DialogContainer";
@@ -33,17 +35,21 @@ export function EditTypeOfWorkDialog({
 }: EditTypeOfWorkDialog) {
 	useLoadTypePhotos();
 	const typePhotos = useTypePhotoStore((state) => state.typePhotos);
-	const [updateTypePhoto, setUpdateTypePhoto] = useState(
-		{} as UpdateTypePhotoDTO
-	);
+	const { mutate, isLoading } = useUpdateTypeWork();
+
+	const [updateTypeWork, setUpdateTypeWork] = useState<UpdateTypeWorkDTO>({
+		name: "",
+		status_list: [],
+	});
 
 	const handleCloseDialog = useCallback(() => {
 		closeDialog(state, setState, index);
 	}, []);
 
-	const handleTypeOfWorkStatus = () => {
+	const handleTypeOfWorkStatus = useCallback(() => {
+		mutate(updateTypeWork);
 		handleCloseDialog();
-	};
+	}, []);
 
 	return (
 		<TableDialogContainer
@@ -55,7 +61,7 @@ export function EditTypeOfWorkDialog({
 			<Grid container justifyContent="space-between" alignItems="center">
 				<TextField
 					onChange={(e) =>
-						setUpdateTypePhoto({ ...updateTypePhoto, name: e.target.value })
+						setUpdateTypeWork({ ...updateTypeWork, name: e.target.value })
 					}
 					required
 					label="Tipo da Obra"
@@ -94,7 +100,7 @@ export function EditTypeOfWorkDialog({
 							color="success"
 							variant="contained"
 						>
-							Salvar
+							{isLoading ? <CircularProgress /> : "Salvar"}
 						</Button>
 					</Grid>
 				</Grid>

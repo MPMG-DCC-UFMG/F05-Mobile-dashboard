@@ -12,10 +12,13 @@ import {
 	TableRow,
 	TextField,
 } from "@mui/material";
-import React, { useState } from "react";
-import { useQuery } from "react-query";
+import React, { useCallback, useState } from "react";
 import { WorkStatus } from "../../core/models/WorkStatus";
-import { WorkStatusServiceQuery } from "../../core/network/services/WorkStatusService";
+import { useDeleteWorkStatus } from "../../core/network/queries/workStatus/mutations";
+import { useLoadWorkStatus } from "../../core/network/queries/workStatus/queries";
+import { useTableStore } from "../../core/store/table";
+import { useWorkStatusStore } from "../../core/store/workStatus";
+import { openDialog } from "../../utils/dialogHandler";
 import { AddWorkStatusDialog } from "../Dialogs/StatusWork/AddWorkStatusDialog";
 import { EditWorkStatusDialog } from "../Dialogs/StatusWork/EditWorkStatusDialog";
 import { Heading } from "../Heading";
@@ -23,45 +26,29 @@ import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export function ListWorkStatus() {
-	const { data: workStatus, isLoading } = useQuery<WorkStatus[]>(
-		["getWorkStatus"],
-		WorkStatusServiceQuery.loadWorkStatus,
-		{
-			onSuccess: (data) => {
-				setOpenEditWorkStatusDialog(Array(data.length).fill(false));
-				setAtualTable(data);
-			},
-		}
-	);
+	const { data: originalData, isLoading } = useLoadWorkStatus();
+	const { workStatus, setWorkStatus, editDialog, setEditDialog } =
+		useWorkStatusStore();
+	const { rowsPerPage, setRowsPerPage } = useTableStore();
+	const { mutate } = useDeleteWorkStatus();
+
 	const [addWorkStatusDialog, setOpenAddWorkStatusDialog] = useState(false);
-	const [editWorkStatusDialog, setOpenEditWorkStatusDialog] = useState<
-		boolean[]
-	>([]);
-	const [atualTable, setAtualTable] = useState<WorkStatus[]>(workStatus!);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [page, setPage] = useState(0);
 
 	const handleSearch = (value?: string) => {
 		if (value) {
-			setAtualTable(
-				workStatus!.filter((workstatus) =>
-					workstatus.name.toLocaleUpperCase().includes(value.toUpperCase())
-				)
+			const filteredWorkStatus = workStatus.filter((item) =>
+				item.name.toUpperCase().includes(value.toUpperCase())
 			);
+			setWorkStatus(filteredWorkStatus);
 		} else {
-			setAtualTable(workStatus!);
+			setWorkStatus(originalData ? originalData : []);
 		}
 	};
 
-	const handleDeleteWorkStatus = (workStatus: WorkStatus) => {};
-
-	const handleOpenEditDialog = (index: number) => {
-		setOpenEditWorkStatusDialog(
-			editWorkStatusDialog.map((value, position) =>
-				position === index ? true : value
-			)
-		);
-	};
+	const handleDeleteWorkStatus = useCallback((flag: number) => {
+		mutate(flag);
+	}, []);
 
 	return (
 		<>
@@ -118,7 +105,7 @@ export function ListWorkStatus() {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{atualTable
+									{workStatus
 										.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 										.map((workStatus: WorkStatus, index: number) => (
 											<TableRow hover key={workStatus.flag}>
@@ -129,22 +116,26 @@ export function ListWorkStatus() {
 												<TableCell align="center">
 													<IconButton
 														color="warning"
-														onClick={() => handleOpenEditDialog(index)}
+														onClick={() =>
+															openDialog(editDialog, setEditDialog, index)
+														}
 													>
 														<Edit />
 													</IconButton>
 												</TableCell>
 												<TableCell align="center">
 													<IconButton
-														onClick={() => handleDeleteWorkStatus(workStatus)}
+														onClick={() =>
+															handleDeleteWorkStatus(workStatus.flag)
+														}
 														color="error"
 													>
 														<Delete />
 													</IconButton>
 												</TableCell>
 												<EditWorkStatusDialog
-													state={editWorkStatusDialog}
-													setState={setOpenEditWorkStatusDialog}
+													state={editDialog}
+													setState={setEditDialog}
 													workStatus={workStatus}
 													index={index}
 													title="Editar Estado Da Obra"
@@ -158,7 +149,7 @@ export function ListWorkStatus() {
 								setRowsPerPage={setRowsPerPage}
 								page={page}
 								setPage={setPage}
-								data={atualTable}
+								data={workStatus}
 							/>
 						</Heading>
 					</Paper>

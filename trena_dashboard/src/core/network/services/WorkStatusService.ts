@@ -1,5 +1,7 @@
 import { QueryFunctionContext } from "react-query";
 import Config from "../../../config/Config";
+import { CreateWorkStatusDTO } from "../../models/dto/workStatus/CreateWorkStatusDTO";
+import { UpdateWorkStatusDTO } from "../../models/dto/workStatus/UpdateWorkStatusDTO";
 import { WorkStatus } from "../../models/WorkStatus";
 import TrenaAPI from "../TrenaAPI";
 
@@ -23,14 +25,16 @@ async function loadWorkStatusById(
 async function deleteWorkStatus(workStatusFlag: number): Promise<WorkStatus> {
 	const call = Config.BASE_URL + "/workstatus/delete";
 	const res = await TrenaAPI.network()
-		.post(call)
+		.delete(call)
 		.type("application/json")
 		.query({ work_status_id: workStatusFlag });
 
 	return res.body;
 }
 
-async function addWorkStatus(workStatus: WorkStatus): Promise<WorkStatus> {
+async function addWorkStatus(
+	workStatus: CreateWorkStatusDTO
+): Promise<WorkStatus> {
 	const call = Config.BASE_URL + "/workstatus/add";
 	const res = await TrenaAPI.network()
 		.post(call)
@@ -40,7 +44,9 @@ async function addWorkStatus(workStatus: WorkStatus): Promise<WorkStatus> {
 	return res.body;
 }
 
-async function updateWorkStatus(workStatus: WorkStatus): Promise<WorkStatus> {
+async function updateWorkStatus(
+	workStatus: UpdateWorkStatusDTO
+): Promise<WorkStatus> {
 	const call = Config.BASE_URL + "/workstatus/update";
 	const res = await TrenaAPI.network()
 		.put(call)

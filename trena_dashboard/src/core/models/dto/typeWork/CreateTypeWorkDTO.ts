@@ -1,4 +1,4 @@
 export interface CreateTypeWorkDTO {
 	name: string;
-	statusList?: number[];
+	status_list: number[];
 }

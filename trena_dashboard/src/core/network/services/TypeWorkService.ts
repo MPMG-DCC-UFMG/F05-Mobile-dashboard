@@ -23,7 +23,7 @@ async function loadTypeWorks(): Promise<TypeWork[]> {
 async function deleteTypeWork(typeWorkFlag: number): Promise<TypeWork> {
 	const call = Config.BASE_URL + "/typeworks/delete";
 	const res = await TrenaAPI.network()
-		.post(call)
+		.delete(call)
 		.type("application/json")
 		.query({ type_work_id: typeWorkFlag });
 

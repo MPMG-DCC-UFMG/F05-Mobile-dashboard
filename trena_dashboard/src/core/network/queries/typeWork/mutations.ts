@@ -33,7 +33,7 @@ export function useDeleteTypeWork() {
 export function useUpdateTypeWork() {
 	const queryClient = useQueryClient();
 
-	return useMutation(TypeWorkServiceQuery.deleteTypeWork, {
+	return useMutation(TypeWorkServiceQuery.updateTypeWork, {
 		onSuccess: () => {
 			Notify("Tipo de Obra atualizada com sucesso!", "bottom-left", "success");
 			queryClient.invalidateQueries("getTypeWorks");

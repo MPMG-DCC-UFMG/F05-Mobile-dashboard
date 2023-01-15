@@ -12,8 +12,9 @@ import {
 	TableRow,
 	TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { TypeWork } from "../../core/models/TypeWork";
+import { useDeleteTypeWork } from "../../core/network/queries/typeWork/mutations";
 import { useLoadTypeWorks } from "../../core/network/queries/typeWork/queries";
 import { useTableStore } from "../../core/store/table";
 import { useTypeWorkStore } from "../../core/store/typeWorks";
@@ -27,16 +28,12 @@ import { TablePagination } from "../TablePagination";
 export function ListTypeWork() {
 	const { data: originalTypeWorks, isLoading } = useLoadTypeWorks();
 
-	const {
-		typeWorks,
-		editDialog,
-		deleteDialog,
-		setTypeWorks,
-		setEditDialog,
-		setDeleteDialog,
-	} = useTypeWorkStore();
+	const { typeWorks, editDialog, setTypeWorks, setEditDialog } =
+		useTypeWorkStore();
 
 	const { rowsPerPage, setRowsPerPage } = useTableStore();
+
+	const { mutate } = useDeleteTypeWork();
 
 	const [addTypeWorkDialog, setOpenAddTypeWorkDialog] = useState(false);
 	const [page, setPage] = useState(0);
@@ -51,6 +48,10 @@ export function ListTypeWork() {
 			setTypeWorks(originalTypeWorks ? originalTypeWorks : []);
 		}
 	};
+
+	const handleDeleteTypeWork = useCallback((flag: number) => {
+		mutate(flag);
+	}, []);
 
 	return (
 		<>
@@ -127,7 +128,7 @@ export function ListTypeWork() {
 														<IconButton
 															size="small"
 															onClick={() =>
-																openDialog(deleteDialog, setDeleteDialog, index)
+																handleDeleteTypeWork(typeWork.flag)
 															}
 															color="error"
 														>
