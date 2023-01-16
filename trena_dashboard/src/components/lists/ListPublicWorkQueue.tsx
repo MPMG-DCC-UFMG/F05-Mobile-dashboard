@@ -10,10 +10,16 @@ import {
 	TableRow,
 	Tooltip,
 } from "@mui/material";
-import React, { useState } from "react";
-import { useQuery } from "react-query";
+import React, { useCallback, useState } from "react";
 import { PublicWork } from "../../core/models/PublicWork";
-import { PublicWorkServiceQuery } from "../../core/network/services/PublicWorkService";
+import {
+	useAcceptPublicWork,
+	useRefusePublicWork,
+} from "../../core/network/queries/queue/mutations";
+import { useLoadPublicWorkQueue } from "../../core/network/queries/queue/queries";
+import { useQueueStore } from "../../core/store/queue";
+import { useTableStore } from "../../core/store/table";
+import { openDialog } from "../../utils/dialogHandler";
 import { addressFormatter } from "../../utils/mapper";
 import { EvaluatePublicQueueDialog } from "../Dialogs/Queue/EvaluatePublicQueueItem";
 import { Heading } from "../Heading";
@@ -22,30 +28,38 @@ import { TablePagination } from "../TablePagination";
 import { WarningField } from "../WarningField";
 
 export function ListPublicWorkQueue() {
-	const [openQueueDialog, setOpenQueueDialog] = useState<boolean[]>([]);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
+	const { isLoading } = useLoadPublicWorkQueue();
+	const {
+		evaluatePublicWorkDialog,
+		setEvaluatePublicWorkDialog,
+		publicWorkQueue,
+	} = useQueueStore();
+	const { rowsPerPage, setRowsPerPage } = useTableStore();
 	const [page, setPage] = useState(0);
 
-	const { data: publicWorks, isLoading } = useQuery<PublicWork[]>(
-		["getPublicWorksQueue"],
-		() => PublicWorkServiceQuery.loadPublicWorkQueue(),
-		{
-			onSuccess(data) {
-				setOpenQueueDialog(Array(data.length).fill(false));
-			},
-		}
-	);
+	const { mutate: acceptPublicWork } = useAcceptPublicWork();
+	const { mutate: refusePublicWork } = useRefusePublicWork();
 
-	const handleOpenQueueDialog = (index: number) => {
-		setOpenQueueDialog(
-			openQueueDialog.map((s, pos) => (pos === index ? true : s))
-		);
-	};
+	const handleAcceptPublicWork = useCallback((publicWork: PublicWork) => {
+		acceptPublicWork({
+			...publicWork,
+			queue_status: 1,
+			queue_status_date: Date.now(),
+		});
+	}, []);
+
+	const handleRefusePublicWork = useCallback((publicWork: PublicWork) => {
+		refusePublicWork({
+			...publicWork,
+			queue_status: 2,
+			queue_status_date: Date.now(),
+		});
+	}, []);
 
 	return (
 		<>
 			{isLoading ||
-				(!publicWorks && (
+				(!publicWorkQueue && (
 					<LoadingTableData
 						headingTitle="Fila de Obras"
 						headingSteps={[
@@ -60,7 +74,7 @@ export function ListPublicWorkQueue() {
 						]}
 					/>
 				))}
-			{!isLoading && publicWorks && publicWorks.length === 0 ? (
+			{!isLoading && publicWorkQueue && publicWorkQueue.length === 0 ? (
 				<WarningField
 					title="Não há Obras na Fila!"
 					message="No momento não há nenhuma Obra para ser validada."
@@ -82,7 +96,7 @@ export function ListPublicWorkQueue() {
 								},
 							]}
 						>
-							{publicWorks && (
+							{publicWorkQueue && (
 								<>
 									<Table>
 										<TableHead>
@@ -95,7 +109,7 @@ export function ListPublicWorkQueue() {
 											</TableRow>
 										</TableHead>
 										<TableBody>
-											{publicWorks
+											{publicWorkQueue
 												.slice(
 													page * rowsPerPage,
 													page * rowsPerPage + rowsPerPage
@@ -114,7 +128,13 @@ export function ListPublicWorkQueue() {
 																	<IconButton
 																		color="info"
 																		size="small"
-																		onClick={() => handleOpenQueueDialog(index)}
+																		onClick={() =>
+																			openDialog(
+																				evaluatePublicWorkDialog,
+																				setEvaluatePublicWorkDialog,
+																				index
+																			)
+																		}
 																	>
 																		<Visibility />
 																	</IconButton>
@@ -122,14 +142,26 @@ export function ListPublicWorkQueue() {
 															</TableCell>
 															<TableCell align="center">
 																<Tooltip title="Aprovar">
-																	<IconButton color="success" size="small">
+																	<IconButton
+																		onClick={() =>
+																			handleAcceptPublicWork(publicWork)
+																		}
+																		color="success"
+																		size="small"
+																	>
 																		<Check />
 																	</IconButton>
 																</Tooltip>
 															</TableCell>
 															<TableCell align="center">
 																<Tooltip title="Recusar">
-																	<IconButton color="error" size="small">
+																	<IconButton
+																		onClick={() =>
+																			handleRefusePublicWork(publicWork)
+																		}
+																		color="error"
+																		size="small"
+																	>
 																		<Close />
 																	</IconButton>
 																</Tooltip>
@@ -137,8 +169,8 @@ export function ListPublicWorkQueue() {
 														</TableRow>
 														<EvaluatePublicQueueDialog
 															index={index}
-															state={openQueueDialog}
-															setState={setOpenQueueDialog}
+															state={evaluatePublicWorkDialog}
+															setState={setEvaluatePublicWorkDialog}
 															fullScreen
 															publicWork={publicWork}
 															title={`Avaliação de Obra Pública - ${publicWork.name}`}
@@ -148,7 +180,7 @@ export function ListPublicWorkQueue() {
 										</TableBody>
 									</Table>
 									<TablePagination
-										data={publicWorks}
+										data={publicWorkQueue}
 										rowsPerPage={rowsPerPage}
 										setRowsPerPage={setRowsPerPage}
 										page={page}

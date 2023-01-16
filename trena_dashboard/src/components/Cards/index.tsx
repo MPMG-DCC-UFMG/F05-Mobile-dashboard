@@ -1,25 +1,17 @@
 import { CalendarMonth, Gite, Security } from "@mui/icons-material";
 import { Container, Grid } from "@mui/material";
 import React from "react";
-import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { CollectServiceQuery } from "../../core/network/services/CollectService";
-import { InspectionServiceQuery } from "../../core/network/services/InspectionService";
-import { PublicWorkServiceQuery } from "../../core/network/services/PublicWorkService";
+import { useLoadMonthlyCollectsCount } from "../../core/network/queries/collect/queries";
+import { useCountMpInspections } from "../../core/network/queries/inspection/queries";
+import { useCountPublicWork } from "../../core/network/queries/publicWork/queries";
 import { Card } from "./CardModel";
 
 export function HomeCards() {
 	const navigate = useNavigate();
-	const { data: publicWorkCount } = useQuery<number>(["publicWorkCount"], () =>
-		PublicWorkServiceQuery.countPublicWork()
-	);
-	const { data: mpInspections } = useQuery<number>(["mpInspectionsCount"], () =>
-		InspectionServiceQuery.countMpInspections()
-	);
-	const { data: usersInspections } = useQuery<number>(
-		["usersInspectionsCount"],
-		() => CollectServiceQuery.collectMonthCount()
-	);
+	const { data: publicWorkCount } = useCountPublicWork();
+	const { data: mpInspections } = useCountMpInspections();
+	const { data: usersInspections } = useLoadMonthlyCollectsCount();
 
 	const handleClickWorks = () => navigate("/publicWork");
 	const handleClickInspections = () => navigate("/inspections");

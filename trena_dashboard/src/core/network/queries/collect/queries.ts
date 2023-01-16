@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useQueries, useQuery } from "react-query";
 import { Collect } from "../../../models/Collect";
 import { useCollectStore } from "../../../store/collect";
@@ -60,9 +59,9 @@ export function useGetMediaMetadata(collectId: string) {
 export function useGetCollectMetadata(collects: Collect[]) {
 	return useQueries(
 		collects.map((collect) => ({
-			queryKey: ["getCollectMetadata", collect.id!],
+			queryKey: ["getCollectMetadata", collect.id],
 			queryFn: () =>
-				CollectServiceQuery.getMediaMetaDataByCollectIdFixed(collect.id!),
+				CollectServiceQuery.getMediaMetaDataByCollectIdFixed(collect.id),
 			enabled: collects.length > 0,
 		}))
 	);

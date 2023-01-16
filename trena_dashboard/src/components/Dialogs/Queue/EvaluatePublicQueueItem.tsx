@@ -4,33 +4,33 @@ import { PublicQueueStepper } from "../../Queue/PublicWorkQueue/PublicQueueStepp
 import { TableDialogContainer, TableDialogProps } from "../DialogContainer";
 
 interface EvaluatePublicQueueItemDialogProps extends TableDialogProps {
-  publicWork: PublicWork;
+	publicWork: PublicWork;
 }
 
 export function EvaluatePublicQueueDialog({
-  publicWork,
-  index,
-  state,
-  setState,
-  title,
-  fullScreen,
+	publicWork,
+	index,
+	state,
+	setState,
+	title,
+	fullScreen,
 }: EvaluatePublicQueueItemDialogProps) {
-  return (
-    <TableDialogContainer
-      state={state}
-      setState={setState}
-      index={index}
-      title={title}
-      fullScreen={fullScreen}
-    >
-      {publicWork && (
-        <PublicQueueStepper
-          state={state}
-          setState={setState}
-          index={index}
-          publicWork={publicWork}
-        />
-      )}
-    </TableDialogContainer>
-  );
+	return (
+		<TableDialogContainer
+			state={state}
+			setState={setState}
+			index={index}
+			title={title}
+			fullScreen={fullScreen}
+		>
+			{publicWork && (
+				<PublicQueueStepper
+					state={state}
+					setState={setState}
+					index={index}
+					publicWork={publicWork}
+				/>
+			)}
+		</TableDialogContainer>
+	);
 }

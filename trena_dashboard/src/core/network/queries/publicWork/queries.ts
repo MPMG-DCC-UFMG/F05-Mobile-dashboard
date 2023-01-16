@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
 import { usePublicWorkStore } from "../../../store/publicWork";
+import { useQueueStore } from "../../../store/queue";
 import { PublicWorkServiceQuery } from "../../services/PublicWorkService";
 
 export function useLoadPublicWorks() {
@@ -22,13 +23,6 @@ export function useLoadPublicWorks() {
 	});
 }
 
-export function useLoadPublicWorksQueue() {
-	return useQuery(
-		["getPublicWorksQueue"],
-		PublicWorkServiceQuery.loadPublicWorkQueue
-	);
-}
-
 export function useCountPublicWork() {
 	return useQuery(
 		["getPublicWorkCount"],
@@ -44,8 +38,17 @@ export function useGetPublicWorkById(publicWorkId: string) {
 }
 
 export function useGetPublicWorksWithCollectsInQueue() {
-	return useQuery([
-		"publicWorksWithCollectsInQueue",
+	const { setPublicWorkWithCollectsInQueue, setEvaluateCollectsDialog } =
+		useQueueStore();
+
+	return useQuery(
+		["publicWorksWithCollectsInQueue"],
 		PublicWorkServiceQuery.getPublicWorksWithCollectsInQueue,
-	]);
+		{
+			onSuccess: (data) => {
+				setPublicWorkWithCollectsInQueue(data);
+				setEvaluateCollectsDialog(Array(data.length).fill(false));
+			},
+		}
+	);
 }

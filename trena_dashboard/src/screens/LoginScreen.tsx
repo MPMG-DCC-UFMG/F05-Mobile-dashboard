@@ -4,11 +4,11 @@ import { AsideLoginContainer } from "../components/Containers/AsideLoginContaine
 import { useLogin } from "../core/network/queries/auth/mutations";
 
 export interface LoginUser {
-  username: string
-  password: string
+	username: string;
+	password: string;
 }
 
-export function LoginScreen () {
+export function LoginScreen() {
 	const defaultUsername = import.meta.env.VITE_ADMIN_USERNAME;
 	const defaultPassword = import.meta.env.VITE_ADMIN_PASSWORD;
 
@@ -16,7 +16,7 @@ export function LoginScreen () {
 
 	const [user, setUser] = useState<LoginUser>({
 		username: defaultUsername || "",
-		password: defaultPassword || ""
+		password: defaultPassword || "",
 	});
 
 	const handleLogin = () => {
@@ -34,7 +34,9 @@ export function LoginScreen () {
 				type="email"
 				autoFocus
 				value={user.username}
-				onChange={(e) => { setUser({ ...user, username: e.target.value }); }}
+				onChange={(e) => {
+					setUser({ ...user, username: e.target.value });
+				}}
 			/>
 			<TextField
 				margin="normal"
@@ -46,13 +48,16 @@ export function LoginScreen () {
 				id="password"
 				autoComplete="current-password"
 				value={user.password}
-				onChange={(e) => { setUser({ ...user, password: e.target.value }); }}
+				onChange={(e) => {
+					setUser({ ...user, password: e.target.value });
+				}}
 			/>
 			<Button
 				fullWidth
 				onClick={handleLogin}
 				variant="contained"
 				sx={{ mt: 3, mb: 2 }}
+				disabled={isLoading}
 			>
 				{isLoading ? <CircularProgress size={20} color="inherit" /> : "Entrar"}
 			</Button>

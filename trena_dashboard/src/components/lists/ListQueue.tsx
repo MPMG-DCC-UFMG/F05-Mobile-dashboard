@@ -11,11 +11,13 @@ import {
 	Tooltip,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useQuery } from "react-query";
 import { PublicWork } from "../../core/models/PublicWork";
-import { WorkStatus } from "../../core/models/WorkStatus";
-import { PublicWorkServiceQuery } from "../../core/network/services/PublicWorkService";
-import { WorkStatusServiceQuery } from "../../core/network/services/WorkStatusService";
+import { useGetPublicWorksWithCollectsInQueue } from "../../core/network/queries/publicWork/queries";
+import { useLoadWorkStatus } from "../../core/network/queries/workStatus/queries";
+import { useQueueStore } from "../../core/store/queue";
+import { useTableStore } from "../../core/store/table";
+import { useWorkStatusStore } from "../../core/store/workStatus";
+import { openDialog } from "../../utils/dialogHandler";
 import { EvaluateQueueItemDialog } from "../Dialogs/Queue/EvaluateQueueItem";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
@@ -23,29 +25,17 @@ import { TablePagination } from "../TablePagination";
 import { WarningField } from "../WarningField";
 
 export function ListQueue() {
-	const [openEvaluateCollect, setOpenEvaluateCollect] = useState<boolean[]>([]);
-	const { data: queue, isLoading } = useQuery<PublicWork[]>(
-		["PublicWorksWithCollectsInQueue"],
-		() => PublicWorkServiceQuery.getPublicWorksWithCollectsInQueue(),
-		{
-			onSuccess(data) {
-				setOpenEvaluateCollect(Array(data.length).fill(false));
-			},
-		}
-	);
+	const { isLoading } = useGetPublicWorksWithCollectsInQueue();
+	useLoadWorkStatus();
+	const {
+		evaluateCollectsDialog,
+		setEvaluateCollectsDialog,
+		publicWorkWithCollectsInQueue: queue,
+	} = useQueueStore();
+	const { workStatus } = useWorkStatusStore();
+	const { rowsPerPage, setRowsPerPage } = useTableStore();
 
-	const { data: workStatus } = useQuery<WorkStatus[]>(["getWorkStatus"], () =>
-		WorkStatusServiceQuery.loadWorkStatus()
-	);
-
-	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [page, setPage] = useState(0);
-
-	const handleOpenEvaluateDialog = (index: number) => {
-		setOpenEvaluateCollect(
-			openEvaluateCollect.map((s, pos) => (pos === index ? true : s))
-		);
-	};
 
 	return (
 		<>
@@ -99,20 +89,26 @@ export function ListQueue() {
 														{public_work.name}
 													</TableCell>
 													<TableCell align="center">
-														{workStatus
-															? workStatus.find(
+														{
+															workStatus.find(
 																(status) =>
 																	status.flag === public_work.user_status
 															)?.name
-															: ""}
+														}
 													</TableCell>
 
 													<TableCell align="center">
 														<Tooltip title="Avaliar">
 															<IconButton
-																onClick={() => handleOpenEvaluateDialog(index)}
+																onClick={() =>
+																	openDialog(
+																		evaluateCollectsDialog,
+																		setEvaluateCollectsDialog,
+																		index
+																	)
+																}
 															>
-																<Visibility />
+																<Visibility color="info" />
 															</IconButton>
 														</Tooltip>
 													</TableCell>
@@ -134,8 +130,8 @@ export function ListQueue() {
 												<EvaluateQueueItemDialog
 													publicWork={public_work}
 													index={index}
-													state={openEvaluateCollect}
-													setState={setOpenEvaluateCollect}
+													state={evaluateCollectsDialog}
+													setState={setEvaluateCollectsDialog}
 													title={"Avaliação de Vistoria Cidadã"}
 													fullScreen
 												/>
