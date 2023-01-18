@@ -35,7 +35,7 @@ export function OpenMessagesDialog({
 	// 	notification.user_email === messageSender ? user.email : user.email;
 
 	const [message, setMessage] = useState<CreateCommentDTO>({
-		id: uuid(),
+		id: "",
 		content: "",
 		notification_id: notification.id,
 		receive_email: notification.user_email,
@@ -43,15 +43,24 @@ export function OpenMessagesDialog({
 		timestamp: Date.now(),
 	});
 
-	const { data: comments, isLoading } = useGetCommentsFromNotification(
-		notification.id
-	);
+	const {
+		data: comments,
+		isLoading,
+		refetch,
+	} = useGetCommentsFromNotification(notification.id);
 
 	const { mutate: send, isLoading: sending } = useSendComment();
 
 	const handleSendMessage = () => {
-		send(message);
-		setMessage({ ...message, content: "" });
+		send(
+			{ ...message, id: uuid() },
+			{
+				onSuccess: () => {
+					refetch();
+					setMessage({ ...message, content: "" });
+				},
+			}
+		);
 	};
 
 	return (
@@ -69,7 +78,7 @@ export function OpenMessagesDialog({
 						key={comment.id}
 						messageOwner={comment.send_email}
 						side={comment.send_email === user.email ? "right" : "left"}
-						text={message.content}
+						text={comment.content}
 						timestamp={comment.timestamp}
 					/>
 				))}

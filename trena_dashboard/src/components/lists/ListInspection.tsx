@@ -1,6 +1,7 @@
 import {
 	Article,
 	Collections,
+	NotificationAdd,
 	PictureAsPdfOutlined,
 } from "@mui/icons-material";
 import {
@@ -21,10 +22,12 @@ import {
 } from "../../core/network/queries/inspection/mutations";
 import { useLoadInspections } from "../../core/network/queries/inspection/queries";
 import { useInspectionStore } from "../../core/store/inspection";
+import { useNotificationsStore } from "../../core/store/notification";
 import { useTableStore } from "../../core/store/table";
 import { openDialog } from "../../utils/dialogHandler";
 import { convertEphocDate, inspectionsStatusMapping } from "../../utils/mapper";
 import { InspectionCollectsDialog } from "../Dialogs/Inspection/InspectionCollects";
+import { SendNotificationDialog } from "../Dialogs/Notification/SendNotificationDialog";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
@@ -34,6 +37,8 @@ export function ListInspection() {
 	const { inspections, collectModal, setCollectModal } = useInspectionStore();
 	const [page, setPage] = useState(0);
 	const { rowsPerPage, setRowsPerPage } = useTableStore();
+	const { sendNotificationDialog, setSendNotificationDialog } =
+		useNotificationsStore();
 
 	const { mutate: downloadPdf } = useDownloadPdf();
 	const { mutate: downloadDocx } = useDownloadDocx();
@@ -90,6 +95,7 @@ export function ListInspection() {
 											<TableCell align="center">Mídias</TableCell>
 											<TableCell align="center">Relatório</TableCell>
 											<TableCell align="center">Editável</TableCell>
+											<TableCell align="center">Notificar</TableCell>
 										</TableRow>
 									</TableHead>
 									<TableBody>
@@ -159,6 +165,22 @@ export function ListInspection() {
 																</IconButton>
 															</Tooltip>
 														</TableCell>
+														<TableCell align="center">
+															<Tooltip title="Notificar">
+																<IconButton
+																	onClick={() =>
+																		openDialog(
+																			sendNotificationDialog,
+																			setSendNotificationDialog,
+																			index
+																		)
+																	}
+																	size="small"
+																>
+																	<NotificationAdd htmlColor="#FFCC00" />
+																</IconButton>
+															</Tooltip>
+														</TableCell>
 													</TableRow>
 													<InspectionCollectsDialog
 														index={index}
@@ -171,6 +193,12 @@ export function ListInspection() {
 																? `${inspection.description} - `
 																: "Coletas - "
 														}${inspection.name}`}
+													/>
+													<SendNotificationDialog
+														index={index}
+														state={sendNotificationDialog}
+														setState={setSendNotificationDialog}
+														inspection={inspection}
 													/>
 												</React.Fragment>
 											))}

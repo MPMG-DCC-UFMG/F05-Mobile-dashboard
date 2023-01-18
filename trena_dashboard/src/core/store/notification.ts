@@ -4,13 +4,16 @@ import { Notification } from "../models/Notification";
 type NotificationStore = {
 	notifications: Notification[];
 	commentsDialog: boolean[];
-	setCommentsDialog: (state: boolean[]) => void;
+	sendNotificationDialog: boolean[];
 	setNotifications: (notifications: Notification[]) => void;
+	setCommentsDialog: (state: boolean[]) => void;
+	setSendNotificationDialog: (state: boolean[]) => void;
 };
 
 export const useNotificationsStore = create<NotificationStore>((set) => ({
 	notifications: [],
 	commentsDialog: [],
+	sendNotificationDialog: [],
 	setNotifications: (newNotifications: Notification[]) => {
 		set(() => ({
 			notifications: newNotifications,
@@ -19,6 +22,11 @@ export const useNotificationsStore = create<NotificationStore>((set) => ({
 	setCommentsDialog: (state: boolean[]) => {
 		set(() => ({
 			commentsDialog: state,
+		}));
+	},
+	setSendNotificationDialog: (state: boolean[]) => {
+		set(() => ({
+			sendNotificationDialog: state,
 		}));
 	},
 }));

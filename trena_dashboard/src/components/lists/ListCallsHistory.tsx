@@ -17,7 +17,7 @@ import { CallServiceQuery } from "../../core/network/services/CallService";
 import { useTableStore } from "../../core/store/table";
 import { useUserStore } from "../../core/store/user";
 import { convertEphocDate } from "../../utils/mapper";
-import { OpenMessagesDialog } from "../Dialogs/Call/OpenMessagesDialog";
+import { OpenMessagesDialog } from "../Dialogs/Notification/OpenMessagesDialog";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
