@@ -6,10 +6,11 @@ import {
 	TextField,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { Call } from "../../../core/models/Call";
-import { SendMessageDTO } from "../../../core/models/dto/SendMessageDTO";
-import { MessageServiceQuery } from "../../../core/network/services/MessagesService";
+import uuid from "react-uuid";
+import { CreateCommentDTO } from "../../../core/models/dto/comment/CreateCommentDTO";
+import { Notification } from "../../../core/models/Notification";
+import { useSendComment } from "../../../core/network/queries/notification/mutations";
+import { useGetCommentsFromNotification } from "../../../core/network/queries/notification/queries";
 import { useUserStore } from "../../../core/store/user";
 import { ChatCard } from "../../Cards/Chat";
 import { TableDialogContainer } from "../DialogContainer";
@@ -19,7 +20,7 @@ interface OpenMessagesDialogProps {
 	setState(state: boolean[]): void;
 	index: number;
 	open?: boolean;
-	call: Call;
+	notification: Notification;
 }
 
 export function OpenMessagesDialog({
@@ -27,46 +28,30 @@ export function OpenMessagesDialog({
 	setState,
 	index,
 	open = true,
-	call,
+	notification,
 }: OpenMessagesDialogProps) {
 	const user = useUserStore((state) => state.user);
-	const queryClient = useQueryClient();
-	const messageSender = user.email;
-	const messageReceiver =
-		call.user_email === messageSender ? call.admin_email : call.user_email;
+	// const messageReceiver =
+	// 	notification.user_email === messageSender ? user.email : user.email;
 
-	const [message, setMessage] = useState<SendMessageDTO>({
-		call_id: call.id,
-		receiver_email: messageReceiver,
-		sender_email: messageSender,
-		text: "",
+	const [message, setMessage] = useState<CreateCommentDTO>({
+		id: uuid(),
+		content: "",
+		notification_id: notification.id,
+		receive_email: notification.user_email,
+		send_email: user.email,
+		timestamp: Date.now(),
 	});
 
-	const {
-		data: messages,
-		isLoading,
-		refetch,
-	} = useQuery(["getCallMessages", call.id], () =>
-		MessageServiceQuery.getMessagesFromCall(call.id)
+	const { data: comments, isLoading } = useGetCommentsFromNotification(
+		notification.id
 	);
 
-	const { mutate: sendMessage, isLoading: sending } = useMutation(
-		MessageServiceQuery.sendMessage,
-		{
-			onSuccess: async () => {
-				await queryClient.invalidateQueries(["getCallMessages", call.id]);
-			},
-		}
-	);
-
-	const handleCloseDialog = () => {
-		setState(state.map((s, pos) => (pos === index ? false : s)));
-	};
+	const { mutate: send, isLoading: sending } = useSendComment();
 
 	const handleSendMessage = () => {
-		sendMessage(message);
-		refetch();
-		setMessage({ ...message, text: "" });
+		send(message);
+		setMessage({ ...message, content: "" });
 	};
 
 	return (
@@ -74,27 +59,27 @@ export function OpenMessagesDialog({
 			index={index}
 			state={state}
 			setState={setState}
-			title={call.title}
+			title={notification.title}
 			scroll="paper"
 		>
-			{messages &&
+			{comments &&
 				!isLoading &&
-				messages.map((message) => (
+				comments.map((comment) => (
 					<ChatCard
-						key={message.id}
-						messageOwner={message.sender_email}
-						side={message.sender_email === user.email ? "right" : "left"}
-						text={message.text}
-						timestamp={message.timestamp}
+						key={comment.id}
+						messageOwner={comment.send_email}
+						side={comment.send_email === user.email ? "right" : "left"}
+						text={message.content}
+						timestamp={comment.timestamp}
 					/>
 				))}
 
 			{open && (
 				<TextField
 					label="Escreva sua mensagem"
-					value={message.text}
+					value={message.content}
 					sx={{ mt: 2 }}
-					onChange={(e) => setMessage({ ...message, text: e.target.value })}
+					onChange={(e) => setMessage({ ...message, content: e.target.value })}
 					multiline
 					InputProps={{
 						endAdornment: (

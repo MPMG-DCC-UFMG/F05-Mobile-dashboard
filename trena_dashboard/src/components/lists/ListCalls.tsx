@@ -1,4 +1,4 @@
-import { Block, Mail } from "@mui/icons-material";
+import { Mail } from "@mui/icons-material";
 import {
 	Grid,
 	IconButton,
@@ -11,70 +11,36 @@ import {
 	Tooltip,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { CallServiceQuery } from "../../core/network/services/CallService";
+import { useGetAllNotifications } from "../../core/network/queries/notification/queries";
+import { useNotificationsStore } from "../../core/store/notification";
 import { useTableStore } from "../../core/store/table";
-import { useUserStore } from "../../core/store/user";
+import { openDialog } from "../../utils/dialogHandler";
 import { convertEphocDate } from "../../utils/mapper";
 import { OpenMessagesDialog } from "../Dialogs/Call/OpenMessagesDialog";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
-import { Notify } from "../Toast/Notify";
 
 export function ListCalls() {
-	const user = useUserStore((state) => state.user);
 	const { rowsPerPage, setRowsPerPage } = useTableStore();
-	const queryClient = useQueryClient();
+	const { isLoading } = useGetAllNotifications();
+	const { notifications, commentsDialog, setCommentsDialog } =
+		useNotificationsStore();
 
 	const [page, setPage] = useState(0);
-	const [openMessages, setOpenMessages] = useState<boolean[]>([]);
-
-	const { data: calls, isLoading } = useQuery(
-		["getUserCalls", user.email],
-		() => CallServiceQuery.getLoggedUserCalls(user.email),
-		{
-			onSuccess(data) {
-				setOpenMessages(Array(data.length).fill(false));
-			},
-		}
-	);
-
-	const { mutate: closeCall } = useMutation(CallServiceQuery.closeCall);
-
-	const handleOpenMessages = (index: number) => {
-		setOpenMessages(
-			openMessages.map((s, position) => (position === index ? true : s))
-		);
-	};
-
-	const handleCloseCall = (callId: string) => {
-		closeCall(callId, {
-			onSuccess: () => {
-				queryClient.invalidateQueries(["getUserCalls", user.email]);
-				Notify(
-					"Chamado fechado com sucesso! Pode acessá-lo em Chamados/Histórico",
-					"bottom-left",
-					"success"
-				);
-			},
-		});
-	};
-
-	const isUserAdmin = user.role === "ADMIN";
 
 	return (
 		<>
-			{isLoading || !calls ? (
+			{isLoading || !notifications ? (
 				<LoadingTableData
-					headingTitle="Meus Chamados"
+					headingTitle="Notificações"
 					headingSteps={[
 						{
 							title: "Dashboard",
 							url: "/",
 						},
 						{
-							title: "Meus Chamados",
+							title: "Notificações",
 							url: "/calls",
 						},
 					]}
@@ -90,7 +56,7 @@ export function ListCalls() {
 									url: "/",
 								},
 								{
-									title: "Meus Chamados",
+									title: "Notificações",
 									url: "/calls",
 								},
 							]}
@@ -100,32 +66,35 @@ export function ListCalls() {
 									<TableRow>
 										<TableCell align="center">Título</TableCell>
 										<TableCell align="center">Aberto Em</TableCell>
-										<TableCell align="left">
-											{isUserAdmin ? "Enviado Para" : "Recebido de"}
-										</TableCell>
+										<TableCell align="left">Enviado Para</TableCell>
 										<TableCell align="center">Mensagens</TableCell>
-										{isUserAdmin && (
-											<TableCell align="center">Fechar</TableCell>
-										)}
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{calls
+									{notifications
 										.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-										.map((call, index) => (
-											<React.Fragment key={call.id}>
+										.map((notification, index) => (
+											<React.Fragment key={notification.id}>
 												<TableRow>
-													<TableCell align="center">{call.title}</TableCell>
 													<TableCell align="center">
-														{convertEphocDate(call.created_at)}
+														{notification.title}
+													</TableCell>
+													<TableCell align="center">
+														{convertEphocDate(notification.timestamp)}
 													</TableCell>
 													<TableCell align="left">
-														{isUserAdmin ? call.user_email : call.admin_email}
+														{notification.user_email}
 													</TableCell>
 													<TableCell align="center">
 														<Tooltip title="Abrir mensagens">
 															<IconButton
-																onClick={() => handleOpenMessages(index)}
+																onClick={() =>
+																	openDialog(
+																		commentsDialog,
+																		setCommentsDialog,
+																		index
+																	)
+																}
 																color="info"
 																size="small"
 															>
@@ -133,24 +102,11 @@ export function ListCalls() {
 															</IconButton>
 														</Tooltip>
 													</TableCell>
-													{isUserAdmin && (
-														<TableCell align="center">
-															<Tooltip title="Fechar Chamado">
-																<IconButton
-																	onClick={() => handleCloseCall(call.id)}
-																	color="warning"
-																	size="small"
-																>
-																	<Block />
-																</IconButton>
-															</Tooltip>
-														</TableCell>
-													)}
 												</TableRow>
 												<OpenMessagesDialog
-													state={openMessages}
-													setState={setOpenMessages}
-													call={call}
+													state={commentsDialog}
+													setState={setCommentsDialog}
+													notification={notification}
 													index={index}
 												/>
 											</React.Fragment>
@@ -158,7 +114,7 @@ export function ListCalls() {
 								</TableBody>
 							</Table>
 							<TablePagination
-								data={calls}
+								data={notifications}
 								rowsPerPage={rowsPerPage}
 								setRowsPerPage={setRowsPerPage}
 								page={page}
