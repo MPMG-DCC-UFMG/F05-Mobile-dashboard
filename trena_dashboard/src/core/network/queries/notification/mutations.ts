@@ -12,9 +12,23 @@ export function useSendNotification() {
 			Notify("Notificação enviada!", "bottom-left", "info");
 			setNotifications([...notifications, data]);
 			queryClient.invalidateQueries("getAllNotifications");
+			queryClient.invalidateQueries(["getNotificationById", data.id]);
 		},
 		onError: () => {
 			Notify("Erro ao enviar notificação!", "bottom-left", "error");
+		},
+	});
+}
+
+export function useSendPushNotification() {
+	const queryClient = useQueryClient();
+	return useMutation(NotificationServiceQuery.sendPushNotification, {
+		onSuccess: () => {
+			Notify("Aparelho móvel notificado!", "bottom-left", "info");
+			queryClient.invalidateQueries("getNotificationById");
+		},
+		onError: () => {
+			Notify("Erro ao notificar aparelho móvel!", "bottom-left", "info");
 		},
 	});
 }

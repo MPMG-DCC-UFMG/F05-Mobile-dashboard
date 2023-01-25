@@ -160,7 +160,7 @@ export function DrawerListItem() {
 				<MyListItem
 					sx={{ pl: 4 }}
 					icon={<Notifications />}
-					url="/calls"
+					url="/notifications"
 					iconText="Notificações"
 				/>
 			</Collapse>

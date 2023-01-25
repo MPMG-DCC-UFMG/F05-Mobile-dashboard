@@ -2,6 +2,7 @@
   "name": "trena_dashboard",
   "version": "1.5.0",
   "private": true,
+	"proxy": "http://0.0.0.0:8000",
   "homepage": "/dashboard/",
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -35,7 +36,7 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "lint": "npx eslint --ext ./src/**/**/*.tsx && npx eslint --ext ./src/**/**/.ts",
-		"lint-fix": "npx eslint --fix ./src/**/**/*.tsx && npx eslint --ext ./src/**/**/.ts "
+		"lint-fix": "npx eslint --fix ./src/**/**/*.tsx && npx eslint --ext ./src/**/**/.ts"
   },
   "eslintConfig": {
     "extends": "react-app"

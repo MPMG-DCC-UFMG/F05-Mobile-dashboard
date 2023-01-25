@@ -1,4 +1,4 @@
-import { Collections, Delete } from "@mui/icons-material";
+import { Collections, Delete, Notifications } from "@mui/icons-material";
 import {
 	Grid,
 	IconButton,
@@ -10,30 +10,29 @@ import {
 	TableRow,
 	Tooltip,
 } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { useDeleteCollect } from "../../core/network/queries/collect/mutations";
 import { useLoadCitizenCollects } from "../../core/network/queries/collect/queries";
 import { useCollectStore } from "../../core/store/collect";
+import { useNotificationsStore } from "../../core/store/notification";
 import { useTableStore } from "../../core/store/table";
+import { openDialog } from "../../utils/dialogHandler";
 import { collectStatusMapping, convertEphocDate } from "../../utils/mapper";
 import { CollectSubmissionDialog } from "../Dialogs/Collect/CollectSubmission";
+import { PushNotificationDialog } from "../Dialogs/Notification/PushNotification";
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export function ListCitizenCollects() {
 	const { collectsDialog, setCollectsDialog } = useCollectStore();
+	const { sendNotificationDialog, setSendNotificationDialog } =
+		useNotificationsStore();
 	const { rowsPerPage, setRowsPerPage } = useTableStore();
 	const [page, setPage] = useState(0);
 
 	const { data: collects, isLoading } = useLoadCitizenCollects();
 	const { mutate } = useDeleteCollect();
-
-	const handleOpenDialog = useCallback((index: number) => {
-		setCollectsDialog(
-			collectsDialog.map((s, position) => (position === index ? true : s))
-		);
-	}, []);
 
 	const handleDeleteCollect = (collectId: string) => {
 		mutate(collectId);
@@ -80,6 +79,7 @@ export function ListCitizenCollects() {
 										<TableCell align="left">Comentário Geral</TableCell>
 										<TableCell align="center">Mídias</TableCell>
 										<TableCell align="center">Excluir</TableCell>
+										<TableCell align="center">Notificar</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -103,7 +103,13 @@ export function ListCitizenCollects() {
 															<IconButton
 																color="info"
 																size="small"
-																onClick={() => handleOpenDialog(index)}
+																onClick={() =>
+																	openDialog(
+																		collectsDialog,
+																		setCollectsDialog,
+																		index
+																	)
+																}
 															>
 																<Collections />
 															</IconButton>
@@ -120,6 +126,22 @@ export function ListCitizenCollects() {
 															</IconButton>
 														</Tooltip>
 													</TableCell>
+													<TableCell>
+														<Tooltip title="Notificar">
+															<IconButton
+																onClick={() =>
+																	openDialog(
+																		sendNotificationDialog,
+																		setSendNotificationDialog,
+																		index
+																	)
+																}
+																size="small"
+															>
+																<Notifications htmlColor="#FFCC00" />
+															</IconButton>
+														</Tooltip>
+													</TableCell>
 												</TableRow>
 												<CollectSubmissionDialog
 													collect={collect}
@@ -129,6 +151,12 @@ export function ListCitizenCollects() {
 													fullScreen
 													// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 													title={`Envios - ${collect.id!}`}
+												/>
+												<PushNotificationDialog
+													state={sendNotificationDialog}
+													setState={setSendNotificationDialog}
+													index={index}
+													userToken={collect.user_email}
 												/>
 											</React.Fragment>
 										))}

@@ -1,10 +1,10 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { CallHistoryScreen, CallScreen } from "../screens/CallScreen";
 import { CollectScreen } from "../screens/CollectScreen";
 import { Home } from "../screens/Home";
 import { InspectionScreen } from "../screens/InspectionScreen";
 import { LoginScreen } from "../screens/LoginScreen";
+import { NotificationScreen } from "../screens/NotificationScreen";
 import { PublicWorkQueueScreen } from "../screens/PublicWorkQueueScreen";
 import { PublicWorkScreen } from "../screens/PublicWorkScreen";
 import { QueueScreen } from "../screens/QueueScreen";
@@ -14,7 +14,7 @@ import { UserManagementScreen } from "../screens/UserManagementScreen";
 import { UserSettingScreen } from "../screens/UserSettingsScreen";
 import { WorkStatusScreen } from "../screens/WorkStatusScreen";
 
-export function AppRoutes () {
+export function AppRoutes() {
 	return (
 		<BrowserRouter>
 			<Routes>
@@ -31,8 +31,7 @@ export function AppRoutes () {
 				<Route path="/collect" element={<CollectScreen />} />
 				<Route path="/inspections" element={<InspectionScreen />} />
 				<Route path="/userSettings" element={<UserSettingScreen />} />
-				<Route path="/calls" element={<CallScreen />} />
-				<Route path="/calls/history" element={<CallHistoryScreen />} />
+				<Route path="/notifications" element={<NotificationScreen />} />
 			</Routes>
 		</BrowserRouter>
 	);

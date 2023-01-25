@@ -11,7 +11,12 @@ import React, { useState } from "react";
 import uuid from "react-uuid";
 import { CreateNotificationDTO } from "../../../core/models/dto/notification/CreateNotificationDTO";
 import { Inspection } from "../../../core/models/Inspection";
-import { useSendNotification } from "../../../core/network/queries/notification/mutations";
+import {
+	useSendComment,
+	useSendNotification,
+	useSendPushNotification,
+} from "../../../core/network/queries/notification/mutations";
+import { useUserStore } from "../../../core/store/user";
 import { closeDialog } from "../../../utils/dialogHandler";
 import { InfoTextField } from "../../Inputs/InfoTextField";
 import { TableDialogContainer } from "../DialogContainer";
@@ -29,7 +34,10 @@ export function SendNotificationDialog({
 	index,
 	inspection,
 }: SendNotificationDialogProps) {
+	const { user } = useUserStore();
 	const { mutate: send, isLoading } = useSendNotification();
+	const { mutate: push } = useSendPushNotification();
+	const { mutate: sendComment } = useSendComment();
 
 	const [notification, setNotification] = useState<CreateNotificationDTO>({
 		id: "",
@@ -42,7 +50,28 @@ export function SendNotificationDialog({
 	});
 
 	const handleSendNotification = () => {
-		send({ ...notification, id: uuid(), timestamp: Date.now() });
+		send(
+			{ ...notification, id: uuid(), timestamp: Date.now() },
+			{
+				onSuccess: (data) => {
+					sendComment({
+						id: uuid(),
+						timestamp: Date.now(),
+						content: notification.content,
+						send_email: user.email,
+						notification_id: data.id,
+						receive_email: inspection.user_email,
+					});
+				},
+			}
+		);
+		push({
+			title: notification.title,
+			body: notification.content,
+			to: "uyasd",
+			sound: "default",
+		});
+
 		closeDialog(state, setState, index);
 		setNotification({ ...notification, title: "", content: "" });
 	};
@@ -50,7 +79,7 @@ export function SendNotificationDialog({
 	return (
 		<>
 			<TableDialogContainer
-				title="Novo Chamado"
+				title="Notificar"
 				state={state}
 				setState={setState}
 				index={index}

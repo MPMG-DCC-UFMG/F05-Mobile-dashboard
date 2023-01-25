@@ -3,6 +3,7 @@ import Config from "../../../config/Config";
 import { Comment } from "../../models/Comment";
 import { CreateCommentDTO } from "../../models/dto/comment/CreateCommentDTO";
 import { CreateNotificationDTO } from "../../models/dto/notification/CreateNotificationDTO";
+import { PushMessageDTO } from "../../models/dto/notification/PushMessageDTO";
 import { Notification } from "../../models/Notification";
 import TrenaAPI from "../TrenaAPI";
 
@@ -26,7 +27,7 @@ async function sendNotification(
 
 async function getNotificationById(
 	ctx: QueryFunctionContext
-): Promise<Notification> {
+): Promise<Notification[]> {
 	const [, id] = ctx.queryKey;
 	const call = BASE_URL + `/${id}`;
 	const res = await TrenaAPI.network().get(call);
@@ -67,6 +68,13 @@ async function getCommentsFromNotification(
 	return res.body;
 }
 
+async function sendPushNotification(message: PushMessageDTO): Promise<void> {
+	const call = BASE_URL + "/push";
+	const res = await TrenaAPI.network().post(call).send(message);
+
+	return res.body;
+}
+
 export const NotificationServiceQuery = {
 	getAllNotifications,
 	sendNotification,
@@ -75,4 +83,5 @@ export const NotificationServiceQuery = {
 	getAllComments,
 	addComment,
 	getCommentsFromNotification,
+	sendPushNotification,
 };

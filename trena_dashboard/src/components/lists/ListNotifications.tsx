@@ -21,7 +21,7 @@ import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
-export function ListCalls() {
+export function ListNotifications() {
 	const { rowsPerPage, setRowsPerPage } = useTableStore();
 	const { isLoading } = useGetAllNotifications();
 	const { notifications, commentsDialog, setCommentsDialog } =
@@ -49,7 +49,7 @@ export function ListCalls() {
 				<Grid style={{ width: "100%", marginTop: 14 }} item>
 					<Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
 						<Heading
-							title="Meus Chamados"
+							title="Notificações"
 							steps={[
 								{
 									title: "Dashboard",

@@ -1,6 +1,7 @@
 import { useQueries, useQuery } from "react-query";
 import { Collect } from "../../../models/Collect";
 import { useCollectStore } from "../../../store/collect";
+import { useNotificationsStore } from "../../../store/notification";
 import { CollectServiceQuery } from "../../services/CollectService";
 
 export function useLoadPublicWorkCollects(publicWorkId: string) {
@@ -16,6 +17,9 @@ export function useLoadAllCollects() {
 
 export function useLoadCitizenCollects() {
 	const setCollectDialog = useCollectStore((state) => state.setCollectsDialog);
+	const setSendNotificationDialog = useNotificationsStore(
+		(state) => state.setSendNotificationDialog
+	);
 
 	return useQuery(
 		["getCitizenCollects"],
@@ -23,6 +27,7 @@ export function useLoadCitizenCollects() {
 		{
 			onSuccess: (data) => {
 				setCollectDialog(Array(data.length).fill(false));
+				setSendNotificationDialog(Array(data.length).fill(false));
 			},
 		}
 	);

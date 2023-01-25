@@ -17,7 +17,7 @@ export function useGetAllNotifications() {
 	);
 }
 
-export function useGetNotificationById(id: string) {
+export function useGetNotificationById(id: number) {
 	return useQuery(
 		["getNotificationById", id],
 		NotificationServiceQuery.getNotificationById

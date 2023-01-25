@@ -9,6 +9,9 @@ export function useLoadInspections() {
 	const setSendNotificationDialog = useNotificationsStore(
 		(state) => state.setSendNotificationDialog
 	);
+	const setInspectionNotificationsDialog = useNotificationsStore(
+		(state) => state.setInspectionNotificationsDialog
+	);
 
 	return useQuery(
 		["getMpInspections"],
@@ -18,6 +21,7 @@ export function useLoadInspections() {
 				setInspections(data);
 				setCollectModal(Array(data.length).fill(false));
 				setSendNotificationDialog(Array(data.length).fill(false));
+				setInspectionNotificationsDialog(Array(data.length).fill(false));
 			},
 		}
 	);
