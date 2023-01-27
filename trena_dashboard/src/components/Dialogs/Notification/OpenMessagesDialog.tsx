@@ -1,6 +1,8 @@
 import { Send } from "@mui/icons-material";
 import {
 	CircularProgress,
+	DialogActions,
+	DialogContent,
 	IconButton,
 	InputAdornment,
 	TextField,
@@ -71,36 +73,38 @@ export function OpenMessagesDialog({
 			title={notification.title}
 			scroll="paper"
 		>
-			{comments &&
-				!isLoading &&
-				comments.map((comment) => (
-					<ChatCard
-						key={comment.id}
-						messageOwner={comment.send_email}
-						side={comment.send_email === user.email ? "right" : "left"}
-						text={comment.content}
-						timestamp={comment.timestamp}
+				{comments &&
+					!isLoading &&
+					comments.map((comment) => (
+						<ChatCard
+							key={comment.id}
+							messageOwner={comment.send_email}
+							side={comment.send_email === user.email ? "right" : "left"}
+							text={comment.content}
+							timestamp={comment.timestamp}
+						/>
+					))}
+				{open && (
+					<TextField
+						fullWidth
+						label="Escreva sua mensagem"
+						value={message.content}
+						sx={{ mt: 2 }}
+						onChange={(e) =>
+							setMessage({ ...message, content: e.target.value })
+						}
+						multiline
+						InputProps={{
+							endAdornment: (
+								<InputAdornment position="end">
+									<IconButton disabled={sending} onClick={handleSendMessage}>
+										{sending ? <CircularProgress /> : <Send color="info" />}
+									</IconButton>
+								</InputAdornment>
+							),
+						}}
 					/>
-				))}
-
-			{open && (
-				<TextField
-					label="Escreva sua mensagem"
-					value={message.content}
-					sx={{ mt: 2 }}
-					onChange={(e) => setMessage({ ...message, content: e.target.value })}
-					multiline
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<IconButton disabled={sending} onClick={handleSendMessage}>
-									{sending ? <CircularProgress /> : <Send color="info" />}
-								</IconButton>
-							</InputAdornment>
-						),
-					}}
-				/>
-			)}
+				)}
 		</TableDialogContainer>
 	);
 }

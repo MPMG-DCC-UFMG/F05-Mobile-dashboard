@@ -18,7 +18,7 @@ export function ChatCard({
 }: ChatCardProps) {
 	const { data: ownerMetadata } = useGetUserPublicData(messageOwner);
 
-	const backgroundColorBasedOnUser = side === "right" ? "blue" : "#F5F5F5";
+	const backgroundColorBasedOnUser = side === "right" ? "#0288d1" : "#36454F";
 	const textColorBasedOnUser = side === "right" ? "white" : "blue";
 
 	return (
@@ -37,13 +37,26 @@ export function ChatCard({
 					<Paper
 						sx={{
 							background: backgroundColorBasedOnUser,
+							p: 1,
 						}}
 						elevation={3}
 					>
-						<Typography align={side} color={textColorBasedOnUser}>
-							{side === "left" ? ownerMetadata?.full_name + ": " + text : text}
-						</Typography>
-						{convertEphocDate(timestamp)}
+						<Grid
+							display="flex"
+							alignContent="center"
+							justifyContent="space-between"
+						>
+							<Typography align={"left"} color={textColorBasedOnUser}>
+								{side === "left"
+									? ownerMetadata?.full_name + ": " + text
+									: text}
+							</Typography>
+						</Grid>
+						<Grid>
+							<Typography align={"right"} color={textColorBasedOnUser}>
+								{convertEphocDate(timestamp)}
+							</Typography>
+						</Grid>
 					</Paper>
 				</Grid>
 			</Grid>

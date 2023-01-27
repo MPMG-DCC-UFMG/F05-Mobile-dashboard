@@ -41,16 +41,15 @@ export function NotificationsDialog({
 			state={state}
 			setState={setState}
 			index={index}
-			fullScreen
+			// fullScreen
 			title={`Notificações - ${inspection.name}`}
 		>
 			{hasNotifications ? (
 				notifications.map((notification, pos) => (
 					<React.Fragment key={notification.id}>
 						<Button
-							sx={{ mt: 2, borderRadius: "150px" }}
+							sx={{ mt: 2, borderRadius: "0px", width: '90%', alignSelf:'center' }}
 							onClick={() => openDialog(commentsDialog, setCommentsDialog, pos)}
-							fullWidth
 							variant="contained"
 						>
 							{notification.title} - {convertEphocDate(notification.timestamp)}
