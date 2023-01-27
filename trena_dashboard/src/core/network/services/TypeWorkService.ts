@@ -8,7 +8,7 @@ import { WorkStatus } from "../../models/WorkStatus";
 
 import TrenaAPI from "../TrenaAPI";
 
-type UpdateParams = {
+export type UpdateParams = {
 	updateFlags: number[];
 	typeWorkFlag: number;
 };
@@ -110,3 +110,4 @@ export const TypeWorkServiceQuery = {
 	updateTypeWorkTypePhoto,
 	loadTypeWorkTypePhotos,
 };
+ 

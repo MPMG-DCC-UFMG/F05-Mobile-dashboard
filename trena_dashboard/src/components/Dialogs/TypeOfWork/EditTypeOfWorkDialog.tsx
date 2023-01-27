@@ -36,7 +36,7 @@ export function EditTypeOfWorkDialog({
 	useLoadTypePhotos();
 	const typePhotos = useTypePhotoStore((state) => state.typePhotos);
 	const { mutate, isLoading } = useUpdateTypeWork();
-
+  const [typeWorkName, setTypeWorkName] = useState<string>(typeWork.name)
 	const [updateTypeWork, setUpdateTypeWork] = useState<UpdateTypeWorkDTO>({
 		name: "",
 		status_list: [],
@@ -46,6 +46,11 @@ export function EditTypeOfWorkDialog({
 		closeDialog(state, setState, index);
 	}, []);
 
+  const handleEditTypeOfWork = (typeWork: TypeWork) => {
+    typeWork.name = typeWorkName;
+    // editTypeWork(typeWork);
+    // handleCloseDialog(index);
+  };
 	const handleTypeOfWorkStatus = useCallback(() => {
 		mutate(updateTypeWork);
 		handleCloseDialog();
@@ -108,3 +113,4 @@ export function EditTypeOfWorkDialog({
 		</TableDialogContainer>
 	);
 }
+
