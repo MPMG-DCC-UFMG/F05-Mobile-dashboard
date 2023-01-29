@@ -44,3 +44,7 @@ export function useGetUserPublicData(email: string) {
 		SecurityServiceQuery.getUserPublicData
 	);
 }
+
+export function useOAuth() {
+	return useQuery(["oAuth"], SecurityServiceQuery.oAuth);
+}

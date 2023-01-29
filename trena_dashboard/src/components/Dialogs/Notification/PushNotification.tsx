@@ -23,7 +23,7 @@ export function PushNotificationDialog({
 		body: "",
 		sound: "default",
 		title: "",
-		to: "",
+		to: "ExponentPushToken[rDc0KYM3eXOqvH7JLakNm-]",
 	});
 
 	const { mutate: send, isLoading } = useSendPushNotification();

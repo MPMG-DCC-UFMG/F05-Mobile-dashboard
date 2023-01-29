@@ -110,10 +110,18 @@ async function loadPublicUserList(): Promise<ReadUserDTO[]> {
 	return res.body;
 }
 
+async function oAuth() {
+	const call = `${Config.BASE_URL}/oauth/authws02`;
+	const res = await TrenaAPI.network().get(call);
+
+	return res.body;
+}
+
 export const SecurityServiceQuery = {
 	login,
 	loadPublicUserList,
 	loadUserList,
+	oAuth,
 	getLoggedUser,
 	getUserPublicData,
 	createUser,

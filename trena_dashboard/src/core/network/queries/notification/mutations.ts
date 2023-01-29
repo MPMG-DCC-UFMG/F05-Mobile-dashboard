@@ -28,7 +28,7 @@ export function useSendPushNotification() {
 			queryClient.invalidateQueries("getNotificationById");
 		},
 		onError: () => {
-			Notify("Erro ao notificar aparelho móvel!", "bottom-left", "info");
+			Notify("Erro ao notificar aparelho móvel!", "bottom-left", "error");
 		},
 	});
 }
