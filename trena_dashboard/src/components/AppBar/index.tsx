@@ -17,12 +17,12 @@ import { useUserStore } from "../../core/store/user";
 import useInterval from "../../hooks/useInterval";
 
 interface AppBarProps {
-  open?: boolean;
-  toggleDrawer(): void;
+	open?: boolean;
+	toggleDrawer(): void;
 }
 
 interface AppBarSetup {
-  open?: boolean;
+	open?: boolean;
 }
 
 const AppBarSetup = styled(MuiAppBar, {
@@ -59,7 +59,7 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
 		localStorage.removeItem("ROLE");
 		setUser({} as ReadUserDTO);
 		queryClient.invalidateQueries();
-		navigate("/");
+		navigate("/login");
 	};
 
 	const handleUser = () => {

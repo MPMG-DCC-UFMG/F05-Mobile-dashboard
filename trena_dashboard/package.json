@@ -2,7 +2,7 @@
   "name": "trena_dashboard",
   "version": "1.5.0",
   "private": true,
-	"proxy": "http://0.0.0.0:8000",
+  "proxy": "http://localhost:8000",
   "homepage": "/dashboard/",
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -14,6 +14,7 @@
     "@mui/styles": "^5.11.0",
     "@sentry/react": "^7.27.0",
     "history": "^5.0.0",
+    "js-cookie": "^3.0.1",
     "leaflet": "^1.6.0",
     "papaparse": "^5.3.2",
     "react": "^17.0.0",
@@ -36,7 +37,7 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "lint": "npx eslint --ext ./src/**/**/*.tsx && npx eslint --ext ./src/**/**/.ts",
-		"lint-fix": "npx eslint --fix ./src/**/**/*.tsx && npx eslint --ext ./src/**/**/.ts"
+    "lint-fix": "npx eslint --fix ./src/**/**/*.tsx && npx eslint --ext ./src/**/**/.ts"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -54,19 +55,20 @@
     ]
   },
   "devDependencies": {
-		"@testing-library/jest-dom": "^4.2.4",
+    "@sentry/typescript": "^5.20.1",
+    "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "@types/jest": "^24.9.1",
+    "@types/js-cookie": "^3.0.2",
     "@types/leaflet": "^1.5.15",
     "@types/node": "^12.12.47",
     "@types/papaparse": "^5.3.5",
     "@types/react": "^17.0.0",
+    "@types/react-dom": "^18.0.9",
     "@types/react-leaflet": "^2.5.2",
     "@types/react-router-dom": "^5.1.5",
     "@types/superagent": "^4.1.8",
-    "@sentry/typescript": "^5.20.1",
-    "@types/react-dom": "^18.0.9",
     "@typescript-eslint/eslint-plugin": "^5.48.1",
     "@typescript-eslint/parser": "^5.48.1",
     "@vitejs/plugin-react": "^2.2.0",

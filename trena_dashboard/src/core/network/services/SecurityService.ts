@@ -114,7 +114,7 @@ async function oAuth() {
 	const call = `${Config.BASE_URL}/oauth/authws02`;
 	const res = await TrenaAPI.network().get(call);
 
-	return res.body;
+	window.location.href = res.body;
 }
 
 export const SecurityServiceQuery = {

@@ -5,6 +5,7 @@ import { Home } from "../screens/Home";
 import { InspectionScreen } from "../screens/InspectionScreen";
 import { LoginScreen } from "../screens/LoginScreen";
 import { NotificationScreen } from "../screens/NotificationScreen";
+import { OAuthScreen } from "../screens/OAuth";
 import { PublicWorkQueueScreen } from "../screens/PublicWorkQueueScreen";
 import { PublicWorkScreen } from "../screens/PublicWorkScreen";
 import { QueueScreen } from "../screens/QueueScreen";
@@ -18,7 +19,7 @@ export function AppRoutes() {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="/" element={<LoginScreen />} />
+				<Route path="/" element={<OAuthScreen />} />
 				<Route path="/login" element={<LoginScreen />} />
 				<Route path="/dashboard" element={<Home />} />
 				<Route path="/typeOfWork" element={<TypeOfWorkScreen />} />
