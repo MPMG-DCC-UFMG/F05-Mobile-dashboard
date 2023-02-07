@@ -90,7 +90,8 @@ export function ListInspection() {
 											<TableCell align="left">Número de Inquérito</TableCell>
 											<TableCell align="center">Vistoria</TableCell>
 											<TableCell align="center">Vistoriador</TableCell>
-											<TableCell align="center">Data</TableCell>
+											<TableCell align="center">Criada em</TableCell>
+											<TableCell align="center">Prazo</TableCell>
 											<TableCell align="center">Status</TableCell>
 											<TableCell align="center">Mídias</TableCell>
 											<TableCell align="center">Relatório</TableCell>
@@ -118,6 +119,9 @@ export function ListInspection() {
 														</TableCell>
 														<TableCell align="center">
 															{convertEphocDate(inspection.request_date)}
+														</TableCell>
+														<TableCell align="center">
+															{convertEphocDate(inspection.limit_date)}
 														</TableCell>
 														<TableCell align="center">
 															{inspectionsStatusMapping(inspection.status)}

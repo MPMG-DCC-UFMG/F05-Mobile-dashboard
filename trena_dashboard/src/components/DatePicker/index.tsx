@@ -13,7 +13,7 @@ interface DatePickerProps {
 export function DatePicker({ value, setValue, label }: DatePickerProps) {
 	const handleChangeValue = (value: Date | null) => {
 		if (!value) {
-			setValue(new Date().getTime());
+			setValue(Date.now());
 			return;
 		}
 

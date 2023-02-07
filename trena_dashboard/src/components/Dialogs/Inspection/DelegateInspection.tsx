@@ -49,7 +49,7 @@ export function DelegateInspectionDialog({
 
 	const handleAddInspection = () => {
 		addInspection(
-			{ ...inspection, request_date: Date.now() },
+			{ ...inspection, request_date: Date.now(), limit_date: datePicker },
 			{
 				onSuccess: () => {
 					setInspection({
