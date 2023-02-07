@@ -149,14 +149,13 @@ export function ListCitizenCollects() {
 													state={collectsDialog}
 													setState={setCollectsDialog}
 													fullScreen
-													// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-													title={`Envios - ${collect.id!}`}
+													title={`Envios - ${collect.id}`}
 												/>
 												<PushNotificationDialog
 													state={sendNotificationDialog}
 													setState={setSendNotificationDialog}
 													index={index}
-													userToken={collect.user_email}
+													userEmail={collect.user_email}
 												/>
 											</React.Fragment>
 										))}

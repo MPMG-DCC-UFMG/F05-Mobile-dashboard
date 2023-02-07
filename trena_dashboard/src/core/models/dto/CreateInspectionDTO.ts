@@ -6,4 +6,5 @@ export interface CreateInspectionDTO {
 	description: string;
 	status: number;
 	request_date: number;
+	limit_date: number;
 }

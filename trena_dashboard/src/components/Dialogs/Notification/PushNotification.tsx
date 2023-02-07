@@ -2,6 +2,7 @@ import { Rtt, TextFields } from "@mui/icons-material";
 import { Button, CircularProgress, Grid } from "@mui/material";
 import React, { useState } from "react";
 import { PushMessageDTO } from "../../../core/models/dto/notification/PushMessageDTO";
+import { useGetUserPublicData } from "../../../core/network/queries/auth/queries";
 import { useSendPushNotification } from "../../../core/network/queries/notification/mutations";
 import { InfoTextField } from "../../Inputs/InfoTextField";
 import { TableDialogContainer } from "../DialogContainer";
@@ -10,20 +11,21 @@ interface PushNotificationProps {
 	state: boolean[];
 	setState: (state: boolean[]) => void;
 	index: number;
-	userToken: string;
+	userEmail: string;
 }
 
 export function PushNotificationDialog({
 	state,
 	setState,
 	index,
-	userToken,
+	userEmail,
 }: PushNotificationProps) {
+	const { data: user } = useGetUserPublicData(userEmail);
 	const [notification, setNotification] = useState<PushMessageDTO>({
 		body: "",
 		sound: "default",
 		title: "",
-		to: "ExponentPushToken[rDc0KYM3eXOqvH7JLakNm-]",
+		to: user ? user.expo_token : "",
 	});
 
 	const { mutate: send, isLoading } = useSendPushNotification();

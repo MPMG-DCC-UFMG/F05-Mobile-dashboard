@@ -3,7 +3,7 @@ import React from "react";
 
 interface InfoTextFieldProps {
 	label: string;
-	icon: JSX.Element;
+	icon?: JSX.Element;
 	fullWidth?: boolean;
 	disabled?: boolean;
 	defaultValue?: string | Date;

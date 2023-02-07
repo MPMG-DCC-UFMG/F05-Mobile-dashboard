@@ -45,6 +45,13 @@ export function useGetUserPublicData(email: string) {
 	);
 }
 
+export function useGetAllUsersPublicData() {
+	return useQuery(
+		["getAllUsersPublic"],
+		SecurityServiceQuery.getAllUsersPublicData
+	);
+}
+
 export function useOAuth() {
 	return useQuery(["oAuth"], SecurityServiceQuery.oAuth);
 }

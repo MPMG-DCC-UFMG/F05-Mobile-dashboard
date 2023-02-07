@@ -2,6 +2,7 @@ import { QueryFunctionContext } from "react-query";
 import Config from "../../../config/Config";
 import { LoginUser } from "../../../screens/LoginScreen";
 import { CreateUserDTO } from "../../models/dto/user/CreateUserDTO";
+import { PublicUserDTO } from "../../models/dto/user/PublicUserDTO";
 import { ReadUserDTO } from "../../models/dto/user/ReadUserDTO";
 import { User } from "../../models/User";
 import TrenaAPI from "../TrenaAPI";
@@ -94,10 +95,19 @@ async function getLoggedUser(): Promise<LoggedUserResponse> {
 	return res.body;
 }
 
-async function getUserPublicData(ctx: QueryFunctionContext) {
+async function getUserPublicData(
+	ctx: QueryFunctionContext
+): Promise<PublicUserDTO> {
 	const [, userEmail] = ctx.queryKey;
 
 	const call = `${Config.BASE_URL}/security/users/${userEmail}`;
+	const res = await TrenaAPI.network().get(call);
+
+	return res.body;
+}
+
+async function getAllUsersPublicData(): Promise<PublicUserDTO[]> {
+	const call = `${Config.BASE_URL}/security/users/public`;
 	const res = await TrenaAPI.network().get(call);
 
 	return res.body;
@@ -124,6 +134,7 @@ export const SecurityServiceQuery = {
 	oAuth,
 	getLoggedUser,
 	getUserPublicData,
+	getAllUsersPublicData,
 	createUser,
 	deleteUser,
 };

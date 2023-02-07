@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import uuid from "react-uuid";
 import { CreateNotificationDTO } from "../../../core/models/dto/notification/CreateNotificationDTO";
 import { Inspection } from "../../../core/models/Inspection";
+import { useGetUserPublicData } from "../../../core/network/queries/auth/queries";
 import {
 	useSendComment,
 	useSendNotification,
@@ -35,6 +36,7 @@ export function SendNotificationDialog({
 	inspection,
 }: SendNotificationDialogProps) {
 	const { user } = useUserStore();
+	const { data: inspector } = useGetUserPublicData(inspection.user_email);
 	const { mutate: send, isLoading } = useSendNotification();
 	const { mutate: push } = useSendPushNotification();
 	const { mutate: sendComment } = useSendComment();
@@ -68,7 +70,7 @@ export function SendNotificationDialog({
 		push({
 			title: notification.title,
 			body: notification.content,
-			to: "uyasd",
+			to: inspector ? inspector.expo_token : "",
 			sound: "default",
 		});
 

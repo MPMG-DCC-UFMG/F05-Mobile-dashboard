@@ -7,5 +7,6 @@ export interface Inspection {
 	status: number;
 	user_email: string;
 	request_date: number;
+	limit_date: number;
 	secret: boolean;
 }

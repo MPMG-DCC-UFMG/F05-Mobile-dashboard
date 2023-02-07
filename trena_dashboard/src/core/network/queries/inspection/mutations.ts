@@ -25,3 +25,14 @@ export function useDownloadDocx() {
 		},
 	});
 }
+
+export function useAddInspection() {
+	return useMutation(InspectionServiceQuery.addInspection, {
+		onError: () => {
+			Notify("Erro ao adicionar Vistoria!", "bottom-left", "error");
+		},
+		onSuccess: () => {
+			Notify("Vistoria adicionada com sucesso!", "bottom-left", "success");
+		},
+	});
+}
