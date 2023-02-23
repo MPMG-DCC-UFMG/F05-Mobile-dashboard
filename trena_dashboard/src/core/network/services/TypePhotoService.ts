@@ -14,7 +14,7 @@ async function loadTypePhotos(): Promise<TypePhoto[]> {
 async function deleteTypePhoto(typePhotoFlag: number): Promise<TypePhoto> {
 	const call = Config.BASE_URL + "/typephotos/delete";
 	const res = await TrenaAPI.network()
-		.post(call)
+		.delete(call)
 		.type("application/json")
 		.query({ type_photo_id: typePhotoFlag });
 
