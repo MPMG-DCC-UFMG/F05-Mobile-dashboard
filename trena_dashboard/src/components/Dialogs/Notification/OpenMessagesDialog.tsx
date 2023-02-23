@@ -1,8 +1,12 @@
-import { Send } from "@mui/icons-material";
+import { Close, Send } from "@mui/icons-material";
 import {
 	CircularProgress,
+	Dialog,
 	DialogActions,
 	DialogContent,
+	DialogTitle,
+	Divider,
+	Grid,
 	IconButton,
 	InputAdornment,
 	TextField,
@@ -15,7 +19,6 @@ import { useSendComment } from "../../../core/network/queries/notification/mutat
 import { useGetCommentsFromNotification } from "../../../core/network/queries/notification/queries";
 import { useUserStore } from "../../../core/store/user";
 import { ChatCard } from "../../Cards/Chat";
-import { TableDialogContainer } from "../DialogContainer";
 
 interface OpenMessagesDialogProps {
 	state: boolean[];
@@ -65,25 +68,49 @@ export function OpenMessagesDialog({
 		);
 	};
 
+	const handleCloseDialog = (index: number) =>
+		setState(state.map((s, pos) => (pos === index ? false : s)));
+
 	return (
-		<TableDialogContainer
-			index={index}
-			state={state}
-			setState={setState}
-			title={notification.title}
+		<Dialog
+			TransitionProps={{ unmountOnExit: true, mountOnEnter: false }}
+			open={state[index]}
 			scroll="paper"
+			fullWidth
+			onClose={handleCloseDialog}
 		>
-				{comments &&
-					!isLoading &&
-					comments.map((comment) => (
-						<ChatCard
-							key={comment.id}
-							messageOwner={comment.send_email}
-							side={comment.send_email === user.email ? "right" : "left"}
-							text={comment.content}
-							timestamp={comment.timestamp}
-						/>
-					))}
+			<DialogTitle>
+				<Grid container justifyContent="space-between" alignItems="center">
+					<Grid item>{notification.title}</Grid>
+					<Grid item>
+						<IconButton
+							sx={{ size: "small" }}
+							onClick={() => handleCloseDialog(index)}
+						>
+							<Close />
+						</IconButton>
+					</Grid>
+				</Grid>
+			</DialogTitle>
+			<Divider />
+			<DialogContent>
+				<Grid container justifyContent="space-between" alignItems="center">
+					<Grid container flexDirection="column" item sx={{ pt: 2 }}>
+						{comments &&
+							!isLoading &&
+							comments.map((comment) => (
+								<ChatCard
+									key={comment.id}
+									messageOwner={comment.send_email}
+									side={comment.send_email === user.email ? "right" : "left"}
+									text={comment.content}
+									timestamp={comment.timestamp}
+								/>
+							))}
+					</Grid>
+				</Grid>
+			</DialogContent>
+			<DialogActions>
 				{open && (
 					<TextField
 						fullWidth
@@ -105,6 +132,7 @@ export function OpenMessagesDialog({
 						}}
 					/>
 				)}
-		</TableDialogContainer>
+			</DialogActions>
+		</Dialog>
 	);
 }
