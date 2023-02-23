@@ -80,13 +80,7 @@ export function DrawerListItem() {
 				<ListItemIcon>
 					<Settings />
 				</ListItemIcon>
-				<ListItemText
-					primary="Configurações de Obra"
-					primaryTypographyProps={{
-						fontSize: "16px",
-						style: { whiteSpace: "normal" },
-					}}
-				/>
+				<ListItemText primary="Config. de Obras" />
 				{menuState.workConfig ? <ExpandLess /> : <ExpandMore />}
 			</ListItemButton>
 			<Collapse in={menuState.workConfig} unmountOnExit>

@@ -1,6 +1,6 @@
 import { Box, Grid, Paper } from "@mui/material";
 import React from "react";
-import background from "../../assets/login-trena.png";
+import background from "../../assets/mpmg_gsi.png";
 import logo from "../../assets/logo512-no-bg.png";
 interface AsideLoginContainerProps {
   children?: JSX.Element | JSX.Element[];
@@ -32,6 +32,7 @@ export function AsideLoginContainer({ children }: AsideLoginContainerProps) {
 						display: "flex",
 						flexDirection: "column",
 						alignItems: "center",
+						justifyContetn: "center"
 					}}
 				>
 					<Box

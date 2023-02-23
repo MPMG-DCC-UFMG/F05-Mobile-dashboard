@@ -11,6 +11,7 @@ import {
 	TableHead,
 	TableRow,
 	TextField,
+	Tooltip,
 } from "@mui/material";
 import React, { useCallback, useState } from "react";
 import { TypeWork } from "../../core/models/TypeWork";
@@ -41,7 +42,7 @@ export function ListTypeWork() {
 	const handleSearch = (value?: string) => {
 		if (value) {
 			const filteredTypeWorks = typeWorks.filter((item) =>
-				item.name.toUpperCase().includes(value.toUpperCase())
+				item.name.toUpperCase().includes(value!.toUpperCase())
 			);
 			setTypeWorks(filteredTypeWorks);
 		} else {
@@ -103,7 +104,7 @@ export function ListTypeWork() {
 									<TableRow>
 										<TableCell align="center">Nome</TableCell>
 										<TableCell align="center">Editar</TableCell>
-										<TableCell align="center">Remover</TableCell>
+										<TableCell align="center">Deletar</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -114,26 +115,30 @@ export function ListTypeWork() {
 												<TableRow hover>
 													<TableCell align="center">{typeWork.name}</TableCell>
 													<TableCell align="center">
-														<IconButton
-															color="warning"
-															size="small"
-															onClick={() =>
-																openDialog(editDialog, setEditDialog, index)
-															}
-														>
-															<Edit />
-														</IconButton>
+														<Tooltip title="Editar">
+															<IconButton
+																color="warning"
+																size="small"
+																onClick={() =>
+																	openDialog(editDialog, setEditDialog, index)
+																}
+															>
+																<Edit />
+															</IconButton>
+														</Tooltip>
 													</TableCell>
 													<TableCell align="center">
-														<IconButton
-															size="small"
-															onClick={() =>
-																handleDeleteTypeWork(typeWork.flag)
-															}
-															color="error"
-														>
-															<Delete />
-														</IconButton>
+														<Tooltip title="Deletar">
+															<IconButton
+																size="small"
+																onClick={() =>
+																	handleDeleteTypeWork(typeWork.flag)
+																}
+																color="error"
+															>
+																<Delete />
+															</IconButton>
+														</Tooltip>
 													</TableCell>
 													<EditTypeOfWorkDialog
 														state={editDialog}
@@ -142,12 +147,6 @@ export function ListTypeWork() {
 														index={index}
 														title="Editar Tipo de Obra"
 													/>
-													{/* <ConfirmActionDialog
-                            message="Confirmar Exclusão"
-                            action={() => handleDeleteTypeWork(typeWork)}
-                            state={openDeleteDialog}
-                            setState={() => setOpenDeleteDialog}
-                          /> */}
 												</TableRow>
 											</React.Fragment>
 										))}
