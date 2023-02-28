@@ -1,18 +1,22 @@
 import {
-	Article,
+	FileDownloadOutlined,
 	Collections,
+	ManageSearch,
 	Notifications,
 	PictureAsPdfOutlined,
 } from "@mui/icons-material";
 import {
+	Divider,
 	Grid,
 	IconButton,
+	InputAdornment,
 	Paper,
 	Table,
 	TableBody,
 	TableCell,
 	TableHead,
 	TableRow,
+	TextField,
 	Tooltip,
 } from "@mui/material";
 import React, { useCallback, useState } from "react";
@@ -33,8 +37,9 @@ import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export function ListInspection() {
-	const { isLoading, isFetched } = useLoadInspections();
-	const { inspections, collectModal, setCollectModal } = useInspectionStore();
+	const { data: originalData, isLoading, isFetched } = useLoadInspections();
+	const { inspections, setInspections, collectModal, setCollectModal } =
+		useInspectionStore();
 	const [page, setPage] = useState(0);
 	const { rowsPerPage, setRowsPerPage } = useTableStore();
 	const { inspectionNotificationsDialog, setInspectionNotificationsDialog } =
@@ -50,6 +55,18 @@ export function ListInspection() {
 	const handleGenerateDoc = useCallback((flag: number) => {
 		downloadDocx(flag);
 	}, []);
+
+	const handleSearch = (search: string) => {
+		if (search) {
+			setInspections(
+				originalData!.filter((value) =>
+					value.name.toUpperCase().includes(search.toUpperCase())
+				)
+			);
+		} else {
+			setInspections(originalData ? originalData : []);
+		}
+	};
 
 	return (
 		<>
@@ -84,6 +101,28 @@ export function ListInspection() {
 									},
 								]}
 							>
+								<Grid
+									item
+									display="flex"
+									padding={2}
+									justifyContent="flex-Start"
+								>
+									<TextField
+										fullWidth
+										size="small"
+										onChange={(e) => handleSearch(e.target.value)}
+										label="Filtrar Vistorias"
+										InputProps={{
+											startAdornment: (
+												<InputAdornment position="start">
+													<ManageSearch />
+												</InputAdornment>
+											),
+										}}
+									/>
+									<IconButton />
+								</Grid>
+								<Divider />
 								<Table>
 									<TableHead>
 										<TableRow>
@@ -94,7 +133,7 @@ export function ListInspection() {
 											<TableCell align="center">Status</TableCell>
 											<TableCell align="center">Mídias</TableCell>
 											<TableCell align="center">Relatório</TableCell>
-											<TableCell align="center">Editável</TableCell>
+											<TableCell align="center">Relatório Editável</TableCell>
 											<TableCell align="center">Notificações</TableCell>
 										</TableRow>
 									</TableHead>
@@ -161,7 +200,7 @@ export function ListInspection() {
 																		handleGenerateDoc(inspection.flag)
 																	}
 																>
-																	<Article />
+																	<FileDownloadOutlined />
 																</IconButton>
 															</Tooltip>
 														</TableCell>

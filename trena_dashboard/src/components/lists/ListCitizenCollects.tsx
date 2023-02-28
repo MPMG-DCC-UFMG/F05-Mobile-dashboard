@@ -1,13 +1,21 @@
-import { Collections, Delete, Notifications } from "@mui/icons-material";
 import {
+	Collections,
+	Delete,
+	ManageSearch,
+	Notifications,
+} from "@mui/icons-material";
+import {
+	Divider,
 	Grid,
 	IconButton,
+	InputAdornment,
 	Paper,
 	Table,
 	TableBody,
 	TableCell,
 	TableHead,
 	TableRow,
+	TextField,
 	Tooltip,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -25,17 +33,29 @@ import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
 
 export function ListCitizenCollects() {
-	const { collectsDialog, setCollectsDialog } = useCollectStore();
+	const { data: originalData, isLoading } = useLoadCitizenCollects();
+	const { collectsDialog, setCollectsDialog, collects, setCollects } =
+		useCollectStore();
 	const { sendNotificationDialog, setSendNotificationDialog } =
 		useNotificationsStore();
 	const { rowsPerPage, setRowsPerPage } = useTableStore();
 	const [page, setPage] = useState(0);
-
-	const { data: collects, isLoading } = useLoadCitizenCollects();
 	const { mutate } = useDeleteCollect();
-
+	
 	const handleDeleteCollect = (collectId: string) => {
 		mutate(collectId);
+	};
+
+	const handleSearch = (search: string) => {
+		if (search) {
+			setCollects(
+				originalData!.filter((value) =>
+					value.user_email.toUpperCase().includes(search.toUpperCase())
+				)
+			);
+		} else {
+			setCollects(originalData ? originalData : []);
+		}
 	};
 
 	return (
@@ -70,6 +90,23 @@ export function ListCitizenCollects() {
 								},
 							]}
 						>
+							<Grid item display="flex" padding={2} justifyContent="flex-Start">
+								<TextField
+									fullWidth
+									size="small"
+									onChange={(e) => handleSearch(e.target.value)}
+									label="Filtrar Vistorias"
+									InputProps={{
+										startAdornment: (
+											<InputAdornment position="start">
+												<ManageSearch />
+											</InputAdornment>
+										),
+									}}
+								/>
+								<IconButton />
+							</Grid>
+							<Divider />
 							<Table>
 								<TableHead>
 									<TableRow>

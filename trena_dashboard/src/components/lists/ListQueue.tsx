@@ -1,13 +1,15 @@
-import { Check, Close, Visibility } from "@mui/icons-material";
+import { Check, Close, ManageSearch, ContentPaste } from "@mui/icons-material";
 import {
 	Grid,
 	IconButton,
+	InputAdornment,
 	Paper,
 	Table,
 	TableBody,
 	TableCell,
 	TableHead,
 	TableRow,
+	TextField,
 	Tooltip,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -25,17 +27,31 @@ import { TablePagination } from "../TablePagination";
 import { WarningField } from "../WarningField";
 
 export function ListQueue() {
-	const { isLoading } = useGetPublicWorksWithCollectsInQueue();
+	const { data: originalData, isLoading } =
+		useGetPublicWorksWithCollectsInQueue();
 	useLoadWorkStatus();
 	const {
 		evaluateCollectsDialog,
 		setEvaluateCollectsDialog,
 		publicWorkWithCollectsInQueue: queue,
+		setPublicWorkWithCollectsInQueue,
 	} = useQueueStore();
 	const { workStatus } = useWorkStatusStore();
 	const { rowsPerPage, setRowsPerPage } = useTableStore();
 
 	const [page, setPage] = useState(0);
+
+	const handleSearch = (search: string) => {
+		if (search != "") {
+			setPublicWorkWithCollectsInQueue(
+				originalData!.filter((value) =>
+					value.name.toUpperCase().includes(search.toUpperCase())
+				)
+			);
+		} else {
+			setPublicWorkWithCollectsInQueue(originalData ? originalData : []);
+		}
+	};
 
 	return (
 		<>
@@ -53,7 +69,7 @@ export function ListQueue() {
 						},
 					]}
 				/>
-			) : queue && queue.length > 0 ? (
+			) : originalData && originalData.length > 0 ? (
 				<Grid style={{ width: "100%", marginTop: 14 }} item>
 					<Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
 						<Heading
@@ -69,6 +85,19 @@ export function ListQueue() {
 								},
 							]}
 						>
+							<TextField
+								fullWidth
+								size="small"
+								onChange={(e) => handleSearch(e.target.value)}
+								label="Filtrar Envios"
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<ManageSearch />
+										</InputAdornment>
+									),
+								}}
+							/>
 							<Table>
 								<TableHead>
 									<TableRow>
@@ -108,7 +137,7 @@ export function ListQueue() {
 																	)
 																}
 															>
-																<Visibility color="info" />
+																<ContentPaste color="info" />
 															</IconButton>
 														</Tooltip>
 													</TableCell>
