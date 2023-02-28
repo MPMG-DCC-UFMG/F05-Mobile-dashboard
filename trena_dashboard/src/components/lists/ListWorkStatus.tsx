@@ -37,7 +37,7 @@ export function ListWorkStatus() {
 
 	const handleSearch = (value?: string) => {
 		if (value) {
-			const filteredWorkStatus = workStatus.filter((item) =>
+			const filteredWorkStatus = originalData!.filter((item) =>
 				item.name.toUpperCase().includes(value.toUpperCase())
 			);
 			setWorkStatus(filteredWorkStatus);
