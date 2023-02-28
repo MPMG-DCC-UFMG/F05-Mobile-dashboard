@@ -37,7 +37,7 @@ export function ListTypePhoto() {
 
 	const handleSearch = (value?: string) => {
 		if (value) {
-			const filteredTypePhoto = typePhotos.filter((item) =>
+			const filteredTypePhoto = originalData!.filter((item) =>
 				item.name.toUpperCase().includes(value.toUpperCase())
 			);
 			setTypePhotos(filteredTypePhoto);

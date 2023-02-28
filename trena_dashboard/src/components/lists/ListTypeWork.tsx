@@ -41,7 +41,7 @@ export function ListTypeWork() {
 
 	const handleSearch = (value?: string) => {
 		if (value) {
-			const filteredTypeWorks = typeWorks.filter((item) =>
+			const filteredTypeWorks = originalTypeWorks!.filter((item) =>
 				item.name.toUpperCase().includes(value!.toUpperCase())
 			);
 			setTypeWorks(filteredTypeWorks);
