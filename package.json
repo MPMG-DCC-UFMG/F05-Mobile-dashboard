@@ -2,7 +2,6 @@
   "name": "trena_dashboard",
   "version": "1.5.0",
   "private": true,
-  "proxy": "http://localhost:8000",
   "homepage": "/dashboard/",
   "dependencies": {
     "@emotion/react": "^11.10.5",
