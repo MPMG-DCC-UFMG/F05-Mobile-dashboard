@@ -11,6 +11,7 @@ import {
 	TableHead,
 	TableRow,
 	TextField,
+	Tooltip,
 } from "@mui/material";
 import React, { useCallback, useState } from "react";
 import { WorkStatus } from "../../core/models/WorkStatus";
@@ -31,13 +32,12 @@ export function ListWorkStatus() {
 		useWorkStatusStore();
 	const { rowsPerPage, setRowsPerPage } = useTableStore();
 	const { mutate } = useDeleteWorkStatus();
-
 	const [addWorkStatusDialog, setOpenAddWorkStatusDialog] = useState(false);
 	const [page, setPage] = useState(0);
 
 	const handleSearch = (value?: string) => {
 		if (value) {
-			const filteredWorkStatus = workStatus.filter((item) =>
+			const filteredWorkStatus = originalData!.filter((item) =>
 				item.name.toUpperCase().includes(value.toUpperCase())
 			);
 			setWorkStatus(filteredWorkStatus);
@@ -101,7 +101,7 @@ export function ListWorkStatus() {
 										<TableCell align="center">Nome</TableCell>
 										<TableCell align="center">Decrição</TableCell>
 										<TableCell align="center">Editar</TableCell>
-										<TableCell align="center">Remover</TableCell>
+										<TableCell align="center">Deletar</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -114,24 +114,28 @@ export function ListWorkStatus() {
 													{workStatus.description}
 												</TableCell>
 												<TableCell align="center">
-													<IconButton
-														color="warning"
-														onClick={() =>
-															openDialog(editDialog, setEditDialog, index)
-														}
-													>
-														<Edit />
-													</IconButton>
+													<Tooltip title="Editar">
+														<IconButton
+															color="warning"
+															onClick={() =>
+																openDialog(editDialog, setEditDialog, index)
+															}
+														>
+															<Edit />
+														</IconButton>
+													</Tooltip>
 												</TableCell>
 												<TableCell align="center">
-													<IconButton
-														onClick={() =>
-															handleDeleteWorkStatus(workStatus.flag)
-														}
-														color="error"
-													>
-														<Delete />
-													</IconButton>
+													<Tooltip title="Deletar">
+														<IconButton
+															onClick={() =>
+																handleDeleteWorkStatus(workStatus.flag)
+															}
+															color="error"
+														>
+															<Delete />
+														</IconButton>
+													</Tooltip>
 												</TableCell>
 												<EditWorkStatusDialog
 													state={editDialog}

@@ -1,11 +1,22 @@
-import { Add } from "@material-ui/icons";
-import { Button } from "@mui/material";
+import { Add, Chat } from "@material-ui/icons";
+import {
+	Button,
+	IconButton,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableRow,
+	Tooltip,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Inspection } from "../../../core/models/Inspection";
 import { useGetNotificationById } from "../../../core/network/queries/notification/queries";
 import { useNotificationsStore } from "../../../core/store/notification";
+import { useTableStore } from "../../../core/store/table";
 import { openDialog } from "../../../utils/dialogHandler";
 import { convertEphocDate } from "../../../utils/mapper";
+import { TablePagination } from "../../TablePagination";
 import { WarningField } from "../../WarningField";
 import { TableDialogContainer } from "../DialogContainer";
 import { OpenMessagesDialog } from "./OpenMessagesDialog";
@@ -31,6 +42,8 @@ export function NotificationsDialog({
 	const [commentsDialog, setCommentsDialog] = useState(
 		Array(notifications?.length).fill(false)
 	);
+	const { rowsPerPage, setRowsPerPage } = useTableStore();
+	const [page, setPage] = useState(0);
 
 	useEffect(() => {
 		setCommentsDialog(Array(notifications?.length).fill(false));
@@ -44,52 +57,93 @@ export function NotificationsDialog({
 			fullScreen
 			title={`Notificações - ${inspection.name}`}
 		>
-			{hasNotifications ? (
-				notifications.map((notification, pos) => (
-					<React.Fragment key={notification.id}>
-						<Button
-							sx={{ mt: 2, borderRadius: "150px" }}
-							onClick={() => openDialog(commentsDialog, setCommentsDialog, pos)}
-							fullWidth
-							variant="contained"
-						>
-							{notification.title} - {convertEphocDate(notification.timestamp)}
-						</Button>
-						<OpenMessagesDialog
-							state={commentsDialog}
-							setState={setCommentsDialog}
-							index={pos}
-							notification={notification}
-						/>
-					</React.Fragment>
-				))
-			) : (
-				<WarningField
-					severity="warning"
-					title="Ausência de dados"
-					message="Não há nenhuma notificação para esta vistoria"
-				/>
-			)}
 			<Button
 				variant="contained"
-				color="success"
+				color="primary"
 				onClick={() =>
 					openDialog(sendNotificationDialog, setSendNotificationDialog, index)
 				}
 				sx={{
-					borderRadius: "50px",
 					alignSelf: "flex-end",
-					mt: 2,
+					mr: 1,
+					mb: 3,
 				}}
 				endIcon={<Add />}
 			>
 				Nova Notificação
 			</Button>
-			<SendNotificationDialog
-				state={sendNotificationDialog}
-				setState={setSendNotificationDialog}
-				index={index}
-				inspection={inspection}
+			<Table>
+				<TableHead>
+					<TableRow>
+						<TableCell>Título</TableCell>
+						<TableCell>Data</TableCell>
+						<TableCell>Chat</TableCell>
+					</TableRow>
+				</TableHead>
+				<TableBody>
+					{hasNotifications ? (
+						notifications.map((notification, pos) => (
+							<TableRow key={notification.id}>
+								<TableCell>{notification.title}</TableCell>
+								<TableCell>
+									{convertEphocDate(notification.timestamp)}
+								</TableCell>
+								<TableCell>
+									<Tooltip title="Abrir Chat">
+										<IconButton
+											color="info"
+											onClick={() =>
+												openDialog(commentsDialog, setCommentsDialog, pos)
+											}
+										>
+											<Chat />
+										</IconButton>
+									</Tooltip>
+								</TableCell>
+								{/* <Button
+									sx={{
+										mt: 2,
+										borderRadius: "50px",
+										width: "90%",
+										alignSelf: "center",
+									}}
+									onClick={() =>
+										openDialog(commentsDialog, setCommentsDialog, pos)
+									}
+									variant="contained"
+								>
+									{notification.title} -{" "}
+									{convertEphocDate(notification.timestamp)}
+								</Button> */}
+								<OpenMessagesDialog
+									state={commentsDialog}
+									setState={setCommentsDialog}
+									index={pos}
+									notification={notification}
+								/>
+							</TableRow>
+						))
+					) : (
+						<WarningField
+							severity="warning"
+							title="Ausência de dados"
+							message="Não há nenhuma notificação para esta vistoria"
+						/>
+					)}
+					<SendNotificationDialog
+						state={sendNotificationDialog}
+						setState={setSendNotificationDialog}
+						index={index}
+						inspection={inspection}
+					/>
+				</TableBody>
+			</Table>
+			<TablePagination
+				rowsPerPage={rowsPerPage}
+				setRowsPerPage={setRowsPerPage}
+				page={page}
+				setPage={setPage}
+				data={notifications!}
 			/>
 		</TableDialogContainer>
 	);

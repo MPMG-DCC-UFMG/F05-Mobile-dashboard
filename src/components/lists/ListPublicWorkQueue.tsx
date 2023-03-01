@@ -1,4 +1,4 @@
-import { Check, Close, Visibility } from "@mui/icons-material";
+import { Check, Close, ContentPaste } from "@mui/icons-material";
 import {
 	Grid,
 	IconButton,
@@ -136,7 +136,7 @@ export function ListPublicWorkQueue() {
 																			)
 																		}
 																	>
-																		<Visibility />
+																		<ContentPaste />
 																	</IconButton>
 																</Tooltip>
 															</TableCell>

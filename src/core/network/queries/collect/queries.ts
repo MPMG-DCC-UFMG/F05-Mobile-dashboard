@@ -20,6 +20,7 @@ export function useLoadCitizenCollects() {
 	const setSendNotificationDialog = useNotificationsStore(
 		(state) => state.setSendNotificationDialog
 	);
+	const setCollects  = useCollectStore((state) => state.setCollects);
 
 	return useQuery(
 		["getCitizenCollects"],
@@ -28,6 +29,7 @@ export function useLoadCitizenCollects() {
 			onSuccess: (data) => {
 				setCollectDialog(Array(data.length).fill(false));
 				setSendNotificationDialog(Array(data.length).fill(false));
+				setCollects(data);
 			},
 		}
 	);

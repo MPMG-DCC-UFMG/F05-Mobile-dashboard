@@ -9,4 +9,5 @@ export interface PublicWork {
 	rnn_status?: number;
 	queue_status: number;
 	queue_status_date: number;
+	profile_picture: string;
 }

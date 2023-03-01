@@ -1,6 +1,5 @@
 import { Button, Grid, TextField } from "@mui/material";
-import React, { useCallback, useState } from "react";
-import { UpdateTypePhotoDTO } from "../../../core/models/dto/typePhotos/UpdateTypePhotoDTO";
+import React, { useState } from "react";
 import { TypePhoto } from "../../../core/models/TypePhoto";
 import { useUpdateTypePhoto } from "../../../core/network/queries/typePhotos/mutations";
 import { closeDialog } from "../../../utils/dialogHandler";
@@ -21,15 +20,13 @@ export function EditTypeOfPhotoDialog({
 	index,
 	title,
 }: EditTypeOfPhotoDialog) {
-	const [updateTypePhoto, setUpdateTypePhoto] = useState(
-		{} as UpdateTypePhotoDTO
-	);
-	const { mutate } = useUpdateTypePhoto();
+	const [updateTypePhoto, setUpdateTypePhoto] = useState<TypePhoto>(typePhoto);
+	const { mutate: updatePhoto } = useUpdateTypePhoto();
 
-	const handleEditTypePhoto = useCallback(() => {
-		mutate(updateTypePhoto);
-		closeDialog(state, setState, index);
-	}, []);
+	const handleEditTypePhoto = () =>{
+		updatePhoto(updateTypePhoto);
+		setState(state.map((value) => value === true ? false : value));
+	}
 
 	return (
 		<TableDialogContainer

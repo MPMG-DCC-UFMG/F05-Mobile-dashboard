@@ -11,8 +11,9 @@ import {
 	TableHead,
 	TableRow,
 	TextField,
+	Tooltip,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { TypePhoto } from "../../core/models/TypePhoto";
 import { useDeleteTypePhoto } from "../../core/network/queries/typePhotos/mutations";
 import { useLoadTypePhotos } from "../../core/network/queries/typePhotos/queries";
@@ -29,17 +30,14 @@ export function ListTypePhoto() {
 	const { data: originalData, isLoading } = useLoadTypePhotos();
 	const { typePhotos, setTypePhotos, editDialog, setEditDialog } =
 		useTypePhotoStore();
-
 	const { rowsPerPage, setRowsPerPage } = useTableStore();
-
 	const { mutate } = useDeleteTypePhoto();
-
 	const [addTypePhotoDialog, setOpenAddTypePhotoDialog] = useState(false);
 	const [page, setPage] = useState(0);
 
 	const handleSearch = (value?: string) => {
 		if (value) {
-			const filteredTypePhoto = typePhotos.filter((item) =>
+			const filteredTypePhoto = originalData!.filter((item) =>
 				item.name.toUpperCase().includes(value.toUpperCase())
 			);
 			setTypePhotos(filteredTypePhoto);
@@ -48,9 +46,9 @@ export function ListTypePhoto() {
 		}
 	};
 
-	const handleDeleteTypePhoto = (flag: number) => {
+	const handleDeleteTypePhoto = useCallback((flag: number) => {
 		mutate(flag);
-	};
+	}, []);
 
 	return (
 		<>
@@ -103,7 +101,7 @@ export function ListTypePhoto() {
 										<TableCell>Nome</TableCell>
 										<TableCell>Descrição</TableCell>
 										<TableCell>Editar</TableCell>
-										<TableCell>Remover</TableCell>
+										<TableCell>Deletar</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -115,26 +113,30 @@ export function ListTypePhoto() {
 													<TableCell>{typePhoto.name}</TableCell>
 													<TableCell>{typePhoto.description}</TableCell>
 													<TableCell>
-														<IconButton
-															onClick={() =>
-																openDialog(editDialog, setEditDialog, index)
-															}
-															color="warning"
-															size="small"
-														>
-															<Edit />
-														</IconButton>
+														<Tooltip title="Editar">
+															<IconButton
+																onClick={() =>
+																	openDialog(editDialog, setEditDialog, index)
+																}
+																color="warning"
+																size="small"
+															>
+																<Edit />
+															</IconButton>
+														</Tooltip>
 													</TableCell>
 													<TableCell>
-														<IconButton
-															color="error"
-															size="small"
-															onClick={() =>
-																handleDeleteTypePhoto(typePhoto.flag)
-															}
-														>
-															<Delete />
-														</IconButton>
+														<Tooltip title="Deletar">
+															<IconButton
+																color="error"
+																size="small"
+																onClick={() =>
+																	handleDeleteTypePhoto(typePhoto.flag)
+																}
+															>
+																<Delete />
+															</IconButton>
+														</Tooltip>
 													</TableCell>
 													<EditTypeOfPhotoDialog
 														state={editDialog}

@@ -4,8 +4,8 @@ import {
     TextField,
   } from "@mui/material";
 import React, { useState } from "react";
-import { useStores } from "../../../core/contexts/UseStores";
 import { WorkStatus } from "../../../core/models/WorkStatus";
+import { useUpdateWorkStatus } from "../../../core/network/queries/workStatus/mutations";
 import {TableDialogContainer} from "../DialogContainer";
 
   interface EditWorkStatusDialog{
@@ -24,18 +24,16 @@ import {TableDialogContainer} from "../DialogContainer";
     title,
   }: EditWorkStatusDialog) {
     
-    const {workStatusStore } = useStores();
-    const [name, setName] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
+    const [workStatusDTO, setWorkStatusDTO] = useState<WorkStatus>(workStatus);
+
+    const{mutate: updateWorkStatus} = useUpdateWorkStatus();  
     
     const handleCloseDialog = (index: number) =>{
       setState(state.map((value, position) => position === index ? false : value))
     }
 
-    const handleEditWorkStatus = (workStatus: WorkStatus) =>{
-        workStatus.name = name;
-        workStatus.description = description;
-        workStatusStore.updateWorkStatus(workStatus);
+    const handleEditWorkStatus = () =>{
+        updateWorkStatus(workStatusDTO);
         handleCloseDialog(index);
     }
   
@@ -48,14 +46,14 @@ import {TableDialogContainer} from "../DialogContainer";
       >
         <Grid container justifyContent="space-between" alignItems="center">
         <TextField
-          onChange={(event) => setName(event.currentTarget.value)}
+          onChange={(e) => setWorkStatusDTO({... workStatusDTO, name: e.target.value})}
           required
           label='Estado Da Obra'
           defaultValue={workStatus.name}
           fullWidth
         />
          <TextField
-          onChange={(event) => setDescription(event.currentTarget.value)}
+          onChange={(e) => setWorkStatusDTO({... workStatusDTO, description: e.target.value})}
           required
           label='Descrição'
           defaultValue={workStatus.description}
@@ -76,7 +74,7 @@ import {TableDialogContainer} from "../DialogContainer";
           </Grid>
           <Grid item display="flex">
             <Button 
-              onClick={()=> handleEditWorkStatus(workStatus)}
+              onClick={handleEditWorkStatus}
               color="success" variant="contained">
               Salvar
             </Button>

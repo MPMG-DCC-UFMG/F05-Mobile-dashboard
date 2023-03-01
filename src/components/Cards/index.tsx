@@ -1,7 +1,8 @@
 import { CalendarMonth, Gite, Security } from "@mui/icons-material";
 import { Container, Grid } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { ThemeContext } from "../../core/contexts/ThemeContext";
 import { useLoadMonthlyCollectsCount } from "../../core/network/queries/collect/queries";
 import { useCountMpInspections } from "../../core/network/queries/inspection/queries";
 import { useCountPublicWork } from "../../core/network/queries/publicWork/queries";
@@ -16,6 +17,7 @@ export function HomeCards() {
 	const handleClickWorks = () => navigate("/publicWork");
 	const handleClickInspections = () => navigate("/inspections");
 	const handleClickQueue = () => navigate("/queue");
+    const {isDark} = useContext(ThemeContext);
 
 	return (
 		<Container
@@ -25,27 +27,27 @@ export function HomeCards() {
 				<Grid item style={{ width: "33.3%" }}>
 					<Card
 						title="Obras cadastradas"
-						icon={<Gite />}
+						icon={<Gite sx={{color: '#fff'}}/>}
 						value={publicWorkCount ? publicWorkCount.toString() : "0"}
-						iconColor="blue"
+						iconColor="#1565c0"
 						onClick={handleClickWorks}
 					/>
 				</Grid>
 				<Grid item style={{ width: "33.3%" }}>
 					<Card
 						title="Vistorias Técnicas"
-						icon={<Security />}
+						icon={<Security  sx={{color: '#fff'}}/>}
 						value={mpInspections ? mpInspections.toString() : "0"}
-						iconColor="#ED0000"
+						iconColor="#d32f2f"
 						onClick={handleClickInspections}
 					/>
 				</Grid>
 				<Grid item style={{ width: "33.3%" }}>
 					<Card
 						title="Vistorias Cidadãs no mês"
-						icon={<CalendarMonth />}
+						icon={<CalendarMonth sx={{color: '#fff'}}/>}
 						value={usersInspections ? usersInspections.toString() : "0"}
-						iconColor="#000000"
+						iconColor="#2e7d32"
 						onClick={handleClickQueue}
 					/>
 				</Grid>

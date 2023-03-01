@@ -4,6 +4,7 @@ import { Edit } from "@material-ui/icons";
 import { Delete, LocalSee, Map, PendingActions } from "@mui/icons-material";
 import {
 	Autocomplete,
+	Avatar,
 	Grid,
 	IconButton,
 	Paper,
@@ -15,7 +16,7 @@ import {
 	TextField,
 	Tooltip,
 } from "@mui/material";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { Address } from "../../core/models/Address";
 import { TypeWork } from "../../core/models/TypeWork";
 import { useLoadPublicWorks } from "../../core/network/queries/publicWork/queries";
@@ -31,6 +32,7 @@ import { PublicWorkInspectionsDialog } from "../Dialogs/PublicWork/PublicWorkIns
 import { Heading } from "../Heading";
 import { LoadingTableData } from "../Loading/LoadingTableData";
 import { TablePagination } from "../TablePagination";
+import { PublicWorkPhoto } from "../Photo/publicWork";
 
 export function ListPublicWork() {
 	const {
@@ -71,14 +73,14 @@ export function ListPublicWork() {
 	const addressFormatter = (adress: Address) =>
 		`${adress.street}, ${adress.number} - ${adress.city}`;
 
-	const filterOptions = ["Escola", "Creche"];
+	const filterOptions = typeWork?.map((value) => value.name);
 
 	const handleSearch = (name: string) => {
 		const typeworkFilter = typeWork?.find(
 			(value) => value.name.toLowerCase() === name.toLowerCase()
 		);
-		if (name !== "") {
-			const filteredPublicWorks = publicWorks.filter(
+		if (name !== "" && originalPublicWorks) {
+			const filteredPublicWorks = originalPublicWorks.filter(
 				(item) => item.type_work_flag === typeworkFilter?.flag
 			);
 			setPublicWorks(filteredPublicWorks);
@@ -121,7 +123,7 @@ export function ListPublicWork() {
 										renderInput={(params) => (
 											<TextField {...params} label="Filtrar por tipo de obra" />
 										)}
-										options={filterOptions}
+										options={filterOptions ? filterOptions : []}
 										onChange={(e, value) =>
 											value === null ? handleSearch("") : handleSearch(value)
 										}
@@ -130,6 +132,7 @@ export function ListPublicWork() {
 								<Table>
 									<TableHead>
 										<TableRow>
+											<TableCell align="center">Avatar</TableCell>
 											<TableCell align="center">Nome</TableCell>
 											<TableCell align="center">Tipo de Obra</TableCell>
 											<TableCell align="center">Endereço</TableCell>
@@ -148,6 +151,9 @@ export function ListPublicWork() {
 											)
 											.map((publicWork, index: number) => (
 												<TableRow key={publicWork.id}>
+													<TableCell align="center">
+														<PublicWorkPhoto publicWork={publicWork} />
+													</TableCell>
 													<TableCell align="center">
 														{publicWork.name}
 													</TableCell>
