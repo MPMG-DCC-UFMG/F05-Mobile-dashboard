@@ -121,6 +121,7 @@ async function loadPublicUserList(): Promise<ReadUserDTO[]> {
 }
 
 async function oAuth() {
+  if (Config.DEV_WSO2_MODE == "false") return
   const call = `${Config.BASE_URL}/oauth/authws02`
   const res = await TrenaAPI.network().get(call)
 
@@ -128,6 +129,7 @@ async function oAuth() {
 }
 
 async function oAuthLogout() {
+  if (Config.DEV_WSO2_MODE == "false") return
   const call = `${Config.BASE_URL}/oauth/logoutcallback`
   const res = await TrenaAPI.network().get(call)
 

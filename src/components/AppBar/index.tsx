@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom"
 import background from "../../assets/gsi.png"
 import dark_mpmg from "../../assets/logo-mpmg-alternativa.png"
 import light_mpmg from "../../assets/mpmg.png"
+import Config from "../../config/Config"
 import { ThemeContext } from "../../core/contexts/ThemeContext"
 import { ReadUserDTO } from "../../core/models/dto/user/ReadUserDTO"
 import { useOAuthLogout } from "../../core/network/queries/auth/mutations"
@@ -62,6 +63,7 @@ export function AppBar({ open, toggleDrawer }: AppBarProps) {
     setUser({} as ReadUserDTO)
     queryClient.invalidateQueries()
     navigate("/login")
+    if (Config.DEV_WSO2_MODE == "false") return
     logout()
   }
 
